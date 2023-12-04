@@ -2,7 +2,7 @@
 
 #include "config.h"
 #include "libs.h"
-#include "timer.h"  // Timer t; - already initialised here!
+#include "timer.h" // Timer t; - already initialised here!
 
 using namespace std;
 using namespace libconfig;
@@ -13,7 +13,7 @@ int rc;
 // int main(int argc, char **argv) {
 
 int main() {
-//Timer t;
+  // Timer t;
   t.start();
   int s = 8;
 
