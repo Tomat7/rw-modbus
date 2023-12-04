@@ -52,7 +52,7 @@ int cfg_read_mbset(const char *cfg_file, vector<plc_t> &plcset) {
             plc.lookupValue("name", plcnow.preffix) &&
             plc.lookupValue("ip", plcnow.ipaddr) &&
             plc.lookupValue("polling", plcnow.polling) &&
-            plc.lookupValue("timeout", plcnow.timeout) )) {
+            plc.lookupValue("timeout", plcnow.timeout))) {
         cout << "Warning!! Error reading PLC configuration: " << i << endl;
         continue;
       }
@@ -60,8 +60,8 @@ int cfg_read_mbset(const char *cfg_file, vector<plc_t> &plcset) {
       plcnow.nb_regs = count_REGs;
 
       cout << setw(10) << left << ptitle << "  " << setw(10) << left
-           << plcnow.preffix << "  " << setw(20) << left
-           << plcnow.ipaddr << "  " << plcnow.nb_regs << endl;
+           << plcnow.preffix << "  " << setw(20) << left << plcnow.ipaddr
+           << "  " << plcnow.nb_regs << endl;
 
       // ===== Show registers details =====
       for (int j = 0; j < count_REGs; ++j) {
@@ -70,8 +70,7 @@ int cfg_read_mbset(const char *cfg_file, vector<plc_t> &plcset) {
 
         if (!(reg.lookupValue("rname", regnow.rname) &&
               reg.lookupValue("addr", regnow.raddr) &&
-              reg.lookupValue("access", regnow.rmode))) 
-        {
+              reg.lookupValue("access", regnow.rmode))) {
           cout << "error reading REG " << j << endl;
           continue;
         }
@@ -79,12 +78,12 @@ int cfg_read_mbset(const char *cfg_file, vector<plc_t> &plcset) {
         regnow.rvalue = 0;
         plcnow.regs.push_back(regnow);
 
-        cout << "       " << setw(9) << left << regnow.rname << "" 
-			 << setw(3) << right << regnow.raddr << " " 
-			 << setw(5) << left << regnow.rmode << "  " << endl;
+        cout << "       " << setw(9) << left << regnow.rname << "" << setw(3)
+             << right << regnow.raddr << " " << setw(5) << left << regnow.rmode
+             << "  " << endl;
       }
       // ===== END registers details =====
-      
+
       cout << endl;
       plcset.push_back(plcnow);
     }

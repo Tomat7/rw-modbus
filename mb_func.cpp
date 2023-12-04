@@ -15,18 +15,16 @@ int mb_show(const vector<plc_t> &plcset) {
 
     int count_REGs = plcset[i].nb_regs;
 
-    cout << setw(5) << left << plcset[i].preffix << "  " 
-		 << setw(5) << left << plcset[i].nb_regs << "  " 
-		 << setw(15) << left << plcset[i].ipaddr << "  " 
-		 << plcset[i].polling << "  " << plcset[i].timeout << endl;
+    cout << setw(5) << left << plcset[i].preffix << "  " << setw(5) << left
+         << plcset[i].nb_regs << "  " << setw(15) << left << plcset[i].ipaddr
+         << "  " << plcset[i].polling << "  " << plcset[i].timeout << endl;
 
     // ===== Show registers details =====
     for (int j = 0; j < count_REGs; ++j) {
-      cout << "       " << setw(9) << left << plcset[i].regs[j].rname 
-           << setw(3) << right << plcset[i].regs[j].raddr 
-           << setw(7) << right << plcset[i].regs[j].rvalue 
-           << "  " << left << plcset[i].regs[j].rmode 
-           << " " << endl;
+      cout << "       " << setw(9) << left << plcset[i].regs[j].rname << setw(3)
+           << right << plcset[i].regs[j].raddr << setw(7) << right
+           << plcset[i].regs[j].rvalue << "  " << left
+           << plcset[i].regs[j].rmode << " " << endl;
     }
     // =====
     cout << endl;
