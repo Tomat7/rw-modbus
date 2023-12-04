@@ -3,6 +3,8 @@ CC=g++
 
 .DEFAULT_GOAL := all
 
+OBJDIR=./obj
+
 LIBS= -lrt
 LIBCONFIG=$(shell pkg-config libconfig++ --libs)
 LIBNIDBUS=$(shell pkg-config --libs --cflags libmodbus)
@@ -18,7 +20,8 @@ LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 # === C/CPP flags configuretion ===
 
 LDFLAGS= -Wall
-CFLAGS= -c -MD -Wall
+CFLAGS= -c -Wall
+DEPFLAGS= -MD -MF
 
 CPP_VER= -std=c++17
 WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 
@@ -61,7 +64,7 @@ debug: clean a.out
 
 libtest: a.out
 
-a.out: $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+a.out: $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp))
 ifdef DO_DEBUG
 	@echo "=== Linking with DEBUG: $@"
 else
@@ -78,23 +81,23 @@ else
 endif
 
 
-%.o: %.cpp
+$(OBJDIR)/%.o: %.cpp
 ifeq ("YES","$(DO_DEBUG)")
-	@echo "=== Compiling with DEBUG: $@"
+	@echo "=== Compiling with DEBUG: $<"
 else
-	@echo "=== Compiling: $@"
+	@echo "=== Compiling: $<"
 endif
-	$(CC) $(CFLAGS) $<
+	$(CC) $(CFLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
+#	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<
 #       gcc -c -MD $<
 
-include $(wildcard *.d)
+include $(wildcard $(OBJDIR)/*.cpp.d)
 
 
 clean:
 	@echo "=== Cleaning UP..."
-	rm -rf *.o
-	rm -rf *.d
-	rm -rf sh_mem
+	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
+	rm -rfv a.out
 
 # =======================================
 #$(EXECUTABLE): $(OBJECTS)
