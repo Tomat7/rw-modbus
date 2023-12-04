@@ -1,6 +1,8 @@
 CC=g++
 #CC=/usr/lib/gcc-astra/bin/g++
 
+
+
 .DEFAULT_GOAL := all
 
 OBJDIR=./obj
