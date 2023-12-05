@@ -1,8 +1,0 @@
-#! /bin/sh
-#
-# =======================
-git add .
-git commit
-##### -m $1
-git push -v -f -u origin --all
-git push -v -f github --all
