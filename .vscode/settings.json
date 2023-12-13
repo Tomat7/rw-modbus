@@ -50,8 +50,8 @@
     },
     "makefile.launchConfigurations": [
         {
-            "cwd": "/home/star9999/src/rm_read4",
-            "binaryPath": "/home/star9999/src/rm_read4/a.out",
+            "cwd": "/home/star9999/src/rw-modbus",
+            "binaryPath": "/home/star9999/src/rw-modbus/a.out",
             "binaryArgs": []
         }
     ],

@@ -22,7 +22,7 @@ int main() {
 
   s = 10;
   t.stop();
-  t.spent_msec();
+  t.spent_auto();
 
   return (EXIT_SUCCESS);
 }

@@ -41,16 +41,23 @@ public:
     return sec.count();
   }
 
-  void spent_us(const char *txt = "Time spent (microseconds): ") {
-    cout << txt << (elapsed_sec() * 1000000) << '\n';
+  void spent_sec(const char *txt = "Time spent (seconds): ") {
+    cout << txt << setprecision(3) << (elapsed_sec()) << '\n';
   }
 
   void spent_msec(const char *txt = "Time spent (milliseconds): ") {
     cout << txt << setprecision(3) << (elapsed_sec() * 1000) << '\n';
   }
 
-  void spent_sec(const char *txt = "Time spent (seconds): ") {
-    cout << txt << setprecision(3) << (elapsed_sec()) << '\n';
+  void spent_us(const char *txt = "Time spent (microseconds): ") {
+    cout << txt << (elapsed_sec() * 1000000) << '\n';
+  }
+
+  void spent_auto() {
+    double _duration = elapsed_sec();
+    if (_duration > 1) spent_sec();
+    else if (_duration*1000 >1 ) spent_msec();
+    else spent_us();
   }
 };
 
