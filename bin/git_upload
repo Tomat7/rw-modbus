@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # =======================
+cd ..
 git add -v -f .
 git commit -a
 ##### -m $1
