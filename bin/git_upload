@@ -1,7 +1,8 @@
 #!/bin/bash
 #
 # =======================
-git add -A -v -f
+cd ..
+git add -v -f .
 git commit -a
 ##### -m $1
 git push -v -f -u origin --all
