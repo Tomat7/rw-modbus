@@ -1,14 +1,14 @@
 #!/bin/bash
 #
 # =======================
-read -p "Warning! Will LOST ALL CHANGES! (Y/N): " ANS
+read -p "==== Warning! Will LOST ALL CHANGES! (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
 then
-    echo Doing git STASH/PULL/CLEAR.
+    echo ==== Doing git STASH/PULL/CLEAR.
     git stash
     git pull
     git stash clear
 else
-    echo Doing nothing. Relax and Bye!
+    echo ==== Doing nothing. Relax and Bye!
 fi
