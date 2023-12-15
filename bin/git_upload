@@ -4,7 +4,7 @@
 cd ..
 
 echo ==== ADD files ====
-git add -v -f .
+git add -v .
 
 echo ==== COMMIT ====
 git commit -a
