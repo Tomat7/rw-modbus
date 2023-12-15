@@ -4,5 +4,8 @@ a.out
 /**/*.o
 /**/*.d
 /**/a.out
+test/**/*.o
+test/**/*.d
+test/**/a.out
 
 
