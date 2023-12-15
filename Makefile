@@ -3,6 +3,7 @@ CC=g++
 
 .DEFAULT_GOAL := all
 
+CPP_VER= -std=c++17
 OBJDIR=./obj
 
 LIBS= -lrt
@@ -23,7 +24,6 @@ LDFLAGS= -Wall
 CFLAGS= -c -Wall
 DEPFLAGS= -MD -MF
 
-CPP_VER= -std=c++17
 WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 
 CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
 TYPES_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -fstack-protector
