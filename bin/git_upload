@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# =======================
+
 cd ..
 
 echo ==== ADD files ====
@@ -13,3 +13,5 @@ git commit -a
 echo ==== PUSH ====
 git push -v -f -u origin --all
 git push -v -f github --all
+
+echo ==== Finished...
