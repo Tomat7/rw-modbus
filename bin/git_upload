@@ -2,8 +2,14 @@
 #
 # =======================
 cd ..
+
+echo ==== ADD files ====
 git add -v -f .
+
+echo ==== COMMIT ====
 git commit -a
 ##### -m $1
+
+echo ==== PUSH ====
 git push -v -f -u origin --all
 git push -v -f github --all
