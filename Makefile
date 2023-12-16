@@ -58,7 +58,7 @@ FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
 
 #===============================================================================
 
-all: clean a.out
+all: a.out
 
 debug: clean a.out
 

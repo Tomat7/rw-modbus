@@ -1,4 +1,53 @@
-CC=/usr/lib/gcc-astra/bin/gcc
+CC=g++
+#CC=/usr/lib/gcc-astra/bin/g++
+
+.DEFAULT_GOAL := all
+
+CPP_VER= -std=c++17
+OBJDIR=./obj
+
+LIBS= -lrt
+LIBCONFIG=$(shell pkg-config libconfig++ --libs)
+LIBNIDBUS=$(shell pkg-config --libs --cflags libmodbus)
+#LIBS+= $(LIBCONFIG) $(LIBMODBUS) 
+
+#LIBS= -lconfig -lmodbus
+#INCLUDES = -I/usr/include/modbus
+#SOURCES=plc32.cpp plc_read.cpp
+#OBJECTS=$(SOURCES:.cpp=.o)
+#EXECUTABLE=hello
+
+
+# === C/CPP flags configuretion ===
+
+LDFLAGS= -Wall
+CFLAGS= -c -Wall
+DEPFLAGS= -MD -MF
+
+WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 
+CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
+TYPES_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -fstack-protector
+GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2
+DEBUG_FLAGS= -g -fsanitize=address -fsanitize=undefined -fno-sanitize-recover 
+
+CFLAGS+= $(CPP_VER)
+CFLAGS+= $(WARN_FLAGS)
+CFLAGS+= $(CHECK_FLAGS)
+CFLAGS+= $(TYPES_FLAGS)
+CFLAGS+= $(GLIBC_FLAGS)
+
+# === Check for DEBUG build ===
+
+$(info === The GOALS is: $(MAKECMDGOALS))
+
+ifeq ("debug","$(filter debug,$(MAKECMDGOALS))")
+CFLAGS+= $(DEBUG_FLAGS)
+LDFLAGS+= $(DEBUG_FLAGS)
+DO_DEBUG=YES
+$(info === Debug options activated! ===)
+endif
+
+# =============================
 
 FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
  -Wfloat-equal -Wconversion -Wlogical-op -Wshift-overflow=2 \
@@ -7,58 +56,49 @@ FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
  -fsanitize=address -fsanitize=undefined -fno-sanitize-recover \
  -fstack-protector
 
+#===============================================================================
 
-X1FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
-X2FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -fstack-protector
-X3FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2
-X4FLAGS= -fsanitize=address -fsanitize=undefined -fno-sanitize-recover 
+all: clean a.out
 
-CCVER= -std=c++20
-#-std=c++11
+debug: clean a.out
 
-CFLAGS= -c -MD -MP -Wall -Wextra -Wfatal-errors -pedantic -O2 
-CFLAGS+= $(CCVER)
-CFLAGS+= $(X1FLAGS)
-CFLAGS+= $(X2FLAGS)
-CFLAGS+= $(X3FLAGS)
-#CFLAGS+= $(X4FLAGS)
+libtest: a.out
 
-LDFLAGS= -Wall -Wextra -pedantic -O2
-LDFLAGS+= $(X1FLAGS)
-LDFLAGS+= $(X2FLAGS)
-LDFLAGS+= $(X3FLAGS)
-#LDFLAGS+= $(X4FLAGS)
-
-#-Wl,–verbose
-
-SOURCES=plc32.cpp plc_read.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=hello
-LIBS= -lrt
-#LIBS= -lconfig -lmodbus
-#INCLUDES = -I/usr/include/modbus
-
-all: $(patsubst %.c,%.o,$(wildcard *.c))
+a.out: $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp))
+ifdef DO_DEBUG
+	@echo "=== Linking with DEBUG: $@"
+else
+	@echo "=== Linking: $@"
+endif
 	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
-#       gcc $^ -o $@
+ifdef DO_DEBUG
+	@echo "==="
+	@echo "=== Finished with DEBUG! ==="
+	@echo "=== The size of executable file will be REALLY BIG. ==="
+	@echo "==="
+else
+	@echo "=== Done. ==="
+endif
 
-sh_mem: $(patsubst %.c,%.o,$(wildcard *.c))
-	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
 
-
-%.o: %.c
-	$(CC) $(CFLAGS) $<
-#	$(CC) $(CFLAGS) $<
+$(OBJDIR)/%.o: %.cpp
+ifeq ("YES","$(DO_DEBUG)")
+	@echo "=== Compiling with DEBUG: $<"
+else
+	@echo "=== Compiling: $<"
+endif
+	$(CC) $(CFLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
+#	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<
 #       gcc -c -MD $<
 
-include $(wildcard *.d)
-
-
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+include $(wildcard $(OBJDIR)/*.cpp.d)
 
 
 clean:
-	rm -rf *.o
-	rm -rf *.d
-	rm -rf plc
+	@echo "=== Cleaning UP..."
+	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
+	rm -rfv a.out
+
+# =======================================
+#$(EXECUTABLE): $(OBJECTS)
+#	$(CC) $(LDFLAGS) $(OBJECTS) -o $@

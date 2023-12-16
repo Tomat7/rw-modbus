@@ -27,7 +27,7 @@ int cfg_read_mbset(const char *cfg_file, vector<plc_t> &plcset) {
     return (EXIT_FAILURE);
   }
 
-  // Get the store name.
+// Get the name.
   try {
     string name = cfg.lookup("maintitle");
     cout << "Config title: " << name << endl << endl;
@@ -35,39 +35,41 @@ int cfg_read_mbset(const char *cfg_file, vector<plc_t> &plcset) {
     cerr << "No 'nametitle' setting in configuration file." << endl;
   }
 
-  // Output a list of all PLCs in the inventory.
+// Output a list of all PLCs in the inventory.
   try {
     const Setting &PLCs = cfg.lookup("plc");
     int count_PLCs = PLCs.getLength();
 
+// ===== Cycle for PLCs =====
     for (int i = 0; i < count_PLCs; ++i) {
       const Setting &plc = PLCs[i];
       const Setting &REGs = plc["regs"];
+      const char *ptitle; 	// Just to show
+
       int count_REGs = REGs.getLength();
+      plcnow.nb_regs = count_REGs;
 
-      // Only output the record if all of the expected fields are present.
-      const char *ptitle;
-
+// ===== Check the record which expect to get for CFG-file.
       if (!(plc.lookupValue("title", ptitle) &&
             plc.lookupValue("name", plcnow.preffix) &&
             plc.lookupValue("ip", plcnow.ipaddr) &&
             plc.lookupValue("polling", plcnow.polling) &&
             plc.lookupValue("timeout", plcnow.timeout))) {
         cout << "Warning!! Error reading PLC configuration: " << i << endl;
-        continue;
+        continue;  // get out of current cycle iteration if any field wrong in CFG-file 
       }
 
-      plcnow.nb_regs = count_REGs;
-
+// ===== Output PLC details
       cout << setw(10) << left << ptitle << "  " << setw(10) << left
            << plcnow.preffix << "  " << setw(20) << left << plcnow.ipaddr
            << "  " << plcnow.nb_regs << endl;
 
-      // ===== Show registers details =====
+// ===== Cycle for REGs =====
       for (int j = 0; j < count_REGs; ++j) {
         const Setting &reg = REGs[j];
         reg_t regnow;
 
+// ===== Check the record which expect to get for CFG-file.
         if (!(reg.lookupValue("rname", regnow.rname) &&
               reg.lookupValue("addr", regnow.raddr) &&
               reg.lookupValue("access", regnow.rmode))) {
@@ -78,20 +80,22 @@ int cfg_read_mbset(const char *cfg_file, vector<plc_t> &plcset) {
         regnow.rvalue = 0;
         plcnow.regs.push_back(regnow);
 
+// ===== Output REG details
         cout << "       " << setw(9) << left << regnow.rname << "" << setw(3)
              << right << regnow.raddr << " " << setw(5) << left << regnow.rmode
              << "  " << endl;
       }
-      // ===== END registers details =====
+// ===== END registers details =====
 
       cout << endl;
       plcset.push_back(plcnow);
+// ===== END PLs details =====
     }
     cout << "Configured PLCs: " << plcset.size() << endl;
 
   } catch (const SettingNotFoundException &nfex) {
     cout << "Great ERROR! Exiting." << endl;
-    // Ignore.
+// Ignore.
   }
 
   /*

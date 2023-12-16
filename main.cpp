@@ -15,7 +15,10 @@ int rc;
 int main() {
   // Timer t;
   t.start();
-  int s = 8;
+  uint64_t s = 0;
+
+  s = sizeof(plcs);
+  cout << "Size of PLC structure is: " << s << endl;
 
   cfg_read_mbset(CFG_FILE, plcs);
   mb_show(plcs);
@@ -23,6 +26,11 @@ int main() {
   s = 10;
   t.stop();
   t.spent_auto();
+
+  s = sizeof(plcs);
+  cout << "Size of PLC structure is: " << s << endl;
+
+//   getr();
 
   return (EXIT_SUCCESS);
 }

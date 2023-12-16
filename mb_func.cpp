@@ -11,6 +11,7 @@ int mb_show(const vector<plc_t> &plcset) {
   int count_PLCs = static_cast<int>(plcset.size());
   cout << "Total PLCs: " << count_PLCs << endl;
 
+// ===== Cycle to Show PLCs details =====
   for (int i = 0; i < count_PLCs; ++i) {
 
     int count_REGs = plcset[i].nb_regs;
@@ -19,7 +20,7 @@ int mb_show(const vector<plc_t> &plcset) {
          << plcset[i].nb_regs << "  " << setw(15) << left << plcset[i].ipaddr
          << "  " << plcset[i].polling << "  " << plcset[i].timeout << endl;
 
-    // ===== Show registers details =====
+// ===== Cycle to Show registers details =====
     for (int j = 0; j < count_REGs; ++j) {
       cout << "       " << setw(9) << left << plcset[i].regs[j].rname << setw(3)
            << right << plcset[i].regs[j].raddr << setw(7) << right

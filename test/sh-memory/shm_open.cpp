@@ -15,7 +15,7 @@
 
 int main (int argc, char ** argv) {
     int shm, len, cmd, mode = 0;
-    char *addr;
+    char *addr = NULL;
 
     if ( argc < 2 ) {
         usage(argv[0]);
@@ -48,7 +48,9 @@ int main (int argc, char ** argv) {
         }
     }
 
-    addr = mmap(0, SHARED_MEMORY_OBJECT_SIZE+1, PROT_WRITE|PROT_READ, MAP_SHARED, shm, 0);
+    addr = (char*)mmap(0, SHARED_MEMORY_OBJECT_SIZE+1, PROT_WRITE|PROT_READ, MAP_SHARED, shm, 0);
+//    mmap(addr, SHARED_MEMORY_OBJECT_SIZE+1, PROT_WRITE|PROT_READ, MAP_SHARED, shm, 0);
+
     if ( addr == (char*)-1 ) {
         perror("mmap");
         return 1;
