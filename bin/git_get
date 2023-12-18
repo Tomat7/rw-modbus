@@ -6,11 +6,11 @@ read -p "==== Warning! Will LOST ALL CHANGES! (Y/N): " ANS
 if [ "$ANS" == "Y" ]
 then
     echo ==== Doing git STASH.
-    git stash -v
+    git stash
     echo ==== Doing git PULL.
     git pull -v 
     echo ==== Doing git STASH CLEAR.
-    git stash -v clear
+    git stash clear
     echo ==== Finished.
 else
     echo ==== Doing nothing. Relax and Bye!
