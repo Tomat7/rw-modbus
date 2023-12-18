@@ -4,22 +4,20 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
 #include "usage.h"
-
-#define SHARED_MEMORY_OBJECT_NAME "my_shared_memory"
-#define SHARED_MEMORY_OBJECT_SIZE 50
-#define SHM_CREATE 1
-#define SHM_PRINT  3
-#define SHM_CLOSE  4
 
 
 int main (int argc, char ** argv) {
     int shm, len, cmd, mode = 0;
     char *addr = NULL;
 
+    chk_usage(argc, *argv);
+
     if ( argc < 2 ) {
         usage(argv[0]);
-        return 1;
+	sleep(2);
+        return SHM_ERR_ARG_LOST;
     }
 
     if ( (!strcmp(argv[1], "create") || !strcmp(argv[1], "write")) && (argc == 3) ) {
@@ -33,18 +31,20 @@ int main (int argc, char ** argv) {
         cmd = SHM_CLOSE;
     } else {
         usage(argv[0]);
-        return 1;
+	sleep(2);
+        return SHM_ERR_ARG_WRONG;
     }
 
     if ( (shm = shm_open(SHARED_MEMORY_OBJECT_NAME, mode|O_RDWR, 0777)) == -1 ) {
-        perror("shm_open");
-        return 1;
+	std::cout << errno << std::endl;
+        perror("shm OPEN: ");
+        return SHM_ERR_OPEN;
     }
 
     if ( cmd == SHM_CREATE ) {
         if ( ftruncate(shm, SHARED_MEMORY_OBJECT_SIZE+1) == -1 ) {
             perror("ftruncate");
-            return 1;
+            return SHM_ERR_TRUNC;
         }
     }
 
@@ -53,7 +53,7 @@ int main (int argc, char ** argv) {
 
     if ( addr == (char*)-1 ) {
         perror("mmap");
-        return 1;
+        return SHM_ERR_MMAP;
     }
 
     switch ( cmd ) {
@@ -63,9 +63,14 @@ int main (int argc, char ** argv) {
         printf("Shared memory filled in. You may run '%s print' to see value.\n", argv[0]);
         break;
     case SHM_PRINT:
+	for (;;) {
         printf("Got from shared memory: %s\n", addr);
+	sleep(3);
+	}
         break;
     }
+
+    sleep(1);
 
     munmap(addr, SHARED_MEMORY_OBJECT_SIZE);
     close(shm);
