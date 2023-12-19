@@ -76,8 +76,10 @@ ifdef DO_DEBUG
 	@echo "=== Finished with DEBUG! ==="
 	@echo "=== The size of executable file will be REALLY BIG. ==="
 	@echo "==="
+	sleep 3
 else
 	@echo "=== Done. ==="
+	sleep 2
 endif
 
 

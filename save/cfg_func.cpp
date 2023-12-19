@@ -1,5 +1,5 @@
 // cfg_func.cpp --------------------------------------------------------------
-#include <vector>
+
 #include "config.h"
 #include "libs.h"
 
@@ -14,9 +14,8 @@ Config cfg;
 
 int cfg_read_mbset(const char *cfg_file) {
 
-  // Read the file. If there is an error, report it and exit.
-  cout << endl << "======= cfg_read_mbset =======" << endl;
 
+  // Read the file. If there is an error, report it and exit.
   try {
     cfg.readFile(cfg_file);
     std::cout << "I/O reading file OK: " << cfg_file << std::endl;
@@ -29,7 +28,7 @@ int cfg_read_mbset(const char *cfg_file) {
     return (EXIT_FAILURE);
   }
 
-// Get the top name.
+// Get the name.
   try {
     string name = cfg.lookup("maintitle");
     cout << "Config title: " << name << endl << endl;
@@ -39,18 +38,7 @@ int cfg_read_mbset(const char *cfg_file) {
 
 // Output a list of all PLCs in the inventory.
   try {
-    cfg_fill_plc(cfg.lookup("plc"));
-  } catch (const SettingNotFoundException &nfex) {
-    cout << "Great ERROR! Exiting." << endl;
-// Ignore.
-  }
-  
-  return (EXIT_SUCCESS);
-}
-
-
-int cfg_fill_plc(const Setting &PLCs) {
-//  const Setting &PLCs = cfg.lookup("plc");
+    const Setting &PLCs = cfg.lookup("plc");
     int count_PLCs = PLCs.getLength();
 
 // ===== Cycle for PLCs =====
@@ -62,7 +50,7 @@ int cfg_fill_plc(const Setting &PLCs) {
 
       int count_REGs = REGs.getLength();
       plcnow.nb_regs = count_REGs;
-//      cout << count_REGs << endl;
+      cout << count_REGs << endl;
 
 // ===== Check the record which expect to get for CFG-file.
       if (!(plc.lookupValue("title", ptitle) &&
@@ -110,7 +98,47 @@ int cfg_fill_plc(const Setting &PLCs) {
 // ===== END PLs details =====
     }
     cout << "Configured PLCs: " << PLCset.size() << endl;
-    return 0;
+
+  } catch (const SettingNotFoundException &nfex) {
+    cout << "Great ERROR! Exiting." << endl;
+// Ignore.
+  }
+
+  /*
+    // Output a list of all PLCs in the inventory.
+    try {
+      const Setting &movies = root["inventory"]["movies"];
+      int count = movies.getLength();
+
+      cout << setw(30) << left << "TITLE"
+           << "  " << setw(10) << left << "MEDIA"
+           << "   " << setw(6) << left << "PRICE"
+           << "  "
+           << "QTY" << endl;
+
+      for (int i = 0; i < count; ++i) {
+        const Setting &movie = movies[i];
+
+        // Only output the record if all of the expected fields are present.
+        string title, media;
+        double price;
+        int qty;
+
+        if (!(movie.lookupValue("title", title) &&
+              movie.lookupValue("media", media) &&
+              movie.lookupValue("price", price) && movie.lookupValue("qty",
+    qty))) continue;
+
+        cout << setw(30) << left << title << "  " << setw(10) << left << media
+             << "  " << '$' << setw(6) << right << price << "  " << qty << endl;
+      }
+
+      cout << endl;
+    } catch (const SettingNotFoundException &nfex) {
+      // Ignore.
+    }
+  */
+  return (EXIT_SUCCESS);
 }
 
 // eof

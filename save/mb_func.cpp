@@ -1,5 +1,4 @@
 // ----------------------------------------------------------------------------
-#include <vector>
 
 #include "config.h"
 #include "libs.h"
@@ -9,8 +8,6 @@ using namespace libconfig;
 
 int mb_show()
 {
-
-  cout << endl << "======= mb_show =======" << endl;
 
   int count_PLCs = static_cast<int>(PLCset.size());
   cout << "Total PLCs: " << count_PLCs << endl;
@@ -24,16 +21,18 @@ int mb_show()
          << "  " << PLCset[i].poll_interval << "  " << PLCset[i].err_timeout << endl;
 
     // ===== Cycle to Show registers details =====
+
     mb_show_regs_full(i);
 
     // ===== Next PLC ...
     cout << endl;
   }
   // ===== All PLC done.
+  cout << endl;
   mb_show_regs_name();
   
-//  cout << PLCset[0].regs.size() << endl;
-//  cout << PLCset[1].regs.size() << endl;
+  cout << PLCset[0].regs.size() << endl;
+  cout << PLCset[1].regs.size() << endl;
   
   return 0;
 }
@@ -41,7 +40,7 @@ int mb_show()
 void mb_show_regs_full(int i)
 {
   int nbregs = static_cast<int>(PLCset[i].regs.size());
-//  cout << nbregs << endl;
+  cout << nbregs << endl;
 
   for (int j = 0; j < nbregs; ++j)
   {
@@ -61,7 +60,6 @@ void mb_show_regs_full(int i)
 
 void mb_show_regs_name()
 {
-  cout << endl << "======= mb_show_regs_name =======" << endl;
   for (const auto &[rname, rval] : MBreg)
     cout << rname << " " << *rval << endl;
 }

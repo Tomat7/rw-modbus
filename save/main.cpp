@@ -18,6 +18,7 @@ int main() {
 
   std::map<std::string, unsigned> products;
   map<string, unsigned> product2;
+
   map<string, reg_t> product3;
 
   t.start();

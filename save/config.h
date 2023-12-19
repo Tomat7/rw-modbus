@@ -5,7 +5,6 @@
 #define CFG_FILE "./conf/modbus.cfg"
 
 using namespace std;
-using namespace libconfig;
 
 struct reg_t {
   int raddr;
@@ -27,8 +26,6 @@ extern map<string, uint16_t*> MBreg;
 extern vector<plc_t> PLCset;
 
 int cfg_read_mbset(const char *cfg_file);
-int cfg_fill_plc(const Setting &PLCs);
-
 int mb_show();
 
 void mb_show_regs_full(int i);
