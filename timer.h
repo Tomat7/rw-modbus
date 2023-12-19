@@ -1,4 +1,5 @@
 #include <chrono> // для функций из std::chrono
+#include <thread>
 
 using namespace std;
 using namespace chrono;
@@ -36,7 +37,7 @@ public:
     auto sec = duration_cast<milliseconds>(end - begin);
     return sec.count();
   }
-  int64_t elapsed_usec() const {
+  int64_t elapsed_us() const {
     auto sec = duration_cast<microseconds>(end - begin);
     return sec.count();
   }
@@ -45,7 +46,7 @@ public:
     cout << txt << setprecision(3) << (elapsed_sec()) << '\n';
   }
 
-  void spent_msec(const char *txt = "Time spent (milliseconds): ") {
+  void spent_ms(const char *txt = "Time spent (milliseconds): ") {
     cout << txt << setprecision(3) << (elapsed_sec() * 1000) << '\n';
   }
 
@@ -56,9 +57,22 @@ public:
   void spent_auto() {
     double _duration = elapsed_sec();
     if (_duration > 1) spent_sec();
-    else if (_duration*1000 >1 ) spent_msec();
+    else if (_duration*1000 > 1 ) spent_ms();
     else spent_us();
   }
+
+  void sleep_sec(int s) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(s));
+  }
+
+  void sleep_ms(int ms) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+  }
+
+  void sleep_us(int us) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(us));
+  }
+
 };
 
 Timer t;

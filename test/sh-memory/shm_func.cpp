@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <chrono>
+#include <thread>
+
 #include "usage.h"
 
 
@@ -16,7 +19,8 @@ int main (int argc, char ** argv) {
 
     if ( argc < 2 ) {
         usage(argv[0]);
-	sleep(2);
+//	sleep(0.92);
+	std::this_thread::sleep_for(std::chrono::milliseconds(900));
         return SHM_ERR_ARG_LOST;
     }
 

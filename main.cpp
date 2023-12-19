@@ -30,6 +30,11 @@ int main() {
   s = sizeof(plcs);
   cout << "Size of PLC structure is: " << s << endl;
 
+  t.start();
+  t.sleep_ms(900);
+  t.stop();
+  t.spent_auto();
+
 //   getr();
 
   return (EXIT_SUCCESS);
