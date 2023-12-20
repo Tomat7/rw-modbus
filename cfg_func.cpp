@@ -91,13 +91,13 @@ void cfg_fill_regs(const Setting &REGs, plc_t* pn) {
     int nb_regs = REGs.getLength();
     // ===== Cycle for REGs =====
     for (int j = 0; j < nb_regs; ++j) {
-//      const Setting &reg = REGs[j];
+      const Setting &reg = REGs[j];
       reg_t regnow;
 
       // ===== Check the record which expect to get for CFG-file.
-      if (!(REGs[j].lookupValue("rname", regnow.rname) &&
-            REGs[j].lookupValue("addr", regnow.raddr) &&
-            REGs[j].lookupValue("access", regnow.rmode))) {
+      if (!(reg.lookupValue("rname", regnow.rname) &&
+            reg.lookupValue("addr", regnow.raddr) &&
+            reg.lookupValue("access", regnow.rmode))) {
         cout << "error reading REG " << j << endl;
         continue;
       }

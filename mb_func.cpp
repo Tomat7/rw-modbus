@@ -33,7 +33,7 @@ void mb_show_plcs_full() {
   cout << "Total PLCs: " << nb_plcs << endl;
   // ===== Cycle to Show PLCs details =====
   for (int i = 0; i < nb_plcs; ++i) {
-    int count_REGs = PLCset[i].nb_regs;
+//    int count_REGs = PLCset[i].nb_regs;
     mb_print_plc_details(i);
     mb_show_regs_full(i);
     cout << endl;

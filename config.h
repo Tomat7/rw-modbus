@@ -27,7 +27,7 @@ struct plc_t {
   vector<reg_t> regs;
 };
 
-extern map<string, uint16_t *> MBreg;
+extern map<string, uint16_t*> MBreg;
 extern vector<plc_t> PLCset;
 
 int cfg_read_mbset(const char *cfg_file);

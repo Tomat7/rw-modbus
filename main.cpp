@@ -7,7 +7,7 @@
 using namespace std;
 using namespace libconfig;
 
-map<string, uint16_t *> MBreg;
+map<string, uint16_t*> MBreg;
 vector<plc_t> PLCset;
 int rc;
 
@@ -15,10 +15,6 @@ int rc;
 
 int main() {
   // Timer t;
-
-  std::map<std::string, unsigned> products;
-  map<string, unsigned> product2;
-  map<string, reg_t> product3;
 
   t.start();
   uint64_t s = 0;
