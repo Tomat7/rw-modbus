@@ -20,20 +20,25 @@ struct reg_t {
 struct plc_t {
   const char *dev_desc;
   const char *dev_name;
+
   const char *ip_addr;
-  int nb_regs;
+  int tcp_port;
+
   int poll_interval;
   int err_timeout;
+
+  int nb_regs;
   vector<reg_t> regs;
 };
 
-extern map<string, uint16_t*> MBreg;
+extern map<string, uint16_t *> MBreg;
 extern vector<plc_t> PLCset;
 
 int cfg_read_mbset(const char *cfg_file);
-//int cfg_fill_plc(const Setting &PLCs);
+// int cfg_fill_plc(const Setting &PLCs);
 
 int mb_show();
+int mb_get();
 
 // void mb_show_regs_full(int i);
 // void mb_show_regs_name();

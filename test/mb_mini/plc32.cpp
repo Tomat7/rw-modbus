@@ -7,7 +7,7 @@
 #include <string.h>
 #include <syslog.h>
 
-#define MB_CONFIG_FILE "plc39.cfg"
+#define MB_CONFIG_FILE "plc32.cfg"
 #define NB_REGS 12
 //#define MB_READ_ONE_REG
 

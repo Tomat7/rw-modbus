@@ -8,7 +8,7 @@ OBJDIR=./obj
 
 LIBS= -lrt
 LIBCONFIG=$(shell pkg-config libconfig++ --libs)
-LIBNIDBUS=$(shell pkg-config --libs --cflags libmodbus)
+LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
 LIBS+= $(LIBCONFIG) $(LIBMODBUS) 
 
 #LIBS= -lconfig -lmodbus

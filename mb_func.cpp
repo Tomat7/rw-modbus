@@ -16,7 +16,6 @@ void mb_print_reg_details(int i, int j);
 void mb_show_regs_name();
 void mb_fill_reg_name(string devname, string regname, uint16_t *val);
 
-
 int mb_show() {
   cout << endl << "======= mb_show =======" << endl;
   // ===== Print ALL PLCs detailed.
@@ -33,7 +32,7 @@ void mb_show_plcs_full() {
   cout << "Total PLCs: " << nb_plcs << endl;
   // ===== Cycle to Show PLCs details =====
   for (int i = 0; i < nb_plcs; ++i) {
-//    int count_REGs = PLCset[i].nb_regs;
+    //    int count_REGs = PLCset[i].nb_regs;
     mb_print_plc_details(i);
     mb_show_regs_full(i);
     cout << endl;

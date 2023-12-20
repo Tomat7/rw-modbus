@@ -1,18 +1,17 @@
 // cfg_func.cpp --------------------------------------------------------------
 #include "config.h"
 #include "libs.h"
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 using namespace libconfig;
 
 int cfg_fill_plcset();
-void cfg_fill_regs(const Setting &reg, plc_t* pn);
+void cfg_fill_regs(const Setting &reg, plc_t *pn);
 
-
-void cfg_print_plc_details(const plc_t* pn);
-void cfg_print_reg_details(const reg_t* rn);
+void cfg_print_plc_details(const plc_t *pn);
+void cfg_print_reg_details(const reg_t *rn);
 
 Config cfg;
 
@@ -61,12 +60,14 @@ int cfg_fill_plcset() {
 
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
-    plc_t plcnow;
+//    plc_t plcnow;
+    PLC plcnow;
 
     // ===== Check the record which expect to get for CFG-file.
     if (!(PLCs[i].lookupValue("title", plcnow.dev_desc) &&
           PLCs[i].lookupValue("name", plcnow.dev_name) &&
           PLCs[i].lookupValue("ip", plcnow.ip_addr) &&
+          PLCs[i].lookupValue("port", plcnow.tcp_port) &&
           PLCs[i].lookupValue("polling", plcnow.poll_interval) &&
           PLCs[i].lookupValue("timeout", plcnow.err_timeout))) {
       cout << "Warning!! Error reading PLC configuration: " << i << endl;
@@ -87,43 +88,41 @@ int cfg_fill_plcset() {
   return 0;
 }
 
-void cfg_fill_regs(const Setting &REGs, plc_t* pn) {
-    int nb_regs = REGs.getLength();
-    // ===== Cycle for REGs =====
-    for (int j = 0; j < nb_regs; ++j) {
-      const Setting &reg = REGs[j];
-      reg_t regnow;
+void cfg_fill_regs(const Setting &REGs, plc_t *pn) {
+  int nb_regs = REGs.getLength();
+  // ===== Cycle for REGs =====
+  for (int j = 0; j < nb_regs; ++j) {
+    const Setting &reg = REGs[j];
+    reg_t regnow;
 
-      // ===== Check the record which expect to get for CFG-file.
-      if (!(reg.lookupValue("rname", regnow.rname) &&
-            reg.lookupValue("addr", regnow.raddr) &&
-            reg.lookupValue("access", regnow.rmode))) {
-        cout << "error reading REG " << j << endl;
-        continue;
-      }
-
-      regnow.rvalue = 555;
-      cfg_print_reg_details(&regnow);
-      pn->regs.push_back(regnow);
+    // ===== Check the record which expect to get for CFG-file.
+    if (!(reg.lookupValue("rname", regnow.rname) &&
+          reg.lookupValue("addr", regnow.raddr) &&
+          reg.lookupValue("access", regnow.rmode))) {
+      cout << "error reading REG " << j << endl;
+      continue;
     }
-    return;
+
+    regnow.rvalue = 555;
+    cfg_print_reg_details(&regnow);
+    pn->regs.push_back(regnow);
+  }
+  return;
 }
 
-
-void cfg_print_plc_details(const plc_t* pn) {
-    // ===== Output PLC details
-    cout << setw(10) << left << pn->dev_desc << "  " << setw(10) << left
-         << pn->dev_name << "  " << setw(20) << left << pn->ip_addr
-         << "  " << pn->nb_regs << endl;
-    return;
+void cfg_print_plc_details(const plc_t *pn) {
+  // ===== Output PLC details
+  cout << setw(10) << left << pn->dev_desc << "  " << setw(10) << left
+       << pn->dev_name << "  " << setw(20) << left << pn->ip_addr << "  "
+       << pn->nb_regs << endl;
+  return;
 }
 
-void cfg_print_reg_details(const reg_t* rn) {
-      // ===== Output REG details
-      cout << "       " << setw(9) << left << rn->rname << "" << setw(3)
-           << right << rn->raddr << " " << setw(5) << left << rn->rmode
-           << "  " << endl;
-    return;
+void cfg_print_reg_details(const reg_t *rn) {
+  // ===== Output REG details
+  cout << "       " << setw(9) << left << rn->rname << "" << setw(3) << right
+       << rn->raddr << " " << setw(5) << left << rn->rmode << "  " << endl;
+  return;
 }
 
 // eof

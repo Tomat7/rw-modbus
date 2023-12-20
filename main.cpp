@@ -2,19 +2,26 @@
 
 #include "config.h"
 #include "libs.h"
+#include "mb_plc_class.h"
 #include "timer.h" // Timer t; - already initialised here!
 
 using namespace std;
 using namespace libconfig;
 
-map<string, uint16_t*> MBreg;
-vector<plc_t> PLCset;
+map<string, uint16_t *> MBreg;
+//vector<plc_t> PLCset;
+
+vector<PLC> PLCset;
+
 int rc;
 
 // int main(int argc, char **argv) {
 
 int main() {
-  // Timer t;
+  Timer t2;
+//  PLC plc;
+
+//  devset.push_back(plc);
 
   t.start();
   uint64_t s = 0;
@@ -31,6 +38,11 @@ int main() {
 
   s = sizeof(PLCset);
   cout << "Size of PLC structure is: " << s << endl;
+
+  t.start();
+  mb_get();
+  t.stop();
+  t.spent();
 
   t.start();
   t.sleep_ms(987);
