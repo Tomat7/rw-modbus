@@ -2,19 +2,15 @@
 #include "config.h"
 #include "libs.h"
 #include <vector>
-#include <string>
 
 using namespace std;
 using namespace libconfig;
 
-int cfg_fill_plcset();
-void cfg_fill_regs(const Setting &reg, plc_t* pn);
-
-
-void cfg_print_plc_details(const plc_t* pn);
-void cfg_print_reg_details(const reg_t* rn);
+int cfg_fill_plcset(const Setting &PLCs);
 
 Config cfg;
+plc_t plcnow;
+//reg_t regnow;
 
 // This example reads the configuration file and displays
 // some of its contents.
@@ -46,7 +42,7 @@ int cfg_read_mbset(const char *cfg_file) {
 
   // Output a list of all PLCs in the inventory.
   try {
-    cfg_fill_plcset();
+    cfg_fill_plcset(cfg.lookup("plc"));
   } catch (const SettingNotFoundException &nfex) {
     cout << "Great ERROR! Exiting." << endl;
     // Ignore.
@@ -55,75 +51,70 @@ int cfg_read_mbset(const char *cfg_file) {
   return (EXIT_SUCCESS);
 }
 
-int cfg_fill_plcset() {
-  const Setting &PLCs = cfg.lookup("plc");
+int cfg_fill_plcset(const Setting &PLCs) {
+  //  const Setting &PLCs = cfg.lookup("plc");
   int nb_plcs = PLCs.getLength();
 
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
-    plc_t plcnow;
+//    plc_t plcnow;
+    plcnow.regs.clear();
+    const Setting &plc = PLCs[i];
+//    const Setting &REGs = plc["regs"];
 
+    const Setting &REGs = PLCs[i]["regs"];
+    int nb_regs = REGs.getLength();
+    plcnow.nb_regs = nb_regs;
+
+    const char *ptitle; // Just to show
     // ===== Check the record which expect to get for CFG-file.
-    if (!(PLCs[i].lookupValue("title", plcnow.dev_desc) &&
-          PLCs[i].lookupValue("name", plcnow.dev_name) &&
-          PLCs[i].lookupValue("ip", plcnow.ip_addr) &&
-          PLCs[i].lookupValue("polling", plcnow.poll_interval) &&
-          PLCs[i].lookupValue("timeout", plcnow.err_timeout))) {
+    if (!(plc.lookupValue("title", ptitle) &&
+          plc.lookupValue("name", plcnow.dev_name) &&
+          plc.lookupValue("ip", plcnow.ip_addr) &&
+          plc.lookupValue("polling", plcnow.poll_interval) &&
+          plc.lookupValue("timeout", plcnow.err_timeout))) {
       cout << "Warning!! Error reading PLC configuration: " << i << endl;
       continue; // get out of current cycle iteration if any field wrong in
                 // CFG-file
     }
 
-    plcnow.nb_regs = PLCs[i]["regs"].getLength();
-    cfg_print_plc_details(&plcnow);
-    cfg_fill_regs(PLCs[i]["regs"], &plcnow);
+    // ===== Output PLC details
+    cout << setw(10) << left << ptitle << "  " << setw(10) << left
+         << plcnow.dev_name << "  " << setw(20) << left << plcnow.ip_addr
+         << "  " << plcnow.nb_regs << endl;
 
-    cout << endl;
-    cout << "Configured REGs now: " << plcnow.regs.size() << endl;
-    PLCset.push_back(plcnow);
-    // ===== End PLC filling  =====
-  }
-  cout << "Configured PLCs: " << PLCset.size() << endl;
-  return 0;
-}
-
-void cfg_fill_regs(const Setting &REGs, plc_t* pn) {
-    int nb_regs = REGs.getLength();
     // ===== Cycle for REGs =====
     for (int j = 0; j < nb_regs; ++j) {
-//      const Setting &reg = REGs[j];
+      const Setting &reg = REGs[j];
       reg_t regnow;
 
       // ===== Check the record which expect to get for CFG-file.
-      if (!(REGs[j].lookupValue("rname", regnow.rname) &&
-            REGs[j].lookupValue("addr", regnow.raddr) &&
-            REGs[j].lookupValue("access", regnow.rmode))) {
+      if (!(reg.lookupValue("rname", regnow.rname) &&
+            reg.lookupValue("addr", regnow.raddr) &&
+            reg.lookupValue("access", regnow.rmode))) {
         cout << "error reading REG " << j << endl;
         continue;
       }
 
       regnow.rvalue = 555;
-      cfg_print_reg_details(&regnow);
-      pn->regs.push_back(regnow);
-    }
-    return;
-}
+      //	plcnow.reg[regnow.rname] = &regnow.rvalue;
+      //	cout << *(plcnow.reg[regnow.rname]) << endl; //   -------------
+      plcnow.regs.push_back(regnow);
 
-
-void cfg_print_plc_details(const plc_t* pn) {
-    // ===== Output PLC details
-    cout << setw(10) << left << pn->dev_desc << "  " << setw(10) << left
-         << pn->dev_name << "  " << setw(20) << left << pn->ip_addr
-         << "  " << pn->nb_regs << endl;
-    return;
-}
-
-void cfg_print_reg_details(const reg_t* rn) {
       // ===== Output REG details
-      cout << "       " << setw(9) << left << rn->rname << "" << setw(3)
-           << right << rn->raddr << " " << setw(5) << left << rn->rmode
+      cout << "       " << setw(9) << left << regnow.rname << "" << setw(3)
+           << right << regnow.raddr << " " << setw(5) << left << regnow.rmode
            << "  " << endl;
-    return;
+    }
+    // ===== END registers details =====
+
+    cout << endl;
+    cout << "Configured REGs now: " << plcnow.regs.size() << endl;
+    PLCset.push_back(plcnow);
+    // ===== END PLs details =====
+  }
+  cout << "Configured PLCs: " << PLCset.size() << endl;
+  return 0;
 }
 
 // eof

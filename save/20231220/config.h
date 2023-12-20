@@ -18,7 +18,6 @@ struct reg_t {
 };
 
 struct plc_t {
-  const char *dev_desc;
   const char *dev_name;
   const char *ip_addr;
   int nb_regs;
