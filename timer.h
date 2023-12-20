@@ -42,24 +42,26 @@ public:
     return sec.count();
   }
 
-  void spent_sec(const char *txt1 = "Time spent: ", const char *txt2 = " second.") {
-    cout << txt1 << setprecision(3) << (elapsed_sec()) << txt2 << '\n';
+  void spent_sec(int p = 6, const char *txt1 = "Time spent: ", const char *txt2 = " second.") {
+    cout << txt1 << fixed << setprecision(p) << (elapsed_sec()) << txt2 << '\n';
   }
 
-  void spent_ms(const char *txt1 = "Time spent: ", const char *txt2 = " msec.") {
-    cout << txt1 << setprecision(3) << (elapsed_sec() * 1000) << txt2 << '\n';
+  void spent_ms(int p = 6, const char *txt1 = "Time spent: ", const char *txt2 = " msec.") {
+    cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) << txt2 << '\n';
   }
 
-  void spent_us(const char *txt1 = "Time spent: ", const char *txt2 = " us.") {
-    cout << txt1 << (elapsed_sec() * 1000000) << txt2 << '\n';
+  void spent_us(int p = 6, const char *txt1 = "Time spent: ", const char *txt2 = " us.") {
+    cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000000) << txt2 << '\n';
   }
 
   void spent_auto() {
     double _duration = elapsed_sec();
-    if (_duration > 1) spent_sec();
-    else if (_duration*1000 > 1 ) spent_ms();
-    else spent_us();
+    if (_duration > 1) spent_sec(2);
+    else if (_duration*1000 > 1 ) spent_ms(1);
+    else spent_us(0);
   }
+    
+  void spent() { spent_auto(); }
 
   void sleep_sec(int s) {
     std::this_thread::sleep_for(std::chrono::milliseconds(s));

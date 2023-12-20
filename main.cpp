@@ -37,9 +37,9 @@ int main() {
   cout << "Size of PLC structure is: " << s << endl;
 
   t.start();
-  t.sleep_ms(900);
+  t.sleep_ms(1987);
   t.stop();
-  t.spent_auto();
+  t.spent();
 
 //   getr();
 

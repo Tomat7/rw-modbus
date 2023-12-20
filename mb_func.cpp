@@ -63,7 +63,7 @@ void mb_show_regs_name()
 {
   cout << endl << "======= mb_show_regs_name =======" << endl;
   for (const auto &[rname, rval] : MBreg)
-    cout << rname << " " << *rval << endl;
+    cout << "  " << setw(12) << left << rname << setw(7) << right << *rval << endl;
 }
 
 // eof

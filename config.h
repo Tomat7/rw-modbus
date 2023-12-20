@@ -4,6 +4,10 @@
 
 #define CFG_FILE "./conf/modbus.cfg"
 
+// https://31.44.7.12:55972/panel/
+// http://85.117.235.21:55971/
+
+
 using namespace std;
 using namespace libconfig;
 
