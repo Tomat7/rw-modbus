@@ -1,8 +1,10 @@
 #pragma once
 
 //#include "config.h"
+#include <iostream>
 #include <modbus/modbus.h>
 #include <vector>
+
 
 using namespace std;
 
@@ -16,10 +18,14 @@ struct reg_t {
 class PLC {
 
 public:
-  PLC(); // {}
+  PLC() {cout << "New PLC created." << endl;}
+  ~PLC() {cout << "PLC deleted." << endl;}
 
-  int init(const char *_ip, int _port);
+  int init(const char *_ip = "", int _port = 0);
   int set_timeout();
+  int connect();
+  int read();
+  void deinit();
 
   const char *dev_title;
   const char *dev_desc;

@@ -45,17 +45,19 @@ void mb_fill_plcs_full() {
 
 int mb_fill_regs_full(int i) {
 
+/*
   const int nb_regs = static_cast<int>(PLCset[i].regs.size());
   uint16_t mbregs[nb_regs + 1];
-
   const char *_ip = PLCset[i].ip_addr;
   int _port = PLCset[i].tcp_port;
-
-  modbus_t *mb;
-  int rc = 0;
-
+*/
   // ===== Try/check to open MB
 
+  PLCset[i].read();
+
+/*
+  modbus_t *mb;
+  int rc = 0;
   mb = modbus_new_tcp(_ip, _port);
   rc = modbus_connect(mb);
   if (rc == -1) {
@@ -63,6 +65,7 @@ int mb_fill_regs_full(int i) {
     modbus_free(mb);
     return rc;
   }
+*/
   /*
     rc = modbus_set_response_timeout(mb, 0, PLCset[i].err_timeout);
     if ( rc == -1)
@@ -72,8 +75,8 @@ int mb_fill_regs_full(int i) {
       }
   */
   //  mb_set_response_timeout(i);
-
-  // ===== Try to get ALL HOLDING registers by ONE request */
+/*
+  // ===== Try to get ALL HOLDING registers by ONE request 
   rc = modbus_read_registers(mb, 0, nb_regs, mbregs);
   if (rc == -1) {
     fprintf(stderr, "MB multi-read error: %s \n", modbus_strerror(errno));
@@ -89,7 +92,7 @@ int mb_fill_regs_full(int i) {
 
   modbus_close(mb);
   modbus_free(mb);
-
+*/
   return 0;
 }
 
