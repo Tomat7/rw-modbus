@@ -43,7 +43,7 @@ int cfg_read_mbset(const char *cfg_file) {
 
 // ===== Cycle for PLCs =====
     for (int i = 0; i < count_PLCs; ++i) {
-      plc_t plcnow;
+      PLC plcnow;
       const Setting &plc = PLCs[i];
       const Setting &REGs = plc["regs"];
       const char *ptitle; 	// Just to show

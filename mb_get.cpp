@@ -31,7 +31,6 @@ int mb_get() {
   return 0;
 }
 
-
 void mb_fill_plcs_full() {
   int nb_plcs = static_cast<int>(PLCset.size());
   cout << "Total PLCs: " << nb_plcs << endl;
@@ -43,7 +42,6 @@ void mb_fill_plcs_full() {
 
   return;
 }
-
 
 int mb_fill_regs_full(int i) {
 
@@ -95,7 +93,6 @@ int mb_fill_regs_full(int i) {
   return 0;
 }
 
-
 /*
 int mb_set_respose_timeout() {
     uint32_t response_sec;
@@ -106,7 +103,6 @@ int mb_set_respose_timeout() {
   return rc;
 }
 */
-
 
 void mb_get_regs_byname() {
   cout << endl << "======= mb_get_regs_byname =======" << endl;

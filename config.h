@@ -1,7 +1,7 @@
 #pragma once
 
 #include "libs.h"
-#include "mb_plc_class.h"
+#include "plc_class.h"
 
 #define CFG_FILE "./conf/modbus.cfg"
 
@@ -35,8 +35,10 @@ struct plc_t {
 };
 */
 
+// extern vector<Timer> Timerset;
+
 extern map<string, uint16_t *> MBreg;
-extern vector<plc_t> PLCset;
+extern vector<PLC> PLCset;
 
 int cfg_read_mbset(const char *cfg_file);
 // int cfg_fill_plc(const Setting &PLCs);

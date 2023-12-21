@@ -2,26 +2,26 @@
 
 #include "config.h"
 #include "libs.h"
-#include "mb_plc_class.h"
+#include "plc_class.h"
 #include "timer.h" // Timer t; - already initialised here!
 
 using namespace std;
 using namespace libconfig;
 
 map<string, uint16_t *> MBreg;
-//vector<plc_t> PLCset;
+// vector<plc_t> PLCset;
 
-//vector<PLC> PLCset;
-vector<plc_t> PLCset;
+vector<PLC> PLCset;
+
 int rc;
 
 // int main(int argc, char **argv) {
 
 int main() {
   Timer t2;
-//  PLC plc;
+  //  PLC plc;
 
-//  devset.push_back(plc);
+  //  devset.push_back(plc);
 
   t.start();
   uint64_t s = 0;

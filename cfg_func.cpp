@@ -1,7 +1,8 @@
 // cfg_func.cpp --------------------------------------------------------------
+
 #include "config.h"
 #include "libs.h"
-#include "mb_plc_class.h"
+#include "plc_class.h"
 #include <string>
 #include <vector>
 
@@ -9,9 +10,9 @@ using namespace std;
 using namespace libconfig;
 
 int cfg_fill_plcset();
-void cfg_fill_regs(const Setting &reg, plc_t *pn);
+void cfg_fill_regs(const Setting &reg, PLC *pn);
 
-void cfg_print_plc_details(const plc_t *pn);
+void cfg_print_plc_details(const PLC *pn);
 void cfg_print_reg_details(const reg_t *rn);
 
 Config cfg;
@@ -56,29 +57,30 @@ int cfg_read_mbset(const char *cfg_file) {
 }
 
 int cfg_fill_plcset() {
-  const Setting &PLCs = cfg.lookup("plc");
-  int nb_plcs = PLCs.getLength();
+  const Setting &cfgPLC = cfg.lookup("plc");
+  int nb_plcs = cfgPLC.getLength();
 
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
-    plc_t plcnow;
-//    PLC plcnow;
+    PLC plcnow;
+    //    PLC plcnow;
 
     // ===== Check the record which expect to get for CFG-file.
-    if (!(PLCs[i].lookupValue("title", plcnow.dev_desc) &&
-          PLCs[i].lookupValue("name", plcnow.dev_name) &&
-          PLCs[i].lookupValue("ip", plcnow.ip_addr) &&
-          PLCs[i].lookupValue("port", plcnow.tcp_port) &&
-          PLCs[i].lookupValue("polling", plcnow.poll_interval) &&
-          PLCs[i].lookupValue("timeout", plcnow.err_timeout))) {
+    if (!(cfgPLC[i].lookupValue("title", plcnow.dev_title) &&
+          cfgPLC[i].lookupValue("desc", plcnow.dev_desc) &&
+          cfgPLC[i].lookupValue("name", plcnow.dev_name) &&
+          cfgPLC[i].lookupValue("ip", plcnow.ip_addr) &&
+          cfgPLC[i].lookupValue("port", plcnow.tcp_port) &&
+          cfgPLC[i].lookupValue("polling", plcnow.poll_interval) &&
+          cfgPLC[i].lookupValue("timeout", plcnow.err_timeout))) {
       cout << "Warning!! Error reading PLC configuration: " << i << endl;
       continue; // get out of current cycle iteration if any field wrong in
                 // CFG-file
     }
 
-    plcnow.nb_regs = PLCs[i]["regs"].getLength();
+    plcnow.nb_regs = cfgPLC[i]["regs"].getLength();
     cfg_print_plc_details(&plcnow);
-    cfg_fill_regs(PLCs[i]["regs"], &plcnow);
+    cfg_fill_regs(cfgPLC[i]["regs"], &plcnow);
 
     cout << endl;
     cout << "Configured REGs now: " << plcnow.regs.size() << endl;
@@ -89,17 +91,17 @@ int cfg_fill_plcset() {
   return 0;
 }
 
-void cfg_fill_regs(const Setting &REGs, plc_t *pn) {
-  int nb_regs = REGs.getLength();
+void cfg_fill_regs(const Setting &cfgREG, PLC *pn) {
+  int nb_regs = cfgREG.getLength();
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
-    const Setting &reg = REGs[j];
+    //    const Setting &reg = cfgREG[j];
     reg_t regnow;
 
     // ===== Check the record which expect to get for CFG-file.
-    if (!(reg.lookupValue("rname", regnow.rname) &&
-          reg.lookupValue("addr", regnow.raddr) &&
-          reg.lookupValue("access", regnow.rmode))) {
+    if (!(cfgREG[j].lookupValue("rname", regnow.rname) &&
+          cfgREG[j].lookupValue("addr", regnow.raddr) &&
+          cfgREG[j].lookupValue("access", regnow.rmode))) {
       cout << "error reading REG " << j << endl;
       continue;
     }
@@ -111,7 +113,7 @@ void cfg_fill_regs(const Setting &REGs, plc_t *pn) {
   return;
 }
 
-void cfg_print_plc_details(const plc_t *pn) {
+void cfg_print_plc_details(const PLC *pn) {
   // ===== Output PLC details
   cout << setw(10) << left << pn->dev_desc << "  " << setw(10) << left
        << pn->dev_name << "  " << setw(20) << left << pn->ip_addr << "  "
