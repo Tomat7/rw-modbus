@@ -48,6 +48,7 @@ int cfg_read_mbset(const char *cfg_file) {
   // Output a list of all PLCs in the inventory.
   try {
     cfg_fill_plcset();
+    cout << "+++++" << endl;
   } catch (const SettingNotFoundException &nfex) {
     cout << "Great ERROR! Exiting." << endl;
     // Ignore.
@@ -63,7 +64,6 @@ int cfg_fill_plcset() {
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
     PLC plcnow;
-    //    PLC plcnow;
 
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("title", plcnow.dev_title) &&

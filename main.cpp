@@ -18,30 +18,35 @@ int rc;
 // int main(int argc, char **argv) {
 
 int main() {
-  Timer t2;
+//  Timer t2;
   //  PLC plc;
 
   //  devset.push_back(plc);
 
   t.start();
-  uint64_t s = 0;
+//  uint64_t s = 0;
 
-  s = sizeof(PLCset);
-  cout << "Size of PLC structure is: " << s << endl;
+//  s = sizeof(PLCset);
+//  cout << "Size of PLC structure is: " << s << endl;
 
   cfg_read_mbset(CFG_FILE);
-  mb_show();
+  cout << "============ Configuration finished." << endl;
 
-  s = 10;
+  mb_show();
+  cout << "============ MBshow finished." << endl;
+
+//  s = 10;
   t.stop();
   t.spent_auto();
 
-  s = sizeof(PLCset);
-  cout << "Size of PLC structure is: " << s << endl;
+//  s = sizeof(PLCset);
+//  cout << "Size of PLC structure is: " << s << endl;
 
   t.start();
   mb_get();
   t.stop();
+  cout << "============ MBget finished." << endl;
+
   t.spent();
 
   t.start();

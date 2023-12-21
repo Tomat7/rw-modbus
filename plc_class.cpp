@@ -28,13 +28,7 @@ int PLC::init(const char *_ip, int _port) {
     fprintf(stderr, "MB: error allocate ctx for %s:%d\n", _ip, _port);
     rc = -1;
   }
-/*
-    rc = modbus_connect(ctx);
-    if (rc == -1) {
-      fprintf(stderr, "MB: connection failed to %s:%d: %s\n", _ip, _port,
-    modbus_strerror(errno)); modbus_free(ctx);
-    }
-  */
+
   return rc;
 }
 
@@ -59,23 +53,20 @@ int PLC::connect() {
 
 int PLC::read()
 {
-//  uint16_t mbregs[nb_regs];
-//  vector<uint16_t> mbregs(nb_regs);
+
   connect();
+  if (rc == -1) return rc;
   uint16_t *mbregs = new uint16_t[nb_regs+1];
 
   rc = modbus_read_registers(ctx, 0, nb_regs, mbregs);
+
   if (rc == -1) {
     fprintf(stderr, "MB: read error: %s \n", modbus_strerror(errno));
     return rc;
   }
-  
-  // ===== Cycle to get MB-registers =====
-  for (int j = 0; j < nb_regs; ++j) {
-    //    reg_t &reg = PLCset[i].regs[j];
-    //    int &raddr = reg.raddr;
+
+  for (int j = 0; j < nb_regs; ++j)
     regs[j].rvalue = mbregs[regs[j].raddr];
-  }
 
   modbus_close(ctx);
   delete[] mbregs;
@@ -90,15 +81,14 @@ int PLC::set_timeout() {
     init();
 
   rc = modbus_set_response_timeout(ctx, 0, err_timeout);
-  if (rc == -1) {
+  if (rc == -1) 
     fprintf(stderr, "MB: set timeout failed: %s\n", modbus_strerror(errno));
-    // modbus_free(mb);
-  }
 
   return rc;
 }
 
+
 void PLC::deinit() {
   modbus_close(ctx);
-  modbus_free(ctx);
+//  modbus_free(ctx);
 }

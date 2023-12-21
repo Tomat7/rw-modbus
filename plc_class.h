@@ -18,8 +18,11 @@ struct reg_t {
 class PLC {
 
 public:
-  PLC() {cout << "New PLC created." << endl;}
-  ~PLC() {cout << "PLC deleted." << endl;}
+  PLC() {cout << "+ New PLC created." << endl;}
+  ~PLC() {
+    cout << "- PLC deleted: " << dev_name << endl;
+    deinit();
+  }
 
   int init(const char *_ip = "", int _port = 0);
   int set_timeout();
