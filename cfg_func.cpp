@@ -1,6 +1,7 @@
 // cfg_func.cpp --------------------------------------------------------------
 #include "config.h"
 #include "libs.h"
+#include "mb_plc_class.h"
 #include <string>
 #include <vector>
 
@@ -60,8 +61,8 @@ int cfg_fill_plcset() {
 
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
-//    plc_t plcnow;
-    PLC plcnow;
+    plc_t plcnow;
+//    PLC plcnow;
 
     // ===== Check the record which expect to get for CFG-file.
     if (!(PLCs[i].lookupValue("title", plcnow.dev_desc) &&

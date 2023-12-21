@@ -10,7 +10,7 @@ using namespace libconfig;
 void mb_fill_plcs_full();
 int mb_fill_regs_full(int i);
 
-void mb_show_regs_byname();
+void mb_get_regs_byname();
 
 // int mb_set_response_timeout(int i);
 
@@ -21,15 +21,16 @@ void mb_fill_reg_name(string devname, string regname, uint16_t *val);
 */
 
 int mb_get() {
-  cout << endl << "======= mb_show =======" << endl;
+  cout << endl << "======= mb_get =======" << endl;
   // ===== Print ALL PLCs detailed.
   mb_fill_plcs_full();
 
   // ===== Print ALL REGs names.
-  mb_show_regs_byname();
+  mb_get_regs_byname();
 
   return 0;
 }
+
 
 void mb_fill_plcs_full() {
   int nb_plcs = static_cast<int>(PLCset.size());
@@ -42,6 +43,7 @@ void mb_fill_plcs_full() {
 
   return;
 }
+
 
 int mb_fill_regs_full(int i) {
 
@@ -93,6 +95,7 @@ int mb_fill_regs_full(int i) {
   return 0;
 }
 
+
 /*
 int mb_set_respose_timeout() {
     uint32_t response_sec;
@@ -104,8 +107,9 @@ int mb_set_respose_timeout() {
 }
 */
 
-void mb_show_regs_byname() {
-  cout << endl << "======= mb_show_regs_name =======" << endl;
+
+void mb_get_regs_byname() {
+  cout << endl << "======= mb_get_regs_byname =======" << endl;
   for (const auto &[rname, rval] : MBreg)
     cout << "  " << setw(12) << left << rname << setw(7) << right << *rval
          << endl;

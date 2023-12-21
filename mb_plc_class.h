@@ -5,22 +5,22 @@
 
 using namespace std;
 
-/*
+
 struct reg_t {
   int raddr;
   const char *rname;
   const char *rmode;
   uint16_t rvalue;
 };
-*/
 
-class PLC {
+
+class plc_t {
 private:
   int rc = 0;
   modbus_t *ctx = NULL;
 
 public:
-  PLC() {}
+  plc_t() {}
 
   int init(const char *_ip, int _port) {
     rc = 0;
