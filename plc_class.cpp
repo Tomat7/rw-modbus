@@ -26,9 +26,9 @@ int PLC::init(const char *_ip, int _port)
   static time_t old_time;
   mb_time = time(0);
   char* dt = ctime(&mb_time);
-  printf("Time: %s", dt);
+  printf("___Time: %s\n", dt);
   
-  printf("Time: %d", mb_time-old_time);
+  printf("___dT: %d\n", mb_time-old_time);
   old_time = mb_time;
 
   if (ctx != NULL)
