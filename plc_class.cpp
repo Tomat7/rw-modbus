@@ -23,6 +23,13 @@ int PLC::init(const char *_ip, int _port)
   }
 
   printf("+++ MB: try to check for NULL: %s \n", _ip);
+  static time_t old_time;
+  mb_time = time(0);
+  char* dt = ctime(&mb_time);
+  printf("Time: %s", dt);
+  
+  printf("Time: %d", mb_time-old_time);
+  old_time = mb_time;
 
   if (ctx != NULL)
   {
@@ -34,7 +41,6 @@ int PLC::init(const char *_ip, int _port)
   }
 
   printf("+++ MB: try to NEW: %s \n", _ip);
-
 
   ctx = modbus_new_tcp(_ip, _port);
   if (ctx == NULL)
@@ -69,24 +75,33 @@ int PLC::connect()
   return rc;
 }
 
+
 int PLC::read()
 {
-
+  rc = 0;
   connect();
-  if (rc == -1)
+  if (rc == -1) {
+    mb_errors++;
     return rc;
+  }
+
   uint16_t *mbregs = new uint16_t[nb_regs + 1];
 
   rc = modbus_read_registers(ctx, 0, nb_regs, mbregs);
-
   if (rc == -1)
   {
     fprintf(stderr, "MB: read error: %s \n", modbus_strerror(errno));
+    mb_errors++;
     return rc;
   }
 
   for (int j = 0; j < nb_regs; ++j)
     regs[j].rvalue = mbregs[regs[j].raddr];
+
+  mb_errors = 0;
+  mb_time = time(0);
+  char* dt = ctime(&mb_time);
+  printf("Time: %s", dt);
 
   modbus_close(ctx);
   delete[] mbregs;

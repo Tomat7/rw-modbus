@@ -35,7 +35,7 @@ int main()
   cout << "============ REG init finished." << endl;
   t.spent();
 
-//  for (;;)
+  for (;;)
   {
     t.start();
     mb_read();
@@ -48,13 +48,12 @@ int main()
     t.stop();
     cout << "============ REG print finished." << endl;
     t.spent();
+
+    t.start();
+    t.sleep_ms(987);
+    t.stop();
+    t.spent();
   }
-  /*
-   t.start();
-   t.sleep_ms(987);
-   t.stop();
-   t.spent();
- */
   //   getr();
 
   return (EXIT_SUCCESS);

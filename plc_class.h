@@ -4,6 +4,7 @@
 #include <iostream>
 #include <modbus/modbus.h>
 #include <vector>
+#include <ctime>
 
 using namespace std;
 
@@ -35,6 +36,8 @@ public:
   const char *ip_addr;
   int tcp_port = 0;
   uint32_t err_timeout = 0;
+  uint32_t mb_errors = 0;
+  time_t mb_time;
   int poll_interval = 0;
   int nb_regs = 0;
   vector<reg_t> regs;
