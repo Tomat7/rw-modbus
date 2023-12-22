@@ -90,17 +90,15 @@ int PLC::read()
 
   for (int j = 0; j < nb_regs; ++j)
     regs[j].rvalue = mbregs[regs[j].raddr];
+// https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 
   mb_errors = 0;
+  time_t old_time = mb_time;
   mb_time = time(0);
   char* dt = ctime(&mb_time);
   printf("___Time: %s\n", dt);
-
-  static time_t old_time;
   printf("___dT: %ld\n", mb_time-old_time);
-  old_time = mb_time;
-
-
+  
   modbus_close(ctx);
   delete[] mbregs;
 
