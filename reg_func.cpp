@@ -42,7 +42,6 @@ void reg_init() {
 
   //    reg_fill_name(PLCset[i].dev_name, PLCset[i].regs[j].rname,
   //                  &PLCset[i].regs[j].rvalue);
-  reg_print_name();
   return;
 }
 

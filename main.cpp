@@ -27,6 +27,12 @@ int main() {
   t.stop();
   cout << "============ PLC show finished." << endl;
   t.spent();
+  
+  t.start();
+  reg_init();
+  t.stop();
+  cout << "============ REG init finished." << endl;
+  t.spent();
 
   t.start();
   mb_read();
@@ -35,9 +41,9 @@ int main() {
   t.spent();
 
   t.start();
-  reg_init();
+  reg_print_name();
   t.stop();
-  cout << "============ REG init finished." << endl;
+  cout << "============ REG print finished." << endl;
   t.spent();
 
  /*
