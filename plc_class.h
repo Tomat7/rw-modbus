@@ -20,7 +20,7 @@ public:
   PLC() { cout << "+ New PLC created." << endl; }
   ~PLC() {
     cout << "- PLC deleted: " << dev_name << endl;
-//    deinit();
+    deinit();
   }
 
   int init(const char *_ip = "", int _port = 0);

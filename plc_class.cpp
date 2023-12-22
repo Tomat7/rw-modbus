@@ -2,9 +2,9 @@
 #include <errno.h>
 #include <modbus/modbus.h>
 #include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
-//#include <syslog.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #include <syslog.h>
 
 #include "plc_class.h"
 
@@ -12,19 +12,33 @@ using namespace std;
 
 // PLC::PLC() {}
 
-int PLC::init(const char *_ip, int _port) {
+int PLC::init(const char *_ip, int _port)
+{
+  rc = 0;
 
-  if (_port == 0) {
+  if (_port == 0)
+  {
     _port = tcp_port;
     _ip = ip_addr;
   }
 
-  modbus_close(ctx);
-  modbus_free(ctx);
-  ctx = NULL;
+  printf("+++ MB: try to check for NULL: %s \n", _ip);
+
+  if (ctx != NULL)
+  {
+    printf("+++ MB: try to close: %s \n", _ip);
+    modbus_close(ctx);
+    printf("+++ MB: try to free: %s \n", _ip);
+    modbus_free(ctx);
+    ctx = NULL;
+  }
+
+  printf("+++ MB: try to NEW: %s \n", _ip);
+
 
   ctx = modbus_new_tcp(_ip, _port);
-  if (ctx == NULL) {
+  if (ctx == NULL)
+  {
     fprintf(stderr, "MB: error allocate ctx for %s:%d\n", _ip, _port);
     rc = -1;
   }
@@ -32,9 +46,11 @@ int PLC::init(const char *_ip, int _port) {
   return rc;
 }
 
-int PLC::connect() {
+int PLC::connect()
+{
 
-  if (ctx == NULL) {
+  if (ctx == NULL)
+  {
     init();
     if (rc == -1)
       return rc;
@@ -42,16 +58,19 @@ int PLC::connect() {
   }
 
   rc = modbus_connect(ctx);
-  if (rc == -1) {
+  if (rc == -1)
+  {
     fprintf(stderr, "MB: connect err %s:%d: %s\n", ip_addr, tcp_port,
             modbus_strerror(errno));
     modbus_free(ctx);
+    ctx = NULL;
   }
 
   return rc;
 }
 
-int PLC::read() {
+int PLC::read()
+{
 
   connect();
   if (rc == -1)
@@ -60,7 +79,8 @@ int PLC::read() {
 
   rc = modbus_read_registers(ctx, 0, nb_regs, mbregs);
 
-  if (rc == -1) {
+  if (rc == -1)
+  {
     fprintf(stderr, "MB: read error: %s \n", modbus_strerror(errno));
     return rc;
   }
@@ -74,7 +94,8 @@ int PLC::read() {
   return 0;
 }
 
-int PLC::set_timeout() {
+int PLC::set_timeout()
+{
 
   if (ctx == NULL)
     init();
@@ -86,7 +107,10 @@ int PLC::set_timeout() {
   return rc;
 }
 
-void PLC::deinit() {
-  modbus_close(ctx);
-  //  modbus_free(ctx);
+void PLC::deinit()
+{
+  if (ctx != NULL) {
+    modbus_close(ctx);
+    modbus_free(ctx);
+  }
 }
