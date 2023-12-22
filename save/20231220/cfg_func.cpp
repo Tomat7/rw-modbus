@@ -15,7 +15,7 @@ PLC plcnow;
 // This example reads the configuration file and displays
 // some of its contents.
 
-int cfg_read_mbset(const char *cfg_file) {
+int cfg_read(const char *cfg_file) {
 
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;

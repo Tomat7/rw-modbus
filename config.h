@@ -11,40 +11,14 @@
 using namespace std;
 using namespace libconfig;
 
-/*
-struct reg_t {
-  int raddr;
-  const char *rname;
-  const char *rmode;
-  uint16_t rvalue;
-};
-*/
-/*
-struct plc_t {
-  const char *dev_desc;
-  const char *dev_name;
-
-  const char *ip_addr;
-  int tcp_port;
-
-  int poll_interval;
-  int err_timeout;
-
-  int nb_regs;
-  vector<reg_t> regs;
-};
-*/
-
-// extern vector<Timer> Timerset;
-
 extern map<string, uint16_t *> MBreg;
 extern vector<PLC> PLCset;
 
-int cfg_read_mbset(const char *cfg_file);
-// int cfg_fill_plc(const Setting &PLCs);
+int cfg_read(const char *cfg_file);
 
-int mb_show();
-int mb_get();
+int plc_show();
+int mb_read();
+void reg_init();
 
 // void mb_show_regs_full(int i);
 // void mb_show_regs_name();

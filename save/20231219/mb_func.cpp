@@ -6,7 +6,7 @@
 using namespace std;
 using namespace libconfig;
 
-int mb_show()
+int plc_show()
 {
 
   int count_PLCs = static_cast<int>(PLCset.size());
@@ -22,14 +22,14 @@ int mb_show()
 
     // ===== Cycle to Show registers details =====
 
-    mb_show_regs_full(i);
+    plc_show_regs(i);
 
     // ===== Next PLC ...
     cout << endl;
   }
   // ===== All PLC done.
   cout << endl;
-  mb_show_regs_name();
+  reg_init();
   
   cout << PLCset[0].regs.size() << endl;
   cout << PLCset[1].regs.size() << endl;
@@ -37,7 +37,7 @@ int mb_show()
   return 0;
 }
 
-void mb_show_regs_full(int i)
+void plc_show_regs(int i)
 {
   int nbregs = static_cast<int>(PLCset[i].regs.size());
   cout << nbregs << endl;
@@ -58,7 +58,7 @@ void mb_show_regs_full(int i)
   return;
 }
 
-void mb_show_regs_name()
+void reg_init()
 {
   for (const auto &[rname, rval] : MBreg)
     cout << rname << " " << *rval << endl;

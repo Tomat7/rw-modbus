@@ -27,8 +27,8 @@ int main() {
   s = sizeof(PLCset);
   cout << "Size of PLC structure is: " << s << endl;
 
-  cfg_read_mbset(CFG_FILE);
-  mb_show();
+  cfg_read(CFG_FILE);
+  plc_show();
 
   s = 10;
   t.stop();

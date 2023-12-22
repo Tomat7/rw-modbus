@@ -9,51 +9,43 @@ using namespace std;
 using namespace libconfig;
 
 map<string, uint16_t *> MBreg;
-// vector<plc_t> PLCset;
-
 vector<PLC> PLCset;
-
 int rc;
 
 // int main(int argc, char **argv) {
 
 int main() {
-//  Timer t2;
-  //  PLC plc;
-
-  //  devset.push_back(plc);
 
   t.start();
-//  uint64_t s = 0;
-
-//  s = sizeof(PLCset);
-//  cout << "Size of PLC structure is: " << s << endl;
-
-  cfg_read_mbset(CFG_FILE);
-  cout << "============ Configuration finished." << endl;
-
-  mb_show();
-  cout << "============ MBshow finished." << endl;
-
-//  s = 10;
+  cfg_read(CFG_FILE);
   t.stop();
-  t.spent_auto();
-
-//  s = sizeof(PLCset);
-//  cout << "Size of PLC structure is: " << s << endl;
-
+  cout << "============ Cfg finished." << endl;
+  t.spent();
+  
   t.start();
-  mb_get();
+  plc_show();
   t.stop();
-  cout << "============ MBget finished." << endl;
-
+  cout << "============ PLC show finished." << endl;
   t.spent();
 
+  t.start();
+  mb_read();
+  t.stop();
+  cout << "============ MB read finished." << endl;
+  t.spent();
+
+  t.start();
+  reg_init();
+  t.stop();
+  cout << "============ REG init finished." << endl;
+  t.spent();
+
+ /*
   t.start();
   t.sleep_ms(987);
   t.stop();
   t.spent();
-
+*/ 
   //   getr();
 
   return (EXIT_SUCCESS);

@@ -10,7 +10,7 @@
 
 using namespace std;
 
-//PLC::PLC() {}
+// PLC::PLC() {}
 
 int PLC::init(const char *_ip, int _port) {
 
@@ -36,7 +36,8 @@ int PLC::connect() {
 
   if (ctx == NULL) {
     init();
-    if (rc == -1) return rc;
+    if (rc == -1)
+      return rc;
     printf("MB: new CTX - ok.\n");
   }
 
@@ -50,13 +51,12 @@ int PLC::connect() {
   return rc;
 }
 
-
-int PLC::read()
-{
+int PLC::read() {
 
   connect();
-  if (rc == -1) return rc;
-  uint16_t *mbregs = new uint16_t[nb_regs+1];
+  if (rc == -1)
+    return rc;
+  uint16_t *mbregs = new uint16_t[nb_regs + 1];
 
   rc = modbus_read_registers(ctx, 0, nb_regs, mbregs);
 
@@ -74,21 +74,19 @@ int PLC::read()
   return 0;
 }
 
-
 int PLC::set_timeout() {
 
   if (ctx == NULL)
     init();
 
   rc = modbus_set_response_timeout(ctx, 0, err_timeout);
-  if (rc == -1) 
+  if (rc == -1)
     fprintf(stderr, "MB: set timeout failed: %s\n", modbus_strerror(errno));
 
   return rc;
 }
 
-
 void PLC::deinit() {
   modbus_close(ctx);
-//  modbus_free(ctx);
+  //  modbus_free(ctx);
 }

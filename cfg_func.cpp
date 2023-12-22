@@ -9,8 +9,8 @@
 using namespace std;
 using namespace libconfig;
 
-int cfg_fill_plcset();
-void cfg_fill_regs(const Setting &reg, PLC *pn);
+int cfg_init_plcset();
+void cfg_init_regs(const Setting &reg, PLC *pn);
 
 void cfg_print_plc_details(const PLC *pn);
 void cfg_print_reg_details(const reg_t *rn);
@@ -20,7 +20,7 @@ Config cfg;
 // This example reads the configuration file and displays
 // some of its contents.
 
-int cfg_read_mbset(const char *cfg_file) {
+int cfg_read(const char *cfg_file) {
 
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;
@@ -47,7 +47,7 @@ int cfg_read_mbset(const char *cfg_file) {
 
   // Output a list of all PLCs in the inventory.
   try {
-    cfg_fill_plcset();
+    cfg_init_plcset();
     cout << "+++++" << endl;
   } catch (const SettingNotFoundException &nfex) {
     cout << "Great ERROR! Exiting." << endl;
@@ -57,7 +57,7 @@ int cfg_read_mbset(const char *cfg_file) {
   return (EXIT_SUCCESS);
 }
 
-int cfg_fill_plcset() {
+int cfg_init_plcset() {
   const Setting &cfgPLC = cfg.lookup("plc");
   int nb_plcs = cfgPLC.getLength();
 
@@ -80,7 +80,7 @@ int cfg_fill_plcset() {
 
     plcnow.nb_regs = cfgPLC[i]["regs"].getLength();
     cfg_print_plc_details(&plcnow);
-    cfg_fill_regs(cfgPLC[i]["regs"], &plcnow);
+    cfg_init_regs(cfgPLC[i]["regs"], &plcnow);
 
     cout << endl;
     cout << "Configured REGs now: " << plcnow.regs.size() << endl;
@@ -91,7 +91,7 @@ int cfg_fill_plcset() {
   return 0;
 }
 
-void cfg_fill_regs(const Setting &cfgREG, PLC *pn) {
+void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
   int nb_regs = cfgREG.getLength();
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
@@ -113,18 +113,18 @@ void cfg_fill_regs(const Setting &cfgREG, PLC *pn) {
   return;
 }
 
-void cfg_print_plc_details(const PLC *pn) {
+void cfg_print_plc_details(const PLC *D) {
   // ===== Output PLC details
-  cout << setw(10) << left << pn->dev_desc << "  " << setw(10) << left
-       << pn->dev_name << "  " << setw(20) << left << pn->ip_addr << "  "
-       << pn->nb_regs << endl;
+  cout << setw(10) << left << D->dev_desc << "  " << setw(10) << left
+       << D->dev_name << "  " << setw(20) << left << D->ip_addr << "  "
+       << D->nb_regs << endl;
   return;
 }
 
-void cfg_print_reg_details(const reg_t *rn) {
+void cfg_print_reg_details(const reg_t *R) {
   // ===== Output REG details
-  cout << "       " << setw(9) << left << rn->rname << "" << setw(3) << right
-       << rn->raddr << " " << setw(5) << left << rn->rmode << "  " << endl;
+  cout << "       " << setw(9) << left << R->rname << "" << setw(3) << right
+       << R->raddr << " " << setw(5) << left << R->rmode << "  " << endl;
   return;
 }
 

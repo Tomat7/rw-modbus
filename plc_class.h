@@ -5,7 +5,6 @@
 #include <modbus/modbus.h>
 #include <vector>
 
-
 using namespace std;
 
 struct reg_t {
@@ -18,10 +17,10 @@ struct reg_t {
 class PLC {
 
 public:
-  PLC() {cout << "+ New PLC created." << endl;}
+  PLC() { cout << "+ New PLC created." << endl; }
   ~PLC() {
     cout << "- PLC deleted: " << dev_name << endl;
-    deinit();
+//    deinit();
   }
 
   int init(const char *_ip = "", int _port = 0);
