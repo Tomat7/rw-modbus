@@ -23,13 +23,6 @@ int PLC::init(const char *_ip, int _port)
   }
 
   printf("+++ MB: try to check for NULL: %s \n", _ip);
-  static time_t old_time;
-  mb_time = time(0);
-  char* dt = ctime(&mb_time);
-  printf("___Time: %s\n", dt);
-  
-  printf("___dT: %d\n", mb_time-old_time);
-  old_time = mb_time;
 
   if (ctx != NULL)
   {
@@ -101,7 +94,12 @@ int PLC::read()
   mb_errors = 0;
   mb_time = time(0);
   char* dt = ctime(&mb_time);
-  printf("Time: %s", dt);
+  printf("___Time: %s\n", dt);
+
+  static time_t old_time;
+  printf("___dT: %ld\n", mb_time-old_time);
+  old_time = mb_time;
+
 
   modbus_close(ctx);
   delete[] mbregs;
