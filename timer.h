@@ -59,14 +59,14 @@ public:
          << txt2 << '\n';
   }
 
-  void spent_auto() {
+  void spent_auto(const char *txt1 = "Time spent: ") {
     double _duration = elapsed_sec();
     if (_duration > 1)
-      spent_sec(2);
+      spent_sec(2, txt1);
     else if (_duration * 1000 > 1)
-      spent_ms(1);
+      spent_ms(1, txt1);
     else
-      spent_us(0);
+      spent_us(0, txt1);
   }
 
   void spent() { spent_auto(); }

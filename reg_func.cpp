@@ -34,7 +34,7 @@ void reg_init() {
       PLC &D = PLCset[i];
       reg_init_name(D.dev_name, D.regs[j].rname, &D.regs[j].rvalue);
     }
-//    cout << endl;
+    //    cout << endl;
   }
   //  int nb_regs = static_cast<int>(PLCset[i].regs.size());
   // ===== Cycle to Show registers details =====
@@ -58,8 +58,5 @@ void reg_print_name() {
          << endl;
   return;
 }
-
-
-
 
 // eof

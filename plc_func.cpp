@@ -46,8 +46,7 @@ void plc_show_regs(int i) {
 void plc_print_details(int i) {
   cout << setw(5) << left << PLCset[i].dev_name << "  " << setw(5) << left
        << PLCset[i].nb_regs << "  " << setw(15) << left << PLCset[i].ip_addr
-       << "  " << PLCset[i].poll_interval << "  " << PLCset[i].err_timeout
-       << endl;
+       << "  " << PLCset[i].mb_interval << "  " << PLCset[i].mb_timeout << endl;
   return;
 }
 

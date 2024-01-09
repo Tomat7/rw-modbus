@@ -71,8 +71,8 @@ int cfg_init_plcset() {
           cfgPLC[i].lookupValue("name", plcnow.dev_name) &&
           cfgPLC[i].lookupValue("ip", plcnow.ip_addr) &&
           cfgPLC[i].lookupValue("port", plcnow.tcp_port) &&
-          cfgPLC[i].lookupValue("polling", plcnow.poll_interval) &&
-          cfgPLC[i].lookupValue("timeout", plcnow.err_timeout))) {
+          cfgPLC[i].lookupValue("polling", plcnow.mb_interval) &&
+          cfgPLC[i].lookupValue("timeout", plcnow.mb_timeout))) {
       cout << "Warning!! Error reading PLC configuration: " << i << endl;
       continue; // get out of current cycle iteration if any field wrong in
                 // CFG-file

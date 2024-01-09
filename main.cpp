@@ -14,8 +14,7 @@ int rc;
 
 // int main(int argc, char **argv) {
 
-int main()
-{
+int main() {
 
   t.start();
   cfg_read(CFG_FILE);
@@ -35,13 +34,12 @@ int main()
   cout << "============ REG init finished." << endl;
   t.spent();
 
-  for (;;)
-  {
+  for (;;) {
     t.start();
     mb_read();
     t.stop();
     cout << "============ MB read finished." << endl;
-    t.spent();
+    t.spent_auto("MB: spent on 3xPLC by TCP: ");
 
     t.start();
     reg_print_name();

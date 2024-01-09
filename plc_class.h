@@ -1,10 +1,10 @@
 #pragma once
 
 //#include "config.h"
+#include <ctime>
 #include <iostream>
 #include <modbus/modbus.h>
 #include <vector>
-#include <ctime>
 
 using namespace std;
 
@@ -29,16 +29,17 @@ public:
   int connect();
   int read();
   void deinit();
+  uint64_t timed();
 
   const char *dev_title;
   const char *dev_desc;
   const char *dev_name;
   const char *ip_addr;
   int tcp_port = 0;
-  uint32_t err_timeout = 0;
-  uint32_t mb_errors = 0;
-  time_t mb_time;
-  int poll_interval = 0;
+  uint64_t mb_time = 0;     // milliseconds since the Epoch on last read
+  uint32_t mb_timeout = 0;  // miCRo seconds (!!) Modbus respose timeout
+  uint32_t mb_errors = 0;   // counter of any ERROR
+  uint32_t mb_interval = 0; // milliseconds between read request
   int nb_regs = 0;
   vector<reg_t> regs;
 
