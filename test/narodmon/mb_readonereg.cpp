@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   uint16_t *myregs;
   myregs = &myreg;
 
-  const char *str;
+  //  const char *str;
   char sl[80];
   float temp;
 
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
   //      printf("read OK\n");
 
   if (strcmp(argv[3], "f") == 0) {
-    temp = ((int16_t)*myregs) / 100.0;
+    temp = ((int16_t)*myregs) / (float)100.0;
     printf("%.2f\n", temp);
   } else
     printf("%d\n", (int16_t)*myregs);

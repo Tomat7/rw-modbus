@@ -1,10 +1,9 @@
 
+#include "timer_simple.h"
 #include <chrono>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
-#include "timer_simple.h"
-
 
 #define CLKSIZE 300
 
@@ -25,7 +24,7 @@ int main() {
       }
   cout << endl;
   string s;
-  //  cin >> s; 
+  //  cin >> s;
 
   // Получаем момент времени_2
   t.stop();

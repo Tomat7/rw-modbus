@@ -100,6 +100,9 @@ clean:
 	@echo "=== Cleaning UP..."
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
 	rm -rfv a.out
+	clang-format -i --verbose *.cpp
+	clang-format -i --verbose *.h
+
 
 # =======================================
 #$(EXECUTABLE): $(OBJECTS)

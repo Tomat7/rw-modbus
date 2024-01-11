@@ -4,6 +4,8 @@
 cd ..
 
 echo ==== ADD files ====
+clang-format -i *.cpp
+clang-format -i *.h
 git add -v .
 
 echo ==== COMMIT ====

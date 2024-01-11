@@ -1,14 +1,13 @@
 
-#include <iostream>
-#include <iomanip>
 #include <chrono> // для функций из std::chrono
+#include <iomanip>
+#include <iostream>
 
 using namespace std;
 using namespace chrono;
 
 class Timer {
 private:
-
   system_clock::time_point begin, end;
   duration<double> sec;
 
@@ -20,7 +19,7 @@ public:
     cout << txt;
     begin = system_clock::now();
     auto current_time = system_clock::to_time_t(begin);
-//    cout.imbue(locale("ru_RU.utf8"));
+    //    cout.imbue(locale("ru_RU.utf8"));
     cout << put_time(localtime(&current_time), "%d.%m.%Y %T %Z") << endl;
   }
 
@@ -29,18 +28,15 @@ public:
     end = system_clock::now();
     sec = end - begin;
     auto current_time = system_clock::to_time_t(begin);
-//    cout.imbue(locale("ru_RU.utf8"));
+    //    cout.imbue(locale("ru_RU.utf8"));
     cout << put_time(localtime(&current_time), "%d.%m.%Y %T %Z") << endl;
   }
 
-  double elapsed_second() const {
-    return sec.count();
-  }
+  double elapsed_second() const { return sec.count(); }
 
   void spent_second(const char *txt = "Time spent (seconds): ") {
     cout << txt << elapsed_second() << '\n';
   }
-
 
   int elapsed_msec() const {
     auto msec = sec * 1000;
@@ -51,16 +47,14 @@ public:
     cout << txt << elapsed_msec() << '\n';
   }
 
-
   int elapsed_us() const {
-    auto us = sec*1000000;
+    auto us = sec * 1000000;
     return int(us.count());
   }
 
   void spent_us(const char *txt = "Time spent (us): ") {
     cout << txt << elapsed_us() << '\n';
   }
-
 };
 
 Timer t;
