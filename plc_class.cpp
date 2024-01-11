@@ -49,7 +49,6 @@ int PLC::init(const char *_ip, int _port) {
   return rc;
 }
 
-
 int PLC::connect() {
 
   if (ctx == NULL) {
@@ -69,7 +68,6 @@ int PLC::connect() {
 
   return rc;
 }
-
 
 int PLC::read() {
   rc = 0;
@@ -100,7 +98,6 @@ int PLC::read() {
   return 0;
 }
 
-
 int PLC::set_timeout() {
 
   if (ctx == NULL)
@@ -113,7 +110,6 @@ int PLC::set_timeout() {
   return rc;
 }
 
-
 void PLC::deinit() {
   if (ctx != NULL) {
     modbus_close(ctx);
@@ -121,9 +117,8 @@ void PLC::deinit() {
   }
 }
 
-
 uint64_t PLC::timed() {
-  
+
   using namespace std::chrono;
   uint64_t t, old = mb_time;
   t = duration_cast<milliseconds>(system_clock::now().time_since_epoch())
@@ -140,4 +135,3 @@ uint64_t PLC::timed() {
   // -----------------------------------------
   return t;
 }
-

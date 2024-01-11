@@ -18,57 +18,62 @@ int main(int argc, char **argv) {
   //  closelog();
   // =======
 
+  if (argc != 4) {
+    printf("Read one holding REGISTER by Modbus-TCP from slave on IP_ADDR\n");
+    printf("and print result in FORMAT (i for INTEGER, f for FLOAT).\n");
+    printf("Usage: %s IP_ADDR REGISTER FORMAT\n", argv[0]);
+    return -1;
+  }
+
   modbus_t *mb;
   int rc = 0;
   uint16_t myreg;
   uint16_t *myregs;
   myregs = &myreg;
 
-//  uint16_t allregs[NB_REGS];
   const char *str;
   char sl[80];
   float temp;
 
-//  printf("\n%s ", sl);
+  //  printf("\n%s ", sl);
   syslog(LOG_DEBUG, "%s", sl);
 
-//  str = MB_IPADDR;
+  const char *ip = argv[1];
+  int reg = atoi(argv[2]);
 
-  mb = modbus_new_tcp(MB_IPADDR, 502);
+  mb = modbus_new_tcp(ip, 502);
   if (modbus_connect(mb) == -1) {
     fprintf(stderr, "MB connection failed: %s\n", modbus_strerror(errno));
     modbus_free(mb);
     return -1;
-  } //else
-//      printf("new OK\n");
+  } // else
+  //      printf("new OK\n");
 
-
-  rc = modbus_read_registers(mb, MB_MYREG, 1, myregs);
+  rc = modbus_read_registers(mb, reg, 1, myregs);
   if (rc == -1) {
     fprintf(stderr, "MB one-read error: %s \n", modbus_strerror(errno));
     return -1;
-  } //else
-//      printf("read OK\n");
+  } // else
+  //      printf("read OK\n");
 
-#ifdef MB_FLOAT
-  temp = (int16_t)*(myregs) / 100.0;
-  printf("%.2f\n", temp);
-#else
-  printf("%d\n", (int16_t)*(myregs));
-#endif
+  if (strcmp(argv[3], "f") == 0) {
+    temp = ((int16_t)*myregs) / 100.0;
+    printf("%.2f\n", temp);
+  } else
+    printf("%d\n", (int16_t)*myregs);
 
-//  printf("%7d  %.2f\n", (int16_t)*myregs, temp);
+  //  printf("%7d  %.2f\n", (int16_t)*myregs, temp);
 
-//  syslog(LOG_DEBUG, "   %-10s  %-5s  %3d %7d\n", rname, access, addr,
-//         (uint16_t) * (myregs + i));
+  //  syslog(LOG_DEBUG, "   %-10s  %-5s  %3d %7d\n", rname, access, addr,
+  //         (uint16_t) * (myregs + i));
   /* end reading HOLDING registers */
 
-//  putchar('\n');
+  //  putchar('\n');
 
   modbus_close(mb);
   modbus_free(mb);
-//  free(myregs);
-//  config_destroy(&cfg);
+  //  free(myregs);
+  //  config_destroy(&cfg);
   /* Освободить память обязательно, если это не конец программы */
   closelog();
 
