@@ -53,7 +53,7 @@ void reg_print_name() {
            << ra->rvalue << endl;
     else
       cout << "  " << setw(12) << left << rname << setw(7) << right << fixed
-           << setprecision(2) << (float)(ra->rvalue / 100.0) << endl;
+           << setprecision(2) << (float)((int16_t)(ra->rvalue) / 100.0) << endl;
   }
   return;
 }
