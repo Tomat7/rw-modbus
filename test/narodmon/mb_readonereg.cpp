@@ -13,8 +13,8 @@
 
 int main(int argc, char **argv) {
   // ======= SYSLOG test ======
-  openlog("Modbus", LOG_NDELAY, LOG_DAEMON);
-  syslog(LOG_DEBUG, "Start test logging ...");
+  openlog("Modbus", LOG_NDELAY, LOG_LOCAL0);
+  //  syslog(LOG_DEBUG, "Start test logging ...");
   //  closelog();
   // =======
 
@@ -32,19 +32,21 @@ int main(int argc, char **argv) {
   myregs = &myreg;
 
   //  const char *str;
-  char sl[80];
+  //  char sl[80];
   float temp;
 
   //  printf("\n%s ", sl);
-  syslog(LOG_DEBUG, "%s", sl);
 
   const char *ip = argv[1];
   int reg = atoi(argv[2]);
+
+  syslog(LOG_INFO, "trying %s H-reg: %d", ip, reg);
 
   mb = modbus_new_tcp(ip, 502);
   if (modbus_connect(mb) == -1) {
     fprintf(stderr, "MB connection failed: %s\n", modbus_strerror(errno));
     modbus_free(mb);
+    syslog(LOG_ERR, "error connecting %s", ip);
     return -1;
   } // else
   //      printf("new OK\n");
@@ -52,6 +54,7 @@ int main(int argc, char **argv) {
   rc = modbus_read_registers(mb, reg, 1, myregs);
   if (rc == -1) {
     fprintf(stderr, "MB one-read error: %s \n", modbus_strerror(errno));
+    syslog(LOG_ERR, "error readinging %s H-reg: %d", ip, reg);
     return -1;
   } // else
   //      printf("read OK\n");
