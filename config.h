@@ -11,7 +11,7 @@
 using namespace std;
 using namespace libconfig;
 
-extern map<string, uint16_t *> MBreg;
+extern map<string, reg_t *> REGmap;
 extern vector<PLC> PLCset;
 
 int cfg_read(const char *cfg_file);

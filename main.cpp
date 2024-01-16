@@ -8,7 +8,7 @@
 using namespace std;
 using namespace libconfig;
 
-map<string, uint16_t *> MBreg;
+map<string, reg_t *> REGmap;
 vector<PLC> PLCset;
 int rc;
 
