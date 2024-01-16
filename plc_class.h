@@ -12,6 +12,7 @@ struct reg_t {
   int raddr;
   const char *rname;
   const char *rmode;
+  const char *rtype;
   uint16_t rvalue;
 };
 

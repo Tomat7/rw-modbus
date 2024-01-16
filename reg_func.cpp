@@ -12,14 +12,11 @@ void reg_init();
 void reg_print_name();
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
-void reg_init()
-{
-  cout << endl
-       << "===== reg_init =====" << endl;
+void reg_init() {
+  cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
-    for (auto &R : D.regs)
-    {
+    for (auto &R : D.regs) {
       string reg = (string)D.dev_name + "." + (string)R.rname;
       REGmap[reg] = &R;
       REGmap[reg]->rvalue = 5757;
@@ -48,18 +45,15 @@ void reg_init_name(string devname, string regname, uint16_t *val) {
 }
 */
 
-void reg_print_name()
-{
-  cout << endl
-       << "======= regs_print_name =======" << endl;
-  for (const auto &[rname, ra] : REGmap)
-  {
-    if (strcmp(ra->rmode, "rw") == 0)
+void reg_print_name() {
+  cout << endl << "======= regs_print_name =======" << endl;
+  for (const auto &[rname, ra] : REGmap) {
+    if (strcmp(ra->rtype, "i") == 0)
       cout << "  " << setw(12) << left << rname << setw(7) << right
            << ra->rvalue << endl;
     else
-      cout << "  " << setw(12) << left << rname << setw(7) << right
-           << fixed << setprecision(2) << (float)(ra->rvalue / 100.0) << endl;
+      cout << "  " << setw(12) << left << rname << setw(7) << right << fixed
+           << setprecision(2) << (float)(ra->rvalue / 100.0) << endl;
   }
   return;
 }

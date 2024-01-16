@@ -100,8 +100,9 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
 
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgREG[j].lookupValue("rname", regnow.rname) &&
-          cfgREG[j].lookupValue("addr", regnow.raddr) &&
-          cfgREG[j].lookupValue("access", regnow.rmode))) {
+          cfgREG[j].lookupValue("raddr", regnow.raddr) &&
+          cfgREG[j].lookupValue("rmode", regnow.rmode) &&
+          cfgREG[j].lookupValue("rtype", regnow.rtype))) {
       cout << "error reading REG " << j << endl;
       continue;
     }
