@@ -90,7 +90,7 @@ int PLC::read() {
   for (int j = 0; j < nb_regs; ++j)
     regs[j].rvalue = mbregs[regs[j].raddr];
 
-  mb_time = timed();
+  mb_time = millis();
 
   modbus_close(ctx);
   delete[] mbregs;
@@ -117,21 +117,13 @@ void PLC::deinit() {
   }
 }
 
-uint64_t PLC::timed() {
+uint64_t PLC::millis() {
+#define CAST_MILLIS duration_cast<milliseconds>
 
   using namespace std::chrono;
   uint64_t t, old = mb_time;
-  t = duration_cast<milliseconds>(system_clock::now().time_since_epoch())
-          .count();
+  t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
   printf("___dT: %ld  errors: %d\n", t - old, mb_errors);
 
-  // ----------------------------------------------
-  /*  uint64_t old_time = mb_time;
-    mb_time = time(0);
-    char* dt = ctime(&mb_time);
-    printf("___Time: %s\n", dt);
-    printf("___dT: %ld\n", mb_time-old_time);
-  */
-  // -----------------------------------------
   return t;
 }

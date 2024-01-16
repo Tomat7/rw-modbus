@@ -1,6 +1,10 @@
 #include <chrono> // для функций из std::chrono
 #include <thread>
 
+#define CAST_SECONDS duration_cast<second_t>
+#define CAST_MILLIS duration_cast<milliseconds>
+#define CAST_MICROS duration_cast<microseconds>
+
 using namespace std;
 using namespace chrono;
 
@@ -42,6 +46,8 @@ public:
     return sec.count();
   }
 
+  // ============================
+
   void spent_sec(int p = 6, const char *txt1 = "Time spent: ",
                  const char *txt2 = " second.") {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec()) << txt2 << '\n';
@@ -71,6 +77,8 @@ public:
 
   void spent() { spent_auto(); }
 
+  // ===========================
+
   void sleep_sec(int s) {
     std::this_thread::sleep_for(std::chrono::milliseconds(s));
   }
@@ -81,6 +89,16 @@ public:
 
   void sleep_us(int us) {
     std::this_thread::sleep_for(std::chrono::milliseconds(us));
+  }
+
+  // ============================
+
+  uint64_t millis() {
+    return CAST_MILLIS(system_clock::now().time_since_epoch()).count();
+  }
+
+  uint64_t micros() {
+    return CAST_MICROS(system_clock::now().time_since_epoch()).count();
   }
 };
 

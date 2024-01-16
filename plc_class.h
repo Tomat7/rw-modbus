@@ -29,7 +29,7 @@ public:
   int connect();
   int read();
   void deinit();
-  uint64_t timed();
+  uint64_t millis();
 
   const char *dev_title;
   const char *dev_desc;
