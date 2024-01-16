@@ -12,8 +12,8 @@ using namespace libconfig;
 int cfg_init_plcset();
 void cfg_init_regs(const Setting &reg, PLC *pn);
 
-void cfg_print_plc_details(const PLC *pn);
-void cfg_print_reg_details(const reg_t *rn);
+void cfg_print_plc_details(const PLC &pn);
+void cfg_print_reg_details(const reg_t &rn);
 
 Config cfg;
 
@@ -79,7 +79,7 @@ int cfg_init_plcset() {
     }
 
     plcnow.nb_regs = cfgPLC[i]["regs"].getLength();
-    cfg_print_plc_details(&plcnow);
+    cfg_print_plc_details(plcnow);
     cfg_init_regs(cfgPLC[i]["regs"], &plcnow);
 
     cout << endl;
@@ -108,24 +108,24 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
     }
 
     regnow.rvalue = 555;
-    cfg_print_reg_details(&regnow);
+    cfg_print_reg_details(regnow);
     pn->regs.push_back(regnow);
   }
   return;
 }
 
-void cfg_print_plc_details(const PLC *D) {
+void cfg_print_plc_details(const PLC &D) {
   // ===== Output PLC details
-  cout << setw(10) << left << D->dev_desc << "  " << setw(10) << left
-       << D->dev_name << "  " << setw(20) << left << D->ip_addr << "  "
-       << D->nb_regs << endl;
+  cout << setw(10) << left << D.dev_desc << "  " << setw(10) << left
+       << D.dev_name << "  " << setw(20) << left << D.ip_addr << "  "
+       << D.nb_regs << endl;
   return;
 }
 
-void cfg_print_reg_details(const reg_t *R) {
+void cfg_print_reg_details(const reg_t &R) {
   // ===== Output REG details
-  cout << "       " << setw(9) << left << R->rname << "" << setw(3) << right
-       << R->raddr << " " << setw(5) << left << R->rmode << "  " << endl;
+  cout << "       " << setw(9) << left << R.rname << "" << setw(3) << right
+       << R.raddr << " " << setw(5) << left << R.rmode << "  " << endl;
   return;
 }
 
