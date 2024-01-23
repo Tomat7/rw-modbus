@@ -3,7 +3,7 @@ CC=g++
 
 .DEFAULT_GOAL := all
 
-CPP_VER= -std=c++17
+CPP_VER= -std=c++20
 OBJDIR=./obj
 
 LIBS= -lrt
@@ -23,6 +23,7 @@ LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 LDFLAGS= -Wall
 CFLAGS= -c -Wall
 DEPFLAGS= -MD -MF
+ASFLAGS= -f -k1 -W3 -xg -xb -xj -xp -c -O -H
 
 WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 
 CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
@@ -96,13 +97,34 @@ endif
 include $(wildcard $(OBJDIR)/*.cpp.d)
 
 
-clean:
+clean: format-kr
 	@echo "=== Cleaning UP..."
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
 	rm -rfv a.out
+
+
+# ======================================
+# Reindent *.cpp to K&R code-style
+format-kr:
+	astyle $(ASFLAGS) -n --style=kr *.cpp,*.h
+
+# Reindent *.cpp to Linux code-style
+format-linux:
+	astyle $(ASFLAGS) -n --style=linux *.cpp,*.h
+
+# Reindent *.cpp to Google code-style
+format-google:
+	astyle $(ASFLAGS) -n --style=google *.cpp,*.h
+
+# Reindent *.cpp to Allman code-style
+format-allman:
+	astyle $(ASFLAGS) -n --style=allman *.cpp,*.h
+
+
+# Reindent *.cpp to LLVM code-style
+format-clang:
 	clang-format -i --verbose *.cpp
 	clang-format -i --verbose *.h
-
 
 # =======================================
 #$(EXECUTABLE): $(OBJECTS)

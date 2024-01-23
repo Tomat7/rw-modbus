@@ -13,37 +13,38 @@ int rc;
 
 // int main(int argc, char **argv) {
 
-int main() {
-  // Timer t;
+int main()
+{
+    // Timer t;
 
-  std::map<std::string, unsigned> products;
-  map<string, unsigned> product2;
-  map<string, reg_t> product3;
+    std::map<std::string, unsigned> products;
+    map<string, unsigned> product2;
+    map<string, reg_t> product3;
 
-  t.start();
-  uint64_t s = 0;
+    t.start();
+    uint64_t s = 0;
 
-  s = sizeof(PLCset);
-  cout << "Size of PLC structure is: " << s << endl;
+    s = sizeof(PLCset);
+    cout << "Size of PLC structure is: " << s << endl;
 
-  cfg_read(CFG_FILE);
-  plc_show();
+    cfg_read(CFG_FILE);
+    plc_show();
 
-  s = 10;
-  t.stop();
-  t.spent_auto();
+    s = 10;
+    t.stop();
+    t.spent_auto();
 
-  s = sizeof(PLCset);
-  cout << "Size of PLC structure is: " << s << endl;
+    s = sizeof(PLCset);
+    cout << "Size of PLC structure is: " << s << endl;
 
-  t.start();
-  t.sleep_ms(987);
-  t.stop();
-  t.spent();
+    t.start();
+    t.sleep_ms(987);
+    t.stop();
+    t.spent();
 
-  //   getr();
+    //   getr();
 
-  return (EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
 
 // eof

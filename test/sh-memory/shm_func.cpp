@@ -10,81 +10,82 @@
 
 #include "usage.h"
 
-int main(int argc, char **argv) {
-  int shm, len, cmd, mode = 0;
-  char *addr = NULL;
+int main(int argc, char **argv)
+{
+    int shm, len, cmd, mode = 0;
+    char *addr = NULL;
 
-  chk_usage(argc, *argv);
+    chk_usage(argc, *argv);
 
-  if (argc < 2) {
-    usage(argv[0]);
-    //	sleep(0.92);
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    return SHM_ERR_ARG_LOST;
-  }
-
-  if ((!strcmp(argv[1], "create") || !strcmp(argv[1], "write")) &&
-      (argc == 3)) {
-    len = strlen(argv[2]);
-    len = (len <= SHARED_MEMORY_OBJECT_SIZE) ? len : SHARED_MEMORY_OBJECT_SIZE;
-    mode = O_CREAT;
-    cmd = SHM_CREATE;
-  } else if (!strcmp(argv[1], "print")) {
-    cmd = SHM_PRINT;
-  } else if (!strcmp(argv[1], "unlink")) {
-    cmd = SHM_CLOSE;
-  } else {
-    usage(argv[0]);
-    sleep(2);
-    return SHM_ERR_ARG_WRONG;
-  }
-
-  if ((shm = shm_open(SHARED_MEMORY_OBJECT_NAME, mode | O_RDWR, 0777)) == -1) {
-    std::cout << errno << std::endl;
-    perror("shm OPEN: ");
-    return SHM_ERR_OPEN;
-  }
-
-  if (cmd == SHM_CREATE) {
-    if (ftruncate(shm, SHARED_MEMORY_OBJECT_SIZE + 1) == -1) {
-      perror("ftruncate");
-      return SHM_ERR_TRUNC;
+    if (argc < 2) {
+        usage(argv[0]);
+        //	sleep(0.92);
+        std::this_thread::sleep_for(std::chrono::milliseconds(900));
+        return SHM_ERR_ARG_LOST;
     }
-  }
 
-  addr = (char *)mmap(0, SHARED_MEMORY_OBJECT_SIZE + 1, PROT_WRITE | PROT_READ,
-                      MAP_SHARED, shm, 0);
-  //    mmap(addr, SHARED_MEMORY_OBJECT_SIZE+1, PROT_WRITE|PROT_READ,
-  //    MAP_SHARED, shm, 0);
-
-  if (addr == (char *)-1) {
-    perror("mmap");
-    return SHM_ERR_MMAP;
-  }
-
-  switch (cmd) {
-  case SHM_CREATE:
-    memcpy(addr, argv[2], len);
-    addr[len] = '\0';
-    printf("Shared memory filled in. You may run '%s print' to see value.\n",
-           argv[0]);
-    break;
-  case SHM_PRINT:
-    for (;;) {
-      printf("Got from shared memory: %s\n", addr);
-      sleep(3);
+    if ((!strcmp(argv[1], "create") || !strcmp(argv[1], "write")) &&
+            (argc == 3)) {
+        len = strlen(argv[2]);
+        len = (len <= SHARED_MEMORY_OBJECT_SIZE) ? len : SHARED_MEMORY_OBJECT_SIZE;
+        mode = O_CREAT;
+        cmd = SHM_CREATE;
+    } else if (!strcmp(argv[1], "print")) {
+        cmd = SHM_PRINT;
+    } else if (!strcmp(argv[1], "unlink")) {
+        cmd = SHM_CLOSE;
+    } else {
+        usage(argv[0]);
+        sleep(2);
+        return SHM_ERR_ARG_WRONG;
     }
-    break;
-  }
 
-  sleep(1);
+    if ((shm = shm_open(SHARED_MEMORY_OBJECT_NAME, mode | O_RDWR, 0777)) == -1) {
+        std::cout << errno << std::endl;
+        perror("shm OPEN: ");
+        return SHM_ERR_OPEN;
+    }
 
-  munmap(addr, SHARED_MEMORY_OBJECT_SIZE);
-  close(shm);
+    if (cmd == SHM_CREATE) {
+        if (ftruncate(shm, SHARED_MEMORY_OBJECT_SIZE + 1) == -1) {
+            perror("ftruncate");
+            return SHM_ERR_TRUNC;
+        }
+    }
 
-  if (cmd == SHM_CLOSE) {
-    shm_unlink(SHARED_MEMORY_OBJECT_NAME);
-  }
+    addr = (char *)mmap(0, SHARED_MEMORY_OBJECT_SIZE + 1, PROT_WRITE | PROT_READ,
+                        MAP_SHARED, shm, 0);
+    //    mmap(addr, SHARED_MEMORY_OBJECT_SIZE+1, PROT_WRITE|PROT_READ,
+    //    MAP_SHARED, shm, 0);
 
-  return 0;
+    if (addr == (char *)-1) {
+        perror("mmap");
+        return SHM_ERR_MMAP;
+    }
+
+    switch (cmd) {
+    case SHM_CREATE:
+        memcpy(addr, argv[2], len);
+        addr[len] = '\0';
+        printf("Shared memory filled in. You may run '%s print' to see value.\n",
+               argv[0]);
+        break;
+    case SHM_PRINT:
+        for (;;) {
+            printf("Got from shared memory: %s\n", addr);
+            sleep(3);
+        }
+        break;
+    }
+
+    sleep(1);
+
+    munmap(addr, SHARED_MEMORY_OBJECT_SIZE);
+    close(shm);
+
+    if (cmd == SHM_CLOSE) {
+        shm_unlink(SHARED_MEMORY_OBJECT_NAME);
+    }
+
+    return 0;
 }

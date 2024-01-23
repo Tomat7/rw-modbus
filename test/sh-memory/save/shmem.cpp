@@ -7,13 +7,14 @@
 #include "usage.h"
 
 
-int main (int argc, char ** argv) {
+int main (int argc, char ** argv)
+{
     int shm, len, cmd, mode = 0;
     char *addr = NULL;
 
     if ( argc < 2 ) {
         usage(argv[0]);
-	sleep(2);
+        sleep(2);
         return SHM_ERR_ARG_LOST;
     }
 
@@ -28,7 +29,7 @@ int main (int argc, char ** argv) {
         cmd = SHM_CLOSE;
     } else {
         usage(argv[0]);
-	sleep(2);
+        sleep(2);
         return SHM_ERR_ARG_WRONG;
     }
 
@@ -59,10 +60,10 @@ int main (int argc, char ** argv) {
         printf("Shared memory filled in. You may run '%s print' to see value.\n", argv[0]);
         break;
     case SHM_PRINT:
-	for (;;) {
-        printf("Got from shared memory: %s\n", addr);
-	sleep(3);
-	}
+        for (;;) {
+            printf("Got from shared memory: %s\n", addr);
+            sleep(3);
+        }
         break;
     }
 
