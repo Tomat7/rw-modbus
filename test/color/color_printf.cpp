@@ -11,8 +11,17 @@
 #define YEL "\033[0;93m"
 #define PUR "\033[0;95m"
 
-#define WH0 "\033[0;97m"
-#define WH1 "\033[1;97m"
+#define WHI_ "\033[0;97m"
+#define WHI_B "\033[1;97m"
+
+#define STD_ "\033[0;39m"
+#define STD_B "\033[1;39m"
+
+#define GRL_ "\033[1;37m"
+#define GRL_B "\033[1;37m"
+
+#define GRD_ "\033[1;90m"
+#define GRD_B "\033[1;90m"
 
 #define COLOR1 "\033[1;162;159m"
 #define COLOR2 "\033[0;0;0m"
@@ -21,14 +30,17 @@
 int main()
 {
     if (isatty(STDOUT_FILENO))
-        printf(WH0 "White " WH1 "Yellow " OLDCOLOR "\n");
+        printf(WHI_ "Regular WHITE " WHI_ "Bold WHITE " OLDCOLOR "\n");
     else
         printf("This is pipe, no colors!\n");
 
+    printf(STD_ "Regular WHITE " STD_B "Bold WHITE " OLDCOLOR "\n");
+    printf(GRL_ "Regular WHITE " GRL_B "Bold WHITE " OLDCOLOR "\n");
+    printf(GRD_ "Regular WHITE " GRD_B "Bold WHITE " OLDCOLOR "\n");
 
-
-while
-	for
-		
-return 0;
+/*
+    while
+    for
+*/
+        return 0;
 }

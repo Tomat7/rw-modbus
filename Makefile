@@ -3,7 +3,7 @@ CC=g++
 
 .DEFAULT_GOAL := all
 
-CPP_VER= -std=c++20
+CPP_VER= -std=c++17
 OBJDIR=./obj
 
 LIBS= -lrt
@@ -58,6 +58,12 @@ FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
  -fstack-protector
 
 #===============================================================================
+
+git-upload:
+	cd ~/src/rw-modbus/bin
+	pwd
+	ll
+	./git_upload
 
 all: a.out
 
