@@ -17,10 +17,10 @@
 #define STD_ "\033[0;39m"
 #define STD_B "\033[1;39m"
 
-#define GRL_ "\033[1;37m"
+#define GRL_ "\033[0;37m"
 #define GRL_B "\033[1;37m"
 
-#define GRD_ "\033[1;90m"
+#define GRD_ "\033[0;90m"
 #define GRD_B "\033[1;90m"
 
 #define COLOR1 "\033[1;162;159m"
@@ -30,13 +30,13 @@
 int main()
 {
     if (isatty(STDOUT_FILENO))
-        printf(WHI_ "Regular WHITE " WHI_ "Bold WHITE " OLDCOLOR "\n");
+        printf("white     " WHI_ " STAND " WHI_B "bold STAND  " OLDCOLOR "\n");
     else
         printf("This is pipe, no colors!\n");
 
-    printf(STD_ "Regular WHITE " STD_B "Bold WHITE " OLDCOLOR "\n");
-    printf(GRL_ "Regular WHITE " GRL_B "Bold WHITE " OLDCOLOR "\n");
-    printf(GRD_ "Regular WHITE " GRD_B "Bold WHITE " OLDCOLOR "\n");
+    printf("standart  " STD_ " STAND " STD_B "bold STAND " OLDCOLOR "\n");
+    printf("light-grey" GRL_ " STAND " GRL_B "bold STAND " OLDCOLOR "\n");
+    printf("dark-grey " GRD_ " STAND " GRD_B "bold STAND " OLDCOLOR "\n");
 
 /*
     while
