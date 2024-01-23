@@ -27,6 +27,13 @@
 #define COLOR2 "\033[0;0;0m"
 
 
+#define RED_L "\033[0;91m"
+#define RED_LB "\033[1;91m"
+#define RED_D "\033[0;31m"
+#define RED_DB "\033[1;31m"
+
+
+
 int main()
 {
     if (isatty(STDOUT_FILENO))
@@ -37,6 +44,10 @@ int main()
     printf("standart  " STD_ " no BOLD " STD_B " BOLD " OLDCOLOR "\n");
 //    printf("light-grey" GRL_ " STAND " GRL_B "bold STAND " OLDCOLOR "\n");
     printf("dark-grey " GRD_ " no BOLD " GRD_B " BOLD " OLDCOLOR "\n");
+
+
+    printf("red-light " RED_L " no BOLD " RED_LB " BOLD " OLDCOLOR "\n");
+    printf("red-dark  " RED_D " no BOLD " RED_DB " BOLD " OLDCOLOR "\n");
 
 /*
     while
