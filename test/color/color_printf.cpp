@@ -33,6 +33,21 @@
 #define RED_DB "\033[1;31m"
 
 
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+
+
+#define NEWCOLOR0 "\033[0;38;05;49;48;05;129m"
+#define NEWCOLOR1 "\033[1;38;05;49;48;05;129m"
+
+// "\033[$A;38;05;$B;48;05;$C""m Фон $C\t\c"
+
 
 int main()
 {
@@ -48,6 +63,19 @@ int main()
 
     printf("red-light " RED_L " no BOLD " RED_LB " BOLD " OLDCOLOR "\n");
     printf("red-dark  " RED_D " no BOLD " RED_DB " BOLD " OLDCOLOR "\n");
+
+    printf("new color " NEWCOLOR0 " no BOLD " NEWCOLOR1 " BOLD " OLDCOLOR "\n");
+
+
+    printf("%sred\n", KRED);
+    printf("%sgreen\n", KGRN);
+    printf("%syellow\n", KYEL);
+    printf("%sblue\n", KBLU);
+    printf("%smagenta\n", KMAG);
+    printf("%scyan\n", KCYN);
+    printf("%swhite\n", KWHT);
+    printf("%snormal\n", KNRM);
+
 
 /*
     while
