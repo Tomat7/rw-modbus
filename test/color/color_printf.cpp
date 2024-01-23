@@ -30,13 +30,13 @@
 int main()
 {
     if (isatty(STDOUT_FILENO))
-        printf("white     " WHI_ " STAND " WHI_B "bold STAND  " OLDCOLOR "\n");
+        printf("white     " WHI_ " no BOLD " WHI_B " BOLD  " OLDCOLOR "\n");
     else
         printf("This is pipe, no colors!\n");
 
-    printf("standart  " STD_ " STAND " STD_B "bold STAND " OLDCOLOR "\n");
-    printf("light-grey" GRL_ " STAND " GRL_B "bold STAND " OLDCOLOR "\n");
-    printf("dark-grey " GRD_ " STAND " GRD_B "bold STAND " OLDCOLOR "\n");
+    printf("standart  " STD_ " no BOLD " STD_B " BOLD " OLDCOLOR "\n");
+//    printf("light-grey" GRL_ " STAND " GRL_B "bold STAND " OLDCOLOR "\n");
+    printf("dark-grey " GRD_ " no BOLD " GRD_B " BOLD " OLDCOLOR "\n");
 
 /*
     while
