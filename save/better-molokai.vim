@@ -130,7 +130,7 @@ if &t_Co > 255
    hi Character       ctermfg=186
    hi Number          ctermfg=135
    hi String          ctermfg=186
-   hi Conditional     ctermfg=199               cterm=bold
+   hi Conditional     ctermfg=205               cterm=bold
    hi Constant        ctermfg=135               cterm=bold
    hi Cursor          ctermfg=16  ctermbg=253
    hi Debug           ctermfg=225               cterm=bold
@@ -154,7 +154,7 @@ if &t_Co > 255
    hi Ignore          ctermfg=244 ctermbg=232
    hi IncSearch       ctermfg=193 ctermbg=16
 
-   hi Keyword         ctermfg=161               cterm=bold
+   hi Keyword         ctermfg=196               cterm=bold
    hi Label           ctermfg=229               cterm=none
    hi Macro           ctermfg=148
    hi SpecialKey      ctermfg=81
@@ -162,7 +162,7 @@ if &t_Co > 255
    hi MatchParen      ctermfg=16  ctermbg=208 cterm=bold
    hi ModeMsg         ctermfg=229
    hi MoreMsg         ctermfg=229
-   hi Operator        ctermfg=161
+   hi Operator        ctermfg=196
 
    " complete menu
    hi Pmenu           ctermfg=81  ctermbg=16
@@ -173,7 +173,7 @@ if &t_Co > 255
    hi PreCondit       ctermfg=118               cterm=bold
    hi PreProc         ctermfg=118
    hi Question        ctermfg=81
-   hi Repeat          ctermfg=199               cterm=bold
+   hi Repeat          ctermfg=205               cterm=bold
    hi Search          ctermfg=253 ctermbg=66
 
    " marks column
@@ -183,12 +183,12 @@ if &t_Co > 255
    hi Special         ctermfg=81
    hi SpecialKey      ctermfg=245
 
-   hi Statement       ctermfg=161               cterm=bold
+   hi Statement       ctermfg=196               cterm=bold
    hi StatusLine      ctermfg=238 ctermbg=253
    hi StatusLineNC    ctermfg=244
    hi StorageClass    ctermfg=208
    hi Structure       ctermfg=81
-   hi Tag             ctermfg=161
+   hi Tag             ctermfg=196
    hi Title           ctermfg=166
    hi Todo            ctermfg=233  ctermbg=119  cterm=bold
 
