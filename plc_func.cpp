@@ -31,17 +31,17 @@ int plc_show()
 }
 
 /*
-void plc_show_regs(int i) {
-  int nb_regs = static_cast<int>(PLCset[i].regs.size());
-  // ===== Cycle to Show registers details =====
-  for (int j = 0; j < nb_regs; ++j) {
+    void plc_show_regs(int i) {
+    int nb_regs = static_cast<int>(PLCset[i].regs.size());
+    // ===== Cycle to Show registers details =====
+    for (int j = 0; j < nb_regs; ++j) {
         reg_fill_name(PLCset[i].dev_name, PLCset[i].regs[j].rname,
                          &PLCset[i].regs[j].rvalue);
 
     plc_print_reg_details(i, j);
-  }
-  return;
-}
+    }
+    return;
+    }
 */
 
 void plc_print_details(int i)

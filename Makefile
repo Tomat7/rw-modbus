@@ -103,7 +103,7 @@ endif
 include $(wildcard $(OBJDIR)/*.cpp.d)
 
 
-clean: format-kr
+clean: format-clang
 	@echo "=== Cleaning UP..."
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
 	rm -rfv a.out

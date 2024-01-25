@@ -10,7 +10,7 @@ using namespace std;
 using namespace libconfig;
 
 int cfg_init_plcset();
-void cfg_init_regs(const Setting &reg, PLC *pn);
+void cfg_init_regs(const Setting &reg, PLC* pn);
 
 void cfg_print_plc_details(const PLC &pn);
 void cfg_print_reg_details(const reg_t &rn);
@@ -20,7 +20,7 @@ Config cfg;
 // This example reads the configuration file and displays
 // some of its contents.
 
-int cfg_read(const char *cfg_file)
+int cfg_read(const char* cfg_file)
 {
 
     // Read the file. If there is an error, report it and exit.
@@ -89,13 +89,15 @@ int cfg_init_plcset()
         PLCset.push_back(plcnow);
         // ===== End PLC filling  =====
     }
+
     cout << "Configured PLCs: " << PLCset.size() << endl;
     return 0;
 }
 
-void cfg_init_regs(const Setting &cfgREG, PLC *pn)
+void cfg_init_regs(const Setting &cfgREG, PLC* pn)
 {
     int nb_regs = cfgREG.getLength();
+
     // ===== Cycle for REGs =====
     for (int j = 0; j < nb_regs; ++j) {
         //    const Setting &reg = cfgREG[j];
@@ -114,6 +116,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn)
         cfg_print_reg_details(regnow);
         pn->regs.push_back(regnow);
     }
+
     return;
 }
 

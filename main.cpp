@@ -8,7 +8,7 @@
 using namespace std;
 using namespace libconfig;
 
-map<string, reg_t *> REGmap;
+map<string, reg_t*> REGmap;
 vector<PLC> PLCset;
 int rc;
 
@@ -53,6 +53,7 @@ int main()
         t.stop();
         t.spent();
     }
+
     //   getr();
 
     return (EXIT_SUCCESS);

@@ -19,11 +19,9 @@ int main(int argc, char** argv)
     //  closelog();
     // =======
 
-    for (;;) {}
-
-    while
-    do til
-
+//    for (;;) {}
+//    while
+//    do til
 
     if (argc != 4) {
             printf("Read one holding REGISTER by Modbus-TCP from slave on IP_ADDR\n");
@@ -31,10 +29,6 @@ int main(int argc, char** argv)
             printf("Usage: %s IP_ADDR REGISTER FORMAT\n", argv[0]);
             return -1;
         }
-
-
-    for ();
-
 
     modbus_t* mb;
     int rc = 0;
