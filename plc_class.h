@@ -20,10 +20,7 @@ class PLC
 {
 
 public:
-    PLC()
-    {
-        cout << "+ New PLC created." << endl;
-    }
+    PLC() { cout << "+ New PLC created." << endl; }
 
     ~PLC()
     {

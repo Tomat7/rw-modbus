@@ -5,6 +5,11 @@
 
 #define CFG_FILE "./conf/modbus.cfg"
 
+// ANSI Escape Sequences
+#define ESC "\x1B"
+#define CLS ESC "[2J"
+#define HOME ESC "[H"
+
 // https://31.44.7.12:55972/panel/
 // http://85.117.235.21:55971/
 

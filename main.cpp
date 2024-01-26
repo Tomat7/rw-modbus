@@ -36,6 +36,10 @@ int main()
     t.spent();
 
     for (;;) {
+        printf(CLS);
+        printf(HOME);
+        fflush(stdout);
+
         t.start();
         mb_read();
         t.stop();
@@ -46,7 +50,7 @@ int main()
         reg_print_name();
         t.stop();
         cout << "============ REG print finished." << endl;
-        t.spent();
+        t.spent_auto("Printing: ");
 
         t.start();
         t.sleep_ms(987);

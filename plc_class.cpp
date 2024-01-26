@@ -14,7 +14,6 @@
 
 #define CAST_MILLIS duration_cast<milliseconds>
 
-
 using namespace std;
 
 // PLC::PLC() {}
@@ -55,7 +54,6 @@ int PLC::init(const char* _ip, int _port)
     return rc;
 }
 
-
 int PLC::connect()
 {
     if (ctx == NULL) {
@@ -78,7 +76,6 @@ int PLC::connect()
 
     return rc;
 }
-
 
 int PLC::read()
 {
@@ -112,7 +109,6 @@ int PLC::read()
     return 0;
 }
 
-
 int PLC::set_timeout()
 {
     if (ctx == NULL)
@@ -126,7 +122,6 @@ int PLC::set_timeout()
     return rc;
 }
 
-
 void PLC::deinit()
 {
     if (ctx != NULL) {
@@ -134,7 +129,6 @@ void PLC::deinit()
         modbus_free(ctx);
     }
 }
-
 
 uint64_t PLC::millis()
 {

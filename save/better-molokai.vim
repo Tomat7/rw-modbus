@@ -130,7 +130,7 @@ if &t_Co > 255
    hi Character       ctermfg=186
    hi Number          ctermfg=135
    hi String          ctermfg=186
-   hi Conditional     ctermfg=205               cterm=bold
+   hi Conditional     ctermfg=199               cterm=bold
    hi Constant        ctermfg=135               cterm=bold
    hi Cursor          ctermfg=16  ctermbg=253
    hi Debug           ctermfg=225               cterm=bold
@@ -173,7 +173,7 @@ if &t_Co > 255
    hi PreCondit       ctermfg=118               cterm=bold
    hi PreProc         ctermfg=118
    hi Question        ctermfg=81
-   hi Repeat          ctermfg=205               cterm=bold
+   hi Repeat          ctermfg=199               cterm=bold
    hi Search          ctermfg=253 ctermbg=66
 
    " marks column
@@ -187,7 +187,7 @@ if &t_Co > 255
    hi StatusLine      ctermfg=238 ctermbg=253
    hi StatusLineNC    ctermfg=244
    hi StorageClass    ctermfg=208
-   hi Structure       ctermfg=81
+   hi Structure       ctermfg=51
    hi Tag             ctermfg=196
    hi Title           ctermfg=166
    hi Todo            ctermfg=233  ctermbg=119  cterm=bold

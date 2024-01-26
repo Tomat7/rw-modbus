@@ -5,6 +5,8 @@
 #include "config.h"
 #include "libs.h"
 
+#define MB_READ
+
 using namespace std;
 using namespace libconfig;
 
@@ -52,11 +54,25 @@ void reg_print_name()
 
     for (const auto &[rname, ra] : REGmap) {
         if (strcmp(ra->rtype, "i") == 0)
-            cout << "  " << setw(12) << left << rname << setw(7) << right
-                 << ra->rvalue << endl;
+            printf("%-12s %7d\n", rname.c_str(), ra->rvalue);
         else
-            cout << "  " << setw(12) << left << rname << setw(7) << right << fixed
-                 << setprecision(2) << (float)((int16_t)(ra->rvalue) / 100.0) << endl;
+            printf("%-12s %7.2f\n", rname.c_str(), (int16_t)ra->rvalue * 0.01);
+    }
+
+    return;
+}
+
+void reg_print_name_c()
+{
+    cout << endl << "======= regs_print_name =======" << endl;
+
+    for (const auto &[rname, ra] : REGmap) {
+        if (strcmp(ra->rtype, "i") == 0)
+            cout << setw(12) << left << rname << setw(7) << right << ra->rvalue
+                 << endl;
+        else
+            cout << setw(12) << left << rname << setw(7) << right << fixed
+                 << setprecision(2) << (int16_t)(ra->rvalue) * 0.01 << endl;
     }
 
     return;

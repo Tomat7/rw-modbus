@@ -86,10 +86,7 @@ public:
             spent_us(0, txt1);
     }
 
-    void spent()
-    {
-        spent_auto();
-    }
+    void spent() { spent_auto(); }
 
     // ===========================
 
