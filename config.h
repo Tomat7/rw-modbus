@@ -16,10 +16,10 @@
 using namespace std;
 using namespace libconfig;
 
-extern map<string, reg_t*> REGmap;
+extern map<string, reg_t *> REGmap;
 extern vector<PLC> PLCset;
 
-int cfg_read(const char* cfg_file);
+int cfg_read(const char *cfg_file);
 
 int plc_show();
 int mb_read();
