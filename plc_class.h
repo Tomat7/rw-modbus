@@ -28,7 +28,6 @@ struct reg_t {
 
 class PLC
 {
-
 public:
     PLC(); // { LOGINFO("+ New PLC created."); }
     ~PLC(); // { deinit(); }
@@ -55,4 +54,5 @@ public:
 private:
     int rc = 0;
     modbus_t* ctx = NULL;
+
 };
