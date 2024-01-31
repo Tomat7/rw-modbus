@@ -21,7 +21,7 @@ int plc_show()
         plc_print_details(i);
         //    int nb_regs = static_cast<int>(PLCset[i].regs.size());
 
-        for (int j = 0; j < PLCset[i].nb_regs; ++j) // Cycle for REGs
+        for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
             plc_print_reg_details(i, j);
 
         cout << endl;
@@ -47,7 +47,7 @@ void plc_show_regs(int i) {
 void plc_print_details(int i)
 {
     cout << setw(5) << left << PLCset[i].dev_name << "  " << setw(5) << left
-         << PLCset[i].nb_regs << "  " << setw(15) << left << PLCset[i].ip_addr
+         << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
          << "  " << PLCset[i].mb_interval << "  " << PLCset[i].mb_timeout << endl;
     return;
 }

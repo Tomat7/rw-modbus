@@ -20,7 +20,7 @@ struct reg_t {
 struct PLC {
     const char *dev_name;
     const char *ip_addr;
-    int nb_regs;
+    int reg_qty;
     int poll_interval;
     int err_timeout;
     vector<reg_t> regs;

@@ -50,7 +50,7 @@ int cfg_read(const char *cfg_file)
             const char *ptitle; 	// Just to show
 
             int count_REGs = REGs.getLength();
-            plcnow.nb_regs = count_REGs;
+            plcnow.reg_qty = count_REGs;
             cout << count_REGs << endl;
 
 // ===== Check the record which expect to get for CFG-file.
@@ -66,7 +66,7 @@ int cfg_read(const char *cfg_file)
 // ===== Output PLC details
             cout << setw(10) << left << ptitle << "  " << setw(10) << left
                  << plcnow.dev_name << "  " << setw(20) << left << plcnow.ip_addr
-                 << "  " << plcnow.nb_regs << endl;
+                 << "  " << plcnow.reg_qty << endl;
 
 // ===== Cycle for REGs =====
             for (int j = 0; j < count_REGs; ++j) {

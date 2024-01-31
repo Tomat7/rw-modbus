@@ -55,7 +55,9 @@ public:
   uint32_t mb_errors = 0;       // counter of any ERROR
   uint32_t mb_status = 0;       // rc value of last func (init/connect/read)
 
-  int nb_regs = 0;
+  int reg_min = 0;     // minimal address of reg
+  int reg_max = 0;     // maximal address of reg
+  int reg_qty = 0;          // number of regs
   vector<reg_t> regs;
 
 private:

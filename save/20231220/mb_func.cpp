@@ -35,7 +35,7 @@ void plc_show_full()
     cout << "Total PLCs: " << nb_plcs << endl;
     // ===== Cycle to Show PLCs details =====
     for (int i = 0; i < nb_plcs; ++i) {
-        int count_REGs = PLCset[i].nb_regs;
+        int count_REGs = PLCset[i].reg_qty;
         plc_print_details(i);
         plc_show_regs(i);
         cout << endl;
@@ -46,7 +46,7 @@ void plc_show_full()
 void plc_print_details(int i)
 {
     cout << setw(5) << left << PLCset[i].dev_name << "  " << setw(5) << left
-         << PLCset[i].nb_regs << "  " << setw(15) << left << PLCset[i].ip_addr
+         << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
          << "  " << PLCset[i].poll_interval << "  " << PLCset[i].err_timeout
          << endl;
     return;

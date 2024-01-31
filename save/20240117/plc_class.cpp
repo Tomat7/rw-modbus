@@ -81,16 +81,16 @@ int PLC::read()
         return rc;
     }
 
-    uint16_t *mbregs = new uint16_t[nb_regs + 1];
+    uint16_t *mbregs = new uint16_t[reg_qty + 1];
 
-    rc = modbus_read_registers(ctx, 0, nb_regs, mbregs);
+    rc = modbus_read_registers(ctx, 0, reg_qty, mbregs);
     if (rc == -1) {
         fprintf(stderr, "MB: read error: %s \n", modbus_strerror(errno));
         mb_errors++;
         return rc;
     }
 
-    for (int j = 0; j < nb_regs; ++j)
+    for (int j = 0; j < reg_qty; ++j)
         regs[j].rvalue = mbregs[regs[j].raddr];
 
     mb_timestamp_ms = millis();

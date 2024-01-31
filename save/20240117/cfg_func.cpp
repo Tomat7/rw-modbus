@@ -80,7 +80,7 @@ int cfg_init_plcset()
             // CFG-file
         }
 
-        plcnow.nb_regs = cfgPLC[i]["regs"].getLength();
+        plcnow.reg_qty = cfgPLC[i]["regs"].getLength();
         cfg_print_plc_details(plcnow);
         cfg_init_regs(cfgPLC[i]["regs"], &plcnow);
 
@@ -122,7 +122,7 @@ void cfg_print_plc_details(const PLC &D)
     // ===== Output PLC details
     cout << setw(10) << left << D.dev_desc << "  " << setw(10) << left
          << D.dev_name << "  " << setw(20) << left << D.ip_addr << "  "
-         << D.nb_regs << endl;
+         << D.reg_qty << endl;
     return;
 }
 

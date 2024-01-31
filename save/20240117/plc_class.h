@@ -46,7 +46,7 @@ public:
     uint32_t mb_timeout = 0;  // miCRo seconds (!!) Modbus respose timeout
     uint32_t mb_errors = 0;   // counter of any ERROR
     uint32_t mb_interval = 0; // milliseconds between read request
-    int nb_regs = 0;
+    int reg_qty = 0;
     vector<reg_t> regs;
 
 private:

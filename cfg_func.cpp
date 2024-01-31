@@ -78,7 +78,7 @@ int cfg_init_plcset() {
                 // CFG-file
     }
 
-    plcnow.nb_regs = cfgPLC[i]["regs"].getLength();
+    plcnow.reg_qty = cfgPLC[i]["regs"].getLength();
     cfg_print_plc_details(plcnow);
     cfg_init_regs(cfgPLC[i]["regs"], &plcnow);
 
@@ -109,9 +109,15 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
       continue;
     }
 
+    if (regnow.raddr < pn->reg_min)
+      pn->reg_min = regnow.raddr;
+    if (regnow.raddr > pn->reg_max)
+      pn->reg_max = regnow.raddr;   
+
     regnow.rvalue = 555;
     cfg_print_reg_details(regnow);
     pn->regs.push_back(regnow);
+ 
   }
 
   return;
@@ -121,7 +127,7 @@ void cfg_print_plc_details(const PLC &D) {
   // ===== Output PLC details
   cout << setw(10) << left << D.dev_desc << "  " << setw(10) << left
        << D.dev_name << "  " << setw(20) << left << D.ip_addr << "  "
-       << D.nb_regs << endl;
+       << D.reg_qty << endl;
   return;
 }
 
