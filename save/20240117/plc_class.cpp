@@ -93,7 +93,7 @@ int PLC::read()
     for (int j = 0; j < nb_regs; ++j)
         regs[j].rvalue = mbregs[regs[j].raddr];
 
-    mb_time = millis();
+    mb_timestamp_ms = millis();
 
     modbus_close(ctx);
     delete[] mbregs;
@@ -127,7 +127,7 @@ uint64_t PLC::millis()
 #define CAST_MILLIS duration_cast<milliseconds>
 
     using namespace std::chrono;
-    uint64_t t, old = mb_time;
+    uint64_t t, old = mb_timestamp_ms;
     t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
     printf("___dT: %ld  errors: %d\n", t - old, mb_errors);
 

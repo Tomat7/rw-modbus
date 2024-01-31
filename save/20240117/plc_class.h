@@ -42,7 +42,7 @@ public:
     const char *dev_name;
     const char *ip_addr;
     int tcp_port = 0;
-    uint64_t mb_time = 0;     // milliseconds since the Epoch on last read
+    uint64_t mb_timestamp_ms = 0;     // milliseconds since the Epoch on last read
     uint32_t mb_timeout = 0;  // miCRo seconds (!!) Modbus respose timeout
     uint32_t mb_errors = 0;   // counter of any ERROR
     uint32_t mb_interval = 0; // milliseconds between read request

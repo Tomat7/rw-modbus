@@ -18,134 +18,122 @@ using namespace std;
 
 // PLC::PLC() {}
 
-PLC::PLC()
-{
-    openlog("Modbus", LOG_NDELAY, LOG_LOCAL0);
-    LOGINFO("+ New PLC created.");
+PLC::PLC() {
+  openlog("Modbus", LOG_NDELAY, LOG_LOCAL0);
+  LOGINFO("+ New PLC created.");
 }
 
 PLC::~PLC() { deinit(); }
 
+int PLC::init(const char *_ip, int _port) {
+  rc = 0;
 
-int PLC::init(const char* _ip, int _port)
-{
-    rc = 0;
+  if (_port == 0) {
+    _port = tcp_port;
+    _ip = ip_addr;
+  }
 
-    if (_port == 0) {
-        _port = tcp_port;
-        _ip = ip_addr;
+  LOGINFO("%s: try to init \n", _ip);
+
+  if (ctx != NULL) {
+    LOGINFO("%s: try to close \n", _ip);
+    modbus_close(ctx);
+    LOGINFO("%s: try to free \n", _ip);
+    modbus_free(ctx);
+    ctx = NULL;
+  }
+
+  ctx = modbus_new_tcp(_ip, _port);
+
+  if (ctx == NULL) {
+    LOGINFO("%s:%d %s CTX allocate error. \n", _ip, _port, dev_name);
+    rc = -1;
+  } else {
+    LOGINFO("%s:%d %s CTX allocate OK. \n", _ip, _port, dev_name);
+    rc = modbus_set_response_timeout(ctx, 0, mb_timeout_us);
+    if (rc == -1) {
+      LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,
+             modbus_strerror(errno));
     }
+  }
 
-    LOGINFO("%s: try to init \n", _ip);
-
-    if (ctx != NULL) {
-        LOGINFO("%s: try to close \n", _ip);
-        modbus_close(ctx);
-        LOGINFO("%s: try to free \n", _ip);
-        modbus_free(ctx);
-        ctx = NULL;
-    }
-
-    ctx = modbus_new_tcp(_ip, _port);
-
-    if (ctx == NULL) {
-        LOGINFO("%s:%d %s CTX allocate error. \n", _ip, _port, dev_name);
-        rc = -1;
-    } else {
-        LOGINFO("%s:%d %s CTX allocate OK. \n", _ip, _port, dev_name);
-        rc = modbus_set_response_timeout(ctx, 0, mb_timeout);
-        if (rc == -1) {
-            LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name, modbus_strerror(errno));
-	}
-    }
-
-    return rc;
+  return rc;
 }
 
+int PLC::connect() {
+  if (ctx == NULL) {
+    rc = init();
+    if (rc == -1)
+      return rc;
+  }
 
-int PLC::connect()
-{
-    if (ctx == NULL) {
-        rc = init();
-        if (rc == -1)
-            return rc;
-    }
+  rc = modbus_connect(ctx);
 
-    rc = modbus_connect(ctx);
+  if (rc == -1) {
+    LOGERR("%s %s connect error: %s\n", ip_addr, dev_name,
+           modbus_strerror(errno));
+    modbus_free(ctx);
+    ctx = NULL;
+  }
 
-    if (rc == -1) {
-        LOGERR("%s %s connect error: %s\n", ip_addr, dev_name, modbus_strerror(errno));
-        modbus_free(ctx);
-        ctx = NULL;
-    }
-
-    return rc;
+  return rc;
 }
 
+int PLC::read() {
+  rc = connect();
 
-int PLC::read()
-{
-    rc = connect();
-    if (rc == -1) {
-        mb_errors++;
-        return rc;
-    }
-
-    uint16_t* mbregs = new uint16_t[nb_regs + 1];
-
+  if (rc == -1) {
+    mb_errors++;
+  } else {
+    uint16_t *mbregs = new uint16_t[nb_regs + 1];
     rc = modbus_read_registers(ctx, 0, nb_regs, mbregs);
 
     if (rc == -1) {
-        LOGERR("%s %s read error: %s \n", ip_addr, dev_name, modbus_strerror(errno));
-        mb_errors++;
-        return rc;
-    }
-
-    for (int j = 0; j < nb_regs; ++j)
+      LOGERR("%s %s read error: %s \n", ip_addr, dev_name,
+             modbus_strerror(errno));
+      mb_errors++;
+    } else {
+      for (int j = 0; j < nb_regs; ++j)
         regs[j].rvalue = mbregs[regs[j].raddr];
+      mb_timestamp_ms = millis();
+    }
 
-    mb_time = millis();
-
-    modbus_close(ctx);
     delete[] mbregs;
+  }
 
-    return 0;
+  modbus_close(ctx);
+  return rc;
 }
 
-int PLC::set_timeout()
-{
-    if (ctx == NULL)
-        init();
+int PLC::set_timeout() {
+  if (ctx == NULL)
+    init();
 
-    rc = modbus_set_response_timeout(ctx, 0, mb_timeout);
+  rc = modbus_set_response_timeout(ctx, 0, mb_timeout_us);
+  if (rc == -1) {
+    LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,
+           modbus_strerror(errno));
+  }
 
-    if (rc == -1) {
-        LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name, modbus_strerror(errno));
-    }
-
-    return rc;
+  return rc;
 }
 
-
-void PLC::deinit()
-{
-    if (ctx != NULL) {
-        LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
-        modbus_close(ctx);
-        modbus_free(ctx);
-    }
-    LOGINFO("- PLC deleted: %s. \n", dev_name);
+void PLC::deinit() {
+  if (ctx != NULL) {
+    LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
+    modbus_close(ctx);
+    modbus_free(ctx);
+  }
+  LOGINFO("- PLC deleted: %s. \n", dev_name);
 }
 
-
-uint64_t PLC::millis()
-{
+uint64_t PLC::millis() {
 #define CAST_MILLIS duration_cast<milliseconds>
 
-    using namespace std::chrono;
-    uint64_t t, old = mb_time;
-    t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
-    printf("%s __dT: %ld  errors: %d\n", dev_name, t - old, mb_errors);
+  using namespace std::chrono;
+  uint64_t t, old = mb_timestamp_ms;
+  t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
+  printf("%s __dT: %ld  errors: %d\n", dev_name, t - old, mb_errors);
 
-    return t;
+  return t;
 }
