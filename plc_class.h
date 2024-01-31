@@ -62,5 +62,6 @@ public:
 
 private:
   int rc = 0;
+  int read_mb();    
   modbus_t *ctx = NULL;
 };

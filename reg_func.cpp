@@ -52,7 +52,7 @@ void reg_print_name() {
 
   const char *C = KNRM;
   for (const auto &[rname, ra] : REGmap) {
-    if (ra->rstatus == -1)
+    if (ra->rstatus < 0)
       C = KRED;
     if (strcmp(ra->rtype, "i") == 0)
       printf("%s%-12s %7d\n" NRM, C, rname.c_str(), ra->rvalue);

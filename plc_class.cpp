@@ -100,29 +100,7 @@ int PLC::read()
     }
     else
     {
-        int nb_regs = reg_max - reg_min + 1;
-        uint16_t *mbregs = new uint16_t[nb_regs];
-        rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
-
-        if (rc == -1)
-        {
-            mb_errors++;
-            LOGERR("%s %s read error: %s \n", ip_addr, dev_name,
-                   modbus_strerror(errno));
-        }
-        else if (rc != nb_regs)
-        {
-            mb_errors++;
-            LOGERR("%s %s qty regs mismatch: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
-        }
-        else
-        {
-            mb_errors = 0;
-            for (auto r : regs) // (int j = 0; j < reg_qty; ++j)
-                r.rvalue = mbregs[r.raddr - reg_min]; //regs[j].rvalue = mbregs[regs[j].raddr - reg_min];
-        }
-
-        delete[] mbregs;
+        rc = read_mb();
     }
 
     mb_timestamp_ms = millis();
@@ -132,6 +110,35 @@ int PLC::read()
     for (auto &r : regs)
         r.rstatus = mb_status;
 
+    return rc;
+}
+
+int PLC::read_mb()
+{
+    int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
+    uint16_t *mbregs = new uint16_t[nb_regs];
+    rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
+
+    if (rc == -1)
+    {
+        mb_errors++;
+        LOGERR("%s %s read error: %s \n", ip_addr, dev_name,
+               modbus_strerror(errno));
+    }
+    else if (rc != nb_regs)
+    {
+        mb_errors++;
+        rc = -2;
+        LOGERR("%s %s qty regs mismatch: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
+    }
+    else
+    {
+        mb_errors = 0;
+        for (auto &r : regs)                      // (int j = 0; j < reg_qty; ++j)
+            r.rvalue = mbregs[r.raddr - reg_min]; // regs[j].rvalue = mbregs[regs[j].raddr - reg_min];
+    }
+
+    delete[] mbregs;
     return rc;
 }
 
