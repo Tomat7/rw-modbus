@@ -89,18 +89,19 @@ int PLC::read() {
     rc = modbus_read_registers(ctx, 0, nb_regs, mbregs);
 
     if (rc == -1) {
+      mb_errors++;
       LOGERR("%s %s read error: %s \n", ip_addr, dev_name,
              modbus_strerror(errno));
-      mb_errors++;
     } else {
+      mb_errors = 0;
       for (int j = 0; j < nb_regs; ++j)
-        regs[j].rvalue = mbregs[regs[j].raddr];
-      mb_timestamp_ms = millis();
+        regs[j].rvalue = mbregs[regs[j].raddr];  
     }
 
     delete[] mbregs;
   }
-
+  
+  mb_timestamp_ms = millis();
   modbus_close(ctx);
   mb_status = rc;
 
@@ -138,7 +139,7 @@ uint64_t PLC::millis() {
   using namespace std::chrono;
   uint64_t t, old = mb_timestamp_ms;
   t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
-  printf("%s __dT: %ld  errors: %d\n", dev_name, t - old, mb_errors);
+  printf("%s __dT: %ld  errors: %d  rc: %d\n", dev_name, t - old, mb_errors, rc);
 
   return t;
 }

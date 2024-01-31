@@ -57,8 +57,7 @@ void reg_print_name() {
     if (strcmp(ra->rtype, "i") == 0)
       printf("%s%-12s %7d\n" NRM, C, rname.c_str(), ra->rvalue);
     else
-      printf("%s%-12s %7.2f\n" NRM, C, rname.c_str(),
-             (int16_t)ra->rvalue * 0.01);
+      printf("%s%-12s %7.2f\n" NRM, C, rname.c_str(), (int16_t)ra->rvalue * 0.01);
   }
 
   return;
