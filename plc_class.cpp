@@ -102,6 +102,11 @@ int PLC::read() {
   }
 
   modbus_close(ctx);
+  mb_status = rc;
+
+  for (auto &r : regs)
+    r.rstatus = mb_status;
+
   return rc;
 }
 

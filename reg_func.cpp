@@ -50,11 +50,15 @@ void reg_init() {
 void reg_print_name() {
   cout << endl << "======= regs_print_name =======" << endl;
 
+  const char *C = KNRM;
   for (const auto &[rname, ra] : REGmap) {
+    if (ra->rstatus == -1)
+      C = KRED;
     if (strcmp(ra->rtype, "i") == 0)
-      printf("%-12s %7d\n", rname.c_str(), ra->rvalue);
+      printf("%s%-12s %7d\n" NRM, C, rname.c_str(), ra->rvalue);
     else
-      printf("%-12s %7.2f\n", rname.c_str(), (int16_t)ra->rvalue * 0.01);
+      printf("%s%-12s %7.2f\n" NRM, C, rname.c_str(),
+             (int16_t)ra->rvalue * 0.01);
   }
 
   return;
