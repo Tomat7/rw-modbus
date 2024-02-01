@@ -116,16 +116,18 @@ format-kr:
 
 # Reindent *.cpp to Linux code-style
 format-linux:
-	astyle $(ASFLAGS) -n --style=linux *.cpp,*.h
-
-# Reindent *.cpp to Google code-style
-format-google:
-	astyle $(ASFLAGS) -n --style=google *.cpp,*.h
+	astyle $(ASFLAGS) -n -s2 --style=linux *.cpp,*.h
 
 # Reindent *.cpp to Allman code-style
 format-allman:
 	astyle $(ASFLAGS) -n --style=allman *.cpp,*.h
 
+
+# Reindent *.cpp to Google code-style
+format-google:
+#	astyle $(ASFLAGS) -n --style=google *.cpp,*.h
+	clang-format -i -style=google --verbose *.cpp
+	clang-format -i -style=google --verbose *.h
 
 # Reindent *.cpp to LLVM code-style
 format-clang:

@@ -16,12 +16,12 @@ int rc;
 
 int main()
 {
-
     t.start();
     cfg_read(CFG_FILE);
     t.stop();
     cout << "============ Cfg finished." << endl;
     t.spent();
+    t.sleep_ms(7987);
 
     t.start();
     plc_show();

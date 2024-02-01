@@ -21,6 +21,26 @@
 #define KCYN "\x1B[36m"
 #define KWHT "\x1B[37m"
 
+#define USE_SYSLOG
+#ifdef LOGERR
+#undef LOGERR
+#endif
+#ifdef LOGINFO
+#undef LOGINFO
+#endif
+
+#ifdef USE_SYSLOG
+#define LOGERR(...)                                                            \
+  printf(__VA_ARGS__);                                                         \
+  syslog(LOG_ERR, __VA_ARGS__)
+#define LOGINFO(...)                                                           \
+  printf(__VA_ARGS__);                                                         \
+  syslog(LOG_INFO, __VA_ARGS__)
+#else
+#define LOGERR(...) printf(__VA_ARGS__)
+#define LOGINFO(...) printf(__VA_ARGS__)
+#endif
+
 // https://31.44.7.12:55972/panel/
 // http://85.117.235.21:55971/
 

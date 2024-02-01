@@ -1,10 +1,11 @@
 // cfg_func.cpp --------------------------------------------------------------
 
+#include <string>
+#include <vector>
+
 #include "config.h"
 #include "libs.h"
 #include "plc_class.h"
-#include <string>
-#include <vector>
 
 using namespace std;
 using namespace libconfig;
@@ -22,28 +23,35 @@ Config cfg;
 
 int cfg_read(const char* cfg_file)
 {
-
     // Read the file. If there is an error, report it and exit.
     cout << endl << "======= cfg_read_mbset =======" << endl;
 
+    openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
+
     try {
         cfg.readFile(cfg_file);
-        std::cout << "I/O reading file OK: " << cfg_file << std::endl;
+        LOGINFO("I/O reading file OK: %s\n", cfg_file);
+        // std::cout << "I/O reading file OK: " << cfg_file << std::endl;
     } catch (const FileIOException &fioex) {
-        std::cerr << "I/O error while reading file " << cfg_file << std::endl;
+        LOGERR("I/O error while reading file: %s\n", cfg_file);
+        // std::cerr << "I/O error while reading file " << cfg_file << std::endl;
         return (EXIT_FAILURE);
     } catch (const ParseException &pex) {
-        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine()
-                  << " - " << pex.getError() << std::endl;
+        LOGERR("Parse error at %s:%d - %s\n", pex.getFile(), pex.getLine(),
+               pex.getError());
+        // std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine()
+        //          << " - " << pex.getError() << std::endl;
         return (EXIT_FAILURE);
     }
 
     // Get the top name.
     try {
         string name = cfg.lookup("maintitle");
-        cout << "Config title: " << name << endl << endl;
+        LOGINFO("Config title: %s\n", name.c_str());
+        // cout << "Config title: " << name << endl << endl;
     } catch (const SettingNotFoundException &nfex) {
-        cerr << "No 'nametitle' setting in configuration file." << endl;
+        LOGERR("No 'nametitle' setting in configuration file.\n");
+        // cerr << "No 'nametitle' setting in configuration file." << endl;
     }
 
     // Output a list of all PLCs in the inventory.
@@ -51,10 +59,11 @@ int cfg_read(const char* cfg_file)
         cfg_init_plcset();
         cout << "+++++" << endl;
     } catch (const SettingNotFoundException &nfex) {
-        cout << "Great ERROR! Exiting." << endl;
-        // Ignore.
+        LOGERR("Great ERROR! Exiting.\n");
+        // cout << "Great ERROR! Exiting." << endl;
     }
 
+    closelog();
     return (EXIT_SUCCESS);
 }
 
@@ -75,7 +84,8 @@ int cfg_init_plcset()
                 cfgPLC[i].lookupValue("port", plcnow.tcp_port) &&
                 cfgPLC[i].lookupValue("polling", plcnow.mb_interval_ms) &&
                 cfgPLC[i].lookupValue("timeout", plcnow.mb_timeout_us))) {
-            cout << "Warning!! Error reading PLC configuration: " << i << endl;
+            LOGERR("Warning!! Error reading PLC configuration: %d\n", i);
+            // cout << "Warning!! Error reading PLC configuration: " << i << endl;
             continue; // get out of current cycle iteration if any field wrong in
             // CFG-file
         }
@@ -85,12 +95,14 @@ int cfg_init_plcset()
         cfg_init_regs(cfgPLC[i]["regs"], &plcnow);
 
         cout << endl;
-        cout << "Configured REGs now: " << plcnow.regs.size() << endl;
+        LOGINFO("Configured REGs now: %d\n", (int)plcnow.regs.size());
+        // cout << "Configured REGs now: " << plcnow.regs.size() << endl;
         PLCset.push_back(plcnow);
         // ===== End PLC filling  =====
     }
 
-    cout << "Configured PLCs: " << PLCset.size() << endl;
+    LOGINFO("Configured PLCs: %d\n", (int)PLCset.size());
+    // cout << "Configured PLCs: " << PLCset.size() << endl;
     return 0;
 }
 
@@ -108,7 +120,8 @@ void cfg_init_regs(const Setting &cfgREG, PLC* pn)
                 cfgREG[j].lookupValue("raddr", regnow.raddr) &&
                 cfgREG[j].lookupValue("rmode", regnow.rmode) &&
                 cfgREG[j].lookupValue("rtype", regnow.rtype))) {
-            cout << "error reading REG " << j << endl;
+            LOGERR("error reading REG %d\n", j);
+            // cout << "error reading REG " << j << endl;
             continue;
         }
 

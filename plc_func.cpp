@@ -1,7 +1,8 @@
 // ----------------------------------------------------------------------------
+#include <vector>
+
 #include "config.h"
 #include "libs.h"
-#include <vector>
 
 using namespace std;
 using namespace libconfig;

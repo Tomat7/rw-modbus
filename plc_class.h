@@ -1,9 +1,10 @@
 #pragma once
 
 //#include "config.h"
+#include <modbus/modbus.h>
+
 #include <ctime>
 #include <iostream>
-#include <modbus/modbus.h>
 #include <vector>
 
 #define USE_SYSLOG

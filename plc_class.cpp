@@ -2,10 +2,11 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <chrono>
 #include <errno.h>
 #include <modbus/modbus.h>
 #include <stdio.h>
+
+#include <chrono>
 // #include <stdlib.h>
 // #include <string.h>
 #include <syslog.h>
@@ -21,7 +22,7 @@ using namespace std;
 PLC::PLC()
 {
     openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-    LOGINFO("+ New PLC created.");
+    LOGINFO("+ New PLC created.\n");
 }
 
 PLC::~PLC() { deinit(); }
@@ -117,7 +118,7 @@ int PLC::read_mb()
     } else {
         mb_errors = 0;
         for (auto &r : regs) // (int j = 0; j < reg_qty; ++j)
-            r.rvalue =  mbregs[r.raddr - reg_min];
+            r.rvalue = mbregs[r.raddr - reg_min];
         // regs[j].rvalue = mbregs[regs[j].raddr - reg_min];
     }
 

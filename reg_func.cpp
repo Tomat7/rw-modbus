@@ -1,5 +1,6 @@
 // ----------------------------------------------------------------------------
 #include <string.h>
+
 #include <vector>
 
 #include "config.h"
@@ -51,27 +52,24 @@ void reg_init()
 void reg_print_name()
 {
     cout << endl << "======= regs_print_name =======" << endl;
-
     const char* C = KNRM;
 
-    for (const auto &[rname, ra] : REGmap) {
-        if (ra->rstatus < 0)
+    for (const auto &[rn, r] : REGmap) {
+        if (r->rstatus < 0)
             C = KRED;
-
-        if (strcmp(ra->rtype, "i") == 0)
-            printf("%s%-12s %7d\n" NRM, C, rname.c_str(), ra->rvalue);
+        if (strcmp(r->rtype, "i") == 0)
+            printf("%s%-12s %7d\n" NRM, C, rn.c_str(), r->rvalue);
         else
-            printf("%s%-12s %7.2f\n" NRM, C, rname.c_str(),
-                   (int16_t)ra->rvalue * 0.01);
+            printf("%s%-12s %7.2f\n" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
     }
 
     return;
 }
 
-void reg_print_name_c()
-{
+/*
+    void reg_print_name_c()
+    {
     cout << endl << "======= regs_print_name =======" << endl;
-
     for (const auto &[rname, ra] : REGmap) {
         if (strcmp(ra->rtype, "i") == 0)
             cout << setw(12) << left << rname << setw(7) << right << ra->rvalue
@@ -80,8 +78,8 @@ void reg_print_name_c()
             cout << setw(12) << left << rname << setw(7) << right << fixed
                  << setprecision(2) << (int16_t)(ra->rvalue) * 0.01 << endl;
     }
-
     return;
-}
+    }
+*/
 
 // eof
