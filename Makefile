@@ -23,7 +23,7 @@ LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 LDFLAGS= -Wall
 CFLAGS= -c -Wall
 DEPFLAGS= -MD -MF
-ASFLAGS= -f -k1 -W3 -xg -xb -xj -xp -c -O -H
+ASFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
 WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 
 CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op

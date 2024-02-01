@@ -20,26 +20,24 @@ using namespace std;
 
 PLC::PLC()
 {
-    openlog("Modbus", LOG_NDELAY, LOG_LOCAL0);
+    openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
     LOGINFO("+ New PLC created.");
 }
 
 PLC::~PLC() { deinit(); }
 
-int PLC::init(const char *_ip, int _port)
+int PLC::init(const char* _ip, int _port)
 {
     rc = 0;
 
-    if (_port == 0)
-    {
+    if (_port == 0) {
         _port = tcp_port;
         _ip = ip_addr;
     }
 
     LOGINFO("%s: try to init \n", _ip);
 
-    if (ctx != NULL)
-    {
+    if (ctx != NULL) {
         LOGINFO("%s: try to close \n", _ip);
         modbus_close(ctx);
         LOGINFO("%s: try to free \n", _ip);
@@ -49,17 +47,13 @@ int PLC::init(const char *_ip, int _port)
 
     ctx = modbus_new_tcp(_ip, _port);
 
-    if (ctx == NULL)
-    {
+    if (ctx == NULL) {
         LOGINFO("%s:%d %s CTX allocate error. \n", _ip, _port, dev_name);
         rc = -1;
-    }
-    else
-    {
+    } else {
         LOGINFO("%s:%d %s CTX allocate OK. \n", _ip, _port, dev_name);
         rc = modbus_set_response_timeout(ctx, 0, mb_timeout_us);
-        if (rc == -1)
-        {
+        if (rc == -1) {
             LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,
                    modbus_strerror(errno));
         }
@@ -70,17 +64,14 @@ int PLC::init(const char *_ip, int _port)
 
 int PLC::connect()
 {
-    if (ctx == NULL)
-    {
+    if (ctx == NULL) {
         rc = init();
         if (rc == -1)
             return rc;
     }
 
     rc = modbus_connect(ctx);
-
-    if (rc == -1)
-    {
+    if (rc == -1) {
         LOGERR("%s %s connect error: %s\n", ip_addr, dev_name,
                modbus_strerror(errno));
         modbus_free(ctx);
@@ -93,15 +84,10 @@ int PLC::connect()
 int PLC::read()
 {
     rc = connect();
-
     if (rc == -1)
-    {
         mb_errors++;
-    }
     else
-    {
         rc = read_mb();
-    }
 
     mb_timestamp_ms = millis();
     modbus_close(ctx);
@@ -116,26 +102,23 @@ int PLC::read()
 int PLC::read_mb()
 {
     int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
-    uint16_t *mbregs = new uint16_t[nb_regs];
+    uint16_t* mbregs = new uint16_t[nb_regs];
     rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
 
-    if (rc == -1)
-    {
+    if (rc == -1) {
         mb_errors++;
         LOGERR("%s %s read error: %s \n", ip_addr, dev_name,
                modbus_strerror(errno));
-    }
-    else if (rc != nb_regs)
-    {
+    } else if (rc != nb_regs) {
         mb_errors++;
         rc = -2;
-        LOGERR("%s %s qty regs mismatch: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
-    }
-    else
-    {
+        LOGERR("%s %s qty regs mismatch: expect %d, got %d\n", ip_addr, dev_name,
+               nb_regs, rc);
+    } else {
         mb_errors = 0;
-        for (auto &r : regs)                      // (int j = 0; j < reg_qty; ++j)
-            r.rvalue = mbregs[r.raddr - reg_min]; // regs[j].rvalue = mbregs[regs[j].raddr - reg_min];
+        for (auto &r : regs) // (int j = 0; j < reg_qty; ++j)
+            r.rvalue =  mbregs[r.raddr - reg_min];
+        // regs[j].rvalue = mbregs[regs[j].raddr - reg_min];
     }
 
     delete[] mbregs;
@@ -148,8 +131,7 @@ int PLC::set_timeout()
         init();
 
     rc = modbus_set_response_timeout(ctx, 0, mb_timeout_us);
-    if (rc == -1)
-    {
+    if (rc == -1) {
         LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,
                modbus_strerror(errno));
     }
@@ -159,12 +141,12 @@ int PLC::set_timeout()
 
 void PLC::deinit()
 {
-    if (ctx != NULL)
-    {
+    if (ctx != NULL) {
         LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
         modbus_close(ctx);
         modbus_free(ctx);
     }
+
     LOGINFO("- PLC deleted: %s. \n", dev_name);
 }
 
@@ -175,7 +157,7 @@ uint64_t PLC::millis()
     using namespace std::chrono;
     uint64_t t, old = mb_timestamp_ms;
     t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
-    printf("%s __dT: %ld  errors: %d  rc: %d\n", dev_name, t - old, mb_errors, rc);
+    printf("%s _dT: %ld  errors: %d  rc: %d\n", dev_name, t - old, mb_errors, rc);
 
     return t;
 }
