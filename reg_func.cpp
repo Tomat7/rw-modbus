@@ -1,28 +1,27 @@
-// ----------------------------------------------------------------------------
+// reg_func.cpp -----------------------------
+// Copyright 2024 Tomat7 (star0413@gmail.com)
 #include <string.h>
 
 #include <vector>
+#include <string>
 
-#include "config.h"
-#include "libs.h"
+#include "./config.h"
+#include "./libs.h"
 
 #define MB_READ
 
-using namespace std;
-using namespace libconfig;
+// using ::std;
+// using ::libconfig;
 
 void reg_init();
 void reg_print_name();
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
-void reg_init()
-{
-  cout << endl
-       << "===== reg_init =====" << endl;
+void reg_init() {
+  cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
-    for (auto &R : D.regs)
-    {
+    for (auto &R : D.regs) {
       string reg = (string)D.dev_name + "." + (string)R.rname;
       REGmap[reg] = &R;
       REGmap[reg]->rvalue = 5757;
@@ -51,14 +50,11 @@ void reg_init()
     }
 */
 
-void reg_print_name()
-{
-  cout << endl
-       << "======= regs_print_name =======" << endl;
+void reg_print_name() {
+  cout << endl << "======= regs_print_name =======" << endl;
 
-  for (const auto &[rn, r] : REGmap)
-  {
-    const char *C = KNRM;
+  for (const auto &[rn, r] : REGmap) {
+    const char* C = KNRM;
     if (r->rstatus < 0)
       C = KRED;
 

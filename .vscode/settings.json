@@ -47,7 +47,9 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "*.h++": "cpp"
+        "*.h++": "cpp",
+        "map": "cpp",
+        "thread": "cpp"
     },
     "makefile.launchConfigurations": [
         {

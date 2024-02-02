@@ -122,10 +122,12 @@ format-linux:
 format-allman:
 	astyle $(ASFLAGS) -n --style=allman *.cpp,*.h
 
+# Reindent *.cpp to Google code-style
+format-google2:
+	astyle $(ASFLAGS) -n -s2 --style=google *.cpp,*.h
 
 # Reindent *.cpp to Google code-style
 format-google:
-#	astyle $(ASFLAGS) -n --style=google *.cpp,*.h
 	clang-format -i -style=google --verbose *.cpp
 	clang-format -i -style=google --verbose *.h
 

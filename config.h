@@ -1,7 +1,13 @@
 #pragma once
+// config.h ---------------------------------
+// Copyright 2024 Tomat7 (star0413@gmail.com)
 
-#include "libs.h"
-#include "plc_class.h"
+#include <string>
+#include <vector>
+#include <map>
+
+#include "./libs.h"
+#include "./plc_class.h"
 
 #define CFG_FILE "./conf/modbus.cfg"
 
@@ -44,11 +50,11 @@
 // https://31.44.7.12:55972/panel/
 // http://85.117.235.21:55971/
 
-using namespace std;
-using namespace libconfig;
+// using namespace std;
+// using namespace libconfig;
 
-extern map<string, reg_t*> REGmap;
-extern vector<PLC> PLCset;
+extern std::map<string, reg_t*> REGmap;
+extern std::vector<PLC> PLCset;
 
 int cfg_read(const char* cfg_file);
 
