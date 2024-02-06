@@ -16,7 +16,6 @@
 
 #include "./plc_class.h"
 
-
 PLC::PLC() {
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   LOGINFO("+ New PLC created.\n");
@@ -24,7 +23,7 @@ PLC::PLC() {
 
 PLC::~PLC() { deinit(); }
 
-int PLC::init(const char* _ip, int _port) {
+int PLC::init(const char *_ip, int _port) {
   rc = 0;
 
   if (_port == 0) {
@@ -34,17 +33,17 @@ int PLC::init(const char* _ip, int _port) {
 
   LOGINFO("%s: try to init \n", _ip);
 
-  if (ctx != NULL) {
+  if (ctx != nullptr) {
     LOGINFO("%s: try to close \n", _ip);
     modbus_close(ctx);
     LOGINFO("%s: try to free \n", _ip);
     modbus_free(ctx);
-    ctx = NULL;
+    ctx = nullptr;
   }
 
   ctx = modbus_new_tcp(_ip, _port);
 
-  if (ctx == NULL) {
+  if (ctx == nullptr) {
     LOGINFO("%s:%d %s CTX allocate error. \n", _ip, _port, dev_name);
     rc = -1;
   } else {
@@ -60,7 +59,7 @@ int PLC::init(const char* _ip, int _port) {
 }
 
 int PLC::connect() {
-  if (ctx == NULL) {
+  if (ctx == nullptr) {
     rc = init();
     if (rc == -1)
       return rc;
@@ -71,7 +70,7 @@ int PLC::connect() {
     LOGERR("%s %s connect error: %s\n", ip_addr, dev_name,
            modbus_strerror(errno));
     modbus_free(ctx);
-    ctx = NULL;
+    ctx = nullptr;
   }
 
   return rc;
@@ -95,8 +94,8 @@ int PLC::read() {
 }
 
 int PLC::read_mb() {
-  int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
-  uint16_t* mbregs = new uint16_t[nb_regs];
+  int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
+  uint16_t *mbregs = new uint16_t[nb_regs];
   rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
 
   if (rc == -1) {
@@ -110,7 +109,7 @@ int PLC::read_mb() {
            nb_regs, rc);
   } else {
     mb_errors = 0;
-    for (auto &r : regs)  // (int j = 0; j < reg_qty; ++j)
+    for (auto &r : regs) // (int j = 0; j < reg_qty; ++j)
       r.rvalue = mbregs[r.raddr - reg_min];
     // regs[j].rvalue = mbregs[regs[j].raddr - reg_min];
   }
@@ -120,7 +119,7 @@ int PLC::read_mb() {
 }
 
 int PLC::set_timeout() {
-  if (ctx == NULL)
+  if (ctx == nullptr)
     init();
 
   rc = modbus_set_response_timeout(ctx, 0, mb_timeout_us);
@@ -133,7 +132,7 @@ int PLC::set_timeout() {
 }
 
 void PLC::deinit() {
-  if (ctx != NULL) {
+  if (ctx != nullptr) {
     LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
     modbus_close(ctx);
     modbus_free(ctx);

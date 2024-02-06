@@ -10,7 +10,7 @@
 int main (int argc, char ** argv)
 {
     int shm, len, cmd, mode = 0;
-    char *addr = NULL;
+    char *addr = nullptr;
 
     if ( argc < 2 ) {
         usage(argv[0]);

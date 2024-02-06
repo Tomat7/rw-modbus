@@ -13,7 +13,7 @@
 int main(int argc, char **argv)
 {
     int shm, len, cmd, mode = 0;
-    char *addr = NULL;
+    char *addr = nullptr;
 
     chk_usage(argc, *argv);
 

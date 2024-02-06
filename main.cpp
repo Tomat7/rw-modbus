@@ -8,12 +8,12 @@
 #include "./config.h"
 #include "./libs.h"
 #include "./plc_class.h"
-#include "./timer.h"  // Timer t; - already initialised here!
+#include "./timer.h" // Timer t; - already initialised here!
 
 // using namespace std;
 // using namespace libconfig;
 
-map<string, reg_t*> REGmap;
+map<string, reg_t *> REGmap;
 vector<PLC> PLCset;
 int rc;
 

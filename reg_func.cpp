@@ -2,8 +2,8 @@
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 #include <string.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "./config.h"
 #include "./libs.h"
@@ -54,7 +54,7 @@ void reg_print_name() {
   cout << endl << "======= regs_print_name =======" << endl;
 
   for (const auto &[rn, r] : REGmap) {
-    const char* C = KNRM;
+    const char *C = KNRM;
     if (r->rstatus < 0)
       C = KRED;
 

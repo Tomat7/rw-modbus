@@ -2,9 +2,9 @@
 // config.h ---------------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 #include "./libs.h"
 #include "./plc_class.h"
@@ -53,10 +53,10 @@
 // using namespace std;
 // using namespace libconfig;
 
-extern std::map<string, reg_t*> REGmap;
+extern std::map<string, reg_t *> REGmap;
 extern std::vector<PLC> PLCset;
 
-int cfg_read(const char* cfg_file);
+int cfg_read(const char *cfg_file);
 
 int plc_show();
 int mb_read();

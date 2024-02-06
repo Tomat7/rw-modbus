@@ -27,18 +27,18 @@ int PLC::init(const char *_ip, int _port)
 
     printf("+++ MB init: try to check for NULL: %s \n", _ip);
 
-    if (ctx != NULL) {
+    if (ctx != nullptr) {
         printf("+++ MB init: try to close: %s \n", _ip);
         modbus_close(ctx);
         printf("+++ MB init: try to free: %s \n", _ip);
         modbus_free(ctx);
-        ctx = NULL;
+        ctx = nullptr;
     }
 
     printf("+++ MB init: try to NEW: %s \n", _ip);
 
     ctx = modbus_new_tcp(_ip, _port);
-    if (ctx == NULL) {
+    if (ctx == nullptr) {
         fprintf(stderr, "MB: error allocate ctx for %s:%d\n", _ip, _port);
         rc = -1;
     } else {
@@ -53,7 +53,7 @@ int PLC::init(const char *_ip, int _port)
 int PLC::connect()
 {
 
-    if (ctx == NULL) {
+    if (ctx == nullptr) {
         init();
         if (rc == -1)
             return rc;
@@ -65,7 +65,7 @@ int PLC::connect()
         fprintf(stderr, "MB: connect err %s:%d: %s\n", ip_addr, tcp_port,
                 modbus_strerror(errno));
         modbus_free(ctx);
-        ctx = NULL;
+        ctx = nullptr;
     }
 
     return rc;
@@ -104,7 +104,7 @@ int PLC::read()
 int PLC::set_timeout()
 {
 
-    if (ctx == NULL)
+    if (ctx == nullptr)
         init();
 
     rc = modbus_set_response_timeout(ctx, 0, mb_timeout);
@@ -116,7 +116,7 @@ int PLC::set_timeout()
 
 void PLC::deinit()
 {
-    if (ctx != NULL) {
+    if (ctx != nullptr) {
         modbus_close(ctx);
         modbus_free(ctx);
     }

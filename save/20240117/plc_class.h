@@ -51,5 +51,5 @@ public:
 
 private:
     int rc = 0;
-    modbus_t *ctx = NULL;
+    modbus_t *ctx = nullptr;
 };
