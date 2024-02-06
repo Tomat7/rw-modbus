@@ -32,9 +32,9 @@
 struct reg_t {
   int raddr;
   int rstatus;
-  const char *rname;
-  const char *rmode;
-  const char *rtype;
+  const char *rname = nullptr;
+  const char *rmode = nullptr;
+  const char *rtype = nullptr;
   uint16_t rvalue;
 };
 
