@@ -50,10 +50,10 @@ class PLC {
   void deinit();
   uint64_t millis();
 
-  const char* dev_title;
-  const char* dev_desc;
-  const char* dev_name;
-  const char* ip_addr;
+  const char* dev_title = nullptr;
+  const char* dev_desc = nullptr;
+  const char* dev_name = nullptr;
+  const char* ip_addr = nullptr;
   int tcp_port = 0;
 
   uint64_t mb_timestamp_ms = 0;     // milliseconds since the Epoch on last read
@@ -70,5 +70,5 @@ class PLC {
  private:
   int rc = 0;
   int read_mb();
-  modbus_t* ctx = NULL;
+  modbus_t* ctx = nullptr;
 };
