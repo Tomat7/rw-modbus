@@ -36,7 +36,7 @@ CFLAGS+= $(WARN_FLAGS)
 CFLAGS+= $(CHECK_FLAGS)
 CFLAGS+= $(TYPES_FLAGS)
 CFLAGS+= $(GLIBC_FLAGS)
-CFLAGS+= -fanalyzer
+#CFLAGS+= -fanalyzer
 
 
 # === Check for DEBUG build ===

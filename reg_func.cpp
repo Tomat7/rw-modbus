@@ -25,6 +25,26 @@ void reg_init() {
       string reg = (string)D.dev_name + "." + (string)R.rname;
       REGmap[reg] = &R;
       REGmap[reg]->rvalue = 5757;
+
+      rshm_t rm;
+      rm.rvalue = R.rvalue;
+      rm.rstatus = R.rstatus;
+      rm.rmode = (strcmp(R.rmode, "rw") == 0) ? 1 : 0;
+      rm.rtype = (strcmp(R.rtype, "f") == 0) ? 1 : 0;
+      SHMmap[reg] = rm;
+
+      int fd = create_shm_fd(reg.c_str());
+      if (fd != -1) {
+        reg_t *addr = create_shm_addr(fd, sizeof(rshm_t));
+
+        if (addr != nullptr) {
+          LOGINFO("SHM: created %s\n", reg.c_str());
+          REGmap[reg]->rfd = fd;
+          REGmap[reg]->rshm = addr;
+//          close_shm(fd, addr, sizeof(rshm_t));
+        } //else
+//          close_fd(fd);
+      }
     }
 
   /*  Old style cycles
@@ -42,14 +62,6 @@ void reg_init() {
   return;
 }
 
-/*
-    void reg_init_name(string devname, string regname, uint16_t *val) {
-    MBreg[devname + "." + regname] = val;
-    MBreg[devname + "." + regname] = 5757;
-    return;
-    }
-*/
-
 void reg_print_name() {
   cout << endl << "======= regs_print_name =======" << endl;
 
@@ -59,9 +71,28 @@ void reg_print_name() {
       C = KRED;
 
     if (strcmp(r->rtype, "i") == 0)
-      printf("%s%-12s %7d\n" NRM, C, rn.c_str(), r->rvalue);
+      printf("%s%-12s %7d" NRM, C, rn.c_str(), r->rvalue);
     else
-      printf("%s%-12s %7.2f\n" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
+      printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
+
+    SHMmap[rn].rvalue = r->rvalue;
+    SHMmap[rn].rstatus = r->rstatus;
+    void *ptr = &SHMmap[rn];
+
+    int fd; // = get_shm_fd(rn.c_str());
+    if (fd != -1) {
+//      reg_t *addr = get_shm_addr(fd, sizeof(rshm_t));
+//      if (addr != nullptr) {
+//        memcpy(addr, ptr, sizeof(rshm_t));
+        memcpy(r->rshm, ptr, sizeof(rshm_t));
+//        close_shm(fd, addr, sizeof(rshm_t));
+        printf("   +\n");
+//      } else {
+//        close_fd(fd);
+//        printf("   --\n");
+//      }
+    } else
+      printf("   -\n");
   }
 
   return;

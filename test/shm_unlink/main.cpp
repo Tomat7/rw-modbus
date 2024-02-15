@@ -14,7 +14,6 @@
 // using namespace libconfig;
 
 map<string, reg_t *> REGmap;
-map<string, rshm_t> SHMmap;
 vector<PLC> PLCset;
 int rc;
 
@@ -40,17 +39,18 @@ int main() {
   t.stop();
   cout << "============ REG init finished." << endl;
   t.spent();
+  t.sleep_ms(987);
 
   for (;;) {
     printf("%s", CLS);
     printf("%s", HOME);
     fflush(stdout);
 
-    t.start();
-    mb_read();
-    t.stop();
-    cout << "============ MB read finished." << endl;
-    t.spent_auto("MB: spent on 3xPLC by TCP: ");
+//    t.start();
+//    mb_read();
+//    t.stop();
+//    cout << "============ MB read finished." << endl;
+//    t.spent_auto("MB: spent on 3xPLC by TCP: ");
 
     t.start();
     reg_print_name();
@@ -59,7 +59,7 @@ int main() {
     t.spent_auto("Printing: ");
 
     t.start();
-    t.sleep_sec(3);
+    t.sleep_sec(1);
     t.stop();
     t.spent();
   }

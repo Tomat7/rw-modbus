@@ -9,7 +9,7 @@
 #include "./libs.h"
 #include "./plc_class.h"
 
-#define CFG_FILE "./conf/modbus.cfg"
+#define CFG_FILE "modbus.cfg"
 
 // ANSI Escape Sequences
 #define ESC "\x1B"
@@ -54,7 +54,6 @@
 // using namespace libconfig;
 
 extern std::map<string, reg_t *> REGmap;
-extern std::map<string, rshm_t> SHMmap;
 extern std::vector<PLC> PLCset;
 
 int cfg_read(const char *cfg_file);
@@ -64,13 +63,14 @@ int mb_read();
 void reg_init();
 void reg_print_name();
 
-int create_shm_fd(const char *fd);
-int get_shm_fd(const char *fd);
-void close_shm(int, reg_t *, size_t);
-void close_fd(int);
+int create_shm_fd(const char* rn);
+int get_shm_fd(const char* rn);
+void close_shm(int, reg_t*, size_t);
+void unlink_shm(const char*);
 
-reg_t *create_shm_addr(int, size_t);
-reg_t *get_shm_addr(int, size_t);
+reg_t* create_shm_addr(int, size_t);
+reg_t* get_shm_addr(int, size_t);
+
 
 // void mb_show_regs_full(int i);
 // void mb_show_regs_name();

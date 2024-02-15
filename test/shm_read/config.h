@@ -9,7 +9,7 @@
 #include "./libs.h"
 #include "./plc_class.h"
 
-#define CFG_FILE "./conf/modbus.cfg"
+#define CFG_FILE "modbus.cfg"
 
 // ANSI Escape Sequences
 #define ESC "\x1B"
