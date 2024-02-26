@@ -16,8 +16,8 @@
 #define SHM_ERR_MMAP -3
 
 int create_shm_fd(const char *rname) {
-  int fd;
-  if ((fd = shm_open(rname, O_CREAT | O_RDWR, 0777)) == -1) {
+  int fd = shm_open(rname, O_CREAT | O_RDWR, 0777);
+  if (fd == -1) {
     LOGERR("SHM: Error crate handle for %s", rname);
     return SHM_ERR_OPEN;
   }
@@ -25,24 +25,38 @@ int create_shm_fd(const char *rname) {
 }
 
 int get_shm_fd(const char *rname) {
-  int fd;
-  if ((fd = shm_open(rname, O_RDWR, 0777)) == -1) {
+  int fd = shm_open(rname, O_RDWR, 0777);
+  if (fd == -1) {
     LOGERR("SHM: Error open handle for %s", rname);
     return SHM_ERR_OPEN;
   }
   return fd;
 }
 
-reg_t *create_shm_addr(int fd, size_t sz) {
-
-  reg_t *addr = nullptr;
+void *create_shm_addr(int fd, size_t sz) {
 
   if (ftruncate(fd, sz + 1) == -1) {
     LOGERR("SHM: ftruncate error for fd %d", fd);
     return nullptr;
   }
+  /*
+    reg_t *addr = nullptr;
+    addr = (reg_t *)mmap(0, sz + 1, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
 
-  addr = (reg_t *)mmap(0, sz + 1, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
+    if (addr == (reg_t *)-1) {
+      LOGERR("SHM: mmap error for fd %d", fd);
+      return nullptr;
+    }
+  */
+  void *addr = get_shm_addr(fd, sz);
+
+  return addr;
+}
+
+void *get_shm_addr(int fd, size_t sz) {
+
+  void *addr = nullptr;
+  addr = (void *)mmap(0, sz + 1, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
 
   if (addr == (reg_t *)-1) {
     LOGERR("SHM: mmap error for fd %d", fd);
@@ -51,20 +65,7 @@ reg_t *create_shm_addr(int fd, size_t sz) {
   return addr;
 }
 
-reg_t *get_shm_addr(int fd, size_t sz) {
-
-  reg_t *addr = nullptr;
-
-  addr = (reg_t *)mmap(0, sz + 1, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
-
-  if (addr == (reg_t *)-1) {
-    LOGERR("SHM: mmap error for fd %d", fd);
-    return nullptr;
-  }
-  return addr;
-}
-
-void close_shm(int fd, reg_t *addr, size_t sz) {
+void close_shm(int fd, void *addr, size_t sz) {
   munmap(addr, sz);
   close(fd);
   return;

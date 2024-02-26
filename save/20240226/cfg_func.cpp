@@ -128,7 +128,6 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
     if (regnow.raddr > pn->reg_max)
       pn->reg_max = regnow.raddr;
 
-/*
     //  ===== Shared memory init.
     regnow.rfd = create_shm_fd(regnow.rname);
     if (regnow.rfd != -1) {
@@ -137,7 +136,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
       if (regnow.rshm != nullptr)
         close_shm(regnow.rfd, regnow.rshm, sizeof(regnow));
     }
-*/
+
     regnow.rvalue = 555;
     cfg_print_reg_details(regnow);
     pn->regs.push_back(regnow);

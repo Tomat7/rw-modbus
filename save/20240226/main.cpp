@@ -13,8 +13,8 @@
 // using namespace std;
 // using namespace libconfig;
 
-map<string, rmap_t> REGmap;
-//map<string, rshm_t> SHMmap;
+map<string, reg_t *> REGmap;
+map<string, rshm_t> SHMmap;
 vector<PLC> PLCset;
 int rc;
 
@@ -27,7 +27,7 @@ int main() {
   t.stop();
   cout << "============ Cfg finished." << endl;
   t.spent();
-  t.sleep_ms(2987);
+  t.sleep_ms(987);
 
   t.start();
   plc_show();
@@ -45,13 +45,13 @@ int main() {
     printf("%s", CLS);
     printf("%s", HOME);
     fflush(stdout);
-    /*
-        t.start();
-        mb_read();
-        t.stop();
-        cout << "============ MB read finished." << endl;
-        t.spent_auto("MB: spent on 3xPLC by TCP: ");
-    */
+
+    t.start();
+    mb_read();
+    t.stop();
+    cout << "============ MB read finished." << endl;
+    t.spent_auto("MB: spent on 3xPLC by TCP: ");
+
     t.start();
     reg_print_name();
     t.stop();

@@ -8,9 +8,11 @@
 //
 
 #include <modbus/modbus.h>
+#include <string.h>
 
 #include <ctime>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #define USE_SYSLOG
@@ -32,19 +34,27 @@
 struct reg_t {
   int raddr;
   int rstatus;
+  uint16_t rvalue;
+  const char *rfullname = nullptr;
   const char *rname = nullptr;
   const char *rmode = nullptr;
   const char *rtype = nullptr;
-  uint16_t rvalue;
-  int rfd = -1;
-  reg_t *rshm = nullptr;
+  //  int rfd = -1;
+  //  reg_t *rshm = nullptr;
 };
 
-struct rshm_t {
+struct rdata_t {
   int rstatus = 0;
   int rmode = 0;
   int rtype = 0;
   uint16_t rvalue = 0;
+};
+
+struct rmap_t {
+  int fd = -1;              // descriptor of SHARED MEMORY
+  rdata_t *pshm = nullptr;  // ptr to SHARED MEMORY data
+  reg_t *preg = nullptr;    // ptr to PLC data
+  rdata_t rdata;            // the COPY of PLC data (fot memcpy())
 };
 
 class PLC {

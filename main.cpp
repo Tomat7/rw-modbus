@@ -13,8 +13,8 @@
 // using namespace std;
 // using namespace libconfig;
 
-map<string, reg_t *> REGmap;
-map<string, rshm_t> SHMmap;
+map<string, rmap_t> REGmap;
+// map<string, rshm_t> SHMmap;
 vector<PLC> PLCset;
 int rc;
 

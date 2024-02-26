@@ -1,1 +1,1 @@
-/root/src/rw-modbus/Makefile
+../../Makefile

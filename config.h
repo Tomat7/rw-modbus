@@ -53,8 +53,9 @@
 // using namespace std;
 // using namespace libconfig;
 
-extern std::map<string, reg_t *> REGmap;
-extern std::map<string, rshm_t> SHMmap;
+// extern std::map<string, reg_t *> REGmap;
+extern std::map<string, rmap_t> REGmap;
+// extern std::map<string, rshm_t> SHMmap;
 extern std::vector<PLC> PLCset;
 
 int cfg_read(const char *cfg_file);
@@ -69,8 +70,8 @@ int get_shm_fd(const char *fd);
 void close_shm(int, reg_t *, size_t);
 void close_fd(int);
 
-reg_t *create_shm_addr(int, size_t);
-reg_t *get_shm_addr(int, size_t);
+void *create_shm_addr(int, size_t);
+void *get_shm_addr(int, size_t);
 
 // void mb_show_regs_full(int i);
 // void mb_show_regs_name();
