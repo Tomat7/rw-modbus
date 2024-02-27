@@ -64,7 +64,8 @@ int plc_show();
 int mb_read();
 int mb_write();
 void reg_init();
-void reg_print_name();
+void reg_update();
+void reg_print();
 
 int create_shm_fd(const char *fd);
 int get_shm_fd(const char *fd);

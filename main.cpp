@@ -53,7 +53,8 @@ int main() {
     t.spent_auto("MB: spent on 3xPLC by TCP: ");
 
     t.start();
-    reg_print_name();
+    reg_update();
+    mb_write();
     t.stop();
     cout << "============ REG print finished." << endl;
     t.spent_auto("Printing: ");
