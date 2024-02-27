@@ -68,44 +68,30 @@ void reg_print_name() {
     else
       printf("%s%-12s %7d" NRM, C, rn.c_str(), r->rvalue);
 
-    uint16_t x = r->rvalue;
-
-    if (d.rmode)
+    rdata_t t;
+    uint16_t remote_val = r->rvalue;
+    uint16_t old_val = d.rvalue;
+    uint16_t &shm_val = t.rvalue;
+    
+    if (r->rmode)
     {
-      memcpy(&m.rdata, m.pshm, sizeof(rdata_t));
-      if (d.rvalue != r->rvalue)
+      memcpy(&t, m.pshm, sizeof(rdata_t));
+      if (old_val != shm_val)
       {
         r->rupdate = 1;
-        r->rvalue = d.rvalue;
-        printf("*");
+        r->rvalue = shm_val;
+        printf("<");
       }
-    }
 
-    d.rvalue = x;
+      if (old_val != remote_val)
+        printf(">");
+    }
+    
+    d.rvalue = remote_val;
     d.rstatus = r->rstatus;
-//    const void *ptr = &m.rdata;
 
     memcpy(m.pshm, &m.rdata, sizeof(rdata_t));
     printf("   +\n");
-
-    /*
-        int fd  = get_shm_fd(rn.c_str());
-        if (fd != -1) {
-          reg_t *addr = get_shm_addr(fd, sizeof(rshm_t));
-
-          if (addr != nullptr) {
-            memcpy(addr, ptr, sizeof(rshm_t));
-          close_shm(fd, addr, sizeof(rshm_t));
-            memcpy(r->rshm, ptr, sizeof(rshm_t));
-            printf("   +\n");
-          } else {
-            close_fd(fd);
-            printf("   --\n");
-          }
-
-        } else
-          printf("   -\n");
-    */
   }
 
   return;
