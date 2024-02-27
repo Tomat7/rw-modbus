@@ -27,4 +27,13 @@ int mb_read() {
   return 0;
 }
 
+
+int mb_write() {
+  cout << endl << "===== mb_read =====" << endl;
+
+  for (auto &D : PLCset)
+    D.write();
+
+  return 0;
+}
 // eof

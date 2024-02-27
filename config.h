@@ -62,6 +62,7 @@ int cfg_read(const char *cfg_file);
 
 int plc_show();
 int mb_read();
+int mb_write();
 void reg_init();
 void reg_print_name();
 
