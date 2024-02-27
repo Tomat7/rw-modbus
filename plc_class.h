@@ -89,7 +89,7 @@ public:
   std::vector<reg_t> regs;
 
 private:
-  int rc = 0;
+  int rc = -1;
   int read_allregs();
   int write_reg(reg_t &);
   modbus_t *ctx = nullptr;
