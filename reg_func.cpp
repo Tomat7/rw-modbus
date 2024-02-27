@@ -23,16 +23,18 @@ void reg_init() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-      string rn = (string)D.dev_name + "." + (string)R.rname;
-      R.rfullname = rn.c_str();
+      string rn = (string)D.dev_name + "." + (string)R.ch_name;
+      R.fullname = rn.c_str();
       R.rvalue = 5757; // TODO: remove for production!!
 
       rmap_t rm;
       rm.preg = &R;
       rm.rdata.rvalue = R.rvalue;
       rm.rdata.rstatus = R.rstatus;
-      rm.rdata.rmode = (strcmp(R.rmode, "rw") == 0) ? 1 : 0;
-      rm.rdata.rtype = (strcmp(R.rtype, "f") == 0) ? 1 : 0;
+      rm.rdata.rmode = R.rmode;
+      rm.rdata.rtype = R.rtype;
+      //      rm.rdata.rmode = (strcmp(R.ch_mode, "rw") == 0) ? 1 : 0;
+      //      rm.rdata.rtype = (strcmp(R.ch_type, "f") == 0) ? 1 : 0;
 
       rm.fd = create_shm_fd(rn.c_str());
       if (rm.fd != -1) {
@@ -45,29 +47,7 @@ void reg_init() {
 
       REGmap[rn] = rm;
     }
-  /*
-        rshm_t rm;
-        rm.rvalue = R.rvalue;
-        rm.rstatus = R.rstatus;
-        rm.rmode = (strcmp(R.rmode, "rw") == 0) ? 1 : 0;
-        rm.rtype = (strcmp(R.rtype, "f") == 0) ? 1 : 0;
-        SHMmap[reg] = rm;
-  */
-  /*
-        int fd = create_shm_fd(reg.c_str());
-        if (fd != -1) {
-          reg_t *addr = create_shm_addr(fd, sizeof(rshm_t));
 
-          if (addr != nullptr) {
-            LOGINFO("SHM: created %s\n", reg.c_str());
-            REGmap[reg]->rfd = fd;
-            REGmap[reg]->rshm = addr;
-  //          close_shm(fd, addr, sizeof(rshm_t));
-          } //else
-  //          close_fd(fd);
-        }
-      }
-  */
   return;
 }
 
@@ -83,16 +63,29 @@ void reg_print_name() {
     if (r->rstatus < 0)
       C = KRED;
 
-    if (strcmp(m.preg->rtype, "i") == 0)
-      printf("%s%-12s %7d" NRM, C, rn.c_str(), r->rvalue);
-    else
+    if (r->rtype)
       printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
+    else
+      printf("%s%-12s %7d" NRM, C, rn.c_str(), r->rvalue);
 
-    d.rvalue = r->rvalue;
+    uint16_t x = r->rvalue;
+
+    if (d.rmode)
+    {
+      memcpy(&m.rdata, m.pshm, sizeof(rdata_t));
+      if (d.rvalue != r->rvalue)
+      {
+        r->rupdate = 1;
+        r->rvalue = d.rvalue;
+        printf("*");
+      }
+    }
+
+    d.rvalue = x;
     d.rstatus = r->rstatus;
-    const void *ptr = &m.rdata;
+//    const void *ptr = &m.rdata;
 
-    memcpy(m.pshm, ptr, sizeof(rdata_t));
+    memcpy(m.pshm, &m.rdata, sizeof(rdata_t));
     printf("   +\n");
 
     /*

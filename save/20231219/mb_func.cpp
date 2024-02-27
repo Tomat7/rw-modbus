@@ -43,13 +43,13 @@ void plc_show_regs(int i)
 
     for (int j = 0; j < nbregs; ++j) {
         string devn = PLCset[i].dev_name;
-        string regn = PLCset[i].regs[j].rname;
+        string regn = PLCset[i].regs[j].ch_name;
         MBreg[devn + "." + regn] = &PLCset[i].regs[j].rvalue;
 
-        cout << "       " << setw(9) << left << PLCset[i].regs[j].rname << setw(3)
+        cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
              << right << PLCset[i].regs[j].raddr << setw(7) << right
              << PLCset[i].regs[j].rvalue << "  " << left
-             << PLCset[i].regs[j].rmode << " " << endl;
+             << PLCset[i].regs[j].ch_mode << " " << endl;
 
         *MBreg[devn + "." + regn] = 5757;
     }

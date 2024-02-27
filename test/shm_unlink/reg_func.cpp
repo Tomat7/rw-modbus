@@ -22,7 +22,7 @@ void reg_init() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-      string reg = (string)D.dev_name + "." + (string)R.rname;
+      string reg = (string)D.dev_name + "." + (string)R.ch_name;
       REGmap[reg] = &R;
       REGmap[reg]->rvalue = 5757;
     }

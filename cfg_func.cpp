@@ -113,14 +113,17 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
     reg_t regnow;
 
     // ===== Check the record which expect to get for CFG-file.
-    if (!(cfgREG[j].lookupValue("rname", regnow.rname) &&
+    if (!(cfgREG[j].lookupValue("rname", regnow.ch_name) &&
           cfgREG[j].lookupValue("raddr", regnow.raddr) &&
-          cfgREG[j].lookupValue("rmode", regnow.rmode) &&
-          cfgREG[j].lookupValue("rtype", regnow.rtype))) {
+          cfgREG[j].lookupValue("rmode", regnow.ch_mode) &&
+          cfgREG[j].lookupValue("rtype", regnow.ch_type))) {
       LOGERR("error reading REG %d\n", j);
       // cout << "error reading REG " << j << endl;
       continue;
     }
+
+    regnow.rmode = (strcmp(regnow.ch_mode, "rw") == 0) ? 1 : 0;
+    regnow.rtype = (strcmp(regnow.ch_type, "f") == 0) ? 1 : 0;
 
     if (regnow.raddr < pn->reg_min)
       pn->reg_min = regnow.raddr;
@@ -128,16 +131,16 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
     if (regnow.raddr > pn->reg_max)
       pn->reg_max = regnow.raddr;
 
-/*
-    //  ===== Shared memory init.
-    regnow.rfd = create_shm_fd(regnow.rname);
-    if (regnow.rfd != -1) {
-      regnow.rshm = create_shm_addr(regnow.rfd, sizeof(regnow));
+    /*
+        //  ===== Shared memory init.
+        regnow.rfd = create_shm_fd(regnow.rname);
+        if (regnow.rfd != -1) {
+          regnow.rshm = create_shm_addr(regnow.rfd, sizeof(regnow));
 
-      if (regnow.rshm != nullptr)
-        close_shm(regnow.rfd, regnow.rshm, sizeof(regnow));
-    }
-*/
+          if (regnow.rshm != nullptr)
+            close_shm(regnow.rfd, regnow.rshm, sizeof(regnow));
+        }
+    */
     regnow.rvalue = 555;
     cfg_print_reg_details(regnow);
     pn->regs.push_back(regnow);
@@ -156,8 +159,8 @@ void cfg_print_plc_details(const PLC &D) {
 
 void cfg_print_reg_details(const reg_t &R) {
   // ===== Output REG details
-  cout << "       " << setw(9) << left << R.rname << "" << setw(3) << right
-       << R.raddr << " " << setw(5) << left << R.rmode << "  " << endl;
+  cout << "       " << setw(9) << left << R.ch_name << "" << setw(3) << right
+       << R.raddr << " " << setw(5) << left << R.ch_mode << "  " << endl;
   return;
 }
 

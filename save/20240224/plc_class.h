@@ -40,6 +40,13 @@ struct reg_t {
   reg_t *rshm = nullptr;
 };
 
+struct rshm_t {
+  int rstatus = 0;
+  int rmode = 0;
+  int rtype = 0;
+  uint16_t rvalue = 0;
+};
+
 class PLC {
 public:
   PLC();  // { LOGINFO("+ New PLC created."); }

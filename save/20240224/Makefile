@@ -17,13 +17,6 @@ LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=hello
 
-RED='\033[0;31m'
-GRE="\033[0;32m"
-YEL="\033[0;33m"
-YEB="\033[1;33m"
-BLU='\033[0;34m'
-NC='\033[0m' # No Color
-
 
 # === C/CPP flags configuretion ===
 
@@ -47,6 +40,7 @@ CFLAGS+= $(GLIBC_FLAGS)
 
 
 # === Check for DEBUG build ===
+
 $(info === The GOALS is: $(MAKECMDGOALS))
 
 ifeq ("debug","$(filter debug,$(MAKECMDGOALS))")
@@ -81,9 +75,9 @@ libtest: a.out
 
 a.out: $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp))
 ifdef DO_DEBUG
-	@echo -e $(GRE)"=== Linking with DEBUG: $@"$(NC)
+	@echo "=== Linking with DEBUG: $@"
 else
-	@echo -e $(GRE)"=== Linking: $@"$(NC)
+	@echo "=== Linking: $@"
 endif
 	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
 ifdef DO_DEBUG
@@ -93,16 +87,16 @@ ifdef DO_DEBUG
 	@echo "==="
 	sleep 3
 else
-	@echo -e $(GRE)"=== Done. ==="$(NC)
+	@echo "=== Done. ==="
 	sleep 2
 endif
 
 
 $(OBJDIR)/%.o: %.cpp
 ifeq ("YES","$(DO_DEBUG)")
-	@echo -e $(YEB)"=== Compiling with DEBUG: $<"$(NC)
+	@echo "=== Compiling with DEBUG: $<"
 else
-	@echo -e $(YEL)"=== Compiling: $<"$(NC)
+	@echo "=== Compiling: $<"
 endif
 	$(CC) $(CFLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 #	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<
@@ -112,7 +106,7 @@ include $(wildcard $(OBJDIR)/*.cpp.d)
 
 
 clean: format-clang
-	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
+	@echo "=== Cleaning UP..."
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
 	rm -rfv a.out
 

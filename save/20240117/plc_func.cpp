@@ -54,9 +54,9 @@ void plc_print_details(int i)
 
 void plc_print_reg_details(int i, int j)
 {
-    cout << "       " << setw(9) << left << PLCset[i].regs[j].rname << setw(3)
+    cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
          << right << PLCset[i].regs[j].raddr << setw(7) << right
-         << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].rmode
+         << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].ch_mode
          << " " << endl;
     return;
 }

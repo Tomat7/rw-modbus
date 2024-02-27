@@ -10,9 +10,9 @@ using namespace std;
 
 struct reg_t {
     int raddr;
-    const char *rname;
-    const char *rmode;
-    const char *rtype;
+    const char *ch_name;
+    const char *ch_mode;
+    const char *ch_type;
     uint16_t rvalue;
 };
 

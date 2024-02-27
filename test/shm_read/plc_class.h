@@ -35,10 +35,10 @@ struct reg_t {
   int raddr;
   int rstatus;
   uint16_t rvalue;
-  const char *rfullname = nullptr;
-  const char *rname = nullptr;
-  const char *rmode = nullptr;
-  const char *rtype = nullptr;
+  const char *fullname = nullptr;
+  const char *ch_name = nullptr;
+  const char *ch_mode = nullptr;
+  const char *ch_type = nullptr;
   //  int rfd = -1;
   //  reg_t *rshm = nullptr;
 };

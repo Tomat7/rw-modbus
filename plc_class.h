@@ -32,15 +32,16 @@
 // using namespace std;
 
 struct reg_t {
-  int raddr;
-  int rstatus;
-  uint16_t rvalue;
-  const char *rfullname = nullptr;
-  const char *rname = nullptr;
-  const char *rmode = nullptr;
-  const char *rtype = nullptr;
-  //  int rfd = -1;
-  //  reg_t *rshm = nullptr;
+  int raddr = 0;
+  int rstatus = 0; // -1 - mean ERROR, any positive - is OK
+  uint16_t rvalue = 0;
+  int rmode = 0;   // 1 - mean RW
+  int rtype = 0;   // 1 - mean FLOAT
+  int rupdate = 0; // 1 - need to write/update remote register
+  const char *fullname = nullptr;
+  const char *ch_name = nullptr;
+  const char *ch_mode = nullptr;
+  const char *ch_type = nullptr;
 };
 
 struct rdata_t {
@@ -51,10 +52,10 @@ struct rdata_t {
 };
 
 struct rmap_t {
-  int fd = -1;              // descriptor of SHARED MEMORY
-  rdata_t *pshm = nullptr;  // ptr to SHARED MEMORY data
-  reg_t *preg = nullptr;    // ptr to PLC data
-  rdata_t rdata;            // the COPY of PLC data (fot memcpy())
+  int fd = -1;             // descriptor of SHARED MEMORY
+  rdata_t *pshm = nullptr; // ptr to SHARED MEMORY data
+  reg_t *preg = nullptr;   // ptr to PLC data
+  rdata_t rdata;           // the COPY of PLC data (fot memcpy())
 };
 
 class PLC {

@@ -23,16 +23,16 @@ void reg_init() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-      string rn = (string)D.dev_name + "." + (string)R.rname;
-      R.rfullname = rn.c_str();
+      string rn = (string)D.dev_name + "." + (string)R.ch_name;
+      R.fullname = rn.c_str();
       R.rvalue = 5757; // TODO: remove for production!!
 
       rmap_t rm;
       rm.preg = &R;
       rm.rdata.rvalue = R.rvalue;
       rm.rdata.rstatus = R.rstatus;
-      rm.rdata.rmode = (strcmp(R.rmode, "rw") == 0) ? 1 : 0;
-      rm.rdata.rtype = (strcmp(R.rtype, "f") == 0) ? 1 : 0;
+      rm.rdata.rmode = (strcmp(R.ch_mode, "rw") == 0) ? 1 : 0;
+      rm.rdata.rtype = (strcmp(R.ch_type, "f") == 0) ? 1 : 0;
 
       rm.fd = create_shm_fd(rn.c_str());
       if (rm.fd != -1) {
@@ -83,7 +83,7 @@ void reg_print_name() {
     if (r->rstatus < 0)
       C = KRED;
 
-    if (strcmp(m.preg->rtype, "i") == 0)
+    if (strcmp(m.preg->ch_type, "i") == 0)
       printf("%s%-12s %7d" NRM, C, rn.c_str(), d.rvalue);
     else
       printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)d.rvalue * 0.01);

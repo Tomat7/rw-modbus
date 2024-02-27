@@ -18,7 +18,7 @@ void reg_init()
 
     for (auto &D : PLCset)
         for (auto &R : D.regs) {
-            string reg = (string)D.dev_name + "." + (string)R.rname;
+            string reg = (string)D.dev_name + "." + (string)R.ch_name;
             REGmap[reg] = &R;
             REGmap[reg]->rvalue = 5757;
         }
@@ -50,7 +50,7 @@ void reg_print_name()
 {
     cout << endl << "======= regs_print_name =======" << endl;
     for (const auto &[rname, ra] : REGmap) {
-        if (strcmp(ra->rtype, "i") == 0)
+        if (strcmp(ra->ch_type, "i") == 0)
             cout << "  " << setw(12) << left << rname << setw(7) << right
                  << ra->rvalue << endl;
         else

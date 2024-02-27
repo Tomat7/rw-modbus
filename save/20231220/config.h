@@ -12,8 +12,8 @@ using namespace libconfig;
 
 struct reg_t {
     int raddr;
-    const char *rname;
-    const char *rmode;
+    const char *ch_name;
+    const char *ch_mode;
     uint16_t rvalue;
 };
 

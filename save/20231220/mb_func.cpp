@@ -62,7 +62,7 @@ void plc_show_regs(int i)
             string regn = PLCset[i].regs[j].rname;
             &PLCset[i].regs[j].rvalue;
         */
-        reg_fill_name(PLCset[i].dev_name, PLCset[i].regs[j].rname,
+        reg_fill_name(PLCset[i].dev_name, PLCset[i].regs[j].ch_name,
                       &PLCset[i].regs[j].rvalue);
         plc_print_reg_details(i, j);
     }
@@ -71,9 +71,9 @@ void plc_show_regs(int i)
 
 void plc_print_reg_details(int i, int j)
 {
-    cout << "       " << setw(9) << left << PLCset[i].regs[j].rname << setw(3)
+    cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
          << right << PLCset[i].regs[j].raddr << setw(7) << right
-         << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].rmode
+         << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].ch_mode
          << " " << endl;
     return;
 }

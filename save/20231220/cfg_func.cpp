@@ -91,9 +91,9 @@ int cfg_fill_plcset(const Setting &PLCs)
             reg_t regnow;
 
             // ===== Check the record which expect to get for CFG-file.
-            if (!(reg.lookupValue("rname", regnow.rname) &&
+            if (!(reg.lookupValue("rname", regnow.ch_name) &&
                     reg.lookupValue("addr", regnow.raddr) &&
-                    reg.lookupValue("access", regnow.rmode))) {
+                    reg.lookupValue("access", regnow.ch_mode))) {
                 cout << "error reading REG " << j << endl;
                 continue;
             }
@@ -104,8 +104,8 @@ int cfg_fill_plcset(const Setting &PLCs)
             plcnow.regs.push_back(regnow);
 
             // ===== Output REG details
-            cout << "       " << setw(9) << left << regnow.rname << "" << setw(3)
-                 << right << regnow.raddr << " " << setw(5) << left << regnow.rmode
+            cout << "       " << setw(9) << left << regnow.ch_name << "" << setw(3)
+                 << right << regnow.raddr << " " << setw(5) << left << regnow.ch_mode
                  << "  " << endl;
         }
         // ===== END registers details =====
