@@ -106,7 +106,7 @@ void reg_print(string rn, const reg_t *r) {
   return;
 }
 
-void reg_write(string rn, uint16_t val) {
+void write_shm(string rn, uint16_t val) {
 
   rmap_t m = REGmap[rn];
   m.rdata.rvalue = val;

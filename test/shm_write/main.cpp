@@ -58,7 +58,7 @@ int main() {
     t.start();
     regs_update();
     w++;
-    reg_write("Kub.Pset", w);
+    write_shm("Kub.Pset", w);
 //    mb_write();
     t.stop();
     cout << "============ REG print finished." << endl;
