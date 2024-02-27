@@ -18,14 +18,11 @@ void reg_init();
 void reg_print();
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
-void reg_init()
-{
-  cout << endl
-       << "===== reg_init =====" << endl;
+void reg_init() {
+  cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
-    for (auto &R : D.regs)
-    {
+    for (auto &R : D.regs) {
       string rn = (string)D.dev_name + "." + (string)R.ch_name;
       R.fullname = rn.c_str();
       R.rvalue = 5757; // TODO: remove for production!!
@@ -40,11 +37,9 @@ void reg_init()
       //      rm.rdata.rtype = (strcmp(R.ch_type, "f") == 0) ? 1 : 0;
 
       rm.fd = create_shm_fd(rn.c_str());
-      if (rm.fd != -1)
-      {
+      if (rm.fd != -1) {
         rdata_t *addr = (rdata_t *)create_shm_addr(rm.fd, sizeof(rdata_t));
-        if (addr != nullptr)
-        {
+        if (addr != nullptr) {
           LOGINFO("SHM: created %s\n", rn.c_str());
           rm.p_shm = addr;
         }
@@ -56,11 +51,9 @@ void reg_init()
   return;
 }
 
-void reg_update()
-{
+void reg_update() {
 
-  for (auto &[rn, m] : REGmap)
-  {
+  for (auto &[rn, m] : REGmap) {
     reg_print(rn, m.p_reg);
 
     const auto &plc = m.p_reg;
@@ -70,25 +63,21 @@ void reg_update()
     uint16_t mem_val = mem.rvalue;
     uint16_t &shm_val = shm.rvalue;
 
-    if (plc->rmode)
-    {
+    if (plc->rmode) {
       memcpy(&shm, m.p_shm, sizeof(rdata_t));
-      
+
       if (mem_val != remote_val)
         printf(" >");
       else
         printf("  ");
-      
-      if (mem_val != shm_val)
-      {
+
+      if (mem_val != shm_val) {
         plc->rupdate = 1;
         plc->rvalue = shm_val;
         printf("< %d", shm_val);
-      }
-      else
+      } else
         printf("  ");
-    }
-    else
+    } else
       printf("    ");
 
     mem.rvalue = remote_val;
@@ -101,8 +90,7 @@ void reg_update()
   return;
 }
 
-void reg_print(string rn, const reg_t *r)
-{
+void reg_print(string rn, const reg_t *r) {
   printf("\n===== regs_print_name =====\n");
 
   const char *C = KNRM;
