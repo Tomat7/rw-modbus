@@ -81,7 +81,7 @@ int PLC::read() {
   if (rc == -1)
     mb_errors++;
   else
-    rc = read_mb();
+    rc = read_allregs();
 
   mb_timestamp_ms = millis();
   modbus_close(ctx);
@@ -93,7 +93,7 @@ int PLC::read() {
   return rc;
 }
 
-int PLC::read_mb() {
+int PLC::read_allregs() {
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t *mbregs = new uint16_t[nb_regs];
   rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);

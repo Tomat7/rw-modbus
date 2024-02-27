@@ -76,15 +76,20 @@ void reg_print_name() {
     if (r->rmode)
     {
       memcpy(&t, m.pshm, sizeof(rdata_t));
+
       if (old_val != shm_val)
       {
         r->rupdate = 1;
         r->rvalue = shm_val;
         printf("<");
       }
+      else
+        printf(" ");
 
       if (old_val != remote_val)
         printf(">");
+      else
+        printf(" ");
     }
     
     d.rvalue = remote_val;

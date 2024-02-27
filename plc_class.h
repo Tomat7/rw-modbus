@@ -67,6 +67,7 @@ public:
   int set_timeout();
   int connect();
   int read();
+  int write();
   void deinit();
   uint64_t millis();
 
@@ -89,6 +90,7 @@ public:
 
 private:
   int rc = 0;
-  int read_mb();
+  int read_allregs();
+  int write_reg(reg_t &);
   modbus_t *ctx = nullptr;
 };

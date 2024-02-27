@@ -78,6 +78,6 @@ public:
 
 private:
   int rc = 0;
-  int read_mb();
+  int read_allregs();
   modbus_t *ctx = nullptr;
 };
