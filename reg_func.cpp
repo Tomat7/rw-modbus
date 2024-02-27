@@ -15,7 +15,7 @@
 // using ::libconfig;
 
 void reg_init();
-void reg_print();
+void reg_print(string, const reg_t*);
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
 void reg_init() {
@@ -52,6 +52,7 @@ void reg_init() {
 }
 
 void reg_update() {
+  printf("\n===== regs_update =====\n");
 
   for (auto &[rn, m] : REGmap) {
     reg_print(rn, m.p_reg);
@@ -91,7 +92,6 @@ void reg_update() {
 }
 
 void reg_print(string rn, const reg_t *r) {
-  printf("\n===== regs_print_name =====\n");
 
   const char *C = KNRM;
   if (r->rstatus < 0)
@@ -101,6 +101,8 @@ void reg_print(string rn, const reg_t *r) {
     printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
   else
     printf("%s%-12s %7d" NRM, C, rn.c_str(), r->rvalue);
+
+  return;
 }
 
 // eof
