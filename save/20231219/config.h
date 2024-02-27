@@ -29,4 +29,4 @@ int cfg_read(const char *cfg_file);
 int plc_show();
 
 void plc_show_regs(int i);
-void reg_init();
+void regs_init();

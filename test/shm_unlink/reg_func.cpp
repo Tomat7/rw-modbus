@@ -13,11 +13,11 @@
 // using ::std;
 // using ::libconfig;
 
-void reg_init();
+void regs_init();
 void reg_print_name();
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
-void reg_init() {
+void regs_init() {
   cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)

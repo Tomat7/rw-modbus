@@ -60,7 +60,7 @@ int cfg_read(const char *cfg_file);
 
 int plc_show();
 int mb_read();
-void reg_init();
+void regs_init();
 void reg_print_name();
 
 int create_shm_fd(const char* rn);

@@ -36,7 +36,7 @@ int main() {
   t.spent();
 
   t.start();
-  reg_init();
+  regs_init();
   t.stop();
   cout << "============ REG init finished." << endl;
   t.spent();

@@ -28,7 +28,7 @@ int plc_show()
     }
     // ===== All PLC done.
     cout << endl;
-    reg_init();
+    regs_init();
 
     cout << PLCset[0].regs.size() << endl;
     cout << PLCset[1].regs.size() << endl;
@@ -56,7 +56,7 @@ void plc_show_regs(int i)
     return;
 }
 
-void reg_init()
+void regs_init()
 {
     for (const auto &[rname, rval] : MBreg)
         cout << rname << " " << *rval << endl;

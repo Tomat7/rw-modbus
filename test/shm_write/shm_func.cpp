@@ -39,7 +39,15 @@ void *create_shm_addr(int fd, size_t sz) {
     LOGERR("SHM: ftruncate error for fd %d", fd);
     return nullptr;
   }
+  /*
+    reg_t *addr = nullptr;
+    addr = (reg_t *)mmap(0, sz + 1, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
 
+    if (addr == (reg_t *)-1) {
+      LOGERR("SHM: mmap error for fd %d", fd);
+      return nullptr;
+    }
+  */
   void *addr = get_shm_addr(fd, sz);
 
   return addr;

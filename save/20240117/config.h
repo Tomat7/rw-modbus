@@ -18,7 +18,7 @@ int cfg_read(const char *cfg_file);
 
 int plc_show();
 int mb_read();
-void reg_init();
+void regs_init();
 void reg_print_name();
 
 // void mb_show_regs_full(int i);

@@ -13,7 +13,7 @@ void plc_show_regs(int i);
 void plc_print_details(int i);
 void plc_print_reg_details(int i, int j);
 
-void reg_init();
+void regs_init();
 void reg_fill_name(string devname, string regname, uint16_t *val);
 
 
@@ -23,7 +23,7 @@ int plc_show()
     // ===== Print ALL PLCs detailed.
     plc_show_full();
     // ===== Print ALL REGs names.
-    reg_init();
+    regs_init();
     //  cout << PLCset[0].regs.size() << endl;
     //  cout << PLCset[1].regs.size() << endl;
     return 0;
@@ -78,7 +78,7 @@ void plc_print_reg_details(int i, int j)
     return;
 }
 
-void reg_init()
+void regs_init()
 {
     cout << endl << "======= mb_show_regs_name =======" << endl;
     for (const auto &[rname, rval] : MBreg)

@@ -55,6 +55,7 @@ void regs_update() {
   printf("\n===== regs_update =====\n");
 
   for (auto &[rn, m] : REGmap) {
+
     reg_print(rn, m.p_reg);
 
     const auto &plc = m.p_reg;
