@@ -28,7 +28,7 @@ void regs_init() {
 
       rshm_t rm;
       rm.rvalue = R.rvalue;
-      rm.rstatus = R.rstatus;
+      rm.rstatus = R.rerrors;
       rm.rmode = (strcmp(R.ch_mode, "rw") == 0) ? 1 : 0;
       rm.rtype = (strcmp(R.ch_type, "f") == 0) ? 1 : 0;
       SHMmap[reg] = rm;
@@ -69,7 +69,7 @@ void reg_print_name() {
   for (const auto &[rn, r] : REGmap) {
 
     const char *C = KNRM;
-    if (r->rstatus < 0)
+    if (r->rerrors < 0)
       C = KRED;
 
     if (strcmp(r->ch_type, "i") == 0)
@@ -78,7 +78,7 @@ void reg_print_name() {
       printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
 
     SHMmap[rn].rvalue = r->rvalue;
-    SHMmap[rn].rstatus = r->rstatus;
+    SHMmap[rn].rstatus = r->rerrors;
     void *ptr = &SHMmap[rn];
 
     memcpy(r->rshm, ptr, sizeof(rshm_t));

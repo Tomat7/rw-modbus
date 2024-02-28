@@ -88,7 +88,7 @@ int PLC::read() {
   mb_status = rc;
 
   for (auto &r : regs)
-    r.rstatus = mb_status;
+    r.rerrors = mb_status;
 
   return rc;
 }

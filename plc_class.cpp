@@ -84,20 +84,22 @@ int PLC::read() {
   } else
     rc = read_allregs();
 
-  modbus_close(ctx);
-  modbus_flush(ctx);
-  //  modbus_free(ctx);
-  //  ctx = nullptr;
-
   mb.status = rc;
-  for (auto &r : regs)
+  for (auto &r : regs) {
     r.rstatus = rc;
+    r.rerrors = mb.errors;
+  }
 
   uint64_t old = mb.timestamp_ms;
   mb.timestamp_ms = millis();
   printf("%s _dT: %ld  err: %d cn: %d rd: %d wr: %d rc: %d\n", dev_name,
          mb.timestamp_ms - old, mb.errors, mb.errors_cn, mb.errors_rd,
          mb.errors_wr, rc);
+
+  modbus_flush(ctx);
+  modbus_close(ctx);
+  //  modbus_free(ctx);
+  //  ctx = nullptr;
 
   return rc;
 }
@@ -138,12 +140,13 @@ int PLC::write() {
       rc = write_reg(r);
   }
 
-  modbus_close(ctx);
+  mb.status = rc;
+
   modbus_flush(ctx);
+  modbus_close(ctx);
   //  modbus_free(ctx);
   //  ctx = nullptr;
 
-  mb.status = rc;
   return rc;
 }
 
@@ -159,6 +162,8 @@ int PLC::write_reg(reg_t &r) {
       mb.errors = 0;
       r.rupdate = 0;
     }
+    r.rstatus = rc;
+    r.rerrors = mb.errors;
   }
   return rc;
 }

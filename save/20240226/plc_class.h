@@ -33,7 +33,7 @@
 
 struct reg_t {
   int raddr;
-  int rstatus;
+  int rerrors;
   uint16_t rvalue;
   const char *fullname = nullptr;
   const char *ch_name = nullptr;
@@ -44,7 +44,7 @@ struct reg_t {
 };
 
 struct rdata_t {
-  int rstatus = 0;
+  int rerrors = 0;
   int rmode = 0;
   int rtype = 0;
   uint16_t rvalue = 0;

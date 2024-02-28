@@ -31,7 +31,7 @@
 
 struct reg_t {
   int raddr;
-  int rstatus;
+  int rerrors;
   const char *ch_name = nullptr;
   const char *ch_mode = nullptr;
   const char *ch_type = nullptr;

@@ -27,7 +27,7 @@ void regs_init() {
       rmap_t rm;
       rm.p_reg = &R;
       rm.rdata.rvalue = R.rvalue;
-      rm.rdata.rstatus = R.rstatus;
+      rm.rdata.rerrors = R.rerrors;
       rm.rdata.rmode = R.rmode;
       rm.rdata.rtype = R.rtype;
 
@@ -77,6 +77,7 @@ void regs_update() {
       printf("    ");
 
     mem.rvalue = remote_val;
+    mem.rerrors = plc->rerrors;
     mem.rstatus = plc->rstatus;
 
     memcpy(m.p_shm, &m.rdata, sizeof(rdata_t));
@@ -89,7 +90,7 @@ void regs_update() {
 void reg_print(string rn, const reg_t *r) {
 
   const char *C = KNRM;
-  if (r->rstatus < 0)
+  if (r->rerrors > 0)
     C = KRED;
 
   if (r->rtype)

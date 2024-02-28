@@ -21,7 +21,6 @@ int plc_show() {
 
   for (int i = 0; i < nb_plcs; ++i) { // Cycle for PLCs
     plc_print_details(i);
-    //    int nb_regs = static_cast<int>(PLCset[i].regs.size());
 
     for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
       plc_print_reg_details(i, j);
@@ -31,20 +30,6 @@ int plc_show() {
 
   return 0;
 }
-
-/*
-    void plc_show_regs(int i) {
-    int nb_regs = static_cast<int>(PLCset[i].regs.size());
-    // ===== Cycle to Show registers details =====
-    for (int j = 0; j < nb_regs; ++j) {
-        reg_fill_name(PLCset[i].dev_name, PLCset[i].regs[j].rname,
-                         &PLCset[i].regs[j].rvalue);
-
-    plc_print_reg_details(i, j);
-    }
-    return;
-    }
-*/
 
 void plc_print_details(int i) {
   cout << setw(5) << left << PLCset[i].dev_name << "  " << setw(5) << left

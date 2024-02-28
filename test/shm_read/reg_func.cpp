@@ -30,7 +30,7 @@ void regs_init() {
       rmap_t rm;
       rm.p_reg = &R;
       rm.rdata.rvalue = R.rvalue;
-      rm.rdata.rstatus = R.rstatus;
+      rm.rdata.rerrors = R.rerrors;
       rm.rdata.rmode = (strcmp(R.ch_mode, "rw") == 0) ? 1 : 0;
       rm.rdata.rtype = (strcmp(R.ch_type, "f") == 0) ? 1 : 0;
 
@@ -80,7 +80,7 @@ void reg_print_name() {
     auto &d = m.rdata;
 
     const char *C = KNRM;
-    if (r->rstatus < 0)
+    if (r->rerrors < 0)
       C = KRED;
 
     if (strcmp(m.p_reg->ch_type, "i") == 0)
@@ -89,7 +89,7 @@ void reg_print_name() {
       printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)d.rvalue * 0.01);
 
     d.rvalue = r->rvalue;
-    d.rstatus = r->rstatus;
+    d.rerrors = r->rerrors;
     const void *ptr = &m.rdata;
 
     memcpy(m.p_shm, ptr, sizeof(rdata_t));

@@ -22,7 +22,6 @@ int rc;
 
 int main() {
 
-
   t.start();
   cfg_read(CFG_FILE);
   t.stop();
@@ -30,11 +29,13 @@ int main() {
   t.spent();
   t.sleep_ms(987);
 
-  t.start();
-  plc_show();
-  t.stop();
-  cout << "============ PLC show finished." << endl;
-  t.spent();
+  /*
+    t.start();
+    plc_show();
+    t.stop();
+    cout << "============ PLC show finished." << endl;
+    t.spent();
+  */
 
   t.start();
   regs_init();
@@ -48,24 +49,25 @@ int main() {
     printf("%s", CLS);
     printf("%s", HOME);
     fflush(stdout);
-/*
-    t.start();
-    mb_read();
-    t.stop();
-    cout << "============ MB read finished." << endl;
-    t.spent_auto("MB: spent on 3xPLC by TCP: ");
-*/
+    /*
+        t.start();
+        mb_read();
+        t.stop();
+        cout << "============ MB read finished." << endl;
+        t.spent_auto("MB: spent on 3xPLC by TCP: ");
+    */
     t.start();
     regs_update();
 
     w++;
-    if (w > 999) w = 500;
+    if (w > 999)
+      w = 500;
     write_shm("Kub.Pset", w);
     write_shm("Kub.millis", 0);
     write_shm("Buf.millis", 0);
     write_shm("Def.millis", 0);
-    
-//    mb_write();
+
+    //    mb_write();
     t.stop();
     cout << "============ REG print finished." << endl;
     t.spent_auto("Printing: ");

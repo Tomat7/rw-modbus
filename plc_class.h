@@ -32,12 +32,13 @@
 // using namespace std;
 
 struct reg_t {
+  uint16_t rvalue = 0;
   int raddr = 0;
-  int rstatus = 0; // -1 - mean ERROR, any positive - is OK
+  int rstatus = 0; // -1 mean ERROR, any positive - is OK
+  int rerrors = 0; // number of errors on MB func (init/connect/read)
   int rmode = 0;   // 1 - mean RW
   int rtype = 0;   // 1 - mean FLOAT
   int rupdate = 0; // 1 - need to write/update remote register
-  uint16_t rvalue = 0;
   const char *fullname = nullptr;
   const char *ch_name = nullptr;
   const char *ch_mode = nullptr;
@@ -45,17 +46,18 @@ struct reg_t {
 };
 
 struct rdata_t {
-  int rstatus = 0;
-  int rmode = 0;
-  int rtype = 0;
   uint16_t rvalue = 0;
+  int rstatus = 0; // -1 mean ERROR, any positive - is OK
+  int rerrors = 0; // number of errors on MB func (init/connect/read)
+  int rmode = 0;   // 1 - mean RW
+  int rtype = 0;   // 1 - mean FLOAT
 };
 
 struct rmap_t {
   int fd = -1;              // descriptor of SHARED MEMORY
+  rdata_t rdata;            // the COPY of PLC data (for memcpy() to SHM)
   rdata_t *p_shm = nullptr; // ptr to SHARED MEMORY data
   reg_t *p_reg = nullptr;   // ptr to PLC data
-  rdata_t rdata;            // the COPY of PLC data (for memcpy() to SHM)
 };
 
 struct mbdata_t {
@@ -66,7 +68,7 @@ struct mbdata_t {
   uint32_t errors = 0;       // counter of any current ERRORS (reset if OK)
   uint32_t errors_rd = 0;    // counter of READ errors (summ from start)
   uint32_t errors_wr = 0;    // counter of WRITE errors (summ from start)
-  uint32_t errors_cn = 0;    // counter of any ERROR (summ from start)
+  uint32_t errors_cn = 0;    // counter of CONNECT errors (summ from start)
 };
 
 class PLC {
