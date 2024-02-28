@@ -42,7 +42,7 @@ int main() {
   cout << "============ REG init finished." << endl;
   t.spent();
 
-  static uint16_t w = 0;
+  static uint16_t w = 500;
 
   for (;;) {
     printf("%s", CLS);
@@ -57,8 +57,14 @@ int main() {
 */
     t.start();
     regs_update();
+
     w++;
+    if (w > 999) w = 500;
     write_shm("Kub.Pset", w);
+    write_shm("Kub.millis", 0);
+    write_shm("Buf.millis", 0);
+    write_shm("Def.millis", 0);
+    
 //    mb_write();
     t.stop();
     cout << "============ REG print finished." << endl;
