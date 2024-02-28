@@ -99,6 +99,8 @@ int PLC::read()
     rc = read_allregs();
 
   modbus_close(ctx);
+  modbus_free(ctx);
+  ctx = nullptr;
 
   mb.status = rc;
   for (auto &r : regs)
@@ -160,6 +162,9 @@ int PLC::write()
   }
 
   modbus_close(ctx);
+  modbus_free(ctx);
+  ctx = nullptr;
+  
   mb.status = rc;
   return rc;
 }
