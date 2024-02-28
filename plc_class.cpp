@@ -55,7 +55,7 @@ int PLC::init(const char *_ip, int _port)
   else
   {
     LOGINFO("%s:%d %s CTX allocate OK. \n", _ip, _port, dev_name);
-    rc = modbus_set_response_timeout(ctx, 0, mb_timeout_us);
+    rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
     if (rc == -1)
     {
       LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,
@@ -92,22 +92,23 @@ int PLC::read()
   rc = connect();
   if (rc == -1)
   {
-    mb_errors++;
-    mb_errors_total++;
+    mb.errors++;
+    mb.errors_cn++;
   }
   else
     rc = read_allregs();
 
   modbus_close(ctx);
 
-  mb_status = rc;
+  mb.status = rc;
   for (auto &r : regs)
     r.rstatus = rc;
 
-  uint64_t old = mb_timestamp_ms;
-  mb_timestamp_ms = millis();
-  printf("%s _dT: %ld  errors: %d total: %d rc: %d\n", dev_name, 
-          mb_timestamp_ms - old, mb_errors, mb_errors_total, rc);
+  uint64_t old = mb.timestamp_ms;
+  mb.timestamp_ms = millis();
+  printf("%s _dT: %ld  err: %d cn: %d rd: %d wr: %d rc: %d\n", dev_name, 
+          mb.timestamp_ms - old, mb.errors, mb.errors_cn, mb.errors_rd, 
+          mb.errors_wr, rc);
 
   return rc;
 }
@@ -120,22 +121,22 @@ int PLC::read_allregs()
 
   if (rc == -1)
   {
-    mb_errors++;
-    mb_errors_total++;
+    mb.errors++;
+    mb.errors_rd++;
     LOGERR("%s %s read error: %s \n", ip_addr, dev_name,
            modbus_strerror(errno));
   }
   else if (rc != nb_regs)
   {
-    mb_errors++;
-    mb_errors_total++;
+    mb.errors++;
+    mb.errors_rd++;
     rc = -2;
     LOGERR("%s %s qty regs mismatch: expect %d, got %d\n", ip_addr, dev_name,
            nb_regs, rc);
   }
   else
   {
-    mb_errors = 0;
+    mb.errors = 0;
     for (auto &r : regs)
       r.rvalue = mbregs[r.raddr - reg_min];
   }
@@ -149,16 +150,17 @@ int PLC::write()
   rc = connect();
   if (rc == -1)
   {
-    mb_errors++;
-    mb_errors_total++;
+    mb.errors++;
+    mb.errors_cn++;
   }
   else
   {
     for (auto &r : regs)
       rc = write_reg(r);
   }
+
   modbus_close(ctx);
-  mb_status = rc;
+  mb.status = rc;
   return rc;
 }
 
@@ -169,13 +171,14 @@ int PLC::write_reg(reg_t &r)
     rc = modbus_write_register(ctx, r.raddr, r.rvalue);
     if (rc == -1)
     {
-      mb_errors++;
+      mb.errors++;
+      mb.errors_wr++;
       LOGERR("%s %s write reg: %s error: %s \n", ip_addr, dev_name, r.ch_name,
              modbus_strerror(errno));
     }
     else
     {
-      mb_errors = 0;
+      mb.errors = 0;
       r.rupdate = 0;
     }
   }
@@ -187,7 +190,7 @@ int PLC::set_timeout()
   if (ctx == nullptr)
     init();
 
-  rc = modbus_set_response_timeout(ctx, 0, mb_timeout_us);
+  rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1)
   {
     LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,

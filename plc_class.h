@@ -58,6 +58,17 @@ struct rmap_t {
   rdata_t rdata;            // the COPY of PLC data (for memcpy() to SHM)
 };
 
+struct mbdata_t {
+  uint64_t timestamp_ms = 0; // milliseconds since the Epoch on last read
+  uint32_t interval_ms = 0;  // milliseconds between read request
+  uint32_t timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
+  uint32_t errors = 0;       // counter of any current ERRORS (reset if OK)
+  uint32_t errors_rd = 0;    // counter of READ errors (summ from start)
+  uint32_t errors_wr = 0;    // counter of WRITE errors (summ from start)
+  uint32_t errors_cn = 0; // counter of any ERROR (summ from start)
+  uint32_t status = 0;       // rc value of last func (init/connect/read)
+};
+
 class PLC {
 public:
   PLC();  // { LOGINFO("+ New PLC created."); }
@@ -77,16 +88,11 @@ public:
   const char *ip_addr = nullptr;
   int tcp_port = 0;
 
-  uint64_t mb_timestamp_ms = 0; // milliseconds since the Epoch on last read
-  uint32_t mb_interval_ms = 0;  // milliseconds between read request
-  uint32_t mb_timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
-  uint32_t mb_errors = 0;       // counter of any ERROR (reset after OK)
-  uint32_t mb_errors_total = 0; // counter of any ERROR (total from start)
-  uint32_t mb_status = 0;       // rc value of last func (init/connect/read)
-
+  mbdata_t mb;
   int reg_min = 0; // minimal address of reg
   int reg_max = 0; // maximal address of reg
   int reg_qty = 0; // number of regs
+
   std::vector<reg_t> regs;
 
 private:

@@ -71,8 +71,8 @@ int cfg_init_plcset() {
           cfgPLC[i].lookupValue("name", plcnow.dev_name) &&
           cfgPLC[i].lookupValue("ip", plcnow.ip_addr) &&
           cfgPLC[i].lookupValue("port", plcnow.tcp_port) &&
-          cfgPLC[i].lookupValue("polling", plcnow.mb_interval_ms) &&
-          cfgPLC[i].lookupValue("timeout", plcnow.mb_timeout_us))) {
+          cfgPLC[i].lookupValue("polling", plcnow.mb.interval_ms) &&
+          cfgPLC[i].lookupValue("timeout", plcnow.mb.timeout_us))) {
       LOGERR("Warning!! Error reading PLC configuration: %d\n", i);
       continue; // get out of current iteration if any field wrong in CFG-file
     }
