@@ -34,10 +34,10 @@
 struct reg_t {
   int raddr = 0;
   int rstatus = 0; // -1 - mean ERROR, any positive - is OK
-  uint16_t rvalue = 0;
   int rmode = 0;   // 1 - mean RW
   int rtype = 0;   // 1 - mean FLOAT
   int rupdate = 0; // 1 - need to write/update remote register
+  uint16_t rvalue = 0;
   const char *fullname = nullptr;
   const char *ch_name = nullptr;
   const char *ch_mode = nullptr;
@@ -59,14 +59,14 @@ struct rmap_t {
 };
 
 struct mbdata_t {
+  int status = 0;            // rc value of last func (init/connect/read)
   uint64_t timestamp_ms = 0; // milliseconds since the Epoch on last read
   uint32_t interval_ms = 0;  // milliseconds between read request
   uint32_t timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
   uint32_t errors = 0;       // counter of any current ERRORS (reset if OK)
   uint32_t errors_rd = 0;    // counter of READ errors (summ from start)
   uint32_t errors_wr = 0;    // counter of WRITE errors (summ from start)
-  uint32_t errors_cn = 0; // counter of any ERROR (summ from start)
-  uint32_t status = 0;       // rc value of last func (init/connect/read)
+  uint32_t errors_cn = 0;    // counter of any ERROR (summ from start)
 };
 
 class PLC {
