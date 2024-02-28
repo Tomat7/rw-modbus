@@ -11,11 +11,8 @@
 
 #define MB_READ
 
-// using ::std;
-// using ::libconfig;
-
 void regs_init();
-void reg_print(string, const reg_t*);
+void reg_print(string, const reg_t *);
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
 void regs_init() {
@@ -33,8 +30,6 @@ void regs_init() {
       rm.rdata.rstatus = R.rstatus;
       rm.rdata.rmode = R.rmode;
       rm.rdata.rtype = R.rtype;
-      //      rm.rdata.rmode = (strcmp(R.ch_mode, "rw") == 0) ? 1 : 0;
-      //      rm.rdata.rtype = (strcmp(R.ch_type, "f") == 0) ? 1 : 0;
 
       rm.fd = create_shm_fd(rn.c_str());
       if (rm.fd != -1) {
@@ -104,7 +99,5 @@ void reg_print(string rn, const reg_t *r) {
 
   return;
 }
-
-
 
 // eof
