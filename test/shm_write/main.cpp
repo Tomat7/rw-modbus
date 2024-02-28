@@ -71,7 +71,7 @@ int main() {
     t.spent_auto("Printing: ");
 
     t.start();
-    t.sleep_sec(1);
+    t.sleep_sec(3);
     t.stop();
     t.spent();
   }

@@ -109,9 +109,8 @@ int PLC::read_allregs() {
            nb_regs, rc);
   } else {
     mb_errors = 0;
-    for (auto &r : regs) // (int j = 0; j < reg_qty; ++j)
+    for (auto &r : regs) // (int j = 0; j < r
       r.rvalue = mbregs[r.raddr - reg_min];
-    // regs[j].rvalue = mbregs[regs[j].raddr - reg_min];
   }
 
   delete[] mbregs;

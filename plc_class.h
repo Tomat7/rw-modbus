@@ -80,7 +80,8 @@ public:
   uint64_t mb_timestamp_ms = 0; // milliseconds since the Epoch on last read
   uint32_t mb_interval_ms = 0;  // milliseconds between read request
   uint32_t mb_timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
-  uint32_t mb_errors = 0;       // counter of any ERROR
+  uint32_t mb_errors = 0;       // counter of any ERROR (reset after OK)
+  uint32_t mb_errors_total = 0; // counter of any ERROR (total from start)
   uint32_t mb_status = 0;       // rc value of last func (init/connect/read)
 
   int reg_min = 0; // minimal address of reg
