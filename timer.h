@@ -110,4 +110,4 @@ public:
   }
 };
 
-Timer t;
+// eof

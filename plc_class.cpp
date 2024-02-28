@@ -63,7 +63,8 @@ int PLC::connect() {
     rc = init();
     if (rc == -1)
       return rc;
-  }
+  } else
+    modbus_flush(ctx);
 
   rc = modbus_connect(ctx);
   if (rc == -1) {
