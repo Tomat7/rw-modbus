@@ -14,9 +14,9 @@
 // using namespace libconfig;
 
 map<string, rmap_t> REGmap;
-// map<string, rshm_t> SHMmap;
 vector<PLC> PLCset;
 int rc;
+Timer t;
 
 // int main(int argc, char **argv) {
 

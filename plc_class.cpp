@@ -23,36 +23,25 @@ PLC::PLC() {
 
 PLC::~PLC() { deinit(); }
 
-int PLC::init(const char *_ip, int _port) {
+int PLC::init() {
   rc = 0;
 
-  if (_port == 0) {
-    _port = tcp_port;
-    _ip = ip_addr;
-  }
-
-  //  LOGINFO("%s: try to init \n", _ip);
-
-  if (ctx != nullptr) {
-    LOGINFO("%s: try to close/free \n", _ip);
+//  if (ctx != nullptr) {
+    LOGINFO("%s: try to close/free \n", ip_addr);
     modbus_close(ctx);
-    //    LOGINFO("%s: try to free \n", _ip);
     modbus_free(ctx);
     ctx = nullptr;
-  }
+// } else {
+//      LOGINFO("%s: try to close \n", _ip);
+//      modbus_close(ctx);
+//  }
 
-  ctx = modbus_new_tcp(_ip, _port);
+  ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
-    LOGINFO("%s:%d %s CTX allocate error. \n", _ip, _port, dev_name);
+    LOGINFO("%s:%d %s CTX allocate error. \n", ip_addr, tcp_port, dev_name);
     rc = -1;
   } else {
-    LOGINFO("%s:%d %s CTX allocate OK. \n", _ip, _port, dev_name);
-    //    rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
-    //    if (rc == -1)
-    //    {
-    //      LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,
-    //             modbus_strerror(errno));
-    //    }
+    LOGINFO("%s:%d %s CTX allocate OK. \n", ip_addr, tcp_port, dev_name);
   }
 
   return rc;
@@ -61,19 +50,18 @@ int PLC::init(const char *_ip, int _port) {
 int PLC::connect() {
   if ((rc < 0) || (ctx == nullptr)) {
     rc = init();
-    if (rc == -1)
-      return rc;
-  } else
-    modbus_flush(ctx);
-
-  rc = modbus_connect(ctx);
-  if (rc == -1) {
-    LOGERR("%s %s connect error: %s\n", ip_addr, dev_name,
+//    if (rc == -1)
+//      return rc;
+    rc = modbus_connect(ctx);
+    if (rc == -1) {
+      LOGERR("%s %s connect error: %s\n", ip_addr, dev_name,
            modbus_strerror(errno));
-    modbus_free(ctx);
-    ctx = nullptr;
+      modbus_free(ctx);
+      ctx = nullptr;
+    }
   }
-
+  modbus_flush(ctx);
+  
   return rc;
 }
 
@@ -96,12 +84,12 @@ int PLC::read() {
   printf("%s _dT: %ld  err: %d cn: %d rd: %d wr: %d rc: %d\n", dev_name,
          mb.timestamp_ms - old, mb.errors, mb.errors_cn, mb.errors_rd,
          mb.errors_wr, rc);
-
+/*
   modbus_flush(ctx);
   modbus_close(ctx);
-  //  modbus_free(ctx);
-  //  ctx = nullptr;
-
+  modbus_free(ctx);
+  ctx = nullptr;
+*/
   return rc;
 }
 
@@ -142,12 +130,12 @@ int PLC::write() {
   }
 
   mb.status = rc;
-
+/*
   modbus_flush(ctx);
   modbus_close(ctx);
-  //  modbus_free(ctx);
-  //  ctx = nullptr;
-
+  modbus_free(ctx);
+  ctx = nullptr;
+*/
   return rc;
 }
 

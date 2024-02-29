@@ -76,7 +76,7 @@ public:
   PLC();  // { LOGINFO("+ New PLC created."); }
   ~PLC(); // { deinit(); }
 
-  int init(const char *_ip = "", int _port = 0);
+  int init(); //const char *_ip = "", int _port = 0);
   int set_timeout();
   int connect();
   int read();
