@@ -76,11 +76,13 @@ public:
   PLC();  // { LOGINFO("+ New PLC created."); }
   ~PLC(); // { deinit(); }
 
-  int init(); //const char *_ip = "", int _port = 0);
+  int init(); // const char *_ip = "", int _port = 0);
   int set_timeout();
   int connect();
   int read();
   int write();
+  int update();
+  int get_rc();
   void deinit();
   uint64_t millis();
 
@@ -89,6 +91,7 @@ public:
   const char *dev_name = nullptr;
   const char *ip_addr = nullptr;
   int tcp_port = 0;
+  int try_qty = 2; // number of attempts
 
   mbdata_t mb;
   int reg_min = 0; // minimal address of reg

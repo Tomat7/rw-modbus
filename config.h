@@ -63,6 +63,8 @@ int cfg_read(const char *cfg_file);
 int plc_show();
 int mb_read();
 int mb_write();
+int mb_update();
+
 void regs_init();
 void regs_update();
 void reg_print(string, const reg_t *);

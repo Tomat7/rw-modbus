@@ -22,11 +22,16 @@ int rc;
 
 int main() {
 
+  int ret = 0;
+
   t.start();
-  cfg_read(CFG_FILE);
+  ret = cfg_read(CFG_FILE);
   t.stop();
   cout << "============ Cfg finished." << endl;
   t.spent();
+  if (ret == EXIT_FAILURE)
+    return ret;
+
   t.sleep_ms(987);
 
   t.start();
@@ -46,18 +51,24 @@ int main() {
     printf("%s", HOME);
     fflush(stdout);
 
-    t.start();
-    mb_read();
-    t.stop();
-    cout << "============ MB read finished." << endl;
-    t.spent_auto("MB: spent on 3xPLC by TCP: ");
+    //    t.start();
+    //    mb_read();
+    //    t.stop();
+    //    cout << "============ MB read finished." << endl;
+    //    t.spent_auto("MB: spent on 3xPLC by TCP: ");
 
     t.start();
     regs_update();
-    mb_write();
     t.stop();
+    //    mb_write();
     cout << "============ REG print finished." << endl;
     t.spent_auto("Printing: ");
+
+    t.start();
+    mb_update();
+    t.stop();
+    cout << "============ MB update finished." << endl;
+    t.spent_auto("MB: spent on ALL PLCs by TCP: ");
 
     t.start();
     t.sleep_sec(1);

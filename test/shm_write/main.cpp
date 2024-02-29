@@ -60,7 +60,7 @@ int main() {
     regs_update();
 
     w++;
-    if (w > 999)
+    if (w > 599)
       w = 500;
     write_shm("Kub.Pset", w);
     write_shm("Kub.millis", 0);

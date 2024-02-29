@@ -43,6 +43,7 @@ int cfg_read(const char *cfg_file) {
     LOGINFO("Config title: %s\n", name.c_str());
   } catch (const SettingNotFoundException &nfex) {
     LOGERR("No 'nametitle' setting in configuration file.\n");
+    return (EXIT_FAILURE);
   }
 
   // Output a list of all PLCs in the inventory.
@@ -51,6 +52,7 @@ int cfg_read(const char *cfg_file) {
     cout << "+++++" << endl;
   } catch (const SettingNotFoundException &nfex) {
     LOGERR("Great ERROR! Exiting.\n");
+    return (EXIT_FAILURE);
   }
 
   closelog();
@@ -71,6 +73,7 @@ int cfg_init_plcset() {
           cfgPLC[i].lookupValue("name", plcnow.dev_name) &&
           cfgPLC[i].lookupValue("ip", plcnow.ip_addr) &&
           cfgPLC[i].lookupValue("port", plcnow.tcp_port) &&
+          cfgPLC[i].lookupValue("attempts", plcnow.try_qty) &&
           cfgPLC[i].lookupValue("polling", plcnow.mb.interval_ms) &&
           cfgPLC[i].lookupValue("timeout", plcnow.mb.timeout_us))) {
       LOGERR("Warning!! Error reading PLC configuration: %d\n", i);
