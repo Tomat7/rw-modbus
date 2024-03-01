@@ -30,12 +30,14 @@ public:
   Timer() {}
 
   void start(const char *txt = "Timer started... \n") {
-    cout << txt;
+    if (txt != nullptr)
+      cout << txt;
     begin = steady_clock::now();
   }
 
   void stop(const char *txt = "Timer stopped... \n") {
-    cout << txt;
+    if (txt != nullptr)
+      cout << txt;
     end = steady_clock::now();
   }
 
@@ -73,6 +75,8 @@ public:
   }
 
   void spent_auto(const char *txt1 = "Time spent: ") {
+
+    end = steady_clock::now();
     double _duration = elapsed_sec();
 
     if (_duration > 1)

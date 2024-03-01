@@ -13,14 +13,14 @@ Timer tt;
 
 int mb_read() {
   cout << endl << "===== mb_read =====" << endl;
+  int ret = 0;
 
   for (auto &D : PLCset) {
     uint64_t old = D.mb.timestamp_ms;
-    D.read();
-    printf("%s _dT: %ld  err: %d cn: %d rd: %d wr: %d rc: %d\n", D.dev_name,
-           D.mb.timestamp_ms - old, D.mb.errors, D.mb.errors_cn, D.mb.errors_rd,
-           D.mb.errors_wr, D.get_rc());
-    //    tt.sleep_ms(10);
+    ret = D.read();
+    printf("%-7s_dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
+           D.dev_name, D.mb.timestamp_ms - old, ret, D.mb.errors,
+           D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
   }
   return 0;
 }
@@ -37,13 +37,13 @@ int mb_write() {
 }
 
 int mb_update() {
-  cout << "===== mb_update =====" << endl;
+//  cout << "===== mb_update =====" << endl;
   int ret = 0;
 
   for (auto &D : PLCset) {
     uint64_t old = D.mb.timestamp_ms;
     ret = D.update();
-    printf("%s _dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
+    printf("%-7s_dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
            D.dev_name, D.mb.timestamp_ms - old, ret, D.mb.errors,
            D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
     //    tt.sleep_ms(10);

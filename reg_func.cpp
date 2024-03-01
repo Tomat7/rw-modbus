@@ -94,9 +94,9 @@ void reg_print(string rn, const reg_t *r) {
     C = KRED;
 
   if (r->rtype)
-    printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
+    printf("%s%-14s %7.2f" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
   else
-    printf("%s%-12s %7d" NRM, C, rn.c_str(), r->rvalue);
+    printf("%s%-14s %7d" NRM, C, rn.c_str(), r->rvalue);
 
   return;
 }

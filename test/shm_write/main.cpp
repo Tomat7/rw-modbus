@@ -71,7 +71,7 @@ int main() {
     write_shm("TH42.millis", 0);
     write_shm("SF45.millis", 0);
     write_shm("SF47.millis", 0);
-
+    write_shm("GATE49.millis", 0);
 
     //    mb_write();
     t.stop();
