@@ -18,7 +18,7 @@ int main(void) {
   modbus_t *ctx;
   modbus_mapping_t *mb_mapping;
 
-  ctx = modbus_new_tcp("127.0.0.1", 1502);
+  ctx = modbus_new_tcp(NULL, 502);
   /* modbus_set_debug(ctx, TRUE); */
 
   mb_mapping = modbus_mapping_new(500, 500, 500, 500);
@@ -29,7 +29,7 @@ int main(void) {
     return -1;
   }
 
-  s = modbus_tcp_listen(ctx, 1);
+  s = modbus_tcp_listen(ctx, 10);
   printf("mb listen - OK\n");
 
   modbus_tcp_accept(ctx, &s);

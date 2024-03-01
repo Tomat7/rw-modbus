@@ -36,7 +36,7 @@ int mb_slave_init() {
     return -1;
   }
 
-  s = modbus_tcp_listen(ctx, 10);
+  s = modbus_tcp_listen(ctx, 1);
   LOGINFO("slave listen\n");
 
   modbus_tcp_accept(ctx, &s);
