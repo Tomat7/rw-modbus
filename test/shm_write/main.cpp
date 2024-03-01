@@ -43,12 +43,15 @@ int main() {
   cout << "============ REG init finished." << endl;
   t.spent();
 
+  mb_slave_init();
+  printf("============ SLAVE init finished.\n");
+  fflush(stdout);
+  t.sleep_sec(3);
+
   static uint16_t w = 500;
+  uint64_t mm = t.millis();
 
   for (;;) {
-    printf("%s", CLS);
-    printf("%s", HOME);
-    fflush(stdout);
     /*
         t.start();
         mb_read();
@@ -56,12 +59,18 @@ int main() {
         cout << "============ MB read finished." << endl;
         t.spent_auto("MB: spent on 3xPLC by TCP: ");
     */
+
+    if ((t.millis() - mm) > 1000) {
     t.start();
+    printf("%s", CLS);
+    printf("%s", HOME);
+    fflush(stdout);
     regs_update();
 
     w++;
     if (w > 599)
       w = 500;
+
     write_shm("Kub.Pset", w);
     write_shm("Kub.millis", 0);
     write_shm("Buf.millis", 0);
@@ -73,15 +82,23 @@ int main() {
     write_shm("SF47.millis", 0);
     write_shm("GATE49.millis", 0);
 
-    //    mb_write();
+    mm = t.millis();
+
+    //mb_write();
     t.stop();
     cout << "============ REG print finished." << endl;
     t.spent_auto("Printing: ");
+    }
 
+    mb_slave();
+
+
+/*
     t.start();
     t.sleep_sec(3);
     t.stop();
     t.spent();
+*/  
   }
 
   //   getr();

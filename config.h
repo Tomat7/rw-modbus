@@ -64,6 +64,8 @@ int plc_show();
 int mb_read();
 int mb_write();
 int mb_update();
+int mb_slave_init();
+int mb_slave();
 
 void regs_init();
 void regs_update();

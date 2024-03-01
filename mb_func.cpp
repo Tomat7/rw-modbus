@@ -9,7 +9,7 @@
 // using namespace std;
 // using namespace libconfig;
 
-Timer tt;
+// Timer tt;
 
 int mb_read() {
   cout << endl << "===== mb_read =====" << endl;
