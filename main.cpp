@@ -36,15 +36,15 @@ int main() {
 
   t.start();
   plc_show();
-//  t.stop();
+  //  t.stop();
   t.spent_auto("============ PLC show finished.");
-//  t.spent();
+  //  t.spent();
 
   t.start();
   regs_init();
-//  t.stop();
+  //  t.stop();
   t.spent_auto("============ REG init finished.");
-//  t.spent();
+  //  t.spent();
 
   for (;;) {
     printf("%s", CLS);
@@ -62,18 +62,18 @@ int main() {
     // t.stop();
     //    mb_write();
     t.spent_auto("============ REG print finished in: ");
-//    t.spent_auto("Printing: ");
+    //    t.spent_auto("Printing: ");
 
-    const char* x = nullptr;
+    const char *x = nullptr;
     t.start(x);
     mb_update();
-//    t.stop();
-//    cout << "============ MB update finished." << endl;
+    //    t.stop();
+    //    cout << "============ MB update finished." << endl;
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     t.start(x);
     t.sleep_sec(1);
-//    t.stop();
+    //    t.stop();
     t.spent();
   }
 

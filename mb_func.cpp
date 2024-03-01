@@ -37,7 +37,7 @@ int mb_write() {
 }
 
 int mb_update() {
-//  cout << "===== mb_update =====" << endl;
+  //  cout << "===== mb_update =====" << endl;
   int ret = 0;
 
   for (auto &D : PLCset) {
