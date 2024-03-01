@@ -91,7 +91,7 @@ public:
   const char *dev_name = nullptr;
   const char *ip_addr = nullptr;
   int tcp_port = 0;
-  int try_qty = 2; // number of attempts
+  int attempts = 2; // number of attempts
 
   mbdata_t mb;
   int reg_min = 0; // minimal address of reg

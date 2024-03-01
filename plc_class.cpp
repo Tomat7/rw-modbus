@@ -26,15 +26,10 @@ PLC::~PLC() { deinit(); }
 int PLC::init() {
   rc = 0;
 
-  //  if (ctx != nullptr) {
   LOGINFO("%s: try to close/free \n", ip_addr);
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
-  // } else {
-  //      LOGINFO("%s: try to close \n", _ip);
-  //      modbus_close(ctx);
-  //  }
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
@@ -50,14 +45,15 @@ int PLC::init() {
 int PLC::connect() {
   if ((rc < 0) || (ctx == nullptr)) {
     rc = init();
-    //    if (rc == -1)
-    //      return rc;
     rc = modbus_connect(ctx);
+
     if (rc == -1) {
       LOGERR("%s %s connect error: %s\n", ip_addr, dev_name,
              modbus_strerror(errno));
       modbus_free(ctx);
       ctx = nullptr;
+      mb.errors++;
+      mb.errors_cn++;
     }
   }
   modbus_flush(ctx);
@@ -67,10 +63,7 @@ int PLC::connect() {
 
 int PLC::read() {
 
-  rc = 0;
-  for (int i = 0; i < try_qty && rc <= 0; i++)
-    rc = read_allregs();
-
+  rc = read_allregs();
   mb.status = rc;
 
   for (auto &r : regs) {
@@ -78,21 +71,7 @@ int PLC::read() {
     r.rerrors = mb.errors;
   }
 
-  //  uint64_t old = mb.timestamp_ms;
   mb.timestamp_ms = millis();
-
-  /*
-    printf("%s _dT: %ld  err: %d cn: %d rd: %d wr: %d rc: %d\n", dev_name,
-           mb.timestamp_ms - old, mb.errors, mb.errors_cn, mb.errors_rd,
-           mb.errors_wr, rc);
-  */
-
-  /*
-    modbus_flush(ctx);
-    modbus_close(ctx);
-    modbus_free(ctx);
-    ctx = nullptr;
-  */
 
   return rc;
 }
@@ -101,15 +80,12 @@ int PLC::read_allregs() {
 
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t *mbregs = new uint16_t[nb_regs];
-
-  rc = connect();
-  if (rc == -1) {
-    mb.errors++;
-    mb.errors_cn++;
-    return rc;
+  rc = 0;
+  
+  for (int i = 0; i < attempts && rc <= 0; i++) {
+    connect();
+    rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
   }
-
-  rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
 
   if (rc == -1) {
     mb.errors++;
@@ -133,39 +109,21 @@ int PLC::read_allregs() {
 }
 
 int PLC::write() {
-  /*
-    rc = connect();
-    if (rc == -1) {
-      mb.errors++;
-      mb.errors_cn++;
-    } else {
-      for (auto &r : regs)
-        rc = write_reg(r);
-    }
-  */
 
-  for (auto &r : regs) {
-    rc = 0;
-    for (int i = 0; i < try_qty && rc <= 0; i++)
+  for (auto &r : regs)
       rc = write_reg(r);
-  }
 
-  //  mb.status = rc;
-
-  /*
-    modbus_flush(ctx);
-    modbus_close(ctx);
-    modbus_free(ctx);
-    ctx = nullptr;
-  */
   return rc;
 }
 
 int PLC::write_reg(reg_t &r) {
 
   if (r.rmode && r.rupdate) {
-    connect();
-    rc = modbus_write_register(ctx, r.raddr, r.rvalue);
+    rc = 0;
+    for (int i = 0; i < attempts && rc <= 0; i++) {
+      connect();
+      rc = modbus_write_register(ctx, r.raddr, r.rvalue);
+    }
 
     if (rc == -1) {
       mb.errors++;
