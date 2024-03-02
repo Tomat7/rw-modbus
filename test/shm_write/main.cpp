@@ -43,7 +43,7 @@ int main() {
   cout << "============ REG init finished." << endl;
   t.spent();
 
-  mb_slave_init();
+//  mb_slave_init();
   printf("============ SLAVE init finished.\n");
   fflush(stdout);
   t.sleep_sec(3);
@@ -90,7 +90,7 @@ int main() {
     t.spent_auto("Printing: ");
     }
 
-    mb_slave();
+//    mb_slave();
 
 
 /*
