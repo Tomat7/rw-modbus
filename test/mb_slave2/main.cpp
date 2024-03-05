@@ -87,7 +87,7 @@ int main(void) {
 
     w++;
     for (int i = 0; i < 10; i++) {
-        mb_mapping->tab_registers[i] = w++;
+      mb_mapping->tab_registers[i] = w++;
     }
 
     rdset = refset;
