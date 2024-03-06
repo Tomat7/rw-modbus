@@ -33,40 +33,21 @@
 
 class INotify {
 public:
-  INotify(const char *fn, uint32_t mask = IN_MODIFY);
-  //  ~PLC();
+  INotify(const char *fn = nullptr, uint32_t mask = IN_MODIFY);
+  ~INotify();
 
-  //  int init();
+  void deinit();
   int check();
-  //  int read();
-  //  int write();
-  //  int update();
-  //  int get_rc();
-  //  void deinit();
-  //  uint64_t millis();
 
-  uint32_t evt_mask = 0;
-  nfds_t nfds = 2;
-  struct pollfd fds[2];
+  //  nfds_t nfds = 2;
+  //  struct pollfd fds[2];
 
   const char *fname = nullptr;
-
-  //  const char *dev_desc = nullptr;
-  //  const char *dev_name = nullptr;
-  //  const char *ip_addr = nullptr;
-  //  int tcp_port = 0;
-  //  int attempts = 2; // number of attempts
-
-  //  mbdata_t mb;
   int fd = 0; // file description
   int wd = 0; // watch description
-  //  int reg_qty = 0; // number of regs
-
-  //  std::vector<reg_t> regs;
 
 private:
   int rc = -1;
   int get_event();
-  //  int write_reg(reg_t &);
-  //  modbus_t *ctx = nullptr;
+  uint32_t evt_mask = 0;
 };

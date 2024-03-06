@@ -17,12 +17,16 @@
 
 #include "./in_class.h"
 
+INotify::~INotify() { deinit(); }
+
 INotify::INotify(const char *fn, uint32_t mask) {
 
   openlog("INotify", LOG_NDELAY, LOG_LOCAL1);
 
-  fname = fn;
-  evt_mask = mask;
+  if (fn != nullptr) {
+    fname = fn;
+    evt_mask = mask;
+  }
 
   fd = inotify_init1(IN_NONBLOCK);
   if (fd == -1) {
@@ -31,7 +35,7 @@ INotify::INotify(const char *fn, uint32_t mask) {
     exit(EXIT_FAILURE);
   }
 
-  wd = inotify_add_watch(fd, fname, IN_MODIFY);
+  wd = inotify_add_watch(fd, fname, evt_mask);
   if (wd == -1) {
     LOGERR("WD error: %s\n", fname);
     perror("inotify_add_watch");
@@ -40,23 +44,24 @@ INotify::INotify(const char *fn, uint32_t mask) {
     LOGINFO("New watching file: %s \n", fname);
   }
 
-  fds[0].fd = STDIN_FILENO;
-  fds[0].events = POLLIN;
+  /*
+    fds[0].fd = STDIN_FILENO;
+    fds[0].events = POLLIN;
 
-  fds[1].fd = fd;
-  fds[1].events = POLLIN;
-
+    fds[1].fd = fd;
+    fds[1].events = POLLIN;
+  */
   return;
 }
-
 
 int INotify::check() {
 
   rc = 0;
-  char buf;
-  printf(".\n");
-//  sleep(10);
-  int poll_num = poll(fds, nfds, -1);
+  //  char buf;
+  //  printf(".\n");
+  //  sleep(10);
+  struct pollfd fds = {fd, POLLIN, 0};
+  int poll_num = poll(&fds, 1, -1);
 
   if (poll_num == -1) {
     if (errno == EINTR)
@@ -66,18 +71,16 @@ int INotify::check() {
   }
 
   if (poll_num > 0) {
-
-    if (fds[0].revents & POLLIN) {
-      /* доступен ввод с консоли: опустошаем stdin и выходим */
-      while (read(STDIN_FILENO, &buf, 1) > 0 && buf != '\n') {
-        printf("!\n");
-        continue;
-      }
-      return -1;
-    }
-
-    if (fds[1].revents & POLLIN) {
-      /* доступны события inotify */
+    /*
+        if (fds[0].revents & POLLIN) { // доступен ввод с консоли:
+          while (read(STDIN_FILENO, &buf, 1) > 0 && buf != '\n') {
+            printf("!\n"); // опустошаем stdin и выходим
+            continue;
+          }
+          return -1;
+        }
+    */
+    if (fds.revents & POLLIN) { // доступны события inotify
       rc = get_event();
     }
   }
@@ -85,49 +88,57 @@ int INotify::check() {
   return rc;
 }
 
-
 int INotify::get_event() {
 
   char buf[4096] __attribute__((aligned(__alignof__(struct inotify_event))));
   const struct inotify_event *event;
-//  int i;
-  ssize_t len;
+  ssize_t length;
   char *ptr;
   rc = 0;
 
-  printf(".\n");
+  //  printf(".\n");
   /* проходим по всем событиям, которые можем прочитать
      из файлового дескриптора inotify */
   for (;;) {
-    /* читаем несколько событий */
-    len = read(fd, buf, sizeof buf);
-    if (len == -1 && errno != EAGAIN) {
+    // Читаем несколько событий. Если неблокирующий read()
+    // не найдёт событий для чтения, то вернёт -1
+    // с errno равным EAGAIN.
+    // В этом случае выходим из цикла.
+
+    length = read(fd, buf, sizeof buf);
+    if (length == -1 && errno != EAGAIN) {
+      LOGERR("Error watching: %s \n", fname);
       perror("read");
       exit(EXIT_FAILURE);
     }
-    /* Если неблокирующий read() не найдёт событий для чтения, то
-       вернёт -1 с errno равным EAGAIN. В этом случае
-       выходим из цикла. */
-    if (len <= 0)
+    if (length <= 0)
       break;
+
     /* проходим по всем событиям в буфере */
-    for (ptr = buf; ptr < buf + len;
+    for (ptr = buf; ptr < buf + length;
          ptr += sizeof(struct inotify_event) + event->len) {
+
       event = (const struct inotify_event *)ptr;
-      /* печатаем тип события */
-      if (event->mask & evt_mask) {
+
+      if (event->mask & evt_mask) { // печатаем тип события
         LOGINFO("File changed: %s \n", fname);
         rc = 1;
       }
 
-//      printf("%s \n", fname);
-
-      if (event->len)
-        printf("%s", event->name);
+      //      if (event->len)
+      //        printf("%s", event->name);  // the filename if watching
+      //        directory
     }
   }
 
   return rc;
+}
+
+void INotify::deinit() {
+  inotify_rm_watch(fd, wd);
+  close(fd);
+  LOGINFO("Stop watching: %s\n", fname);
+  return;
 }
 
 /*

@@ -18,9 +18,9 @@
 
 int main(/*int argc, char *argv[]*/) {
 
- INotify IN(FILE_W);
- while (1){
- IN.check();
- sleep(5);
+  INotify IN(FILE_W);
+  while (1) {
+    IN.check();
+    sleep(5);
+  }
 }
- }
