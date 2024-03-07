@@ -32,8 +32,14 @@ int main() {
   t.spent_auto("============ Cfg finished.");
   if (ret == EXIT_FAILURE)
     return ret;
+  t.sleep_ms(4987);
 
-  t.sleep_ms(2987);
+  for (auto &D : PLCset)
+    for (auto &R : D.regs) {
+      printf("%s: %s.%s [%d] %d\n", D.ip_addr, D.dev_name, R.ch_name, R.raddr, R.rvalue);
+    }
+  printf("===222\n");
+  t.sleep_ms(4987);
 
   t.start();
   plc_show();
@@ -43,7 +49,7 @@ int main() {
   regs_init();
   t.spent_auto("============ REG init finished.");
 
-  t.sleep_ms(2987);
+  t.sleep_ms(4987);
 
   for (;;) {
     printf("%s", CLS);
