@@ -4,5 +4,6 @@
 // https://31.44.7.12:55972/panel/
 // http://85.117.235.21:55971/
 
-#define CFG_FILE "./conf/modbus.cfg"
+#define CFG_DIR "./conf"
+#define CFG_FILE "modbus.cfg"
 #define USE_SYSLOG

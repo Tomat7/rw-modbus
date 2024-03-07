@@ -19,17 +19,20 @@ void cfg_print_reg_details(const reg_t &rn);
 
 Config cfg;
 
-int cfg_read(const char *cfg_file) {
+int cfg_read(const char *cfg_dir, const char *cfg_file) {
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;
 
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
 
+  cfg.setIncludeDir(cfg_dir);
+  string cfile = (string)cfg_dir + "/" + (string)cfg_file;
+
   try {
-    cfg.readFile(cfg_file);
-    LOGINFO("I/O reading file OK: %s\n", cfg_file);
+    cfg.readFile(cfile.c_str());
+    LOGINFO("I/O reading file OK: %s\n", cfile.c_str());
   } catch (const FileIOException &fioex) {
-    LOGERR("I/O error while reading file: %s\n", cfg_file);
+    LOGERR("I/O error while reading file: %s\n", cfile.c_str());
     return (EXIT_FAILURE);
   } catch (const ParseException &pex) {
     LOGERR("Parse error at %s:%d - %s\n", pex.getFile(), pex.getLine(),

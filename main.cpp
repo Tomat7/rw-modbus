@@ -7,7 +7,6 @@
 
 #include "./config.h"
 #include "./libs.h"
-
 //#include "./timer.h" // Timer t; - already initialised here!
 
 // using namespace std;
@@ -16,6 +15,7 @@
 std::map<string, rmap_t> REGmap;
 std::vector<PLC> PLCset;
 Timer t;
+INotify IN(CFG_DIR);
 int rc;
 
 static void close_sigint(int dummy) { exit(dummy); }
@@ -28,10 +28,8 @@ int main() {
   int ret = 0;
 
   t.start();
-  ret = cfg_read(CFG_FILE);
-  t.stop();
-  cout << "============ Cfg finished." << endl;
-  t.spent();
+  ret = cfg_read(CFG_DIR, CFG_FILE);
+  t.spent_auto("============ Cfg finished.");
   if (ret == EXIT_FAILURE)
     return ret;
 
@@ -39,44 +37,28 @@ int main() {
 
   t.start();
   plc_show();
-  //  t.stop();
   t.spent_auto("============ PLC show finished.");
-  //  t.spent();
 
   t.start();
   regs_init();
-  //  t.stop();
   t.spent_auto("============ REG init finished.");
-  //  t.spent();
 
   for (;;) {
     printf("%s", CLS);
     printf("%s", HOME);
     fflush(stdout);
 
-    //    t.start();
-    //    mb_read();
-    //    t.stop();
-    //    cout << "============ MB read finished." << endl;
-    //    t.spent_auto("MB: spent on 3xPLC by TCP: ");
-
     t.start();
     regs_update();
-    // t.stop();
-    //    mb_write();
     t.spent_auto("============ REG print finished in: ");
-    //    t.spent_auto("Printing: ");
 
     const char *x = nullptr;
     t.start(x);
     mb_update();
-    //    t.stop();
-    //    cout << "============ MB update finished." << endl;
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     t.start(x);
-    t.sleep_sec(1);
-    //    t.stop();
+    t.sleep_sec(3);
     t.spent();
   }
 

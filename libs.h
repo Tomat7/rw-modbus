@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include "./decl.h"
+#include "./in_class.h"
 #include "./macros.h"
 #include "./plc_class.h"
 #include "./timer.h"

@@ -14,7 +14,7 @@ using std::string;
 extern std::map<string, rmap_t> REGmap;
 extern std::vector<PLC> PLCset;
 
-int cfg_read(const char *cfg_file);
+int cfg_read(const char *cfg_dir, const char *cfg_file);
 
 int plc_show();
 int mb_read();
