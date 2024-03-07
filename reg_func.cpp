@@ -1,8 +1,8 @@
 // reg_func.cpp -----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#include <map>
 #include <string.h>
-
 #include <string>
 #include <vector>
 

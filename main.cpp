@@ -7,21 +7,24 @@
 
 #include "./config.h"
 #include "./libs.h"
-#include "./plc_class.h"
-#include "./timer.h" // Timer t; - already initialised here!
+
+//#include "./timer.h" // Timer t; - already initialised here!
 
 // using namespace std;
 // using namespace libconfig;
 
-map<string, rmap_t> REGmap;
-vector<PLC> PLCset;
+std::map<string, rmap_t> REGmap;
+std::vector<PLC> PLCset;
 Timer t;
 int rc;
+
+static void close_sigint(int dummy) { exit(dummy); }
 
 // int main(int argc, char **argv) {
 
 int main() {
 
+  signal(SIGINT, close_sigint);
   int ret = 0;
 
   t.start();

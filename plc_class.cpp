@@ -16,6 +16,11 @@
 
 #include "./plc_class.h"
 
+void PLC::logerr(const char *s, ...) {
+  va_list va;
+  printf(s, va);
+}
+
 PLC::PLC() {
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   LOGINFO("+ New PLC created.\n");
@@ -35,9 +40,8 @@ int PLC::init() {
   if (ctx == nullptr) {
     LOGINFO("%s:%d %s CTX allocate error. \n", ip_addr, tcp_port, dev_name);
     rc = -1;
-  } else {
+  } else
     LOGINFO("%s:%d %s CTX allocate OK. \n", ip_addr, tcp_port, dev_name);
-  }
 
   return rc;
 }
@@ -98,8 +102,7 @@ int PLC::read_allregs() {
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
-    LOGERR("%s %s qty regs mismatch: expect %d, got %d\n", ip_addr, dev_name,
-           nb_regs, rc);
+    LOGERR("%s %s qty: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
   } else {
     mb.errors = 0;
     for (auto &r : regs)
@@ -146,7 +149,6 @@ int PLC::write_reg(reg_t &r) {
 }
 
 int PLC::update() {
-
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
     rc = write();
@@ -170,12 +172,11 @@ int PLC::set_timeout() {
 }
 
 void PLC::deinit() {
-  if (ctx != nullptr) {
-    LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
-    modbus_close(ctx);
-    modbus_free(ctx);
-  }
-
+  //  if (ctx != nullptr) {
+  LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
+  modbus_close(ctx);
+  modbus_free(ctx);
+  //  }
   LOGINFO("- PLC deleted: %s. \n", dev_name);
 }
 

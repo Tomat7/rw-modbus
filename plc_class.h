@@ -18,12 +18,8 @@
 #define USE_SYSLOG
 
 #ifdef USE_SYSLOG
-#define LOGERR(...)                                                            \
-  fprintf(stderr, __VA_ARGS__);                                                \
-  syslog(LOG_ERR, __VA_ARGS__)
-#define LOGINFO(...)                                                           \
-  printf(__VA_ARGS__);                                                         \
-  syslog(LOG_INFO, __VA_ARGS__)
+#define LOGERR(...) (fprintf(stderr, __VA_ARGS__), syslog(LOG_ERR, __VA_ARGS__))
+#define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO, __VA_ARGS__))
 #else
 #define LOGERR(...) fprintf(stderr, __VA_ARGS__)
 #define LOGINFO(...) printf(__VA_ARGS__)
@@ -104,5 +100,6 @@ private:
   int rc = -1;
   int read_allregs();
   int write_reg(reg_t &);
+  void logerr(const char *, ...);
   modbus_t *ctx = nullptr;
 };

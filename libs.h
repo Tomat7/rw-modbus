@@ -8,15 +8,15 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+
 #include <map>
 #include <string>
 #include <vector>
 
 #include <libconfig.h++>
+#include <string.h>
 
-using std::cout;
-using std::endl;
-using std::left;
-using std::right;
-using std::setw;
-using std::string;
+#include "./decl.h"
+#include "./macros.h"
+#include "./plc_class.h"
+#include "./timer.h"
