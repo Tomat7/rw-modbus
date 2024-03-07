@@ -33,7 +33,7 @@ int main() {
   if (ret == EXIT_FAILURE)
     return ret;
 
-  t.sleep_ms(987);
+  t.sleep_ms(2987);
 
   t.start();
   plc_show();
@@ -42,6 +42,8 @@ int main() {
   t.start();
   regs_init();
   t.spent_auto("============ REG init finished.");
+
+  t.sleep_ms(2987);
 
   for (;;) {
     printf("%s", CLS);

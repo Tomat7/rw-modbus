@@ -11,8 +11,8 @@
 // using namespace std;
 using namespace libconfig;
 
-int cfg_init_plcset();
-void cfg_init_regs(const Setting &reg, PLC *pn);
+int cfg_init_plcset(const Setting cfgPLC);
+void cfg_init_regs(const Setting reg, PLC *pn);
 
 void cfg_print_plc_details(const PLC &pn);
 void cfg_print_reg_details(const reg_t &rn);
@@ -23,6 +23,7 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;
 
+//  Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
 
   cfg.setIncludeDir(cfg_dir);
@@ -51,7 +52,7 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
 
   // Output a list of all PLCs in the inventory.
   try {
-    cfg_init_plcset();
+    cfg_init_plcset(cfg.lookup("plc"));
     cout << "+++++" << endl;
   } catch (const SettingNotFoundException &nfex) {
     LOGERR("Great ERROR! Exiting.\n");
@@ -62,8 +63,8 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
   return (EXIT_SUCCESS);
 }
 
-int cfg_init_plcset() {
-  const Setting &cfgPLC = cfg.lookup("plc");
+int cfg_init_plcset(const Setting cfgPLC) {
+  //  const Setting &cfgPLC = cfg.lookup("plc");
   int nb_plcs = cfgPLC.getLength();
 
   // ===== Cycle for PLCs =====
@@ -98,7 +99,7 @@ int cfg_init_plcset() {
   return 0;
 }
 
-void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
+void cfg_init_regs(const Setting cfgREG, PLC *pn) {
   int nb_regs = cfgREG.getLength();
 
   // ===== Cycle for REGs =====
@@ -144,6 +145,11 @@ void cfg_print_reg_details(const reg_t &R) {
   cout << "       " << setw(9) << left << R.ch_name << "" << setw(3) << right
        << R.raddr << " " << setw(5) << left << R.ch_mode << "  " << endl;
   return;
+}
+
+void cfg_deinit() {
+  //    cfg.clear();
+  PLCset.clear();
 }
 
 // eof

@@ -101,4 +101,6 @@ void reg_print(string rn, const reg_t *r) {
   return;
 }
 
+void regs_deinit() { REGmap.clear(); }
+
 // eof
