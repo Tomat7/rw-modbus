@@ -17,11 +17,12 @@ LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=hello
 
-RED='\033[0;31m'
+RED='\033[0;91m'
 GRE="\033[0;32m"
-YEL="\033[0;33m"
+YEL="\033[0;93m"
 YEB="\033[1;33m"
-BLU='\033[0;34m'
+BLU='\033[0;94m'
+WHI='\033[0;97m'
 NC='\033[0m' # No Color
 
 
@@ -102,7 +103,7 @@ $(OBJDIR)/%.o: %.cpp
 ifeq ("YES","$(DO_DEBUG)")
 	@echo -e $(YEB)"=== Compiling with DEBUG: $<"$(NC)
 else
-	@echo -e $(YEL)"=== Compiling: $<"$(NC)
+	@echo -e $(WHI)"=== Compiling: $<"$(NC)
 endif
 	$(CC) $(CFLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 #	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<

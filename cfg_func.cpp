@@ -17,7 +17,7 @@ void cfg_init_regs(const Setting &reg, PLC *pn);
 void cfg_print_plc_details(const PLC &pn);
 void cfg_print_reg_details(const reg_t &rn);
 
-Config cfg;
+// Config cfg;
 
 // Function to copy the string
 
@@ -25,7 +25,7 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;
 
-  //  Config cfg;
+  Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
 
   cfg.setIncludeDir(cfg_dir);
@@ -57,7 +57,7 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
     cfg_init_plcset(cfg.lookup("plc"));
     cout << "+++++" << endl;
   } catch (const SettingNotFoundException &nfex) {
-    LOGERR("Great ERROR! Exiting.\n");
+    LOGERR("Great ERROR! (no 'plc' settings?) Exiting.\n");
     return (EXIT_FAILURE);
   }
 
@@ -92,17 +92,18 @@ int cfg_init_plcset(const Setting &cfgPLC) {
           cfgPLC[i].lookupValue("attempts", plc.attempts) &&
           cfgPLC[i].lookupValue("polling", plc.mb.interval_ms) &&
           cfgPLC[i].lookupValue("timeout", plc.mb.timeout_us))) {
-      LOGERR("Warning!! Error reading PLC configuration: %d\n", i);
+      LOGERR("Error reading PLC configuration: %d\n", i);
       continue; // get out of current iteration if any field wrong in CFG-file
     }
 
     plc.reg_qty = cfgPLC[i]["regs"].getLength();
     //    cfg_print_plc_details(plc);
-    cfg_init_regs(cfgPLC[i]["regs"], &PLCset[i]);
+    cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
 
     //    PLCset.push_back(plcnow);
     //    cout << "PB done" << endl;
-    PLCset[i].init(); // Absolutely necessary to copy str to char* and other
+    /*PLCset[i]*/ plc
+        .init(); // Absolutely necessary to copy str to char* and other
     LOGINFO("Configured REGs now: %d\n", (int)plc.regs.size());
     cout << endl;
 
@@ -131,7 +132,9 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
           cfgREG[j].lookupValue("raddr", regnow.raddr) &&
           cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
           cfgREG[j].lookupValue("rtype", regnow.str_type))) {
-      LOGERR("error reading REG %d\n", j);
+      LOGERR("Error reading config on PLC: %s REG: %d\n",
+             pn->str_dev_name.c_str(), j);
+      exit(EXIT_FAILURE);
       continue;
     }
 

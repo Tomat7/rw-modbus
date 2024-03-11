@@ -46,6 +46,33 @@ INotify::INotify(const char *fn, uint32_t mask) {
   return;
 }
 
+INotify::INotify(int _fd, uint32_t mask) {
+
+  openlog("INotify", LOG_NDELAY, LOG_LOCAL1);
+
+  if (fn != nullptr) {
+    fname = fn;
+    evt_mask = mask;
+  }
+
+  fd = _fd // inotify_init1(IN_NONBLOCK);
+  if (fd == -1) {
+    LOGERR("FD error: %s\n", fname);
+    perror("inotify_init1");
+    exit(EXIT_FAILURE);
+  }
+
+  wd = inotify_add_watch(fd, fname, evt_mask);
+  if (wd == -1) {
+    LOGERR("WD error: %s\n", fname);
+    perror("inotify_add_watch");
+    exit(EXIT_FAILURE);
+  } else
+    LOGINFO("New watching: %s \n", fname);
+
+  return;
+}
+
 int INotify::check() {
 
   rc = 0;

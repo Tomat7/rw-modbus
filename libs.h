@@ -8,6 +8,9 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
 
 #include <map>
 #include <string>
