@@ -23,7 +23,7 @@ PLC::PLC() {
 
 PLC::~PLC() { deinit(); }
 
-int PLC::init() {
+int PLC::mb_new() {
   rc = 0;
 
   //  if (ctx != nullptr) {
@@ -47,9 +47,9 @@ int PLC::init() {
   return rc;
 }
 
-int PLC::connect() {
+int PLC::mb_connect() {
   if ((rc < 0) || (ctx == nullptr)) {
-    rc = init();
+    rc = mb_new();
     //    if (rc == -1)
     //      return rc;
     rc = modbus_connect(ctx);
@@ -102,7 +102,7 @@ int PLC::read_allregs() {
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t *mbregs = new uint16_t[nb_regs];
 
-  rc = connect();
+  rc = mb_connect();
   if (rc == -1) {
     mb.errors++;
     mb.errors_cn++;
@@ -164,7 +164,7 @@ int PLC::write() {
 int PLC::write_reg(reg_t &r) {
 
   if (r.rmode && r.rupdate) {
-    connect();
+    mb_connect();
     rc = modbus_write_register(ctx, r.raddr, r.rvalue);
 
     if (rc == -1) {
@@ -197,7 +197,7 @@ int PLC::update() {
 int PLC::set_timeout() {
 
   if (ctx == nullptr)
-    init();
+    mb_new();
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {

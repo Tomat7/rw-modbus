@@ -50,7 +50,7 @@ int PLC::init(const char *_ip, int _port)
     return rc;
 }
 
-int PLC::connect()
+int PLC::mb_connect()
 {
 
     if (ctx == nullptr) {
@@ -75,7 +75,7 @@ int PLC::read()
 {
     rc = 0;
 
-    connect();
+    mb_connect();
     if (rc == -1) {
         mb_errors++;
         return rc;

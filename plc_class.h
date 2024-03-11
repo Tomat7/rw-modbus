@@ -25,7 +25,7 @@
 #define LOGINFO(...) printf(__VA_ARGS__)
 #endif
 
-// using namespace std;
+using namespace std;
 
 struct reg_t {
   uint16_t rvalue = 0;
@@ -72,9 +72,7 @@ public:
   PLC();  // { LOGINFO("+ New PLC created."); }
   ~PLC(); // { deinit(); }
 
-  int init(); // const char *_ip = "", int _port = 0);
-  int set_timeout();
-  int connect();
+  void init();
   int read();
   int write();
   int update();
@@ -98,8 +96,12 @@ public:
 
 private:
   int rc = -1;
+  int mb_new();
+  int mb_connect();
   int read_allregs();
   int write_reg(reg_t &);
+  int set_timeout();
   void logerr(const char *, ...);
+  void new_str(const char *ch);
   modbus_t *ctx = nullptr;
 };

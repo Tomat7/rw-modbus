@@ -20,9 +20,10 @@ void regs_init() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-      string rn = (string)D.dev_name + "." + (string)R.ch_name;
-      R.fullname = rn.c_str();
+      string rn = (string)R.fullname; // D.dev_name + "." + (string)R.ch_name;
+      // R.fullname = rn.c_str();
       R.rvalue = 5757; // TODO: remove for production!!
+      LOGINFO("SHM: try %s\n", R.fullname);
 
       rmap_t rm;
       rm.p_reg = &R;

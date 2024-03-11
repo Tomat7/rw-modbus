@@ -8,22 +8,24 @@
 #include "./libs.h"
 #include "./plc_class.h"
 
-// using namespace std;
+using namespace std;
 using namespace libconfig;
 
-int cfg_init_plcset(Config *cf);
+int cfg_init_plcset(const Setting &cfg);
 void cfg_init_regs(const Setting &reg, PLC *pn);
 
 void cfg_print_plc_details(const PLC &pn);
 void cfg_print_reg_details(const reg_t &rn);
 
-// Config cfg;
+Config cfg;
+
+// Function to copy the string
 
 int cfg_read(const char *cfg_dir, const char *cfg_file) {
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;
 
-  Config cfg;
+  //  Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
 
   cfg.setIncludeDir(cfg_dir);
@@ -52,7 +54,7 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
 
   // Output a list of all PLCs in the inventory.
   try {
-    cfg_init_plcset(&cfg);
+    cfg_init_plcset(cfg.lookup("plc"));
     cout << "+++++" << endl;
   } catch (const SettingNotFoundException &nfex) {
     LOGERR("Great ERROR! Exiting.\n");
@@ -60,24 +62,25 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
   }
 
   closelog();
-
-  for (auto &D : PLCset)
-    for (auto &R : D.regs) {
-      printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
-    }
-  printf("===111\n");
-
+  /*
+    for (auto &D : PLCset)
+      for (auto &R : D.regs) {
+        printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
+      }
+    printf("===111\n");
+  */
   return (EXIT_SUCCESS);
 }
 
-int cfg_init_plcset(Config *cf) {
-  const Setting &cfgPLC = cf->lookup("plc");
+int cfg_init_plcset(const Setting &cfgPLC) {
+  //  const Setting &cfgPLC = cf->lookup("plc");
   int nb_plcs = cfgPLC.getLength();
 
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
+    cout << "plcnow will be..." << endl;
     PLC plcnow;
-
+    cout << "plcnow created!" << endl;
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("title", plcnow.dev_title) &&
           cfgPLC[i].lookupValue("desc", plcnow.dev_desc) &&
@@ -98,15 +101,18 @@ int cfg_init_plcset(Config *cf) {
     cout << endl;
     LOGINFO("Configured REGs now: %d\n", (int)plcnow.regs.size());
     PLCset.push_back(plcnow);
+    cout << "PB done" << endl;
+    PLCset[i].init();
     // ===== End PLC filling  =====
   }
 
   LOGINFO("Configured PLCs: %d\n", (int)PLCset.size());
-
-  for (auto &D : PLCset)
-    for (auto &R : D.regs) {
-      printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
-    }
+  /*
+    for (auto &D : PLCset)
+      for (auto &R : D.regs) {
+        printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
+      }
+  */
   return 0;
 }
 
@@ -126,8 +132,8 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
       continue;
     }
 
-    regnow.rmode = (strcmp(regnow.ch_mode, "rw") == 0) ? 1 : 0;
-    regnow.rtype = (strcmp(regnow.ch_type, "f") == 0) ? 1 : 0;
+    regnow.rmode = (regnow.ch_mode == "rw") ? 1 : 0;
+    regnow.rtype = (regnow.ch_type == "f") ? 1 : 0;
 
     if (regnow.raddr < pn->reg_min)
       pn->reg_min = regnow.raddr;

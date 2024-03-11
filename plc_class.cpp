@@ -8,11 +8,12 @@
 #include <errno.h>
 #include <modbus/modbus.h>
 #include <stdio.h>
-#include <syslog.h>
-// #include <stdlib.h>
+#include <stdlib.h>
 #include <string.h>
+#include <syslog.h>
 
 #include <chrono>
+#include <string>
 
 #include "./plc_class.h"
 
@@ -23,12 +24,33 @@ void PLC::logerr(const char *s, ...) {
 
 PLC::PLC() {
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-  LOGINFO("+ New PLC created.\n");
+  LOGINFO("+ New PLC created. \n");
+  cout << ip_addr << endl;
 }
 
 PLC::~PLC() { deinit(); }
 
-int PLC::init() {
+void PLC::init() {
+  cout << ip_addr << endl;
+  new_str(ip_addr);
+  new_str(dev_title);
+  new_str(dev_desc);
+  new_str(dev_name);
+  LOGINFO("+ PLC init: %s %s \n", ip_addr, dev_name);
+
+  for (auto &R : regs) {
+    string rn = (string)dev_name + "." + (string)R.ch_name;
+    R.fullname = rn.c_str();
+    LOGINFO("+ REG init: %s \n", R.fullname);
+  }
+
+  /*
+  regnow.rmode = (regnow.ch_mode == "rw") ? 1 : 0;
+  regnow.rtype = (regnow.ch_type == "f") ? 1 : 0;
+  */
+}
+
+int PLC::mb_new() {
   rc = 0;
 
   LOGINFO("%s: try to close/free \n", ip_addr);
@@ -46,10 +68,10 @@ int PLC::init() {
   return rc;
 }
 
-int PLC::connect() {
+int PLC::mb_connect() {
 
   if ((mb.errors > 0) || (ctx == nullptr)) {
-    rc = init();
+    rc = mb_new();
     rc = modbus_connect(ctx);
 
     if (rc == -1) {
@@ -88,7 +110,7 @@ int PLC::read_allregs() {
   rc = 0;
 
   for (int i = 0; i < attempts && rc <= 0; i++) {
-    connect();
+    mb_connect();
     rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
     mb.errors++;
   }
@@ -126,7 +148,7 @@ int PLC::write_reg(reg_t &r) {
   if (r.rmode && r.rupdate) {
     rc = 0;
     for (int i = 0; i < attempts && rc <= 0; i++) {
-      connect();
+      mb_connect();
       rc = modbus_write_register(ctx, r.raddr, r.rvalue);
       mb.errors++;
     }
@@ -160,7 +182,7 @@ int PLC::update() {
 int PLC::set_timeout() {
 
   if (ctx == nullptr)
-    init();
+    mb_new();
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {
@@ -185,6 +207,33 @@ uint64_t PLC::millis() {
   uint64_t t;
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
   return t;
+}
+
+void PLC::new_str(const char *ch) {
+  char *new_ch = nullptr;
+  const char *save_ch = ch;
+  string s = (string)ch;
+  int len = strlen(ch) + 1;
+  new_ch = (char *)malloc(len);
+  //  strcpy(new_ch, ch);
+  //  new_ch[0] = (char)"_";
+
+  for (int i = 0; i <= len; i++)
+    new_ch[i] = ch[i];
+
+  ch = new_ch;
+  //  LOGINFO("String copied: %s %s \n",  ch, new_ch);
+  //  ch = s.c_str();
+  LOGINFO("String copied: %s %s \n", ch, new_ch);
+
+  if (save_ch == ch)
+    LOGINFO("save_ch == ch! \n");
+  if (save_ch == new_ch)
+    LOGINFO("save_ch == new_ch! \n");
+  if (ch == new_ch)
+    LOGINFO("ch == new_ch! \n");
+
+  return;
 }
 
 int PLC::get_rc() { return rc; }
