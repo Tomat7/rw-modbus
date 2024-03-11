@@ -29,27 +29,29 @@ int main() {
 
   t.start();
   ret = cfg_read(CFG_DIR, CFG_FILE);
-  t.spent_auto("============ Cfg finished.");
+  t.spent_auto("============ Cfg finished in:");
   if (ret == EXIT_FAILURE)
     return ret;
   t.sleep_ms(4987);
 
-  for (auto &D : PLCset)
-    for (auto &R : D.regs) {
-      printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
-             R.raddr, R.rvalue, R.fullname.c_str());
-    }
-  printf("===222\n");
-  t.sleep_ms(4987);
+  /*
+    for (auto &D : PLCset)
+      for (auto &R : D.regs) {
+        printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
+               R.raddr, R.rvalue, R.fullname.c_str());
+      }
+    printf("===222\n");
+    t.sleep_ms(4987);
+  */
 
   t.start();
   plc_show();
-  t.spent_auto("============ PLC show finished.");
+  t.spent_auto("============ PLC show finished in: ");
+  t.sleep_ms(4987);
 
   t.start();
   regs_init();
-  t.spent_auto("============ REG init finished.");
-
+  t.spent_auto("============ REG init finished in: ");
   t.sleep_ms(4987);
 
   for (;;) {

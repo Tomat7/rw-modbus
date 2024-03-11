@@ -37,7 +37,8 @@ void PLC::init() {
   //  cout << ip_addr << endl;
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
-  LOGINFO("+ PLC init: %s %s \n", ip_addr, dev_name);
+  LOGINFO("+ PLC init: %s %-7s %-7s %-20s \n", ip_addr, dev_name,
+          str_title.c_str(), str_desc.c_str());
 
   for (auto &R : regs) {
     R.fullname = str_dev_name + "." + R.str_name;
@@ -53,26 +54,26 @@ void PLC::init() {
       reg_max = R.raddr;
 
     R.rvalue = 777; // TODO: remove for production
-    LOGINFO("+ REG init: %s.%s [%s] \n", dev_name, R.ch_name,
-            R.fullname.c_str());
+    LOGINFO("+ REG init: %-7s %2d %2s [%s] \n", R.ch_name, R.raddr,
+            R.str_mode.c_str(), R.fullname.c_str());
   }
 }
 
 int PLC::mb_new() {
   rc = 0;
 
-  LOGINFO("%s: try to close/free \n", ip_addr);
+  LOGINFO("%s:%d %s try to close/free.\n", ip_addr, tcp_port, dev_name);
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
-  init();
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
-    LOGINFO("%s:%d %s CTX allocate error. \n", ip_addr, tcp_port, dev_name);
+    LOGINFO("%s:%d %s CTX allocate error.\n", ip_addr, tcp_port, dev_name);
+    //  init();
     rc = -1;
   } else
-    LOGINFO("%s:%d %s CTX allocate OK. \n", ip_addr, tcp_port, dev_name);
+    LOGINFO("%s:%d %s CTX allocate OK.\n", ip_addr, tcp_port, dev_name);
 
   return rc;
 }

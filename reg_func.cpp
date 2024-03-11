@@ -23,7 +23,7 @@ void regs_init() {
       string rn = R.fullname; // D.dev_name + "." + (string)R.ch_name;
       // R.fullname = rn.c_str();
       R.rvalue = 5757; // TODO: remove for production!!
-      LOGINFO("SHM: try %s\n", R.fullname.c_str());
+                       //      LOGINFO("SHM: try %s\n", R.fullname.c_str());
 
       rmap_t rm;
       rm.p_reg = &R;

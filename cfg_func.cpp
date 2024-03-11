@@ -76,33 +76,36 @@ int cfg_init_plcset(const Setting &cfgPLC) {
   //  const Setting &cfgPLC = cf->lookup("plc");
   int nb_plcs = cfgPLC.getLength();
 
+  PLCset.resize(nb_plcs);
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
-    cout << "plcnow will be..." << endl;
-    PLC plcnow;
-    cout << "plcnow created!" << endl;
+    //    cout << "plcnow will be..." << endl;
+    //    PLC plcnow;
+    //    cout << "plcnow created!" << endl;
+    PLC &plc = PLCset[i];
     // ===== Check the record which expect to get for CFG-file.
-    if (!(cfgPLC[i].lookupValue("title", plcnow.str_title) &&
-          cfgPLC[i].lookupValue("desc", plcnow.str_desc) &&
-          cfgPLC[i].lookupValue("name", plcnow.str_dev_name) &&
-          cfgPLC[i].lookupValue("ip", plcnow.str_ip_addr) &&
-          cfgPLC[i].lookupValue("port", plcnow.tcp_port) &&
-          cfgPLC[i].lookupValue("attempts", plcnow.attempts) &&
-          cfgPLC[i].lookupValue("polling", plcnow.mb.interval_ms) &&
-          cfgPLC[i].lookupValue("timeout", plcnow.mb.timeout_us))) {
+    if (!(cfgPLC[i].lookupValue("title", plc.str_title) &&
+          cfgPLC[i].lookupValue("desc", plc.str_desc) &&
+          cfgPLC[i].lookupValue("name", plc.str_dev_name) &&
+          cfgPLC[i].lookupValue("ip", plc.str_ip_addr) &&
+          cfgPLC[i].lookupValue("port", plc.tcp_port) &&
+          cfgPLC[i].lookupValue("attempts", plc.attempts) &&
+          cfgPLC[i].lookupValue("polling", plc.mb.interval_ms) &&
+          cfgPLC[i].lookupValue("timeout", plc.mb.timeout_us))) {
       LOGERR("Warning!! Error reading PLC configuration: %d\n", i);
       continue; // get out of current iteration if any field wrong in CFG-file
     }
 
-    plcnow.reg_qty = cfgPLC[i]["regs"].getLength();
-    cfg_print_plc_details(plcnow);
-    cfg_init_regs(cfgPLC[i]["regs"], &plcnow);
+    plc.reg_qty = cfgPLC[i]["regs"].getLength();
+    //    cfg_print_plc_details(plc);
+    cfg_init_regs(cfgPLC[i]["regs"], &PLCset[i]);
 
-    cout << endl;
-    LOGINFO("Configured REGs now: %d\n", (int)plcnow.regs.size());
-    PLCset.push_back(plcnow);
-    cout << "PB done" << endl;
+    //    PLCset.push_back(plcnow);
+    //    cout << "PB done" << endl;
     PLCset[i].init(); // Absolutely necessary to copy str to char* and other
+    LOGINFO("Configured REGs now: %d\n", (int)plc.regs.size());
+    cout << endl;
+
     // ===== End PLC filling  =====
   }
 
@@ -133,7 +136,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
     }
 
     regnow.rvalue = 555;
-    cfg_print_reg_details(regnow);
+    //    cfg_print_reg_details(regnow);
     pn->regs.push_back(regnow);
   }
 
