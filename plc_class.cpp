@@ -24,30 +24,38 @@ void PLC::logerr(const char *s, ...) {
 
 PLC::PLC() {
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-  LOGINFO("+ New PLC created. \n");
-  cout << ip_addr << endl;
+  ip_addr = "x.x.x.x";
+  dev_name = "tmp";
+  LOGINFO("+ New PLC created: %s %s \n", ip_addr, dev_name);
+  //  cout << ip_addr << endl;
 }
 
 PLC::~PLC() { deinit(); }
 
 void PLC::init() {
-  cout << ip_addr << endl;
-  new_str(ip_addr);
-  new_str(dev_title);
-  new_str(dev_desc);
-  new_str(dev_name);
+
+  //  cout << ip_addr << endl;
+  ip_addr = str_ip_addr.c_str();
+  dev_name = str_dev_name.c_str();
   LOGINFO("+ PLC init: %s %s \n", ip_addr, dev_name);
 
   for (auto &R : regs) {
-    string rn = (string)dev_name + "." + (string)R.ch_name;
-    R.fullname = rn.c_str();
-    LOGINFO("+ REG init: %s \n", R.fullname);
-  }
+    R.fullname = str_dev_name + "." + R.str_name;
+    R.ch_name = R.str_name.c_str();
 
-  /*
-  regnow.rmode = (regnow.ch_mode == "rw") ? 1 : 0;
-  regnow.rtype = (regnow.ch_type == "f") ? 1 : 0;
-  */
+    R.rmode = (R.str_mode == "rw") ? 1 : 0;
+    R.rtype = (R.str_type == "f") ? 1 : 0;
+
+    if (R.raddr < reg_min)
+      reg_min = R.raddr;
+
+    if (R.raddr > reg_max)
+      reg_max = R.raddr;
+
+    R.rvalue = 777; // TODO: remove for production
+    LOGINFO("+ REG init: %s.%s [%s] \n", dev_name, R.ch_name,
+            R.fullname.c_str());
+  }
 }
 
 int PLC::mb_new() {
@@ -57,6 +65,7 @@ int PLC::mb_new() {
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
+  init();
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
@@ -195,11 +204,11 @@ int PLC::set_timeout() {
 
 void PLC::deinit() {
   //  if (ctx != nullptr) {
-  LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
+  //  LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
   modbus_close(ctx);
   modbus_free(ctx);
   //  }
-  LOGINFO("- PLC deleted: %s. \n", dev_name);
+  LOGINFO("- PLC close, free and deleted: %s %s. \n", ip_addr, dev_name);
 }
 
 uint64_t PLC::millis() {
@@ -209,6 +218,7 @@ uint64_t PLC::millis() {
   return t;
 }
 
+/*
 void PLC::new_str(const char *ch) {
   char *new_ch = nullptr;
   const char *save_ch = ch;
@@ -235,5 +245,6 @@ void PLC::new_str(const char *ch) {
 
   return;
 }
+*/
 
 int PLC::get_rc() { return rc; }

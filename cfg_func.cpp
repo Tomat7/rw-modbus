@@ -82,10 +82,10 @@ int cfg_init_plcset(const Setting &cfgPLC) {
     PLC plcnow;
     cout << "plcnow created!" << endl;
     // ===== Check the record which expect to get for CFG-file.
-    if (!(cfgPLC[i].lookupValue("title", plcnow.dev_title) &&
-          cfgPLC[i].lookupValue("desc", plcnow.dev_desc) &&
-          cfgPLC[i].lookupValue("name", plcnow.dev_name) &&
-          cfgPLC[i].lookupValue("ip", plcnow.ip_addr) &&
+    if (!(cfgPLC[i].lookupValue("title", plcnow.str_title) &&
+          cfgPLC[i].lookupValue("desc", plcnow.str_desc) &&
+          cfgPLC[i].lookupValue("name", plcnow.str_dev_name) &&
+          cfgPLC[i].lookupValue("ip", plcnow.str_ip_addr) &&
           cfgPLC[i].lookupValue("port", plcnow.tcp_port) &&
           cfgPLC[i].lookupValue("attempts", plcnow.attempts) &&
           cfgPLC[i].lookupValue("polling", plcnow.mb.interval_ms) &&
@@ -102,7 +102,7 @@ int cfg_init_plcset(const Setting &cfgPLC) {
     LOGINFO("Configured REGs now: %d\n", (int)plcnow.regs.size());
     PLCset.push_back(plcnow);
     cout << "PB done" << endl;
-    PLCset[i].init();
+    PLCset[i].init(); // Absolutely necessary to copy str to char* and other
     // ===== End PLC filling  =====
   }
 
@@ -124,22 +124,13 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
     reg_t regnow;
 
     // ===== Check the record which expect to get for CFG-file.
-    if (!(cfgREG[j].lookupValue("rname", regnow.ch_name) &&
+    if (!(cfgREG[j].lookupValue("rname", regnow.str_name) &&
           cfgREG[j].lookupValue("raddr", regnow.raddr) &&
-          cfgREG[j].lookupValue("rmode", regnow.ch_mode) &&
-          cfgREG[j].lookupValue("rtype", regnow.ch_type))) {
+          cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
+          cfgREG[j].lookupValue("rtype", regnow.str_type))) {
       LOGERR("error reading REG %d\n", j);
       continue;
     }
-
-    regnow.rmode = (regnow.ch_mode == "rw") ? 1 : 0;
-    regnow.rtype = (regnow.ch_type == "f") ? 1 : 0;
-
-    if (regnow.raddr < pn->reg_min)
-      pn->reg_min = regnow.raddr;
-
-    if (regnow.raddr > pn->reg_max)
-      pn->reg_max = regnow.raddr;
 
     regnow.rvalue = 555;
     cfg_print_reg_details(regnow);
@@ -151,16 +142,16 @@ void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
 
 void cfg_print_plc_details(const PLC &D) {
   // ===== Output PLC details
-  cout << setw(10) << left << D.dev_desc << "  " << setw(10) << left
-       << D.dev_name << "  " << setw(20) << left << D.ip_addr << "  "
+  cout << setw(10) << left << D.str_desc << "  " << setw(10) << left
+       << D.str_dev_name << "  " << setw(20) << left << D.str_ip_addr << "  "
        << D.reg_qty << endl;
   return;
 }
 
 void cfg_print_reg_details(const reg_t &R) {
   // ===== Output REG details
-  cout << "       " << setw(9) << left << R.ch_name << "" << setw(3) << right
-       << R.raddr << " " << setw(5) << left << R.ch_mode << "  " << endl;
+  cout << "       " << setw(9) << left << R.str_name << "" << setw(3) << right
+       << R.raddr << " " << setw(5) << left << R.str_mode << "  " << endl;
   return;
 }
 

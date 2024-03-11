@@ -35,10 +35,13 @@ struct reg_t {
   int rmode = 0;   // 1 - mean RW
   int rtype = 0;   // 1 - mean FLOAT
   int rupdate = 0; // 1 - need to write/update remote register
-  const char *fullname = nullptr;
+  string fullname;
+  string str_name;
+  string str_mode;
+  string str_type;
   const char *ch_name = nullptr;
-  const char *ch_mode = nullptr;
-  const char *ch_type = nullptr;
+  //  const char *ch_mode = nullptr;
+  //  const char *ch_type = nullptr;
 };
 
 struct rdata_t {
@@ -80,10 +83,13 @@ public:
   void deinit();
   uint64_t millis();
 
-  const char *dev_title = nullptr;
-  const char *dev_desc = nullptr;
+  string str_title;
+  string str_desc;
+  string str_dev_name;
+  string str_ip_addr;
   const char *dev_name = nullptr;
   const char *ip_addr = nullptr;
+
   int tcp_port = 0;
   int attempts = 2; // number of attempts
 
@@ -102,6 +108,6 @@ private:
   int write_reg(reg_t &);
   int set_timeout();
   void logerr(const char *, ...);
-  void new_str(const char *ch);
+  //  void new_str(const char *ch);
   modbus_t *ctx = nullptr;
 };

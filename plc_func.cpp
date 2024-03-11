@@ -32,7 +32,7 @@ int plc_show() {
 }
 
 void plc_print_details(int i) {
-  cout << setw(5) << left << PLCset[i].dev_name << "  " << setw(5) << left
+  cout << setw(5) << left << PLCset[i].str_dev_name << "  " << setw(5) << left
        << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
        << "  " << PLCset[i].mb.interval_ms << "  " << PLCset[i].mb.timeout_us
        << endl;
@@ -42,7 +42,7 @@ void plc_print_details(int i) {
 void plc_print_reg_details(int i, int j) {
   cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
        << right << PLCset[i].regs[j].raddr << setw(7) << right
-       << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].ch_mode
+       << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].str_mode
        << " " << endl;
   return;
 }

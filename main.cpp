@@ -36,8 +36,8 @@ int main() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-      printf("%s: %s.%s [%d] %d   %s\n", D.ip_addr, D.dev_name, R.ch_name,
-             R.raddr, R.rvalue, R.fullname);
+      printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
+             R.raddr, R.rvalue, R.fullname.c_str());
     }
   printf("===222\n");
   t.sleep_ms(4987);
