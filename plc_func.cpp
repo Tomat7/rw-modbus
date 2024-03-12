@@ -32,7 +32,7 @@ int plc_show() {
 }
 
 void plc_print_details(int i) {
-  cout << setw(5) << left << PLCset[i].str_dev_name << "  " << setw(5) << left
+  cout << setw(7) << left << PLCset[i].str_dev_name << "  " << setw(3) << left
        << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
        << "  " << PLCset[i].mb.interval_ms << "  " << PLCset[i].mb.timeout_us
        << endl;

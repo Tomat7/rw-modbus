@@ -69,7 +69,7 @@ FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
 #===============================================================================
 
 git-upload:
-	cd ~/src/rw-modbus/bin
+	cd ./bin
 	pwd
 	ll
 	./git_upload

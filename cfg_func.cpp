@@ -19,8 +19,6 @@ void cfg_print_reg_details(const reg_t &rn);
 
 // Config cfg;
 
-// Function to copy the string
-
 int cfg_read(const char *cfg_dir, const char *cfg_file) {
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;
@@ -55,20 +53,14 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
   // Output a list of all PLCs in the inventory.
   try {
     cfg_init_plcset(cfg.lookup("plc"));
-    cout << "+++++" << endl;
+    //    cout << "+++++" << endl;
   } catch (const SettingNotFoundException &nfex) {
     LOGERR("Great ERROR! (no 'plc' settings?) Exiting.\n");
     return (EXIT_FAILURE);
   }
 
   closelog();
-  /*
-      for (auto &D : PLCset)
-      for (auto &R : D.regs) {
-        printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
-      }
-      printf("===111\n");
-  */
+
   return (EXIT_SUCCESS);
 }
 
@@ -102,8 +94,8 @@ int cfg_init_plcset(const Setting &cfgPLC) {
 
     //    PLCset.push_back(plcnow);
     //    cout << "PB done" << endl;
-    /*PLCset[i]*/ plc
-        .init(); // Absolutely necessary to copy str to char* and other
+    /*PLCset[i]*/
+    plc.init(); // Absolutely necessary to copy str to char* and other
     LOGINFO("Configured REGs now: %d\n", (int)plc.regs.size());
     cout << endl;
 
@@ -111,12 +103,7 @@ int cfg_init_plcset(const Setting &cfgPLC) {
   }
 
   LOGINFO("Configured PLCs: %d\n", (int)PLCset.size());
-  /*
-      for (auto &D : PLCset)
-      for (auto &R : D.regs) {
-        printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
-      }
-  */
+
   return 0;
 }
 

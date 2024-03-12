@@ -32,7 +32,7 @@ void init_all() {
   int ret = 0;
   t.start();
   ret = cfg_read(CFG_DIR, CFG_FILE);
-  t.spent_auto("============ Cfg finished in:");
+  t.spent_auto("============ Cfg finished in: ");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
   wait_console(TIMEOUT_SEC);
@@ -89,23 +89,29 @@ int main() {
     mb_update();
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-    int ch = read_console();
+    int ch = read_console(TIMEOUT_SEC);
     if (ch != -1)
-      if ((char)ch == 'e') {
-        LOGERR("Char 'e' pressed. Correct shutdown. Bye.\n");
-        t.sleep_sec(3);
+      if (((char)ch == 'e') || ((char)ch == 'q')) {
+        LOGERR("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
+        wait_console(TIMEOUT_SEC);
+        // t.sleep_sec(3);
         return (EXIT_SUCCESS);
       } else if ((char)ch == 'r') {
         LOGERR("Char 'r' pressed. Full reconfiguration.\n");
-        t.sleep_sec(3);
+        wait_console(TIMEOUT_SEC);
         reinit();
-      } else
-        printf("%s ccc %s \n", KRED, KNRM);
+        // t.sleep_sec(3);
+      } else if ((char)ch == ' ') {
+        printf("%s %s %s \n", KGRN, "=============================", KNRM);
+      } else {
+        printf("%s %c %s \n", KBLU, (char)ch, KNRM);
+        wait_console(TIMEOUT_SEC);
+      }
     else
       printf("!\n");
     fflush(stdout);
 
-    wait_console(TIMEOUT_SEC);
+    //    wait_console(TIMEOUT_SEC);
 
     //    t.start(x);
     //    t.sleep_ms(TMOUT);
