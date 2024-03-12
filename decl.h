@@ -14,7 +14,8 @@ using std::string;
 extern std::map<string, rmap_t> REGmap;
 extern std::vector<PLC> PLCset;
 
-int read_console();
+int read_console(time_t _sec = 0, suseconds_t _usec = 10000);
+void wait_console(int _s = 0, int _us = 10000);
 
 int cfg_read(const char *cfg_dir, const char *cfg_file);
 

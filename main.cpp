@@ -12,22 +12,21 @@
 // using namespace std;
 // using namespace libconfig;
 
-#define TMOUT 987
+#define TIMEOUT_SEC 5
 
 std::map<string, rmap_t> REGmap;
 std::vector<PLC> PLCset;
 Timer t;
 INotify IN(CFG_DIR);
-INotify GETCH(STDIN_FILENO);
 
 int rc;
 
-static void close_sigint(int dummy) { 
-    LOGERR("Exit by Ctrl-C. Bye.\n");
-    exit(dummy); }
+static void close_sigint(int dummy) {
+  LOGERR("Exit by Ctrl-C. Bye.\n");
+  exit(dummy);
+}
 
 // int main(int argc, char **argv) {
-
 
 void init_all() {
   int ret = 0;
@@ -36,7 +35,7 @@ void init_all() {
   t.spent_auto("============ Cfg finished in:");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
-  t.sleep_ms(TMOUT);
+  wait_console(TIMEOUT_SEC);
 
   //  /*
   for (auto &D : PLCset)
@@ -45,27 +44,29 @@ void init_all() {
              R.raddr, R.rvalue, R.fullname.c_str());
     }
   printf("===222\n");
-  t.sleep_ms(TMOUT);
+  wait_console(TIMEOUT_SEC);
+  //  t.sleep_ms(TMOUT);
   //  */
 
   t.start();
   plc_show();
   t.spent_auto("============ PLC show finished in: ");
-  t.sleep_ms(TMOUT);
+  wait_console(TIMEOUT_SEC);
+  //  t.sleep_ms(TMOUT);
 
   t.start();
   regs_init();
   t.spent_auto("============ REG init finished in: ");
-  t.sleep_ms(TMOUT);
+  wait_console(TIMEOUT_SEC);
+  //  t.sleep_ms(TMOUT);
 
   return;
 }
 
-void reinit()
-{
-    REGmap.clear();
-    PLCset.clear();
-    init_all();
+void reinit() {
+  REGmap.clear();
+  PLCset.clear();
+  init_all();
 }
 
 int main() {
@@ -88,26 +89,27 @@ int main() {
     mb_update();
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-//    int ch = read_console();
-    int ch = GETCH();
+    int ch = read_console();
     if (ch != -1)
-	if ((char)ch == 'e') {
-	    LOGERR("Char 'e' pressed. Correct shutdown. Bye.\n");
-	    t.sleep_sec(3);
-	    return(EXIT_SUCCESS);
-	} else if ((char)ch == 'r') {
-	    LOGERR("Char 'r' pressed. Full reconfiguration.\n");
-	    t.sleep_sec(3);
-    	    reinit();
-	} else
-    	    printf("%s ccc %s \n", KRED, KNRM);
+      if ((char)ch == 'e') {
+        LOGERR("Char 'e' pressed. Correct shutdown. Bye.\n");
+        t.sleep_sec(3);
+        return (EXIT_SUCCESS);
+      } else if ((char)ch == 'r') {
+        LOGERR("Char 'r' pressed. Full reconfiguration.\n");
+        t.sleep_sec(3);
+        reinit();
+      } else
+        printf("%s ccc %s \n", KRED, KNRM);
     else
-	printf("!\n");
+      printf("!\n");
     fflush(stdout);
 
-    t.start(x);
-    t.sleep_ms(TMOUT);
-    t.spent();
+    wait_console(TIMEOUT_SEC);
+
+    //    t.start(x);
+    //    t.sleep_ms(TMOUT);
+    //    t.spent();
   }
 
   //   getr();

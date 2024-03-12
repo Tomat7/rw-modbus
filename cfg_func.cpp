@@ -63,11 +63,11 @@ int cfg_read(const char *cfg_dir, const char *cfg_file) {
 
   closelog();
   /*
-    for (auto &D : PLCset)
+      for (auto &D : PLCset)
       for (auto &R : D.regs) {
         printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
       }
-    printf("===111\n");
+      printf("===111\n");
   */
   return (EXIT_SUCCESS);
 }
@@ -112,7 +112,7 @@ int cfg_init_plcset(const Setting &cfgPLC) {
 
   LOGINFO("Configured PLCs: %d\n", (int)PLCset.size());
   /*
-    for (auto &D : PLCset)
+      for (auto &D : PLCset)
       for (auto &R : D.regs) {
         printf("%s: %s.%s \n", D.ip_addr, D.dev_name, R.ch_name);
       }

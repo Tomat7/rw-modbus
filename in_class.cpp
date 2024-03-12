@@ -2,8 +2,7 @@
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 //
 // Other (C) https://ru.manpages.org/inotify/7
-// timer & millis() (c)
-// https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
+// https://stackoverflow.com/questions/4664975/monitoring-file-using-inotify
 //
 
 #include <chrono>
@@ -29,33 +28,6 @@ INotify::INotify(const char *fn, uint32_t mask) {
   }
 
   fd = inotify_init1(IN_NONBLOCK);
-  if (fd == -1) {
-    LOGERR("FD error: %s\n", fname);
-    perror("inotify_init1");
-    exit(EXIT_FAILURE);
-  }
-
-  wd = inotify_add_watch(fd, fname, evt_mask);
-  if (wd == -1) {
-    LOGERR("WD error: %s\n", fname);
-    perror("inotify_add_watch");
-    exit(EXIT_FAILURE);
-  } else
-    LOGINFO("New watching: %s \n", fname);
-
-  return;
-}
-
-INotify::INotify(int _fd, uint32_t mask) {
-
-  openlog("INotify", LOG_NDELAY, LOG_LOCAL1);
-
-  if (fn != nullptr) {
-    fname = fn;
-    evt_mask = mask;
-  }
-
-  fd = _fd // inotify_init1(IN_NONBLOCK);
   if (fd == -1) {
     LOGERR("FD error: %s\n", fname);
     perror("inotify_init1");
@@ -102,37 +74,32 @@ int INotify::get_event() {
   ssize_t length;
   char *ptr;
   rc = 0;
-  // проходим по всем событиям, которые можем прочитать
-  // из файлового дескриптора inotify
+  // проходим по всем событиям, которые прочитаем из файлового дескриптора IN
   for (;;) {
     // Читаем несколько событий. Если неблокирующий read() не найдёт
     // событий для чтения, то вернёт -1 с errno равным EAGAIN.
-    // В этом случае выходим из цикла.
     length = read(fd, buf, sizeof buf);
+
     if (length == -1 && errno != EAGAIN) {
       LOGERR("Error watching: %s \n", fname);
       perror("read");
       exit(EXIT_FAILURE);
     }
     if (length <= 0)
-      break;
+      break; // ничего не нашли
 
-    /* проходим по всем событиям в буфере */
+    // проходим по всем событиям в буфере
     for (ptr = buf; ptr < buf + length;
          ptr += sizeof(struct inotify_event) + event->len) {
 
       event = (const struct inotify_event *)ptr;
 
-      if (event->mask & evt_mask) { // печатаем тип события
-        if (event->len) {
-
-          if (event->mask & IN_ISDIR)
-            LOGINFO("Directory changed: %s \n", event->name);
-          else
-            LOGINFO("File changed: %s \n", event->name);
-
-          rc = 1;
-        }
+      if ((event->mask & evt_mask) && (event->len)) {
+        rc = 1;
+        if (event->mask & IN_ISDIR) // печатаем тип события
+          LOGINFO("Directory changed: %s \n", event->name);
+        else
+          LOGINFO("File changed: %s \n", event->name);
       }
     }
   }

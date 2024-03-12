@@ -220,32 +220,32 @@ uint64_t PLC::millis() {
 }
 
 /*
-void PLC::new_str(const char *ch) {
-  char *new_ch = nullptr;
-  const char *save_ch = ch;
-  string s = (string)ch;
-  int len = strlen(ch) + 1;
-  new_ch = (char *)malloc(len);
-  //  strcpy(new_ch, ch);
-  //  new_ch[0] = (char)"_";
+    void PLC::new_str(const char *ch) {
+    char *new_ch = nullptr;
+    const char *save_ch = ch;
+    string s = (string)ch;
+    int len = strlen(ch) + 1;
+    new_ch = (char *)malloc(len);
+    //  strcpy(new_ch, ch);
+    //  new_ch[0] = (char)"_";
 
-  for (int i = 0; i <= len; i++)
+    for (int i = 0; i <= len; i++)
     new_ch[i] = ch[i];
 
-  ch = new_ch;
-  //  LOGINFO("String copied: %s %s \n",  ch, new_ch);
-  //  ch = s.c_str();
-  LOGINFO("String copied: %s %s \n", ch, new_ch);
+    ch = new_ch;
+    //  LOGINFO("String copied: %s %s \n",  ch, new_ch);
+    //  ch = s.c_str();
+    LOGINFO("String copied: %s %s \n", ch, new_ch);
 
-  if (save_ch == ch)
+    if (save_ch == ch)
     LOGINFO("save_ch == ch! \n");
-  if (save_ch == new_ch)
+    if (save_ch == new_ch)
     LOGINFO("save_ch == new_ch! \n");
-  if (ch == new_ch)
+    if (ch == new_ch)
     LOGINFO("ch == new_ch! \n");
 
-  return;
-}
+    return;
+    }
 */
 
 int PLC::get_rc() { return rc; }

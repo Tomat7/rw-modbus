@@ -18,13 +18,11 @@
 #define USE_SYSLOG
 #include "./macros.h"
 /*
-#ifdef USE_SYSLOG
-#define LOGERR(...) (fprintf(stderr, __VA_ARGS__), syslog(LOG_ERR, __VA_ARGS__))
-#define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO, __VA_ARGS__))
-#else
-#define LOGERR(...) fprintf(stderr, __VA_ARGS__)
-#define LOGINFO(...) printf(__VA_ARGS__)
-#endif
+    #ifdef USE_SYSLOG
+    #define LOGERR(...) (fprintf(stderr, __VA_ARGS__), syslog(LOG_ERR,
+   __VA_ARGS__)) #define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO,
+   __VA_ARGS__)) #else #define LOGERR(...) fprintf(stderr, __VA_ARGS__) #define
+   LOGINFO(...) printf(__VA_ARGS__) #endif
 */
 #define MASK_MONITORING (IN_MODIFY | IN_CREATE | IN_MOVE | IN_DELETE)
 
@@ -39,10 +37,12 @@ public:
 
   void deinit();
   int check();
+  int check_console();
 
   const char *fname = nullptr;
-  int fd = 0; // file description
-  int wd = 0; // watch description
+  int fds_fd = 0; // for console
+  int fd = 0;     // file description
+  int wd = 0;     // watch description
 
 private:
   int rc = -1;
