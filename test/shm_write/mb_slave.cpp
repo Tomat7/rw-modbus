@@ -9,7 +9,7 @@
 // using namespace std;
 // using namespace libconfig;
 
-//Timer tt;
+// Timer tt;
 
 int s = -1;
 modbus_t *ctx;
@@ -17,7 +17,7 @@ modbus_mapping_t *mb_mapping;
 
 int mb_slave_init() {
   cout << endl << "===== mb_slave_init =====" << endl;
-//  int ret = 0;
+  //  int ret = 0;
 
   LOGINFO("slave init started\n");
 
@@ -48,20 +48,20 @@ int mb_slave_init() {
 }
 
 int mb_slave() {
-//  cout << "===== mb_slave =====" << endl;
+  //  cout << "===== mb_slave =====" << endl;
 
   uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
   int rc;
 
   rc = modbus_receive(ctx, query);
   if (rc > 0) {
-// rc is the query size
+    // rc is the query size
     modbus_reply(ctx, query, rc, mb_mapping);
   }
-//  else if (rc == -1) {
-// Connection closed by the client or error
-//  break;
-// }
+  //  else if (rc == -1) {
+  // Connection closed by the client or error
+  //  break;
+  // }
   return rc;
 }
 

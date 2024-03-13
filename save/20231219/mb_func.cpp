@@ -6,7 +6,7 @@
 using namespace std;
 using namespace libconfig;
 
-int plc_show()
+int plc_show1()
 {
 
     int count_PLCs = static_cast<int>(PLCset.size());

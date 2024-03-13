@@ -10,7 +10,7 @@ void plc_show_regs(int i);
 void plc_print_details(int i);
 void plc_print_reg_details(int i, int j);
 
-int plc_show()
+int plc_show1()
 {
     cout << endl << "===== plc_show =====" << endl;
 

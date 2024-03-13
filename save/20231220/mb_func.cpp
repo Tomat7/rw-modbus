@@ -17,7 +17,7 @@ void regs_init();
 void reg_fill_name(string devname, string regname, uint16_t *val);
 
 
-int plc_show()
+int plc_show1()
 {
     cout << endl << "======= mb_show =======" << endl;
     // ===== Print ALL PLCs detailed.

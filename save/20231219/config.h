@@ -26,7 +26,7 @@ extern map<string, uint16_t*> MBreg;
 extern vector<PLC> PLCset;
 
 int cfg_read(const char *cfg_file);
-int plc_show();
+int plc_show1();
 
 void plc_show_regs(int i);
 void regs_init();

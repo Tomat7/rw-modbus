@@ -17,9 +17,13 @@ extern std::vector<PLC> PLCset;
 int read_console(time_t _sec = 0, suseconds_t _usec = 10000);
 void wait_console(int _s = 0, int _us = 10000);
 
-int cfg_read(const char *cfg_dir, const char *cfg_file);
+void init_all();
+void reinit();
 
-int plc_show();
+int cfg_master(const char *cfg_dir, const char *cfg_file);
+
+void plc_show1();
+void plc_show2();
 
 int mb_read();
 int mb_write();

@@ -30,7 +30,7 @@ int main() {
   t.sleep_ms(987);
 
   t.start();
-  plc_show();
+  plc_show1();
   t.stop();
   cout << "============ PLC show finished." << endl;
   t.spent();

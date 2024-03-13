@@ -23,7 +23,7 @@ Timer t;
 int main() {
 
   t.start();
-  cfg_read(CFG_FILE);
+  cfg_master(CFG_DIR, CFG_FILE);
   t.stop();
   cout << "============ Cfg finished." << endl;
   t.spent();
@@ -43,7 +43,7 @@ int main() {
   cout << "============ REG init finished." << endl;
   t.spent();
 
-//  mb_slave_init();
+  mb_slave_init();
   printf("============ SLAVE init finished.\n");
   fflush(stdout);
   t.sleep_sec(3);
@@ -61,44 +61,43 @@ int main() {
     */
 
     if ((t.millis() - mm) > 1000) {
-    t.start();
-    printf("%s", CLS);
-    printf("%s", HOME);
-    fflush(stdout);
-    regs_update();
+      t.start();
+      printf("%s", CLS);
+      printf("%s", HOME);
+      fflush(stdout);
+      regs_update();
 
-    w++;
-    if (w > 599)
-      w = 500;
+      w++;
+      if (w > 599)
+        w = 500;
 
-    write_shm("Kub.Pset", w);
-    write_shm("Kub.millis", 0);
-    write_shm("Buf.millis", 0);
-    write_shm("Def.millis", 0);
+      write_shm("Kub.Pset", w);
+      write_shm("Kub.millis", 0);
+      write_shm("Buf.millis", 0);
+      write_shm("Def.millis", 0);
 
-    write_shm("TH41.millis", 0);
-    write_shm("TH42.millis", 0);
-    write_shm("SF45.millis", 0);
-    write_shm("SF47.millis", 0);
-    write_shm("GATE49.millis", 0);
+      write_shm("TH41.millis", 0);
+      write_shm("TH42.millis", 0);
+      write_shm("SF45.millis", 0);
+      write_shm("SF47.millis", 0);
+      write_shm("GATE49.millis", 0);
 
-    mm = t.millis();
+      mm = t.millis();
 
-    //mb_write();
-    t.stop();
-    cout << "============ REG print finished." << endl;
-    t.spent_auto("Printing: ");
+      // mb_write();
+      t.stop();
+      cout << "============ REG print finished." << endl;
+      t.spent_auto("Printing: ");
     }
 
-//    mb_slave();
+    //    mb_slave();
 
-
-/*
-    t.start();
-    t.sleep_sec(3);
-    t.stop();
-    t.spent();
-*/  
+    /*
+        t.start();
+        t.sleep_sec(3);
+        t.stop();
+        t.spent();
+    */
   }
 
   //   getr();

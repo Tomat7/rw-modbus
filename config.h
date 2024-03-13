@@ -7,3 +7,5 @@
 #define CFG_DIR "./conf"
 #define CFG_FILE "modbus.cfg"
 #define USE_SYSLOG
+#define TIMEOUT_SEC 5
+

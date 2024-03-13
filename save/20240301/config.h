@@ -60,7 +60,7 @@ extern std::vector<PLC> PLCset;
 
 int cfg_read(const char *cfg_file);
 
-int plc_show();
+int plc_show1();
 int mb_read();
 int mb_write();
 int mb_update();

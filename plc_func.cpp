@@ -9,11 +9,19 @@
 // using namespace std;
 // using namespace libconfig;
 
-void plc_show_regs(int i);
+// void plc_show_regs(int i);
 void plc_print_details(int i);
 void plc_print_reg_details(int i, int j);
 
-int plc_show() {
+void plc_show2() {
+  for (auto &D : PLCset)
+    for (auto &R : D.regs) {
+      printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
+             R.raddr, R.rvalue, R.fullname.c_str());
+    }
+}
+
+void plc_show1() {
   cout << endl << "===== plc_show =====" << endl;
 
   int nb_plcs = static_cast<int>(PLCset.size());
@@ -28,7 +36,7 @@ int plc_show() {
     cout << endl;
   }
 
-  return 0;
+  return;
 }
 
 void plc_print_details(int i) {

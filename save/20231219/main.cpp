@@ -29,7 +29,7 @@ int main()
     cout << "Size of PLC structure is: " << s << endl;
 
     cfg_read(CFG_FILE);
-    plc_show();
+    plc_show1();
 
     s = 10;
     t.stop();

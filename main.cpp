@@ -12,12 +12,9 @@
 // using namespace std;
 // using namespace libconfig;
 
-#define TIMEOUT_SEC 5
-
 std::map<string, rmap_t> REGmap;
 std::vector<PLC> PLCset;
-Timer t;
-INotify IN(CFG_DIR);
+//INotify IN(CFG_DIR);
 
 int rc;
 
@@ -28,49 +25,9 @@ static void close_sigint(int dummy) {
 
 // int main(int argc, char **argv) {
 
-void init_all() {
-  int ret = 0;
-  t.start();
-  ret = cfg_read(CFG_DIR, CFG_FILE);
-  t.spent_auto("============ Cfg finished in: ");
-  if (ret == EXIT_FAILURE)
-    exit(EXIT_FAILURE);
-  wait_console(TIMEOUT_SEC);
-
-  //  /*
-  for (auto &D : PLCset)
-    for (auto &R : D.regs) {
-      printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
-             R.raddr, R.rvalue, R.fullname.c_str());
-    }
-  printf("===222\n");
-  wait_console(TIMEOUT_SEC);
-  //  t.sleep_ms(TMOUT);
-  //  */
-
-  t.start();
-  plc_show();
-  t.spent_auto("============ PLC show finished in: ");
-  wait_console(TIMEOUT_SEC);
-  //  t.sleep_ms(TMOUT);
-
-  t.start();
-  regs_init();
-  t.spent_auto("============ REG init finished in: ");
-  wait_console(TIMEOUT_SEC);
-  //  t.sleep_ms(TMOUT);
-
-  return;
-}
-
-void reinit() {
-  REGmap.clear();
-  PLCset.clear();
-  init_all();
-}
-
 int main() {
-
+  
+  Timer t;
   signal(SIGINT, close_sigint);
 
   init_all();

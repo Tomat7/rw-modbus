@@ -22,7 +22,7 @@
 #include <sys/socket.h>
 #endif
 
-#define NB_CONNECTION 5
+#define NB_CONNECTION 2
 
 static modbus_t *ctx = NULL;
 static modbus_mapping_t *mb_mapping;
@@ -49,9 +49,13 @@ int main(void) {
   int fdmax;
 
   ctx = modbus_new_tcp(NULL, 502);
+  if (ctx == NULL) {
+    fprintf(stderr, "Unable to allocate libmodbus context\n");
+    return -1;
+  }
 
-  mb_mapping =
-      modbus_mapping_new(MODBUS_MAX_READ_BITS, 0, MODBUS_MAX_READ_REGISTERS, 0);
+  mb_mapping = modbus_mapping_new(0, 0, 50, 0);
+//      modbus_mapping_new(MODBUS_MAX_READ_BITS, 0, MODBUS_MAX_READ_REGISTERS, 0);
   if (mb_mapping == NULL) {
     fprintf(stderr, "Failed to allocate the mapping: %s\n",
             modbus_strerror(errno));

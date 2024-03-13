@@ -32,7 +32,7 @@ extern vector<PLC> PLCset;
 int cfg_read(const char *cfg_file);
 //int cfg_fill_plc(const Setting &PLCs);
 
-int plc_show();
+int plc_show1();
 
 // void mb_show_regs_full(int i);
 // void mb_show_regs_name();
