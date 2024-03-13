@@ -48,6 +48,9 @@ void regs_init() {
 }
 
 void regs_update() {
+
+  initscr();
+
   printf("\n===== regs_update =====\n");
 
   for (auto &[rn, m] : REGmap) {
@@ -83,14 +86,17 @@ void regs_update() {
 
     memcpy(m.p_shm, &m.rdata, sizeof(rdata_t));
     printf("  +\n");
+    refresh();
   }
+
+  endwin();
 
   return;
 }
 
 void reg_print(string rn, const reg_t *r) {
 
-  initscr();
+//  initscr();
   const char *C = KNRM;
   if (r->rerrors > 0)
     C = KRED;
@@ -100,8 +106,7 @@ void reg_print(string rn, const reg_t *r) {
   else
     printw("%s%-14s %7d" NRM, C, rn.c_str(), r->rvalue);
 
-  refresh();
-  endwin();
+//  refresh();
 
   return;
 }
