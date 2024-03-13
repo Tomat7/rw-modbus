@@ -7,14 +7,14 @@
 
 #include "./config.h"
 #include "./libs.h"
-//#include "./timer.h" // Timer t; - already initialised here!
+// #include "./timer.h" // Timer t; - already initialised here!
 
 // using namespace std;
 // using namespace libconfig;
 
 std::map<string, rmap_t> REGmap;
 std::vector<PLC> PLCset;
-//INotify IN(CFG_DIR);
+// INotify IN(CFG_DIR);
 
 int rc;
 
@@ -26,7 +26,7 @@ static void close_sigint(int dummy) {
 // int main(int argc, char **argv) {
 
 int main() {
-  
+
   Timer t;
   signal(SIGINT, close_sigint);
 

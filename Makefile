@@ -9,8 +9,9 @@ OBJDIR=./obj
 LIBS= -lrt
 LIBCONFIG=$(shell pkg-config libconfig++ --libs)
 LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
-LIBNCURSES=$(shell pkg-config ncurses --libs)
-LIBS+= $(LIBCONFIG) $(LIBMODBUS) $(LIBNCURSES)
+#LIBNCURSES=$(shell pkg-config ncurses --libs)
+LIBS+= $(LIBCONFIG) $(LIBMODBUS)
+# $(LIBNCURSES)
 
 #LIBS= -lconfig -lmodbus
 #INCLUDES = -I/usr/include/modbus

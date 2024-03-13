@@ -8,10 +8,10 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <ncurses.h>
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
-#include <ncurses.h>
 
 #include <map>
 #include <string>

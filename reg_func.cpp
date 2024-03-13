@@ -49,9 +49,8 @@ void regs_init() {
 
 void regs_update() {
 
-  initscr();
-
   printf("\n===== regs_update =====\n");
+  bool Enter = false;
 
   for (auto &[rn, m] : REGmap) {
     reg_print(rn, m.p_reg);
@@ -85,28 +84,26 @@ void regs_update() {
     mem.rstatus = plc->rstatus;
 
     memcpy(m.p_shm, &m.rdata, sizeof(rdata_t));
-    printf("  +\n");
-    refresh();
+    if (Enter)
+        printf("  +\n");
+    else 
+	printf("  +     ");
+    Enter = !Enter;
   }
-
-  endwin();
 
   return;
 }
 
 void reg_print(string rn, const reg_t *r) {
 
-//  initscr();
   const char *C = KNRM;
   if (r->rerrors > 0)
     C = KRED;
 
   if (r->rtype)
-    printw("%s%-14s %7.2f" NRM, C, rn.c_str(), (int16_t)r->rvalue * 0.01);
+    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)r->rvalue * 0.01);
   else
-    printw("%s%-14s %7d" NRM, C, rn.c_str(), r->rvalue);
-
-//  refresh();
+    printf("%s%-14s %7d", C, rn.c_str(), r->rvalue);
 
   return;
 }
