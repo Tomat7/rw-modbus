@@ -9,3 +9,5 @@
 #define USE_SYSLOG
 #define TIMEOUT_SEC 5
 
+#define MB_SLAVE_CONN_NB
+#define MB_SLAVE_PORT 1502
