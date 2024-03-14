@@ -11,3 +11,4 @@
 
 #define MB_SLAVE_CONN_NB
 #define MB_SLAVE_PORT 1502
+#define MB_SLAVE_REGS_NB 50

@@ -48,7 +48,7 @@ int main(void) {
   /* Maximum file descriptor number */
   int fdmax;
 
-  ctx = modbus_new_tcp(NULL, 502);
+  ctx = modbus_new_tcp(NULL, 1502);
   if (ctx == NULL) {
     fprintf(stderr, "Unable to allocate libmodbus context\n");
     return -1;
