@@ -50,7 +50,7 @@ void regs_init() {
 void regs_update() {
 
   printf("\n===== regs_update =====\n");
-  bool Enter = false;
+  bool is_eol = false;
 
   for (auto &[rn, m] : REGmap) {
     reg_print(rn, m.p_reg);
@@ -84,11 +84,13 @@ void regs_update() {
     mem.rstatus = plc->rstatus;
 
     memcpy(m.p_shm, &m.rdata, sizeof(rdata_t));
-    if (Enter)
-        printf("  +\n");
-    else 
-	printf("  +     ");
-    Enter = !Enter;
+
+    if (is_eol)
+      printf("  + %s\n", KNRM);
+    else
+      printf("  +          %s", KNRM);
+
+    is_eol = !is_eol;
   }
 
   return;
