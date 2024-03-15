@@ -13,6 +13,10 @@ LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
 LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 # $(LIBNCURSES)
 
+SRCCURRENT="./*.cpp,*.h"
+SRCINCLUDE="include/*.cpp,*.h"
+
+
 #LIBS= -lconfig -lmodbus
 #INCLUDES = -I/usr/include/modbus
 #SOURCES=plc32.cpp plc_read.cpp
@@ -82,7 +86,7 @@ debug: clean a.out
 
 libtest: a.out
 
-a.out: $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp))
+a.out: $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
 ifdef DO_DEBUG
 	@echo -e $(GRE)"=== Linking with DEBUG: $@"$(NC)
 else
@@ -117,25 +121,27 @@ include $(wildcard $(OBJDIR)/*.cpp.d)
 clean: format-clang
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
+	rm -rfv $(OBJDIR)/include/*.o $(OBJDIR)/include/*.d
 	rm -rfv a.out
 
 
 # ======================================
 # Reindent *.cpp to K&R code-style
 format-kr:
-	astyle $(ASFLAGS) -n --style=kr *.cpp,*.h
+	astyle $(ASFLAGS) -n --style=kr $(SRCCURRENT), $(SRCINCLUDE)
+#"./*.cpp,*.h", "include/*.cpp,*.h"
 
 # Reindent *.cpp to Linux code-style
 format-linux:
-	astyle $(ASFLAGS) -n -s2 --style=linux *.cpp,*.h
+	astyle $(ASFLAGS) -n -s2 --style=linux  $(SRCCURRENT), $(SRCINCLUDE)
 
 # Reindent *.cpp to Allman code-style
 format-allman:
-	astyle $(ASFLAGS) -n --style=allman *.cpp,*.h
+	astyle $(ASFLAGS) -n --style=allman $(SRCCURRENT), $(SRCINCLUDE)
 
 # Reindent *.cpp to Google code-style
 format-google2:
-	astyle $(ASFLAGS) -n -s2 --style=google *.cpp,*.h
+	astyle $(ASFLAGS) -n -s2 --style=google $(SRCCURRENT), $(SRCINCLUDE)
 
 # Reindent *.cpp to Google code-style
 format-google:
@@ -144,8 +150,9 @@ format-google:
 
 # Reindent *.cpp to LLVM code-style
 format-clang:
-	clang-format -i --verbose *.cpp
-	clang-format -i --verbose *.h
+	clang-format -i --verbose *.cpp *.h include/*.cpp include/*.h
+#clang-format -i --verbose *.h
+
 
 # =======================================
 #$(EXECUTABLE): $(OBJECTS)

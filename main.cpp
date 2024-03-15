@@ -58,9 +58,9 @@ int main() {
         wait_console(TIMEOUT_SEC);
         reinit();
         // t.sleep_sec(3);
-      } else if ((char)ch == ' ') {
+      } else if ((char)ch == ' ')
         printf("%s %s %s \n", KGRN, "=============================", KNRM);
-      } else {
+      else {
         printf("%s %c %s \n", KBLU, (char)ch, KNRM);
         wait_console(TIMEOUT_SEC);
       }

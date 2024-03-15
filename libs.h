@@ -20,8 +20,8 @@
 #include <libconfig.h++>
 #include <string.h>
 
-#include "./decl.h"
-#include "./in_class.h"
-#include "./macros.h"
-#include "./plc_class.h"
-#include "./timer.h"
+#include "include/decl.h"
+#include "include/in_class.h"
+#include "include/macros.h"
+#include "include/plc_class.h"
+#include "include/timer.h"

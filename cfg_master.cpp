@@ -6,7 +6,7 @@
 
 #include "./config.h"
 #include "./libs.h"
-#include "./plc_class.h"
+//#include "./plc_class.h"
 
 using namespace std;
 using namespace libconfig;

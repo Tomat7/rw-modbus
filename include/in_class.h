@@ -20,9 +20,9 @@
 /*
     #ifdef USE_SYSLOG
     #define LOGERR(...) (fprintf(stderr, __VA_ARGS__), syslog(LOG_ERR,
-   __VA_ARGS__)) #define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO,
-   __VA_ARGS__)) #else #define LOGERR(...) fprintf(stderr, __VA_ARGS__) #define
-   LOGINFO(...) printf(__VA_ARGS__) #endif
+    __VA_ARGS__)) #define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO,
+    __VA_ARGS__)) #else #define LOGERR(...) fprintf(stderr, __VA_ARGS__) #define
+    LOGINFO(...) printf(__VA_ARGS__) #endif
 */
 #define MASK_MONITORING (IN_MODIFY | IN_CREATE | IN_MOVE | IN_DELETE)
 
