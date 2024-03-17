@@ -4,17 +4,20 @@ CC=g++
 .DEFAULT_GOAL := all
 
 CPP_VER= -std=c++17
-OBJDIR=./obj
+OBJDIR=./tmp/obj
+
+SRCDIR1=./
+SRCDIR2=include
+SRCDIR3=sources
+##SRCDIR1=./
 
 LIBS= -lrt
 LIBCONFIG=$(shell pkg-config libconfig++ --libs)
 LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
 #LIBNCURSES=$(shell pkg-config ncurses --libs)
+
 LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 # $(LIBNCURSES)
-
-SRCCURRENT="./*.cpp,*.h"
-SRCINCLUDE="include/*.cpp,*.h"
 
 
 #LIBS= -lconfig -lmodbus
@@ -74,11 +77,15 @@ FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
 
 #===============================================================================
 
-git-upload:
-	cd ./bin
-	pwd
-	ll
-	./git_upload
+SRCFORMAT1="./*.cpp,*.h"
+SRCFORMAT2="$(SRCDIR2)/*.cpp,*.h"
+SRCFORMAT3="$(SRCDIR3)/*.cpp,*.h"
+
+
+SRCLIST1= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR1)/*.cpp))
+SRCLIST2= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR2)/*.cpp)) 
+SRCLIST3= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR3)/*.cpp)) 
+SOURCELIST= $(SRCLIST1) $(SRCLIST2) $(SRCLIST3)
 
 all: a.out
 
@@ -86,7 +93,8 @@ debug: clean a.out
 
 libtest: a.out
 
-a.out: $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
+a.out: $(SOURCELIST)
+#$(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
 ifdef DO_DEBUG
 	@echo -e $(GRE)"=== Linking with DEBUG: $@"$(NC)
 else
@@ -109,7 +117,7 @@ $(OBJDIR)/%.o: %.cpp
 ifeq ("YES","$(DO_DEBUG)")
 	@echo -e $(YEB)"=== Compiling with DEBUG: $<"$(NC)
 else
-	@echo -e $(WHI)"=== Compiling: $<"$(NC)
+	@echo -e $(YEL)"=== Compiling: $<"$(NC)
 endif
 	$(CC) $(CFLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 #	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<
@@ -121,27 +129,28 @@ include $(wildcard $(OBJDIR)/*.cpp.d)
 clean: format-clang
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
-	rm -rfv $(OBJDIR)/include/*.o $(OBJDIR)/include/*.d
+	rm -rfv $(OBJDIR)/$(SRCDIR2)/*.o $(OBJDIR)/$(SRCDIR2)/*.d
+	rm -rfv $(OBJDIR)/$(SRCDIR3)/*.o $(OBJDIR)/$(SRCDIR3)/*.d
 	rm -rfv a.out
 
 
 # ======================================
 # Reindent *.cpp to K&R code-style
 format-kr:
-	astyle $(ASFLAGS) -n --style=kr $(SRCCURRENT), $(SRCINCLUDE)
+	astyle $(ASFLAGS) -n --style=kr $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
 #"./*.cpp,*.h", "include/*.cpp,*.h"
 
 # Reindent *.cpp to Linux code-style
 format-linux:
-	astyle $(ASFLAGS) -n -s2 --style=linux  $(SRCCURRENT), $(SRCINCLUDE)
+	astyle $(ASFLAGS) -n -s2 --style=linux $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
 
 # Reindent *.cpp to Allman code-style
 format-allman:
-	astyle $(ASFLAGS) -n --style=allman $(SRCCURRENT), $(SRCINCLUDE)
+	astyle $(ASFLAGS) -n --style=allman $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
 
 # Reindent *.cpp to Google code-style
 format-google2:
-	astyle $(ASFLAGS) -n -s2 --style=google $(SRCCURRENT), $(SRCINCLUDE)
+	astyle $(ASFLAGS) -n -s2 --style=google $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
 
 # Reindent *.cpp to Google code-style
 format-google:
@@ -150,7 +159,7 @@ format-google:
 
 # Reindent *.cpp to LLVM code-style
 format-clang:
-	clang-format -i --verbose *.cpp *.h include/*.cpp include/*.h
+	clang-format -i --verbose *.cpp *.h $(SRCDIR2)/*.cpp $(SRCDIR2)/*.h $(SRCDIR3)/*.cpp $(SRCDIR3)/*.h
 #clang-format -i --verbose *.h
 
 
