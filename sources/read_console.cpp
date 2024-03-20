@@ -3,6 +3,9 @@
 // Stolen from here https://unixforum.org/viewtopic.php?t=113242
 //
 
+#include <termios.h>
+#include <unistd.h>
+
 #include "./libs.h"
 
 struct termios oldt, newt;

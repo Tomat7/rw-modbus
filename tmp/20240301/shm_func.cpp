@@ -79,7 +79,7 @@ void write_shm(string rn, uint16_t val) {
 
   rmap_t m = REGmap[rn];
   m.rdata.rvalue = val;
-  memcpy(m.p_shm, &m.rdata, sizeof(rdata_t));
+  memcpy(m.ptr_shm, &m.rdata, sizeof(rdata_t));
   return;
 }
 

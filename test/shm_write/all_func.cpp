@@ -1,1 +1,0 @@
-../../all_func.cpp

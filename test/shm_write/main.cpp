@@ -7,8 +7,8 @@
 
 #include "./config.h"
 #include "./libs.h"
-#include "./plc_class.h"
-#include "./timer.h" // Timer t; - already initialised here!
+//#include "./plc_class.h"
+//#include "./timer.h" // Timer t; - already initialised here!
 
 // using namespace std;
 // using namespace libconfig;

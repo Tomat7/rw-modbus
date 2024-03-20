@@ -56,8 +56,8 @@ struct rdata_t {
 struct rmap_t {
   int fd = -1;              // descriptor of SHARED MEMORY
   rdata_t rdata;            // the COPY of PLC data (for memcpy() to SHM)
-  rdata_t *p_shm = nullptr; // ptr to SHARED MEMORY data
-  reg_t *p_reg = nullptr;   // ptr to PLC data
+  rdata_t *ptr_shm = nullptr; // ptr to SHARED MEMORY data
+  reg_t *ptr_reg = nullptr;   // ptr to PLC data
 };
 
 struct mbdata_t {

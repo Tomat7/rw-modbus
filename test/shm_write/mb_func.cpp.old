@@ -5,7 +5,7 @@
 
 #include "./config.h"
 #include "./libs.h"
-#include "./timer.h" // Timer t; - already initialised h
+//#include "./timer.h" // Timer t; - already initialised h
 // using namespace std;
 // using namespace libconfig;
 

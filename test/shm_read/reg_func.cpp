@@ -28,7 +28,7 @@ void regs_init() {
       R.rvalue = 5757; // TODO: remove for production!!
 
       rmap_t rm;
-      rm.p_reg = &R;
+      rm.ptr_reg = &R;
       rm.rdata.rvalue = R.rvalue;
       rm.rdata.rerrors = R.rerrors;
       rm.rdata.rmode = (strcmp(R.ch_mode, "rw") == 0) ? 1 : 0;
@@ -39,7 +39,7 @@ void regs_init() {
         rdata_t *addr = (rdata_t *)create_shm_addr(rm.fd, sizeof(rdata_t));
         if (addr != nullptr) {
           LOGINFO("SHM: created %s\n", rn.c_str());
-          rm.p_shm = addr;
+          rm.ptr_shm = addr;
         }
       }
 
@@ -76,14 +76,14 @@ void reg_print_name() {
   cout << endl << "======= regs_print_name =======" << endl;
 
   for (auto &[rn, m] : REGmap) {
-    const auto &r = m.p_reg;
+    const auto &r = m.ptr_reg;
     auto &d = m.rdata;
 
     const char *C = KNRM;
     if (r->rerrors < 0)
       C = KRED;
 
-    if (strcmp(m.p_reg->ch_type, "i") == 0)
+    if (strcmp(m.ptr_reg->ch_type, "i") == 0)
       printf("%s%-12s %7d" NRM, C, rn.c_str(), d.rvalue);
     else
       printf("%s%-12s %7.2f" NRM, C, rn.c_str(), (int16_t)d.rvalue * 0.01);
@@ -92,7 +92,7 @@ void reg_print_name() {
     d.rerrors = r->rerrors;
     const void *ptr = &m.rdata;
 
-    memcpy(m.p_shm, ptr, sizeof(rdata_t));
+    memcpy(m.ptr_shm, ptr, sizeof(rdata_t));
     printf("   +\n");
 
     /*
