@@ -51,15 +51,14 @@ int INotify::check() {
   int poll_num = poll(&fds, 1, -1);
 
   if (poll_num == -1) {
-    if (errno == EINTR)
-      return rc;
+    if (errno == EINTR) return rc;
     LOGERR("Error pollig: %s \n", fname);
     perror("poll");
     exit(EXIT_FAILURE);
   }
 
   if (poll_num > 0) {
-    if (fds.revents & POLLIN) // доступны события inotify
+    if (fds.revents & POLLIN)  // доступны события inotify
       rc = get_event();
   }
 
@@ -83,8 +82,7 @@ int INotify::get_event() {
       perror("read");
       exit(EXIT_FAILURE);
     }
-    if (length <= 0)
-      break; // ничего не нашли
+    if (length <= 0) break;  // ничего не нашли
 
     // проходим по всем событиям в буфере
     for (ptr = buf; ptr < buf + length;
@@ -93,7 +91,7 @@ int INotify::get_event() {
 
       if ((event->mask & evt_mask) && (event->len)) {
         rc = 1;
-        if (event->mask & IN_ISDIR) // печатаем тип события
+        if (event->mask & IN_ISDIR)  // печатаем тип события
           LOGINFO("Directory changed: %s \n", event->name);
         else
           LOGINFO("File changed: %s \n", event->name);

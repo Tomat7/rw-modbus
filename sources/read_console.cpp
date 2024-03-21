@@ -11,7 +11,7 @@
 struct termios oldt, newt;
 
 int read_console(time_t _sec,
-                 suseconds_t _usec) { // считываем данные с консоли
+                 suseconds_t _usec) {  // считываем данные с консоли
   int rb = -1;
   struct timeval tv;
   int retval;
@@ -25,14 +25,13 @@ int read_console(time_t _sec,
 
   fd_set rfds;
   FD_ZERO(&rfds);
-  FD_SET(STDIN_FILENO, &rfds); // 0 - стандартный вход
+  FD_SET(STDIN_FILENO, &rfds);  // 0 - стандартный вход
   tv.tv_sec = _sec;
-  tv.tv_usec = _usec; // ждем 0.01с
+  tv.tv_usec = _usec;  // ждем 0.01с
   retval = select(1, &rfds, NULL, NULL, &tv);
 
   if (retval)
-    if (FD_ISSET(STDIN_FILENO, &rfds))
-      rb = getchar();
+    if (FD_ISSET(STDIN_FILENO, &rfds)) rb = getchar();
 
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 

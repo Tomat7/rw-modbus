@@ -21,9 +21,9 @@ void regs_init() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-      string rn = R.fullname; // D.dev_name + "." + (string)R.ch_name;
+      string rn = R.fullname;  // D.dev_name + "." + (string)R.ch_name;
       // R.fullname = rn.c_str();
-      R.rvalue = 5757; // TODO: remove for production!!
+      R.rvalue = 5757;  // TODO: remove for production!!
       //      LOGINFO("SHM: try %s\n", R.fullname.c_str());
 
       rmap_t rm;
@@ -55,33 +55,33 @@ void regs_update() {
   for (auto &[rn, m] : REGmap) {
     reg_print(rn, m.ptr_reg);
 
-    const auto &plc = m.ptr_reg; // "plc" is pointer to PLC regs struct
+    const auto &plc = m.ptr_reg;  // "plc" is pointer to PLC regs struct
     auto &mem = m.rdata;
-    rdata_t shm; // Temporary! For values from SHM. Now is empty.
-    uint16_t remote_val = plc->rvalue; // Value from PLC
-    uint16_t mem_val = mem.rvalue;     // Value in memory (in REGmap)
-    uint16_t &shm_val = shm.rvalue;    // Value from SHM (will be!)
+    rdata_t shm;  // Temporary! For values from SHM. Now is empty.
+    uint16_t remote_val = plc->rvalue;  // Value from PLC
+    uint16_t mem_val = mem.rvalue;      // Value in memory (in REGmap)
+    uint16_t &shm_val = shm.rvalue;     // Value from SHM (will be!)
 
-    if (plc->rmode) { // Is the Reg RW? If YES - get&check value from SHM.
-      memcpy(&shm, m.ptr_shm, sizeof(rdata_t)); // Copy from SHM to tmp struct.
+    if (plc->rmode) {  // Is the Reg RW? If YES - get&check value from SHM.
+      memcpy(&shm, m.ptr_shm, sizeof(rdata_t));  // Copy from SHM to tmp struct.
 
-      if (mem_val != remote_val) // If new value got from PLC
-        printf(" >");            // Print sign ">"
+      if (mem_val != remote_val)  // If new value got from PLC
+        printf(" >");             // Print sign ">"
       else
         printf("  ");
 
-      if (mem_val != shm_val) { // If new value got from SHM (SCADA?)
+      if (mem_val != shm_val) {  // If new value got from SHM (SCADA?)
         plc->rupdate = 1;
-        plc->rvalue = shm_val; // Put new value to PLC
+        plc->rvalue = shm_val;  // Put new value to PLC
         printf("< %d", shm_val);
       } else
         printf("  ");
     } else
       printf("    ");
 
-    mem.rvalue = remote_val;    // Fill REGmap with PLC value
-    mem.rerrors = plc->rerrors; // ... PLC errors
-    mem.rstatus = plc->rstatus; // ... PLC status
+    mem.rvalue = remote_val;     // Fill REGmap with PLC value
+    mem.rerrors = plc->rerrors;  // ... PLC errors
+    mem.rstatus = plc->rstatus;  // ... PLC status
 
     memcpy(m.ptr_shm, &m.rdata, sizeof(rdata_t));
 
@@ -98,8 +98,7 @@ void regs_update() {
 
 void reg_print(string rn, const reg_t *r) {
   const char *C = KNRM;
-  if (r->rerrors > 0)
-    C = KRED;
+  if (r->rerrors > 0) C = KRED;
 
   if (r->rtype)
     printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)r->rvalue * 0.01);

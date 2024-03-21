@@ -6,7 +6,7 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <chrono> // для функций из std::chrono
+#include <chrono>  // для функций из std::chrono
 #include <thread>
 
 #define CAST_SECONDS duration_cast<second_t>
@@ -17,7 +17,7 @@ using namespace std;
 using namespace chrono;
 
 class Timer {
-private:
+ private:
   // Псевдонимы типов используются для удобного доступа к вложенным типам
   //  using clock_t = std::chrono::high_resolution_clock;
   //  using second_t = std::chrono::duration<double, std::ratio<1> >;
@@ -26,18 +26,16 @@ private:
   time_point<steady_clock> begin;
   time_point<steady_clock> end;
 
-public:
+ public:
   Timer() {}
 
   void start(const char *txt = "Timer started... \n") {
-    if (txt != nullptr)
-      cout << txt;
+    if (txt != nullptr) cout << txt;
     begin = steady_clock::now();
   }
 
   void stop(const char *txt = "Timer stopped... \n") {
-    if (txt != nullptr)
-      cout << txt;
+    if (txt != nullptr) cout << txt;
     end = steady_clock::now();
   }
 
@@ -91,7 +89,7 @@ public:
   // ===========================
 
   void sleep_sec(int s) {
-    this_thread::sleep_for(seconds(s)); // std::chrono::
+    this_thread::sleep_for(seconds(s));  // std::chrono::
   }
 
   void sleep_ms(int ms) {

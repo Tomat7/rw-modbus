@@ -19,8 +19,7 @@ void init_all() {
   t.start();
   ret = cfg_master(CFG_DIR, CFG_FILE);
   t.spent_auto("============ Cfg finished in: ");
-  if (ret == EXIT_FAILURE)
-    exit(EXIT_FAILURE);
+  if (ret == EXIT_FAILURE) exit(EXIT_FAILURE);
   wait_console(TIMEOUT_SEC);
 
   //  /*
