@@ -1,20 +1,28 @@
 #!/bin/bash
 #
+RED='\033[0;91m'
+GRE="\033[0;32m"
+YEL="\033[0;93m"
+YEB="\033[1;33m"
+BLU='\033[0;94m'
+WHI='\033[0;97m'
+NC='\033[0m' # No Color
+# =====================
 
 cd ..
 
-echo ==== ADD files ====
+echo -e $YEB ==== ADD files ====
 #clang-format -i *.cpp
 #clang-format -i *.h
-make linux
+make clean
 git add -v .
 
-echo ==== COMMIT ====
+echo -e $YEB ==== COMMIT ====
 git commit -a
 ##### -m $1
 
-echo ==== PUSH ====
+echo -e $YEB ==== PUSH ====
 git push -v -f -u origin --all
 git push -v -f github --all
 
-echo ==== Finished...
+echo -e $GRE ==== Finished...

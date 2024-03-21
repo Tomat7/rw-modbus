@@ -16,7 +16,6 @@ std::map<string, rmap_t> REGmap;
 std::vector<PLC> PLCset;
 // INotify IN(CFG_DIR);
 
-
 int rc;
 
 static void close_sigint(int dummy) {
