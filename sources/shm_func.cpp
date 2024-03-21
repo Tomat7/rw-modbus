@@ -85,15 +85,20 @@ void write_shm(string rn, uint16_t val) {
 }
 */
 
-void write_shm(string rn, uint16_t val) {
-
+int write_shm(string rn, uint16_t val) {
+  int rc = -1;
   int fd = get_shm_fd(rn.c_str());
   rdata_t *ptr_shm = (rdata_t *)get_shm_addr(fd, sizeof(rdata_t));
-  rdata_t rdata;
-  memcpy(&rdata, ptr_shm, sizeof(rdata_t));
-  rdata.rvalue = val;
-  memcpy(ptr_shm, &rdata, sizeof(rdata_t));
-  return;
+
+  if (ptr_shm != nullptr) {
+    rc = 1;
+    rdata_t rdata;
+    memcpy(&rdata, ptr_shm, sizeof(rdata_t));
+    rdata.rvalue = val;
+    memcpy(ptr_shm, &rdata, sizeof(rdata_t));
+  }
+
+  return rc;
 }
 
 // eof

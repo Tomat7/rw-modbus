@@ -35,7 +35,7 @@ void regs_init();
 void regs_update();
 void reg_print(string, const reg_t *);
 
-void write_shm(string, uint16_t);
+int write_shm(string, uint16_t);
 int create_shm_fd(const char *fd);
 int get_shm_fd(const char *fd);
 void close_shm(int, reg_t *, size_t);
