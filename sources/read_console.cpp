@@ -10,8 +10,7 @@
 
 struct termios oldt, newt;
 
-int read_console(time_t _sec, suseconds_t _usec) // считываем данные с консоли
-{
+int read_console(time_t _sec, suseconds_t _usec) { // считываем данные с консоли
   int rb = -1;
   struct timeval tv;
   int retval;
