@@ -13,15 +13,13 @@ read -p "==== Warning! Will LOST ALL CHANGES! (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
 then
-    echo -e $YEL ==== Doing git STASH.
+    echo -e $YEL ==== Doing git STASH. $NC
     git stash
-    echo -e $GRE ==== Doing git PULL.
+    echo -e $GRE ==== Doing git PULL. $NC
     git pull -v 
-    echo -e $YEL ==== Doing git STASH CLEAR.
+    echo -e $YEL ==== Doing git STASH CLEAR. $NC
     git stash clear
-    echo -e $GRE ==== Finished.
+    echo -e $GRE ==== Finished. $NC
 else
-    echo -e $BLU ==== Doing nothing. Relax and Bye!
+    echo -e $BLU ==== Doing nothing. Relax and Bye! $NC
 fi
-
-echo -e $NC
