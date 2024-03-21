@@ -5,7 +5,8 @@
 // https://stackoverflow.com/questions/4664975/monitoring-file-using-inotify
 //
 
-#include <chrono>
+#include "./in_class.h"
+
 #include <errno.h>
 #include <poll.h>
 #include <stdio.h>
@@ -14,12 +15,11 @@
 #include <syslog.h>
 #include <unistd.h>
 
-#include "./in_class.h"
+#include <chrono>
 
 INotify::~INotify() { deinit(); }
 
 INotify::INotify(const char *fn, uint32_t mask) {
-
   openlog("INotify", LOG_NDELAY, LOG_LOCAL1);
 
   if (fn != nullptr) {
@@ -46,7 +46,6 @@ INotify::INotify(const char *fn, uint32_t mask) {
 }
 
 int INotify::check() {
-
   rc = 0;
   struct pollfd fds = {fd, POLLIN, 0};
   int poll_num = poll(&fds, 1, -1);
@@ -68,7 +67,6 @@ int INotify::check() {
 }
 
 int INotify::get_event() {
-
   char buf[4096] __attribute__((aligned(__alignof__(struct inotify_event))));
   const struct inotify_event *event;
   ssize_t length;
@@ -91,7 +89,6 @@ int INotify::get_event() {
     // проходим по всем событиям в буфере
     for (ptr = buf; ptr < buf + length;
          ptr += sizeof(struct inotify_event) + event->len) {
-
       event = (const struct inotify_event *)ptr;
 
       if ((event->mask & evt_mask) && (event->len)) {

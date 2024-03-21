@@ -152,16 +152,15 @@ format-allman:
 format-google2:
 	astyle $(ASFLAGS) -n -s2 --style=google $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
 
-# Reindent *.cpp to Google code-style
-format-google:
-	clang-format -i -style=google --verbose *.cpp
-	clang-format -i -style=google --verbose *.h
-
 # Reindent *.cpp to LLVM code-style
 format-clang:
 	clang-format -i --verbose *.cpp *.h $(SRCDIR2)/*.cpp $(SRCDIR2)/*.h $(SRCDIR3)/*.cpp $(SRCDIR3)/*.h
-#clang-format -i --verbose *.h
 
+# Reindent *.cpp to Google code-style
+format-google:
+	clang-format -i -style=google --verbose *.cpp *.h $(SRCDIR2)/*.cpp $(SRCDIR2)/*.h $(SRCDIR3)/*.cpp $(SRCDIR3)/*.h
+#clang-format -i -style=google --verbose *.cpp
+#clang-format -i -style=google --verbose *.h
 
 # =======================================
 #$(EXECUTABLE): $(OBJECTS)

@@ -13,7 +13,6 @@
 // using namespace libconfig;
 
 void init_all() {
-
   Timer t;
   int ret = 0;
 

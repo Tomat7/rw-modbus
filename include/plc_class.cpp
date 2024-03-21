@@ -5,6 +5,8 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
+#include "./plc_class.h"
+
 #include <errno.h>
 #include <modbus/modbus.h>
 #include <stdio.h>
@@ -14,8 +16,6 @@
 
 #include <chrono>
 #include <string>
-
-#include "./plc_class.h"
 
 void PLC::logerr(const char *s, ...) {
   va_list va;
@@ -33,7 +33,6 @@ PLC::PLC() {
 PLC::~PLC() { deinit(); }
 
 void PLC::init() {
-
   //  cout << ip_addr << endl;
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
@@ -79,7 +78,6 @@ int PLC::mb_new() {
 }
 
 int PLC::mb_connect() {
-
   if ((mb.errors > 0) || (ctx == nullptr)) {
     rc = mb_new();
     rc = modbus_connect(ctx);
@@ -99,7 +97,6 @@ int PLC::mb_connect() {
 }
 
 int PLC::read() {
-
   rc = read_allregs();
   mb.status = rc;
 
@@ -114,7 +111,6 @@ int PLC::read() {
 }
 
 int PLC::read_allregs() {
-
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t *mbregs = new uint16_t[nb_regs];
   rc = 0;
@@ -146,7 +142,6 @@ int PLC::read_allregs() {
 }
 
 int PLC::write() {
-
   for (auto &r : regs)
     rc = write_reg(r);
 
@@ -154,7 +149,6 @@ int PLC::write() {
 }
 
 int PLC::write_reg(reg_t &r) {
-
   if (r.rmode && r.rupdate) {
     rc = 0;
     for (int i = 0; i < attempts && rc <= 0; i++) {
@@ -190,7 +184,6 @@ int PLC::update() {
 }
 
 int PLC::set_timeout() {
-
   if (ctx == nullptr)
     mb_new();
 

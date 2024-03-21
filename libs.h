@@ -10,15 +10,14 @@
 #include <iostream>
 //#include <ncurses.h>
 #include <stdio.h>
+#include <string.h>
 #include <termios.h>
 #include <unistd.h>
 
+#include <libconfig.h++>
 #include <map>
 #include <string>
 #include <vector>
-
-#include <libconfig.h++>
-#include <string.h>
 
 #include "include/decl.h"
 #include "include/in_class.h"

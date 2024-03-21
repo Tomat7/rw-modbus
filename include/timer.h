@@ -75,7 +75,6 @@ public:
   }
 
   void spent_auto(const char *txt1 = "Time spent: ") {
-
     end = steady_clock::now();
     double _duration = elapsed_sec();
 

@@ -26,7 +26,6 @@ static void close_sigint(int dummy) {
 // int main(int argc, char **argv) {
 
 int main() {
-
   Timer t;
   signal(SIGINT, close_sigint);
 

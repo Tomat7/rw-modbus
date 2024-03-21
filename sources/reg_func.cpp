@@ -1,8 +1,9 @@
 // reg_func.cpp -----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
-#include <map>
 #include <string.h>
+
+#include <map>
 #include <string>
 #include <vector>
 
@@ -48,7 +49,6 @@ void regs_init() {
 }
 
 void regs_update() {
-
   printf("\n===== regs_update =====\n");
   bool is_eol = false;
 
@@ -97,7 +97,6 @@ void regs_update() {
 }
 
 void reg_print(string rn, const reg_t *r) {
-
   const char *C = KNRM;
   if (r->rerrors > 0)
     C = KRED;

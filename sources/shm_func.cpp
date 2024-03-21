@@ -5,8 +5,9 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/types.h>
-#include <thread>
 #include <unistd.h>
+
+#include <thread>
 
 #include "./config.h"
 #include "./libs.h"
@@ -34,7 +35,6 @@ int get_shm_fd(const char *rname) {
 }
 
 void *create_shm_addr(int fd, size_t sz) {
-
   if (ftruncate(fd, sz + 1) == -1) {
     LOGERR("SHM: ftruncate error for fd %d", fd);
     return nullptr;
@@ -46,7 +46,6 @@ void *create_shm_addr(int fd, size_t sz) {
 }
 
 void *get_shm_addr(int fd, size_t sz) {
-
   void *addr = nullptr;
   addr = (void *)mmap(0, sz + 1, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
 
