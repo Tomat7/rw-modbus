@@ -46,11 +46,13 @@ void PLC::init() {
     R.rmode = (R.str_mode == "rw") ? 1 : 0;
     R.rtype = (R.str_type == "f") ? 1 : 0;
 
-    if (R.raddr < reg_min) reg_min = R.raddr;
+    if (R.raddr < reg_min)
+      reg_min = R.raddr;
 
-    if (R.raddr > reg_max) reg_max = R.raddr;
+    if (R.raddr > reg_max)
+      reg_max = R.raddr;
 
-    R.rvalue = 777;  // TODO: remove for production
+    R.rvalue = 777; // TODO: remove for production
     LOGINFO("+ REG init: %-7s %2d %2s [%s] \n", R.ch_name, R.raddr,
             R.str_mode.c_str(), R.fullname.c_str());
   }
@@ -109,7 +111,7 @@ int PLC::read() {
 }
 
 int PLC::read_allregs() {
-  int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
+  int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t *mbregs = new uint16_t[nb_regs];
   rc = 0;
 
@@ -131,7 +133,8 @@ int PLC::read_allregs() {
     LOGERR("%s %s qty: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
   } else {
     mb.errors = 0;
-    for (auto &r : regs) r.rvalue = mbregs[r.raddr - reg_min];
+    for (auto &r : regs)
+      r.rvalue = mbregs[r.raddr - reg_min];
   }
 
   delete[] mbregs;
@@ -139,7 +142,8 @@ int PLC::read_allregs() {
 }
 
 int PLC::write() {
-  for (auto &r : regs) rc = write_reg(r);
+  for (auto &r : regs)
+    rc = write_reg(r);
 
   return rc;
 }
@@ -180,7 +184,8 @@ int PLC::update() {
 }
 
 int PLC::set_timeout() {
-  if (ctx == nullptr) mb_new();
+  if (ctx == nullptr)
+    mb_new();
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {

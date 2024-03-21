@@ -27,10 +27,10 @@ void plc_show1() {
   int nb_plcs = static_cast<int>(PLCset.size());
   cout << "Total PLCs: " << nb_plcs << endl;
 
-  for (int i = 0; i < nb_plcs; ++i) {  // Cycle for PLCs
+  for (int i = 0; i < nb_plcs; ++i) { // Cycle for PLCs
     plc_print_details(i);
 
-    for (int j = 0; j < PLCset[i].reg_qty; ++j)  // Cycle for REGs
+    for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
       plc_print_reg_details(i, j);
 
     cout << endl;

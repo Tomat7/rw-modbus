@@ -31,11 +31,11 @@ using namespace std;
 struct reg_t {
   uint16_t rvalue = 0;
   int raddr = 0;
-  int rstatus = 0;  // -1 mean ERROR, any positive - is OK
-  int rerrors = 0;  // number of errors on MB func (init/connect/read)
-  int rmode = 0;    // 1 - mean RW
-  int rtype = 0;    // 1 - mean FLOAT
-  int rupdate = 0;  // 1 - need to write/update remote register
+  int rstatus = 0; // -1 mean ERROR, any positive - is OK
+  int rerrors = 0; // number of errors on MB func (init/connect/read)
+  int rmode = 0;   // 1 - mean RW
+  int rtype = 0;   // 1 - mean FLOAT
+  int rupdate = 0; // 1 - need to write/update remote register
   string fullname;
   string str_name;
   string str_mode;
@@ -47,34 +47,34 @@ struct reg_t {
 
 struct rdata_t {
   uint16_t rvalue = 0;
-  int rstatus = 0;  // -1 mean ERROR, any positive - is OK
-  int rerrors = 0;  // number of errors on MB func (init/connect/read)
-  int rmode = 0;    // 1 - mean RW
-  int rtype = 0;    // 1 - mean FLOAT
+  int rstatus = 0; // -1 mean ERROR, any positive - is OK
+  int rerrors = 0; // number of errors on MB func (init/connect/read)
+  int rmode = 0;   // 1 - mean RW
+  int rtype = 0;   // 1 - mean FLOAT
 };
 
 struct rmap_t {
-  int fd = -1;                 // descriptor of SHARED MEMORY
-  rdata_t rdata;               // the COPY of PLC data (for memcpy() to SHM)
-  rdata_t *ptr_shm = nullptr;  // ptr to SHARED MEMORY data
-  reg_t *ptr_reg = nullptr;    // ptr to PLC data
+  int fd = -1;                // descriptor of SHARED MEMORY
+  rdata_t rdata;              // the COPY of PLC data (for memcpy() to SHM)
+  rdata_t *ptr_shm = nullptr; // ptr to SHARED MEMORY data
+  reg_t *ptr_reg = nullptr;   // ptr to PLC data
 };
 
 struct mbdata_t {
-  int status = 0;             // rc value of last func (init/connect/read)
-  uint64_t timestamp_ms = 0;  // milliseconds since the Epoch on last read
-  uint32_t interval_ms = 0;   // milliseconds between read request
-  uint32_t timeout_us = 0;    // miCRo seconds (!!) Modbus respose timeout
-  uint32_t errors = 0;        // counter of any current ERRORS (reset if OK)
-  uint32_t errors_rd = 0;     // counter of READ errors (summ from start)
-  uint32_t errors_wr = 0;     // counter of WRITE errors (summ from start)
-  uint32_t errors_cn = 0;     // counter of CONNECT errors (summ from start)
+  int status = 0;            // rc value of last func (init/connect/read)
+  uint64_t timestamp_ms = 0; // milliseconds since the Epoch on last read
+  uint32_t interval_ms = 0;  // milliseconds between read request
+  uint32_t timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
+  uint32_t errors = 0;       // counter of any current ERRORS (reset if OK)
+  uint32_t errors_rd = 0;    // counter of READ errors (summ from start)
+  uint32_t errors_wr = 0;    // counter of WRITE errors (summ from start)
+  uint32_t errors_cn = 0;    // counter of CONNECT errors (summ from start)
 };
 
 class PLC {
- public:
-  PLC();   // { LOGINFO("+ New PLC created."); }
-  ~PLC();  // { deinit(); }
+public:
+  PLC();  // { LOGINFO("+ New PLC created."); }
+  ~PLC(); // { deinit(); }
 
   void init();
   int read();
@@ -92,16 +92,16 @@ class PLC {
   const char *ip_addr = nullptr;
 
   int tcp_port = 0;
-  int attempts = 2;  // number of attempts
+  int attempts = 2; // number of attempts
 
   mbdata_t mb;
-  int reg_min = 0;  // minimal address of reg
-  int reg_max = 0;  // maximal address of reg
-  int reg_qty = 0;  // number of regs
+  int reg_min = 0; // minimal address of reg
+  int reg_max = 0; // maximal address of reg
+  int reg_qty = 0; // number of regs
 
   std::vector<reg_t> regs;
 
- private:
+private:
   int rc = -1;
   int mb_new();
   int mb_connect();
