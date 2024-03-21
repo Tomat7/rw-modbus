@@ -11,18 +11,19 @@ NC='\033[0m' # No Color
 
 cd ..
 
-echo -e $YEB ==== ADD files ====
+echo -e $YEB ==== ADD files ==== $NC
 #clang-format -i *.cpp
 #clang-format -i *.h
 make clean
 git add -v .
 
-echo -e $YEB ==== COMMIT ====
+echo -e $YEB ==== COMMIT ==== $NC
 git commit -a
 ##### -m $1
 
-echo -e $YEB ==== PUSH ====
+echo -e $YEB ==== PUSH ==== $NC
 git push -v -f -u origin --all
 git push -v -f github --all
 
-echo -e $GRE ==== Finished...
+echo -e $GRE ==== Finished... $NC
+
