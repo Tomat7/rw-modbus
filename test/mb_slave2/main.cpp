@@ -24,6 +24,9 @@
 int mb_slave_init();
 int mb_slave_check();
 void mb_slave_close();
+void mb_slave_print(int /*reg_address*/);
+
+Timer t;
 
 static void close_sigint(int dummy) {
   mb_slave_close();
@@ -38,8 +41,15 @@ int main(void) {
 
   mb_slave_init();
 
-  for (;;) {
+  uint64_t ms = 0;
 
+  for (;;) {
+    
+    if (t.millis() > (ms + 2000)) {
+      ms = t.millis();
+      mb_slave_print(0);
+      mb_slave_print(2);
+    }
     // =======================================================
     // Fill registers with data
     //    w++;

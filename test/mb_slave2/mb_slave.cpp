@@ -66,7 +66,7 @@ int mb_slave_init(void) {
   FD_ZERO(&refset);               // Clear the reference set of socket
   FD_SET(server_socket, &refset); // Add the server socket
   fdmax = server_socket;          // Keep track of the max file descriptor
-  printf("=== Ready before cycle... \n");
+  LOGINFO("MB Slave ready.\n");
   // ==============================================================
 
   return 1;
@@ -80,8 +80,9 @@ int mb_slave_check() {
       w++;
       for (int i = 0; i < 10; i++)
         mb_mapping->tab_registers[i] = w++;
+*/
   // =======================================================
-  */
+  
   rdset = refset;
   if (select(fdmax + 1, &rdset, NULL, NULL, NULL) == -1) {
     LOGERR("Server select() failure.\n");
@@ -106,13 +107,15 @@ int mb_slave_check() {
       memset(&clientaddr, 0, sizeof(clientaddr));
       newfd = accept(server_socket, (struct sockaddr *)&clientaddr, &addrlen);
 
-      if (newfd == -1)
+      if (newfd == -1) {
+        LOGERR("Server accept() error\n");
         perror("Server accept() error");
+      }
       else {
         FD_SET(newfd, &refset);
         if (newfd > fdmax)
           fdmax = newfd; // Keep track of the maximum
-        printf("New connection from %s:%d on socket %d\n",
+        LOGINFO("New connection from %s:%d on socket %d\n",
                inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
       }
 
@@ -123,7 +126,7 @@ int mb_slave_check() {
       if (rc > 0)
         modbus_reply(ctx, query, rc, mb_mapping);
       else if (rc == -1) { // connection closing or any errors.
-        printf("Connection closed on socket %d\n", master_socket);
+        LOGINFO("Connection closed on socket %d\n", master_socket);
         close(master_socket);
         FD_CLR(master_socket, &refset); // Remove from reference set
         if (master_socket == fdmax)
@@ -141,5 +144,10 @@ void mb_slave_close() {
     close(server_socket);
   modbus_free(ctx);
   modbus_mapping_free(mb_mapping);
+  return;
+}
 
+void mb_slave_print(int addr) {
+    printf(" %d ", mb_mapping->tab_registers[addr]);
+    return;
 }
