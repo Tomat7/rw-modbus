@@ -28,27 +28,31 @@ void mb_slave_print(int /*reg_address*/);
 
 Timer t;
 
-static void close_sigint(int dummy) {
+static void close_sigint(int dummy)
+{
   mb_slave_close();
 //  modbus_free(ctx);
 //  modbus_mapping_free(mb_mapping);
   exit(dummy);
 }
 
-int main(void) {
+int main(void)
+{
   // ==============================================================
   signal(SIGINT, close_sigint);
 
   mb_slave_init();
 
-  uint64_t ms = 0;
+  uint64_t ms = t.millis();
 
   for (;;) {
-    
+
     if (t.millis() > (ms + 2000)) {
       ms = t.millis();
       mb_slave_print(0);
-      mb_slave_print(2);
+      mb_slave_print(9);
+      printf(" |\n");
+      fflush(stdout);
     }
     // =======================================================
     // Fill registers with data
@@ -56,7 +60,7 @@ int main(void) {
     //    for (int i = 0; i < 10; i++)
     //      mb_mapping->tab_registers[i] = w++;
     // =======================================================
-
+    printf(".\n");
     mb_slave_check();
   }
   return 0;

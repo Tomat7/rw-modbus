@@ -21,8 +21,8 @@
 #include "./config.h"
 #include "./libs.h"
 
-static modbus_t *ctx = NULL;
-static modbus_mapping_t *mb_mapping;
+static modbus_t* ctx = NULL;
+static modbus_mapping_t* mb_mapping;
 
 static int server_socket = -1;
 static uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
@@ -33,7 +33,8 @@ static fd_set rdset;
 static int fdmax; // Maximum file descriptor number
 static uint16_t w = 0;
 
-int mb_slave_init(void) {
+int mb_slave_init(void)
+{
   /*
     uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
     int master_socket;
@@ -72,17 +73,19 @@ int mb_slave_init(void) {
   return 1;
 }
 
-int mb_slave_check() {
+int mb_slave_check()
+{
   /*
     for (;;) {
-  // =======================================================
-  // Fill registers with data
+    // =======================================================
+    // Fill registers with data
       w++;
       for (int i = 0; i < 10; i++)
         mb_mapping->tab_registers[i] = w++;
-*/
+  */
   // =======================================================
-  
+
+  printf("0\n");
   rdset = refset;
   if (select(fdmax + 1, &rdset, NULL, NULL, NULL) == -1) {
     LOGERR("Server select() failure.\n");
@@ -92,10 +95,12 @@ int mb_slave_check() {
 
   // Run through the existing connections looking for data to be read
 
+  printf("1\n");
   for (master_socket = 0; master_socket <= fdmax; master_socket++) {
 
     if (!FD_ISSET(master_socket, &rdset))
       continue;
+    printf("2\n");
 
     if (master_socket == server_socket) { // A client is asking a new connection
       socklen_t addrlen;
@@ -105,18 +110,17 @@ int mb_slave_check() {
       // Handle new connections
       addrlen = sizeof(clientaddr);
       memset(&clientaddr, 0, sizeof(clientaddr));
-      newfd = accept(server_socket, (struct sockaddr *)&clientaddr, &addrlen);
+      newfd = accept(server_socket, (struct sockaddr*)&clientaddr, &addrlen);
 
       if (newfd == -1) {
         LOGERR("Server accept() error\n");
         perror("Server accept() error");
-      }
-      else {
+      } else {
         FD_SET(newfd, &refset);
         if (newfd > fdmax)
           fdmax = newfd; // Keep track of the maximum
         LOGINFO("New connection from %s:%d on socket %d\n",
-               inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
+                inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
       }
 
     } else { // Existing connection
@@ -139,7 +143,8 @@ int mb_slave_check() {
 }
 
 
-void mb_slave_close() {
+void mb_slave_close()
+{
   if (server_socket != -1)
     close(server_socket);
   modbus_free(ctx);
@@ -147,7 +152,8 @@ void mb_slave_close() {
   return;
 }
 
-void mb_slave_print(int addr) {
-    printf(" %d ", mb_mapping->tab_registers[addr]);
-    return;
+void mb_slave_print(int addr)
+{
+  printf(" %d ", mb_mapping->tab_registers[addr]);
+  return;
 }
