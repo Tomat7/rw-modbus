@@ -17,7 +17,7 @@
 #include <chrono>
 #include <string>
 
-void PLC::logerr(const char *s, ...) {
+void PLC::logerr(const char* s, ...) {
   va_list va;
   printf(s, va);
 }
@@ -112,7 +112,7 @@ int PLC::read() {
 
 int PLC::read_allregs() {
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
-  uint16_t *mbregs = new uint16_t[nb_regs];
+  uint16_t* mbregs = new uint16_t[nb_regs];
   rc = 0;
 
   for (int i = 0; i < attempts && rc <= 0; i++) {

@@ -12,14 +12,14 @@ using namespace std;
 using namespace libconfig;
 
 int cfg_init_plcset(const Setting &cfg);
-void cfg_init_regs(const Setting &reg, PLC *pn);
+void cfg_init_regs(const Setting &reg, PLC* pn);
 
 void cfg_print_plc_details(const PLC &pn);
 void cfg_print_reg_details(const reg_t &rn);
 
 // Config cfg;
 
-int cfg_master(const char *cfg_dir, const char *cfg_file) {
+int cfg_master(const char* cfg_dir, const char* cfg_file) {
   // Read the file. If there is an error, report it and exit.
   cout << endl << "======= cfg_read_mbset =======" << endl;
 
@@ -104,7 +104,7 @@ int cfg_init_plcset(const Setting &cfgPLC) {
   return 0;
 }
 
-void cfg_init_regs(const Setting &cfgREG, PLC *pn) {
+void cfg_init_regs(const Setting &cfgREG, PLC* pn) {
   int nb_regs = cfgREG.getLength();
 
   // ===== Cycle for REGs =====

@@ -19,7 +19,7 @@
 
 INotify::~INotify() { deinit(); }
 
-INotify::INotify(const char *fn, uint32_t mask) {
+INotify::INotify(const char* fn, uint32_t mask) {
   openlog("INotify", LOG_NDELAY, LOG_LOCAL1);
 
   if (fn != nullptr) {
@@ -68,9 +68,9 @@ int INotify::check() {
 
 int INotify::get_event() {
   char buf[4096] __attribute__((aligned(__alignof__(struct inotify_event))));
-  const struct inotify_event *event;
+  const struct inotify_event* event;
   ssize_t length;
-  char *ptr;
+  char* ptr;
   rc = 0;
   // проходим по всем событиям, которые прочитаем из файлового дескриптора IN
   for (;;) {
@@ -89,7 +89,7 @@ int INotify::get_event() {
     // проходим по всем событиям в буфере
     for (ptr = buf; ptr < buf + length;
          ptr += sizeof(struct inotify_event) + event->len) {
-      event = (const struct inotify_event *)ptr;
+      event = (const struct inotify_event*)ptr;
 
       if ((event->mask & evt_mask) && (event->len)) {
         rc = 1;

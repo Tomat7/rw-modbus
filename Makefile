@@ -126,7 +126,7 @@ endif
 include $(wildcard $(OBJDIR)/*.cpp.d)
 
 
-clean: format-clang
+clean: format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
 	rm -rfv $(OBJDIR)/$(SRCDIR2)/*.o $(OBJDIR)/$(SRCDIR2)/*.d

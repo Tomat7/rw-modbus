@@ -13,7 +13,7 @@
 #define MB_READ
 
 void regs_init();
-void reg_print(string, const reg_t *);
+void reg_print(string, const reg_t*);
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
 void regs_init() {
@@ -21,7 +21,6 @@ void regs_init() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-
       R.rvalue = 5757; // TODO: remove for production!!
       rmap_t rm;
       rm.ptr_reg = &R;
@@ -32,7 +31,7 @@ void regs_init() {
 
       rm.fd = create_shm_fd(R.fullname.c_str());
       if (rm.fd != -1) {
-        rdata_t *addr = (rdata_t *)create_shm_addr(rm.fd, sizeof(rdata_t));
+        rdata_t* addr = (rdata_t*)create_shm_addr(rm.fd, sizeof(rdata_t));
         if (addr != nullptr) {
           LOGINFO("SHM: created %s\n", R.fullname.c_str());
           rm.ptr_shm = addr;
@@ -93,8 +92,8 @@ void regs_update() {
   return;
 }
 
-void reg_print(string rn, const reg_t *r) {
-  const char *C = KNRM;
+void reg_print(string rn, const reg_t* r) {
+  const char* C = KNRM;
   if (r->rerrors > 0)
     C = KRED;
 

@@ -20,7 +20,7 @@ void wait_console(int _s = 0, int _us = 10000);
 void init_all();
 void reinit();
 
-int cfg_master(const char *cfg_dir, const char *cfg_file);
+int cfg_master(const char* cfg_dir, const char* cfg_file);
 
 void plc_show1();
 void plc_show2();
@@ -33,16 +33,16 @@ int mb_slave();
 
 void regs_init();
 void regs_update();
-void reg_print(string, const reg_t *);
+void reg_print(string, const reg_t*);
 
 int write_shm(string, uint16_t);
-int create_shm_fd(const char *fd);
-int get_shm_fd(const char *fd);
-void close_shm(int, reg_t *, size_t);
+int create_shm_fd(const char* fd);
+int get_shm_fd(const char* fd);
+void close_shm(int, reg_t*, size_t);
 void close_fd(int);
 
-void *create_shm_addr(int, size_t);
-void *get_shm_addr(int, size_t);
+void* create_shm_addr(int, size_t);
+void* get_shm_addr(int, size_t);
 
 // void mb_show_regs_full(int i);
 // void mb_show_regs_name();

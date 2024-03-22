@@ -14,7 +14,7 @@ cd ..
 echo -e $YEB ==== ADD files ==== $NC
 #clang-format -i *.cpp
 #clang-format -i *.h
-#make clean
+make format-google2
 git add -v .
 
 echo -e $YEB ==== COMMIT ==== $NC

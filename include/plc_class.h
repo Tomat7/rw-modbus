@@ -40,7 +40,7 @@ struct reg_t {
   string str_name;
   string str_mode;
   string str_type;
-  const char *ch_name = nullptr;
+  const char* ch_name = nullptr;
   //  const char *ch_mode = nullptr;
   //  const char *ch_type = nullptr;
 };
@@ -56,8 +56,8 @@ struct rdata_t {
 struct rmap_t {
   int fd = -1;                // descriptor of SHARED MEMORY
   rdata_t rdata;              // the COPY of PLC data (for memcpy() to SHM)
-  rdata_t *ptr_shm = nullptr; // ptr to SHARED MEMORY data
-  reg_t *ptr_reg = nullptr;   // ptr to PLC data
+  rdata_t* ptr_shm = nullptr; // ptr to SHARED MEMORY data
+  reg_t* ptr_reg = nullptr;   // ptr to PLC data
 };
 
 struct mbdata_t {
@@ -72,7 +72,7 @@ struct mbdata_t {
 };
 
 class PLC {
-public:
+ public:
   PLC();  // { LOGINFO("+ New PLC created."); }
   ~PLC(); // { deinit(); }
 
@@ -88,8 +88,8 @@ public:
   string str_desc;
   string str_dev_name;
   string str_ip_addr;
-  const char *dev_name = nullptr;
-  const char *ip_addr = nullptr;
+  const char* dev_name = nullptr;
+  const char* ip_addr = nullptr;
 
   int tcp_port = 0;
   int attempts = 2; // number of attempts
@@ -101,14 +101,14 @@ public:
 
   std::vector<reg_t> regs;
 
-private:
+ private:
   int rc = -1;
   int mb_new();
   int mb_connect();
   int read_allregs();
   int write_reg(reg_t &);
   int set_timeout();
-  void logerr(const char *, ...);
+  void logerr(const char*, ...);
   //  void new_str(const char *ch);
-  modbus_t *ctx = nullptr;
+  modbus_t* ctx = nullptr;
 };
