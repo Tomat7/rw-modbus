@@ -75,13 +75,13 @@ void unlink_shm(const char *rn) {
 }
 
 /*
-  void write_shm(string rn, uint16_t val) {
+    void write_shm(string rn, uint16_t val) {
 
-  rmap_t m = REGmap[rn];
-  m.rdata.rvalue = val;
-  memcpy(m.ptr_shm, &m.rdata, sizeof(rdata_t));
-  return;
-  }
+    rmap_t m = REGmap[rn];
+    m.rdata.rvalue = val;
+    memcpy(m.ptr_shm, &m.rdata, sizeof(rdata_t));
+    return;
+    }
 */
 
 int write_shm(string rn, uint16_t val) {

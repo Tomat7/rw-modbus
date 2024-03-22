@@ -21,11 +21,8 @@ void regs_init() {
 
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
-      string rn = R.fullname; // D.dev_name + "." + (string)R.ch_name;
-      // R.fullname = rn.c_str();
-      R.rvalue = 5757; // TODO: remove for production!!
-      //      LOGINFO("SHM: try %s\n", R.fullname.c_str());
 
+      R.rvalue = 5757; // TODO: remove for production!!
       rmap_t rm;
       rm.ptr_reg = &R;
       rm.rdata.rvalue = R.rvalue;
@@ -33,16 +30,16 @@ void regs_init() {
       rm.rdata.rmode = R.rmode;
       rm.rdata.rtype = R.rtype;
 
-      rm.fd = create_shm_fd(rn.c_str());
+      rm.fd = create_shm_fd(R.fullname.c_str());
       if (rm.fd != -1) {
         rdata_t *addr = (rdata_t *)create_shm_addr(rm.fd, sizeof(rdata_t));
         if (addr != nullptr) {
-          LOGINFO("SHM: created %s\n", rn.c_str());
+          LOGINFO("SHM: created %s\n", R.fullname.c_str());
           rm.ptr_shm = addr;
         }
       }
 
-      REGmap[rn] = rm;
+      REGmap[R.fullname] = rm;
     }
 
   return;
