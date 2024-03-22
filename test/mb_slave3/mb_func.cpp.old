@@ -11,8 +11,7 @@
 
 // Timer tt;
 
-int mb_read()
-{
+int mb_read() {
   cout << endl << "===== mb_read =====" << endl;
   int ret = 0;
 
@@ -26,8 +25,7 @@ int mb_read()
   return 0;
 }
 
-int mb_write()
-{
+int mb_write() {
   cout << endl << "===== mb_write =====" << endl;
 
   for (auto &D : PLCset) {
@@ -38,8 +36,7 @@ int mb_write()
   return 0;
 }
 
-int mb_update()
-{
+int mb_update() {
   //  cout << "===== mb_update =====" << endl;
   int ret = 0;
 

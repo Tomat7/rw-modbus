@@ -12,7 +12,8 @@
 // using namespace std;
 // using namespace libconfig;
 
-void init_all() {
+void init_all()
+{
   Timer t;
   int ret = 0;
 
@@ -45,7 +46,8 @@ void init_all() {
   return;
 }
 
-void reinit() {
+void reinit()
+{
   REGmap.clear();
   PLCset.clear();
   init_all();

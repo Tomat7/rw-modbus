@@ -16,8 +16,9 @@
 using namespace std;
 using namespace chrono;
 
-class Timer {
- private:
+class Timer
+{
+private:
   // Псевдонимы типов используются для удобного доступа к вложенным типам
   //  using clock_t = std::chrono::high_resolution_clock;
   //  using second_t = std::chrono::duration<double, std::ratio<1> >;
@@ -26,31 +27,37 @@ class Timer {
   time_point<steady_clock> begin;
   time_point<steady_clock> end;
 
- public:
+public:
   Timer() {}
 
-  void start(const char* txt = "Timer started... \n") {
+  void start(const char* txt = "Timer started... \n")
+  {
     if (txt != nullptr)
       cout << txt;
     begin = steady_clock::now();
   }
 
-  void stop(const char* txt = "Timer stopped... \n") {
+  void stop(const char* txt = "Timer stopped... \n")
+  {
     if (txt != nullptr)
       cout << txt;
     end = steady_clock::now();
   }
 
-  double elapsed_sec() const {
+  double elapsed_sec() const
+  {
     auto sec = duration_cast<second_t>(end - begin);
     return sec.count();
   }
 
-  int64_t elapsed_ms() const {
+  int64_t elapsed_ms() const
+  {
     auto sec = duration_cast<milliseconds>(end - begin);
     return sec.count();
   }
-  int64_t elapsed_us() const {
+
+  int64_t elapsed_us() const
+  {
     auto sec = duration_cast<microseconds>(end - begin);
     return sec.count();
   }
@@ -58,23 +65,27 @@ class Timer {
   // ============================
 
   void spent_sec(int p = 6, const char* txt1 = "Time spent: ",
-                 const char* txt2 = " second.") {
+                 const char* txt2 = " second.")
+  {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec()) << txt2 << '\n';
   }
 
   void spent_ms(int p = 6, const char* txt1 = "Time spent: ",
-                const char* txt2 = " msec.") {
+                const char* txt2 = " msec.")
+  {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) << txt2
          << '\n';
   }
 
   void spent_us(int p = 6,
-                const char* txt1 = "Time spent: ", const char* txt2 = " us.") {
+                const char* txt1 = "Time spent: ", const char* txt2 = " us.")
+  {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000000)
          << txt2 << '\n';
   }
 
-  void spent_auto(const char* txt1 = "Time spent: ") {
+  void spent_auto(const char* txt1 = "Time spent: ")
+  {
     end = steady_clock::now();
     double _duration = elapsed_sec();
 
@@ -90,25 +101,30 @@ class Timer {
 
   // ===========================
 
-  void sleep_sec(int s) {
+  void sleep_sec(int s)
+  {
     this_thread::sleep_for(seconds(s)); // std::chrono::
   }
 
-  void sleep_ms(int ms) {
+  void sleep_ms(int ms)
+  {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
   }
 
-  void sleep_us(int us) {
+  void sleep_us(int us)
+  {
     std::this_thread::sleep_for(std::chrono::microseconds(us));
   }
 
   // ============================
 
-  uint64_t millis() {
+  uint64_t millis()
+  {
     return CAST_MILLIS(system_clock::now().time_since_epoch()).count();
   }
 
-  uint64_t micros() {
+  uint64_t micros()
+  {
     return CAST_MICROS(system_clock::now().time_since_epoch()).count();
   }
 };

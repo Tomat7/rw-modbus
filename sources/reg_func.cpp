@@ -16,7 +16,8 @@ void regs_init();
 void reg_print(string, const reg_t*);
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
-void regs_init() {
+void regs_init()
+{
   cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
@@ -44,7 +45,8 @@ void regs_init() {
   return;
 }
 
-void regs_update() {
+void regs_update()
+{
   printf("\n===== regs_update =====\n");
   bool is_eol = false;
 
@@ -92,7 +94,8 @@ void regs_update() {
   return;
 }
 
-void reg_print(string rn, const reg_t* r) {
+void reg_print(string rn, const reg_t* r)
+{
   const char* C = KNRM;
   if (r->rerrors > 0)
     C = KRED;
@@ -105,7 +108,8 @@ void reg_print(string rn, const reg_t* r) {
   return;
 }
 
-void regs_deinit() {
+void regs_deinit()
+{
   REGmap.clear();
   return;
 }

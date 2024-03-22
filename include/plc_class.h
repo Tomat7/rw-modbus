@@ -71,8 +71,9 @@ struct mbdata_t {
   uint32_t errors_cn = 0;    // counter of CONNECT errors (summ from start)
 };
 
-class PLC {
- public:
+class PLC
+{
+public:
   PLC();  // { LOGINFO("+ New PLC created."); }
   ~PLC(); // { deinit(); }
 
@@ -101,7 +102,7 @@ class PLC {
 
   std::vector<reg_t> regs;
 
- private:
+private:
   int rc = -1;
   int mb_new();
   int mb_connect();

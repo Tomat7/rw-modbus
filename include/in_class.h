@@ -28,8 +28,9 @@
 
 // using namespace std;
 
-class INotify {
- public:
+class INotify
+{
+public:
   INotify(const char* fn = nullptr, uint32_t mask = MASK_MONITORING);
   INotify(int _fd, uint32_t mask = MASK_MONITORING);
 
@@ -44,7 +45,7 @@ class INotify {
   int fd = 0;     // file description
   int wd = 0;     // watch description
 
- private:
+private:
   int rc = -1;
   int get_event();
   uint32_t evt_mask = 0;

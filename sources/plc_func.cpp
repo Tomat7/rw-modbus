@@ -13,7 +13,8 @@
 void plc_print_details(int i);
 void plc_print_reg_details(int i, int j);
 
-void plc_show2() {
+void plc_show2()
+{
   for (auto &D : PLCset)
     for (auto &R : D.regs) {
       printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
@@ -21,7 +22,8 @@ void plc_show2() {
     }
 }
 
-void plc_show1() {
+void plc_show1()
+{
   cout << endl << "===== plc_show =====" << endl;
 
   int nb_plcs = static_cast<int>(PLCset.size());
@@ -39,7 +41,8 @@ void plc_show1() {
   return;
 }
 
-void plc_print_details(int i) {
+void plc_print_details(int i)
+{
   cout << setw(7) << left << PLCset[i].str_dev_name << "  " << setw(3) << left
        << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
        << "  " << PLCset[i].mb.interval_ms << "  " << PLCset[i].mb.timeout_us
@@ -47,7 +50,8 @@ void plc_print_details(int i) {
   return;
 }
 
-void plc_print_reg_details(int i, int j) {
+void plc_print_reg_details(int i, int j)
+{
   cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
        << right << PLCset[i].regs[j].raddr << setw(7) << right
        << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].str_mode

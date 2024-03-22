@@ -18,14 +18,16 @@ std::vector<PLC> PLCset;
 
 int rc;
 
-static void close_sigint(int dummy) {
+static void close_sigint(int dummy)
+{
   LOGERR("Exit by Ctrl-C. Bye.\n");
   exit(dummy);
 }
 
 // int main(int argc, char **argv) {
 
-int main() {
+int main()
+{
   Timer t;
   signal(SIGINT, close_sigint);
 

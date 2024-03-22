@@ -11,7 +11,8 @@
 struct termios oldt, newt;
 
 int read_console(time_t _sec,
-                 suseconds_t _usec) { // считываем данные с консоли
+                 suseconds_t _usec)   // считываем данные с консоли
+{
   int rb = -1;
   struct timeval tv;
   int retval;
@@ -39,6 +40,7 @@ int read_console(time_t _sec,
   return rb;
 }
 
-void wait_console(int _s, int _us) {
+void wait_console(int _s, int _us)
+{
   read_console((time_t)_s, (suseconds_t)_us);
 }

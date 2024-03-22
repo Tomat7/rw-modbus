@@ -8,7 +8,3 @@
 #define CFG_FILE "modbus.cfg"
 #define USE_SYSLOG
 #define TIMEOUT_SEC 5
-
-#define MB_SLAVE_CONN_MAX 5
-#define MB_SLAVE_PORT 1502
-#define MB_SLAVE_REGS_NB 50

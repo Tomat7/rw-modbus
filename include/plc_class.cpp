@@ -17,12 +17,14 @@
 #include <chrono>
 #include <string>
 
-void PLC::logerr(const char* s, ...) {
+void PLC::logerr(const char* s, ...)
+{
   va_list va;
   printf(s, va);
 }
 
-PLC::PLC() {
+PLC::PLC()
+{
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   ip_addr = "x.x.x.x";
   dev_name = "tmp";
@@ -32,7 +34,8 @@ PLC::PLC() {
 
 PLC::~PLC() { deinit(); }
 
-void PLC::init() {
+void PLC::init()
+{
   //  cout << ip_addr << endl;
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
@@ -58,7 +61,8 @@ void PLC::init() {
   }
 }
 
-int PLC::mb_new() {
+int PLC::mb_new()
+{
   rc = 0;
 
   LOGINFO("%s:%d %s try to close/free.\n", ip_addr, tcp_port, dev_name);
@@ -77,7 +81,8 @@ int PLC::mb_new() {
   return rc;
 }
 
-int PLC::mb_connect() {
+int PLC::mb_connect()
+{
   if ((mb.errors > 0) || (ctx == nullptr)) {
     rc = mb_new();
     rc = modbus_connect(ctx);
@@ -96,7 +101,8 @@ int PLC::mb_connect() {
   return rc;
 }
 
-int PLC::read() {
+int PLC::read()
+{
   rc = read_allregs();
   mb.status = rc;
 
@@ -110,7 +116,8 @@ int PLC::read() {
   return rc;
 }
 
-int PLC::read_allregs() {
+int PLC::read_allregs()
+{
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
   rc = 0;
@@ -141,14 +148,16 @@ int PLC::read_allregs() {
   return rc;
 }
 
-int PLC::write() {
+int PLC::write()
+{
   for (auto &r : regs)
     rc = write_reg(r);
 
   return rc;
 }
 
-int PLC::write_reg(reg_t &r) {
+int PLC::write_reg(reg_t &r)
+{
   if (r.rmode && r.rupdate) {
     rc = 0;
     for (int i = 0; i < attempts && rc <= 0; i++) {
@@ -174,7 +183,8 @@ int PLC::write_reg(reg_t &r) {
   return rc;
 }
 
-int PLC::update() {
+int PLC::update()
+{
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
     rc = write();
@@ -183,7 +193,8 @@ int PLC::update() {
   return rc;
 }
 
-int PLC::set_timeout() {
+int PLC::set_timeout()
+{
   if (ctx == nullptr)
     mb_new();
 
@@ -196,7 +207,8 @@ int PLC::set_timeout() {
   return rc;
 }
 
-void PLC::deinit() {
+void PLC::deinit()
+{
   //  if (ctx != nullptr) {
   //  LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
   modbus_close(ctx);
@@ -205,7 +217,8 @@ void PLC::deinit() {
   LOGINFO("- PLC close, free and deleted: %s %s. \n", ip_addr, dev_name);
 }
 
-uint64_t PLC::millis() {
+uint64_t PLC::millis()
+{
 #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
   uint64_t t;
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
