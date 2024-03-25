@@ -22,9 +22,9 @@
 #include "./libs.h"
 
 int mb_slave_init();
-int mb_slave_check();
+int mb_slave_check(int usec = 1000000);
 void mb_slave_close();
-void mb_slave_print(int /*reg_address*/);
+void mb_slave_print_reg(int /*reg_address*/);
 
 Timer t;
 
@@ -49,8 +49,8 @@ int main(void)
 
     if (t.millis() > (ms + 2000)) {
       ms = t.millis();
-      mb_slave_print(0);
-      mb_slave_print(9);
+      mb_slave_print_reg(0);
+      mb_slave_print_reg(9);
       printf(" |\n");
       fflush(stdout);
     }
