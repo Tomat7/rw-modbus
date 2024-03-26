@@ -75,21 +75,21 @@ int mb_slave_init(void)
 
 int mb_slave_check(int usec /*= 1000000*/)
 {
-  /*
-    for (;;) {
+ 
+    // for (;;) {
     // =======================================================
     // Fill registers with data
       w++;
-      for (int i = 0; i < 10; i++)
-        mb_mapping->tab_registers[i] = w++;
-  */
+//      for (int i = 0; i < 10; i++)
+        mb_mapping->tab_registers[1] = w++;
+        mb_mapping->tab_registers[7] = w++;
   // =======================================================
 
   struct timeval tv;
   tv.tv_sec = 0;
   tv.tv_usec = usec;
 
-  printf("_0\n");
+//  printf("_0\n");
   rdset = refset;
   if (select(fdmax + 1, &rdset, NULL, NULL, &tv) == -1) {
     LOGERR("Server select() failure.\n");
@@ -99,14 +99,14 @@ int mb_slave_check(int usec /*= 1000000*/)
 
   // Run through the existing connections looking for data to be read
 
-  printf("_1\n");
+//  printf("_1\n");
   for (master_socket = 0; master_socket <= fdmax; master_socket++) {
 
     if (!FD_ISSET(master_socket, &rdset)) {
-      printf("--");
+//      printf("--");
       continue;
     }
-    printf("+2\n");
+//    printf("+2\n");
 
     if (master_socket == server_socket) { // A client is asking a new connection
       socklen_t addrlen;

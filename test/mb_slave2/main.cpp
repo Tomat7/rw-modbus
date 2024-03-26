@@ -60,8 +60,8 @@ int main(void)
     //    for (int i = 0; i < 10; i++)
     //      mb_mapping->tab_registers[i] = w++;
     // =======================================================
-    printf(".\n");
-    mb_slave_check();
+//    printf(".\n");
+    mb_slave_check(1);
   }
   return 0;
 }
