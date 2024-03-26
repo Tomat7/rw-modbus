@@ -87,12 +87,14 @@ SRCLIST2= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR2)/*.cpp))
 SRCLIST3= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR3)/*.cpp)) 
 SOURCELIST= $(SRCLIST1) $(SRCLIST2) $(SRCLIST3)
 
+# =============================================
 all: a.out
 
 debug: clean a.out
 
 libtest: a.out
 
+# ============================================
 a.out: $(SOURCELIST)
 #$(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
 ifdef DO_DEBUG
@@ -125,9 +127,8 @@ endif
 
 include $(wildcard $(OBJDIR)/*.cpp.d)
 
-
+# ======================================
 clean: 
-#format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
 	rm -rfv $(OBJDIR)/$(SRCDIR2)/*.o $(OBJDIR)/$(SRCDIR2)/*.d
@@ -136,6 +137,14 @@ clean:
 
 
 # ======================================
+# Simple format current directory only
+clang:
+	clang-format -i --verbose *.cpp *.h
+
+google:
+	clang-format -i -style=google --verbose *.cpp *.h
+
+# ALL FILE recursively!
 # Reindent *.cpp to K&R code-style
 format-kr:
 	astyle $(ASFLAGS) -n --style=kr $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
@@ -160,8 +169,7 @@ format-clang:
 # Reindent *.cpp to Google code-style
 format-google:
 	clang-format -i -style=google --verbose *.cpp *.h $(SRCDIR2)/*.cpp $(SRCDIR2)/*.h $(SRCDIR3)/*.cpp $(SRCDIR3)/*.h
-#clang-format -i -style=google --verbose *.cpp
-#clang-format -i -style=google --verbose *.h
+
 
 # =======================================
 #$(EXECUTABLE): $(OBJECTS)

@@ -4,19 +4,17 @@
     SPDX-License-Identifier: BSD-3-Clause
 */
 
+#include <arpa/inet.h>
 #include <errno.h>
+#include <modbus/modbus.h>
+#include <netinet/in.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-
-#include <modbus/modbus.h>
-
-#include <arpa/inet.h>
-#include <netinet/in.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include "./config.h"
 #include "./libs.h"
@@ -31,8 +29,8 @@ Timer t;
 static void close_sigint(int dummy)
 {
   mb_slave_close();
-//  modbus_free(ctx);
-//  modbus_mapping_free(mb_mapping);
+  //  modbus_free(ctx);
+  //  modbus_mapping_free(mb_mapping);
   exit(dummy);
 }
 
@@ -46,7 +44,6 @@ int main(void)
   uint64_t ms = t.millis();
 
   for (;;) {
-
     if (t.millis() > (ms + 2000)) {
       ms = t.millis();
       mb_slave_print_reg(0);
@@ -60,7 +57,7 @@ int main(void)
     //    for (int i = 0; i < 10; i++)
     //      mb_mapping->tab_registers[i] = w++;
     // =======================================================
-//    printf(".\n");
+    //    printf(".\n");
     mb_slave_check(1);
   }
   return 0;

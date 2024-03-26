@@ -4,19 +4,17 @@
     SPDX-License-Identifier: BSD-3-Clause
 */
 
+#include <arpa/inet.h>
 #include <errno.h>
+#include <modbus/modbus.h>
+#include <netinet/in.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-
-#include <modbus/modbus.h>
-
-#include <arpa/inet.h>
-#include <netinet/in.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include "./config.h"
 #include "./libs.h"
@@ -30,7 +28,7 @@ static int master_socket;
 static int rc;
 static fd_set refset;
 static fd_set rdset;
-static int fdmax; // Maximum file descriptor number
+static int fdmax;  // Maximum file descriptor number
 static uint16_t w = 0;
 
 int mb_slave_init(void)
@@ -63,11 +61,13 @@ int mb_slave_init(void)
     return -1;
   }
 
+  int x = (_modbus)ctx->slave;
+
   // ==============================================================
-  FD_ZERO(&refset);               // Clear the reference set of socket
-  FD_SET(server_socket, &refset); // Add the server socket
-  fdmax = server_socket;          // Keep track of the max file descriptor
-  LOGINFO("MB Slave ready.\n");
+  FD_ZERO(&refset);                // Clear the reference set of socket
+  FD_SET(server_socket, &refset);  // Add the server socket
+  fdmax = server_socket;           // Keep track of the max file descriptor
+  LOGINFO("MB Slave ready on port %d.\n",  MB_SLAVE_PORT);
   // ==============================================================
 
   return 1;
@@ -75,40 +75,39 @@ int mb_slave_init(void)
 
 int mb_slave_check(int usec /*= 1000000*/)
 {
- 
-    // for (;;) {
-    // =======================================================
-    // Fill registers with data
-      w++;
-//      for (int i = 0; i < 10; i++)
-        mb_mapping->tab_registers[1] = w++;
-        mb_mapping->tab_registers[7] = w++;
+  // for (;;) {
+  // =======================================================
+  // Fill registers with data
+  w++;
+  //      for (int i = 0; i < 10; i++)
+  mb_mapping->tab_registers[1] = w++;
+  mb_mapping->tab_registers[7] = w++;
   // =======================================================
 
   struct timeval tv;
   tv.tv_sec = 0;
   tv.tv_usec = usec;
 
-//  printf("_0\n");
+  //  printf("_0\n");
   rdset = refset;
   if (select(fdmax + 1, &rdset, NULL, NULL, &tv) == -1) {
     LOGERR("Server select() failure.\n");
     perror("Server select() failure.");
-    return -1; //close_sigint(1);
+    return -1;  // close_sigint(1);
   }
 
   // Run through the existing connections looking for data to be read
 
-//  printf("_1\n");
+  //  printf("_1\n");
   for (master_socket = 0; master_socket <= fdmax; master_socket++) {
-
     if (!FD_ISSET(master_socket, &rdset)) {
-//      printf("--");
+      //      printf("--");
       continue;
     }
-//    printf("+2\n");
+    //    printf("+2\n");
 
-    if (master_socket == server_socket) { // A client is asking a new connection
+    if (master_socket ==
+        server_socket) {  // A client is asking a new connection
       socklen_t addrlen;
       struct sockaddr_in clientaddr;
       int newfd;
@@ -124,30 +123,29 @@ int mb_slave_check(int usec /*= 1000000*/)
       } else {
         FD_SET(newfd, &refset);
         if (newfd > fdmax)
-          fdmax = newfd; // Keep track of the maximum
+          fdmax = newfd;  // Keep track of the maximum
         LOGINFO("New connection from %s:%d on socket %d\n",
                 inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
       }
 
-    } else { // Existing connection
+    } else {  // Existing connection
       modbus_set_socket(ctx, master_socket);
       rc = modbus_receive(ctx, query);
 
       if (rc > 0)
         modbus_reply(ctx, query, rc, mb_mapping);
-      else if (rc == -1) { // connection closing or any errors.
+      else if (rc == -1) {  // connection closing or any errors.
         LOGINFO("Connection closed on socket %d\n", master_socket);
         close(master_socket);
-        FD_CLR(master_socket, &refset); // Remove from reference set
+        FD_CLR(master_socket, &refset);  // Remove from reference set
         if (master_socket == fdmax)
           fdmax--;
-      } // closing connection
-    }   // not new (existing) connection
-  }     // for (master_sockets...) handling each socket
+      }  // closing connection
+    }    // not new (existing) connection
+  }      // for (master_sockets...) handling each socket
 
   return fdmax;
 }
-
 
 void mb_slave_close()
 {

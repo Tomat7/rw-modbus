@@ -71,5 +71,6 @@
          "name": "Print make version",
          "makeArgs": ["--version"]
      }
-   ]
+],
+"C_Cpp.errorSquiggles": "disabled"
 }

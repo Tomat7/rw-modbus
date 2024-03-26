@@ -111,5 +111,6 @@ void INotify::deinit()
   inotify_rm_watch(fd, wd);
   close(fd);
   LOGINFO("Stop watching: %s\n", fname);
+  closelog();
   return;
 }

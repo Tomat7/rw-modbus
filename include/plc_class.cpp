@@ -25,7 +25,7 @@ void PLC::logerr(const char* s, ...)
 
 PLC::PLC()
 {
-  openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
+  openlog("PLC", LOG_NDELAY, LOG_LOCAL1);
   ip_addr = "x.x.x.x";
   dev_name = "tmp";
   LOGINFO("+ New PLC created: %s %s \n", ip_addr, dev_name);
@@ -215,6 +215,7 @@ void PLC::deinit()
   modbus_free(ctx);
   //  }
   LOGINFO("- PLC close, free and deleted: %s %s. \n", ip_addr, dev_name);
+  closelog();
 }
 
 uint64_t PLC::millis()
