@@ -7,7 +7,6 @@
 
 #include "./config.h"
 #include "./libs.h"
-// #include "./timer.h" // Timer t; - already initialised here!
 
 // using namespace std;
 // using namespace libconfig;
@@ -18,7 +17,8 @@ std::vector<PLC> PLCset;
 
 int rc;
 
-static void close_sigint(int dummy) {
+static void close_sigint(int dummy)
+{
   LOGERR("Exit by Ctrl-C. Bye.\n");
   closelog();
   exit(dummy);
@@ -26,7 +26,8 @@ static void close_sigint(int dummy) {
 
 // int main(int argc, char **argv) {
 
-int main() {
+int main()
+{
   Timer t;
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
@@ -42,7 +43,7 @@ int main() {
     regs_update();
     t.spent_auto("============ REG print finished in: ");
 
-    const char *x = nullptr;
+    const char* x = nullptr;
     t.start(x);
     mb_update();
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
@@ -64,8 +65,7 @@ int main() {
       else {
         printf("%s %c %s \n", KBLU, (char)ch, KNRM);
         wait_console(TIMEOUT_SEC);
-      }
-    else
+      } else
       printf("!\n");
     fflush(stdout);
 

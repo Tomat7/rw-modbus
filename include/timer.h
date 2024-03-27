@@ -6,7 +6,7 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <chrono> // для функций из std::chrono
+#include <chrono>  // для функций из std::chrono
 #include <thread>
 
 #define CAST_SECONDS duration_cast<second_t>
@@ -103,7 +103,7 @@ public:
 
   void sleep_sec(int s)
   {
-    this_thread::sleep_for(seconds(s)); // std::chrono::
+    this_thread::sleep_for(seconds(s));  // std::chrono::
   }
 
   void sleep_ms(int ms)

@@ -61,7 +61,7 @@ int mb_slave_init(void)
     return -1;
   }
 
-  int x = (_modbus)ctx->slave;
+//  int x = (_modbus)ctx->slave;
 
   // ==============================================================
   FD_ZERO(&refset);                // Clear the reference set of socket
@@ -106,8 +106,7 @@ int mb_slave_check(int usec /*= 1000000*/)
     }
     //    printf("+2\n");
 
-    if (master_socket ==
-        server_socket) {  // A client is asking a new connection
+    if (master_socket == server_socket) {  // Client asking a new connection
       socklen_t addrlen;
       struct sockaddr_in clientaddr;
       int newfd;

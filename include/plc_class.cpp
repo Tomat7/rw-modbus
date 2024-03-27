@@ -25,7 +25,7 @@ void PLC::logerr(const char* s, ...)
 
 PLC::PLC()
 {
-  openlog("PLC", LOG_NDELAY, LOG_LOCAL1);
+  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
   ip_addr = "x.x.x.x";
   dev_name = "tmp";
   LOGINFO("+ New PLC created: %s %s \n", ip_addr, dev_name);
@@ -55,13 +55,13 @@ void PLC::init()
     if (R.raddr > reg_max)
       reg_max = R.raddr;
 
-    R.rvalue = 777; // TODO: remove for production
+    R.rvalue = 777;  // TODO: remove for production
     LOGINFO("+ REG init: %-7s %2d %2s [%s] \n", R.ch_name, R.raddr,
             R.str_mode.c_str(), R.fullname.c_str());
   }
 }
 
-int PLC::mb_new()
+int PLC::mb_new_master()
 {
   rc = 0;
 
@@ -84,7 +84,7 @@ int PLC::mb_new()
 int PLC::mb_connect()
 {
   if ((mb.errors > 0) || (ctx == nullptr)) {
-    rc = mb_new();
+    rc = mb_new_master();
     rc = modbus_connect(ctx);
 
     if (rc == -1) {
@@ -118,7 +118,7 @@ int PLC::read()
 
 int PLC::read_allregs()
 {
-  int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
+  int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
   rc = 0;
 
@@ -196,7 +196,7 @@ int PLC::update()
 int PLC::set_timeout()
 {
   if (ctx == nullptr)
-    mb_new();
+    mb_new_master();
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {
@@ -214,7 +214,7 @@ void PLC::deinit()
   modbus_close(ctx);
   modbus_free(ctx);
   //  }
-  LOGINFO("- PLC close, free and deleted: %s %s. \n", ip_addr, dev_name);
+  LOGINFO("- PLC closed, free and deleted: %s %s. \n", ip_addr, dev_name);
   closelog();
 }
 

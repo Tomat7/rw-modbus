@@ -7,7 +7,6 @@
 
 #include "./config.h"
 #include "./libs.h"
-// #include "./timer.h" // Timer t; - already initialised here!
 
 // using namespace std;
 // using namespace libconfig;
@@ -24,18 +23,14 @@ void init_all()
     exit(EXIT_FAILURE);
   wait_console(TIMEOUT_SEC);
 
-  //  /*
   plc_show2();
   printf("===222\n");
   wait_console(TIMEOUT_SEC);
-  //  t.sleep_ms(TMOUT);
-  //  */
 
   t.start();
   plc_show1();
   t.spent_auto("============ PLC show finished in: ");
   wait_console(TIMEOUT_SEC);
-  //  t.sleep_ms(TMOUT);
 
   t.start();
   regs_init();

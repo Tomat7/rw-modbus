@@ -76,7 +76,7 @@ public:
   PLC();  // { LOGINFO("+ New PLC created."); }
   ~PLC(); // { deinit(); }
 
-  int mb_new(); // const char *_ip = "", int _port = 0);
+  int mb_new_master(); // const char *_ip = "", int _port = 0);
   int set_timeout();
   int mb_connect();
   int read();
