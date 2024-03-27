@@ -71,7 +71,7 @@ int PLC::mb_connect()
     return rc;
 }
 
-int PLC::read()
+int PLC::read_master()
 {
     rc = 0;
 

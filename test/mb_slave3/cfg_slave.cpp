@@ -94,7 +94,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
 
     //    PLCset.push_back(plcnow);
     /*PLCset[i].init();*/
-    plc.init(); // Absolutely necessary to copy str to char* and other
+    plc.init_master(); // Absolutely necessary to copy str to char* and other
     LOGINFO("Configured REGs now: %d\n", (int)plc.regs.size());
     cout << endl;
 

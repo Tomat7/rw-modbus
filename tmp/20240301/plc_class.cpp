@@ -65,7 +65,7 @@ int PLC::mb_connect() {
   return rc;
 }
 
-int PLC::read() {
+int PLC::read_master() {
 
   rc = 0;
   for (int i = 0; i < try_qty && rc <= 0; i++)
@@ -132,7 +132,7 @@ int PLC::read_allregs() {
   return rc;
 }
 
-int PLC::write() {
+int PLC::write_master() {
   /*
     rc = connect();
     if (rc == -1) {
@@ -184,12 +184,12 @@ int PLC::write_reg(reg_t &r) {
   return rc;
 }
 
-int PLC::update() {
+int PLC::update_master() {
 
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
-    rc = write();
-    rc = read();
+    rc = write_master();
+    rc = read_master();
   }
   return rc;
 }

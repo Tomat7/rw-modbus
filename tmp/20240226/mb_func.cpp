@@ -13,7 +13,7 @@ int mb_read() {
   cout << endl << "===== mb_read =====" << endl;
 
   for (auto &D : PLCset)
-    D.read();
+    D.read_master();
 
   /*
       int nb_plcs = static_cast<int>(PLCset.size());

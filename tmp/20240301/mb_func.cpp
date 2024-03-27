@@ -16,7 +16,7 @@ int mb_read() {
 
   for (auto &D : PLCset) {
     uint64_t old = D.mb.timestamp_ms;
-    D.read();
+    D.read_master();
     printf("%s _dT: %ld  err: %d cn: %d rd: %d wr: %d rc: %d\n", D.dev_name,
            D.mb.timestamp_ms - old, D.mb.errors, D.mb.errors_cn, D.mb.errors_rd,
            D.mb.errors_wr, D.get_rc());
@@ -29,7 +29,7 @@ int mb_write() {
   cout << endl << "===== mb_write =====" << endl;
 
   for (auto &D : PLCset) {
-    D.write();
+    D.write_master();
     //    tt.sleep_ms(10);
   }
 
@@ -42,7 +42,7 @@ int mb_update() {
 
   for (auto &D : PLCset) {
     uint64_t old = D.mb.timestamp_ms;
-    ret = D.update();
+    ret = D.update_master();
     printf("%s _dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
            D.dev_name, D.mb.timestamp_ms - old, ret, D.mb.errors,
            D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());

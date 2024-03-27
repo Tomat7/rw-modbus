@@ -79,9 +79,9 @@ public:
   int mb_new_master(); // const char *_ip = "", int _port = 0);
   int set_timeout();
   int mb_connect();
-  int read();
-  int write();
-  int update();
+  int read_master();
+  int write_master();
+  int update_master();
   int get_rc();
   void deinit();
   uint64_t millis();

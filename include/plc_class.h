@@ -72,13 +72,15 @@ struct mbdata_t {
 class PLC
 {
 public:
-  PLC();   // { LOGINFO("+ New PLC created."); }
-  ~PLC();  // { deinit(); }
+  PLC(string _ip = "X", string _name = "Master");   // for Master
+  PLC(int _port, string _name = "Slave");   // for Slave
+  ~PLC();  // 
 
-  void init();
-  int read();
-  int write();
-  int update();
+  void init_master();   // for Master only (mandatory!)
+  int read_master();    // for Master only
+  int write_master();   // for Master only
+  int update_master();  // for Master only
+  int check_slave();   // for Slave only. Need to call very often!
   int get_rc();
   void deinit();
   uint64_t millis();
@@ -102,8 +104,10 @@ public:
 
 private:
   modbus_t* ctx = nullptr;
+  bool is_slave = false;
   int rc = -1;
   int mb_new_master();
+  int mb_new_slave();
   int mb_connect();
   int read_allregs();
   int write_reg(reg_t &);

@@ -23,19 +23,33 @@ void PLC::logerr(const char* s, ...)
   printf(s, va);
 }
 
-PLC::PLC()
+PLC::PLC(string _ip, string _name)  // Master only
 {
   openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
-  ip_addr = "x.x.x.x";
-  dev_name = "tmp";
+  ip_addr = _ip.c_str();
+  dev_name = _name.c_str();
   LOGINFO("+ New PLC created: %s %s \n", ip_addr, dev_name);
-  //  cout << ip_addr << endl;
+  closelog();
+}
+
+PLC::PLC(int _port, string _name)  // Slave only
+{
+  openlog("MB_slave", LOG_NDELAY, LOG_LOCAL1);
+  ip_addr = "0.0.0.0";  // Slave always listening on ALL addresses!
+  tcp_port = _port;
+  str_desc = _name;
+  str_dev_name = _name;
+  dev_name = str_dev_name.c_str();
+  is_slave = true;
+  LOGINFO("+ New PLC created: %s:%d %s \n", ip_addr, tcp_port, dev_name);
+  closelog();
 }
 
 PLC::~PLC() { deinit(); }
 
-void PLC::init()
+void PLC::init_master()  // Master only
 {
+  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
   //  cout << ip_addr << endl;
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
@@ -59,6 +73,8 @@ void PLC::init()
     LOGINFO("+ REG init: %-7s %2d %2s [%s] \n", R.ch_name, R.raddr,
             R.str_mode.c_str(), R.fullname.c_str());
   }
+
+  closelog();
 }
 
 int PLC::mb_new_master()
@@ -81,7 +97,7 @@ int PLC::mb_new_master()
   return rc;
 }
 
-int PLC::mb_connect()
+int PLC::mb_connect()  // Master only
 {
   if ((mb.errors > 0) || (ctx == nullptr)) {
     rc = mb_new_master();
@@ -101,8 +117,9 @@ int PLC::mb_connect()
   return rc;
 }
 
-int PLC::read()
+int PLC::read_master()  // Master only
 {
+  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
   rc = read_allregs();
   mb.status = rc;
 
@@ -112,11 +129,12 @@ int PLC::read()
   }
 
   mb.timestamp_ms = millis();
+  closelog();
 
   return rc;
 }
 
-int PLC::read_allregs()
+int PLC::read_allregs()  // Master only
 {
   int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
@@ -148,11 +166,13 @@ int PLC::read_allregs()
   return rc;
 }
 
-int PLC::write()
+int PLC::write_master()  // Master only
 {
+  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
   for (auto &r : regs)
     rc = write_reg(r);
 
+  closelog();
   return rc;
 }
 
@@ -183,12 +203,12 @@ int PLC::write_reg(reg_t &r)
   return rc;
 }
 
-int PLC::update()
+int PLC::update_master()  // Master only
 {
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
-    rc = write();
-    rc = read();
+    rc = write_master();
+    rc = read_master();
   }
   return rc;
 }
@@ -209,11 +229,13 @@ int PLC::set_timeout()
 
 void PLC::deinit()
 {
-  //  if (ctx != nullptr) {
-  //  LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
+  if (is_slave) 
+    openlog("MB_slave", LOG_NDELAY, LOG_LOCAL1);
+  else
+    openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
+
   modbus_close(ctx);
   modbus_free(ctx);
-  //  }
   LOGINFO("- PLC closed, free and deleted: %s %s. \n", ip_addr, dev_name);
   closelog();
 }

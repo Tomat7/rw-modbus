@@ -55,7 +55,7 @@ public:
   int init(const char *_ip = "", int _port = 0);
   int set_timeout();
   int mb_connect();
-  int read();
+  int read_master();
   void deinit();
   uint64_t millis();
 
