@@ -11,12 +11,12 @@ SRCDIR2=include
 SRCDIR3=sources
 ##SRCDIR1=./
 
-LIBS= -lrt
+LIBS= -lrt -lpthread
 LIBCONFIG=$(shell pkg-config libconfig++ --libs)
 LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
 #LIBNCURSES=$(shell pkg-config ncurses --libs)
 
-LIBS+= $(LIBCONFIG) $(LIBMODBUS)
+LIBS+= $(LIBCONFIG) $(LIBMODBUS) 
 # $(LIBNCURSES)
 
 

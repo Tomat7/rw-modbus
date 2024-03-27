@@ -72,7 +72,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
   PLCset.resize(nb_plcs);
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
-    PLC plcx(1503);
+    // PLC plcx(1503);
     //    cout << "plcnow created!" << endl;
     PLC &plc = PLCset[i];
     // ===== Check the record which expect to get for CFG-file.
