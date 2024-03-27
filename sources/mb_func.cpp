@@ -1,5 +1,7 @@
 // mb_func.cpp ------------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
+// https://www.bogotobogo.com/cplusplus/C11/1_C11_creating_thread.php
+// https://stackoverflow.com/questions/266168/simple-example-of-threading-in-c
 
 #include <vector>
 #include <thread>
@@ -9,37 +11,50 @@
 // using namespace std;
 // using namespace libconfig;
 
+static vector<int> res;
+static vector<uint64_t> oldt;
+
 
 void mb_update_master(int x)
 {
   PLC &D = PLCset[x];
-  uint64_t old = D.mb.timestamp_ms;
-  int ret = D.update_master();
+  oldt[x] = D.mb.timestamp_ms;
+  res[x] = D.update_master();
+  std::this_thread::yield();
+  return;
+}
+
+void mb_print_summary(int x)
+{
+  PLC &D = PLCset[x];
   printf("%-7s_dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
-         D.dev_name, D.mb.timestamp_ms - old, ret, D.mb.errors,
+         D.dev_name, D.mb.timestamp_ms - oldt[x], res[x], D.mb.errors,
          D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
-  
-  cout << "Th: " << x << " finished." << endl;
-  
 }
 
 int mb_update()
 {
-  cout << "===== mb_update =====" << endl;
-  int ret = 0;
+//  cout << "===== mb_update =====" << endl;
   uint64_t i = 0;
   uint64_t nb_plcs = PLCset.size();
   vector<thread> thr(nb_plcs);
+  res.resize((int)nb_plcs);
+  oldt.resize(nb_plcs);
 
-  for (i = 0; i < nb_plcs; i++) {
-    cout << "thread " << i << " start." << endl;
+  for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
-  }
 
   for (auto &th : thr)
     th.join();
+  
+  printf("\n");
+  for (i = 0; i < nb_plcs; i++)
+    mb_print_summary((int)i);
 
-  return ret;
+  res.clear();
+  oldt.clear();
+
+  return 0;
 }
 
 

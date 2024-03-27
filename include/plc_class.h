@@ -9,15 +9,17 @@
 
 #include <modbus/modbus.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include <ctime>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <mutex>
 
 #define USE_SYSLOG
 
-#include "./macros.h"
+//#include "./macros.h"
 /*
     #ifdef USE_SYSLOG
     #define LOGERR(...) (fprintf(stderr, __VA_ARGS__), syslog(LOG_ERR,
@@ -74,7 +76,7 @@ class PLC
 public:
   PLC(string _ip = "X", string _name = "Master");   // for Master
   PLC(int _port, string _name = "Slave");   // for Slave
-  ~PLC();  // 
+  ~PLC();  //
 
   void init_master();   // for Master only (mandatory!)
   int read_master();    // for Master only
@@ -112,5 +114,7 @@ private:
   int read_allregs();
   int write_reg(reg_t &);
   int set_timeout();
-  void logerr(const char*, ...);
+  void logger(int prio, const char*, ...);
+  void loginfo(const char*, ...);
+  static mutex logger_mux;
 };

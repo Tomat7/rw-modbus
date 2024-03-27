@@ -13,47 +13,75 @@
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
+#include <stdarg.h>
 
 #include <chrono>
 #include <string>
+#include <mutex>
+ 
+// ANSI color codes
+#define KNRM "\x1B[0m"
+#define KRED "\x1B[91m"
+#define KGRN "\x1B[32m"
+#define KYEL "\x1B[33m"
+#define KBLU "\x1B[94m"
 
-void PLC::logerr(const char* s, ...)
+mutex PLC::logger_mux;
+
+void PLC::logger(int prio, const char* format, ...)
 {
-  va_list va;
-  printf(s, va);
+  logger_mux.lock();
+  FILE* fout = stdout;
+  if (prio == LOG_ERR) {
+    fout = stderr;
+    printf("\x1B[91m\n");
+  }
+
+  if (is_slave)
+    openlog("MB_slave", LOG_NDELAY, LOG_LOCAL1);
+  else
+    openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
+
+  va_list arg1;
+  va_list arg2;
+
+  va_start(arg1, format);
+  va_copy(arg2, arg1);
+  vfprintf(fout, format, arg1);
+  vsyslog(prio, format, arg2);
+  va_end(arg1);
+  va_end(arg2);
+
+  printf(KNRM);
+  closelog();
+  logger_mux.unlock();
 }
 
 PLC::PLC(string _ip, string _name)  // Master only
 {
-  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
-  LOGINFO("+ New PLC created: %s %s \n", ip_addr, dev_name);
-  closelog();
+  logger(LOG_INFO, "+ New PLC created: %s %s \n", ip_addr, dev_name);
 }
 
 PLC::PLC(int _port, string _name)  // Slave only
 {
-  openlog("MB_slave", LOG_NDELAY, LOG_LOCAL1);
   ip_addr = "0.0.0.0";  // Slave always listening on ALL addresses!
   tcp_port = _port;
   str_desc = _name;
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;
-  LOGINFO("+ New PLC created: %s:%d %s \n", ip_addr, tcp_port, dev_name);
-  closelog();
+  logger(LOG_INFO, "+ New PLC created: %s:%d %s \n", ip_addr, tcp_port, dev_name);
 }
 
 PLC::~PLC() { deinit(); }
 
 void PLC::init_master()  // Master only
 {
-  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
-  //  cout << ip_addr << endl;
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
-  LOGINFO("+ PLC init: %s %-7s %-7s %-20s \n", ip_addr, dev_name,
+  logger(LOG_INFO, "+ PLC init: %s %-7s %-7s %-20s \n", ip_addr, dev_name,
           str_title.c_str(), str_desc.c_str());
 
   for (auto &R : regs) {
@@ -70,29 +98,26 @@ void PLC::init_master()  // Master only
       reg_max = R.raddr;
 
     R.rvalue = 777;  // TODO: remove for production
-    LOGINFO("+ REG init: %-7s %2d %2s [%s] \n", R.ch_name, R.raddr,
+    logger(LOG_INFO, "+ REG init: %-7s %2d %2s [%s] \n", R.ch_name, R.raddr,
             R.str_mode.c_str(), R.fullname.c_str());
   }
-
-  closelog();
 }
 
 int PLC::mb_new_master()
 {
   rc = 0;
 
-  LOGINFO("%s:%d %s try to close/free.\n", ip_addr, tcp_port, dev_name);
+  logger(LOG_INFO, "%s:%d %s try to close/free.\n", ip_addr, tcp_port, dev_name);
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
-    LOGINFO("%s:%d %s CTX allocate error.\n", ip_addr, tcp_port, dev_name);
-    //  init();
+    logger(LOG_ERR, "%s:%d %s CTX allocate error.\n", ip_addr, tcp_port, dev_name);
     rc = -1;
   } else
-    LOGINFO("%s:%d %s CTX allocate OK.\n", ip_addr, tcp_port, dev_name);
+    logger(LOG_INFO, "%s:%d %s CTX allocate OK.\n", ip_addr, tcp_port, dev_name);
 
   return rc;
 }
@@ -104,7 +129,7 @@ int PLC::mb_connect()  // Master only
     rc = modbus_connect(ctx);
 
     if (rc == -1) {
-      LOGERR("%s %s connect error: %s\n", ip_addr, dev_name,
+      logger(LOG_ERR, "%s %s connect error: %s ", ip_addr, dev_name,
              modbus_strerror(errno));
       modbus_free(ctx);
       ctx = nullptr;
@@ -119,7 +144,6 @@ int PLC::mb_connect()  // Master only
 
 int PLC::read_master()  // Master only
 {
-  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
   rc = read_allregs();
   mb.status = rc;
 
@@ -129,7 +153,6 @@ int PLC::read_master()  // Master only
   }
 
   mb.timestamp_ms = millis();
-  closelog();
 
   return rc;
 }
@@ -149,13 +172,13 @@ int PLC::read_allregs()  // Master only
   if (rc == -1) {
     mb.errors++;
     mb.errors_rd++;
-    LOGERR("%s %s read error: %s \n", ip_addr, dev_name,
+    logger(LOG_ERR, "%s %s read error: %s ", ip_addr, dev_name,
            modbus_strerror(errno));
   } else if (rc != nb_regs) {
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
-    LOGERR("%s %s qty: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
+    logger(LOG_ERR, "%s %s qty: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
   } else {
     mb.errors = 0;
     for (auto &r : regs)
@@ -163,16 +186,15 @@ int PLC::read_allregs()  // Master only
   }
 
   delete[] mbregs;
+
   return rc;
 }
 
 int PLC::write_master()  // Master only
 {
-  openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
   for (auto &r : regs)
     rc = write_reg(r);
 
-  closelog();
   return rc;
 }
 
@@ -189,7 +211,7 @@ int PLC::write_reg(reg_t &r)
     if (rc == -1) {
       mb.errors++;
       mb.errors_wr++;
-      LOGERR("%s %s write reg: %s error: %s \n", ip_addr, dev_name, r.ch_name,
+      logger(LOG_ERR, "%s %s write reg: %s error: %s \n", ip_addr, dev_name, r.ch_name,
              modbus_strerror(errno));
     } else {
       mb.errors = 0;
@@ -198,6 +220,7 @@ int PLC::write_reg(reg_t &r)
 
     r.rstatus = rc;
     r.rerrors = mb.errors;
+    closelog();
   }
 
   return rc;
@@ -220,7 +243,7 @@ int PLC::set_timeout()
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {
-    LOGERR("%s %s set timeout failed: %s\n", ip_addr, dev_name,
+    logger(LOG_ERR, "%s %s set timeout failed: %s\n", ip_addr, dev_name,
            modbus_strerror(errno));
   }
 
@@ -229,15 +252,9 @@ int PLC::set_timeout()
 
 void PLC::deinit()
 {
-  if (is_slave) 
-    openlog("MB_slave", LOG_NDELAY, LOG_LOCAL1);
-  else
-    openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
-
   modbus_close(ctx);
   modbus_free(ctx);
-  LOGINFO("- PLC closed, free and deleted: %s %s. \n", ip_addr, dev_name);
-  closelog();
+  logger(LOG_INFO, "- PLC closed, free and deleted: %s %s. \n", ip_addr, dev_name);
 }
 
 uint64_t PLC::millis()
@@ -262,16 +279,16 @@ uint64_t PLC::millis()
     new_ch[i] = ch[i];
 
     ch = new_ch;
-    //  LOGINFO("String copied: %s %s \n",  ch, new_ch);
+    //  logger(LOG_INFO, "String copied: %s %s \n",  ch, new_ch);
     //  ch = s.c_str();
-    LOGINFO("String copied: %s %s \n", ch, new_ch);
+    logger(LOG_INFO, "String copied: %s %s \n", ch, new_ch);
 
     if (save_ch == ch)
-    LOGINFO("save_ch == ch! \n");
+    logger(LOG_INFO, "save_ch == ch! \n");
     if (save_ch == new_ch)
-    LOGINFO("save_ch == new_ch! \n");
+    logger(LOG_INFO, "save_ch == new_ch! \n");
     if (ch == new_ch)
-    LOGINFO("ch == new_ch! \n");
+    logger(LOG_INFO, "ch == new_ch! \n");
 
     return;
     }
