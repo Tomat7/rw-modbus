@@ -34,7 +34,8 @@ void PLC::logger(int prio, const char* format, ...)
   FILE* fout = stdout;
   if (prio == LOG_ERR) {
     fout = stderr;
-    printf("\x1B[91m\n");
+    fprintf(fout, KRED);
+    //printf(KRED);
   }
 
   if (is_slave)
@@ -52,7 +53,7 @@ void PLC::logger(int prio, const char* format, ...)
   va_end(arg1);
   va_end(arg2);
 
-  printf(KNRM);
+  fprintf(fout, "%s\n", KNRM);
   closelog();
   logger_mux.unlock();
 }
@@ -61,7 +62,7 @@ PLC::PLC(string _ip, string _name)  // Master only
 {
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
-  logger(LOG_INFO, "+ New PLC created: %s %s \n", ip_addr, dev_name);
+  logger(LOG_INFO, "+ New PLC created: %s %s", ip_addr, dev_name);
 }
 
 PLC::PLC(int _port, string _name)  // Slave only
@@ -72,7 +73,7 @@ PLC::PLC(int _port, string _name)  // Slave only
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;
-  logger(LOG_INFO, "+ New PLC created: %s:%d %s \n", ip_addr, tcp_port, dev_name);
+  logger(LOG_INFO, "+ New PLC created: %s:%d %s", ip_addr, tcp_port, dev_name);
 }
 
 PLC::~PLC() { deinit(); }
@@ -81,7 +82,7 @@ void PLC::init_master()  // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
-  logger(LOG_INFO, "+ PLC init: %s %-7s %-7s %-20s \n", ip_addr, dev_name,
+  logger(LOG_INFO, "+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name,
           str_title.c_str(), str_desc.c_str());
 
   for (auto &R : regs) {
@@ -98,7 +99,7 @@ void PLC::init_master()  // Master only
       reg_max = R.raddr;
 
     R.rvalue = 777;  // TODO: remove for production
-    logger(LOG_INFO, "+ REG init: %-7s %2d %2s [%s] \n", R.ch_name, R.raddr,
+    logger(LOG_INFO, "+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
             R.str_mode.c_str(), R.fullname.c_str());
   }
 }
@@ -107,17 +108,17 @@ int PLC::mb_new_master()
 {
   rc = 0;
 
-  logger(LOG_INFO, "%s:%d %s try to close/free.\n", ip_addr, tcp_port, dev_name);
+  logger(LOG_INFO, "%s:%d %s try to close/free.", ip_addr, tcp_port, dev_name);
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
-    logger(LOG_ERR, "%s:%d %s CTX allocate error.\n", ip_addr, tcp_port, dev_name);
+    logger(LOG_ERR, "%s:%d %s CTX allocate error.", ip_addr, tcp_port, dev_name);
     rc = -1;
   } else
-    logger(LOG_INFO, "%s:%d %s CTX allocate OK.\n", ip_addr, tcp_port, dev_name);
+    logger(LOG_INFO, "%s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
   return rc;
 }
@@ -178,7 +179,7 @@ int PLC::read_allregs()  // Master only
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
-    logger(LOG_ERR, "%s %s qty: expect %d, got %d\n", ip_addr, dev_name, nb_regs, rc);
+    logger(LOG_ERR, "%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs, rc);
   } else {
     mb.errors = 0;
     for (auto &r : regs)
@@ -211,7 +212,7 @@ int PLC::write_reg(reg_t &r)
     if (rc == -1) {
       mb.errors++;
       mb.errors_wr++;
-      logger(LOG_ERR, "%s %s write reg: %s error: %s \n", ip_addr, dev_name, r.ch_name,
+      logger(LOG_ERR, "%s %s write reg: %s error: %s", ip_addr, dev_name, r.ch_name,
              modbus_strerror(errno));
     } else {
       mb.errors = 0;
@@ -243,7 +244,7 @@ int PLC::set_timeout()
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {
-    logger(LOG_ERR, "%s %s set timeout failed: %s\n", ip_addr, dev_name,
+    logger(LOG_ERR, "%s %s set timeout failed: %s", ip_addr, dev_name,
            modbus_strerror(errno));
   }
 
@@ -254,7 +255,7 @@ void PLC::deinit()
 {
   modbus_close(ctx);
   modbus_free(ctx);
-  logger(LOG_INFO, "- PLC closed, free and deleted: %s %s. \n", ip_addr, dev_name);
+  logger(LOG_INFO, "- PLC closed, free and deleted: %s %s.", ip_addr, dev_name);
 }
 
 uint64_t PLC::millis()
