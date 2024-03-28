@@ -13,6 +13,8 @@ read -p "==== Warning! Will LOST ALL CHANGES! (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
 then
+    cd ..
+    make clean
     echo -e $YEL ==== Doing git STASH. $NC
     git stash
     echo -e $GRE ==== Doing git PULL. $NC
