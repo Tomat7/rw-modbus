@@ -11,9 +11,12 @@ NC='\033[0m' # No Color
 echo -e $RED
 read -p "==== Warning! Will LOST ALL CHANGES! (Y/N): " ANS
 
+echo -e $NC
+
 if [ "$ANS" == "Y" ]
 then
     cd ..
+    pwd
     make clean
     echo -e $YEL ==== Doing git STASH. $NC
     git stash
