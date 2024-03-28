@@ -10,6 +10,8 @@ NC='\033[0m' # No Color
 # =====================
 
 cd ..
+echo
+pwd
 
 echo -e $YEB ==== ADD files ==== $NC
 #clang-format -i *.cpp
