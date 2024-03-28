@@ -9,7 +9,7 @@
 //#include <time.h>
 //#include <sys/types.h>
 
-int read_console(time_t _sec, suseconds_t _usec)  // считываем с консоли
+int read_console(time_t _sec, suseconds_t _usec)    // считываем с консоли
 {
   int rb = -1;
   int retval;
@@ -25,7 +25,7 @@ int read_console(time_t _sec, suseconds_t _usec)  // считываем с ко�
   fd_set rfds;
   FD_ZERO(&rfds);
   FD_SET(STDIN_FILENO, &rfds);  // 0 - стандартный вход
-  tv.tv_sec = _sec;    // задаём время ожидания в секундах
+  tv.tv_sec = _sec;  // задаём время ожидания в секундах
   tv.tv_usec = _usec;  // ... в микросекундах
   retval = select(1, &rfds, NULL, NULL, &tv);
 

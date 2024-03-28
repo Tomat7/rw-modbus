@@ -8,14 +8,14 @@
 //
 
 #include <modbus/modbus.h>
-#include <string.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include <ctime>
 #include <iostream>
+#include <mutex>
 #include <string>
 #include <vector>
-#include <mutex>
 
 #define USE_SYSLOG
 
@@ -74,15 +74,15 @@ struct mbdata_t {
 class PLC
 {
 public:
-  PLC(string _ip = "X", string _name = "Master");   // for Master
-  PLC(int _port, string _name = "Slave");   // for Slave
-  ~PLC();  //
+  PLC(string _ip = "none", string _name = "Master");  // for Master
+  PLC(int _port, string _name = "Slave");          // for Slave
+  ~PLC();                                          //
 
   void init_master();   // for Master only (mandatory!)
   int read_master();    // for Master only
   int write_master();   // for Master only
   int update_master();  // for Master only
-  int check_slave();   // for Slave only. Need to call very often!
+  int check_slave();    // for Slave only. Need to call very often!
   int get_rc();
   void deinit();
   uint64_t millis();
@@ -115,6 +115,5 @@ private:
   int write_reg(reg_t &);
   int set_timeout();
   void logger(int prio, const char*, ...);
-  void loginfo(const char*, ...);
   static mutex logger_mux;
 };

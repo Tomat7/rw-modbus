@@ -3,8 +3,8 @@
 // https://www.bogotobogo.com/cplusplus/C11/1_C11_creating_thread.php
 // https://stackoverflow.com/questions/266168/simple-example-of-threading-in-c
 
-#include <vector>
 #include <thread>
+#include <vector>
 
 #include "./config.h"
 #include "./libs.h"
@@ -13,7 +13,6 @@
 
 static vector<int> res;
 static vector<uint64_t> oldt;
-
 
 void mb_update_master(int x)
 {
@@ -34,7 +33,7 @@ void mb_print_summary(int x)
 
 int mb_update()
 {
-//  cout << "===== mb_update =====" << endl;
+  //  cout << "===== mb_update =====" << endl;
   uint64_t i = 0;
   uint64_t nb_plcs = PLCset.size();
   vector<thread> thr(nb_plcs);
@@ -46,7 +45,7 @@ int mb_update()
 
   for (auto &th : thr)
     th.join();
-  
+
   printf("\n");
   for (i = 0; i < nb_plcs; i++)
     mb_print_summary((int)i);
@@ -56,7 +55,6 @@ int mb_update()
 
   return 0;
 }
-
 
 int mb_read()
 {
@@ -72,7 +70,6 @@ int mb_read()
   }
   return 0;
 }
-
 
 int mb_write()
 {

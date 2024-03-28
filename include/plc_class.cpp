@@ -9,16 +9,16 @@
 
 #include <errno.h>
 #include <modbus/modbus.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
-#include <stdarg.h>
 
 #include <chrono>
-#include <string>
 #include <mutex>
- 
+#include <string>
+
 // ANSI color codes
 #define KNRM "\x1B[0m"
 #define KRED "\x1B[91m"
@@ -35,7 +35,6 @@ void PLC::logger(int prio, const char* format, ...)
   if (prio == LOG_ERR) {
     fout = stderr;
     fprintf(fout, KRED);
-    //printf(KRED);
   }
 
   if (is_slave)
@@ -58,16 +57,16 @@ void PLC::logger(int prio, const char* format, ...)
   logger_mux.unlock();
 }
 
-PLC::PLC(string _ip, string _name)  // Master only
+PLC::PLC(string _ip, string _name)    // Master only
 {
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
   logger(LOG_INFO, "+ New PLC created: %s %s", ip_addr, dev_name);
 }
 
-PLC::PLC(int _port, string _name)  // Slave only
+PLC::PLC(int _port, string _name)    // Slave only
 {
-  ip_addr = "0.0.0.0";  // Slave always listening on ALL addresses!
+  ip_addr = "0.0.0.0";               // Slave always listening on ALL addresses!
   tcp_port = _port;
   str_desc = _name;
   str_dev_name = _name;
@@ -78,12 +77,12 @@ PLC::PLC(int _port, string _name)  // Slave only
 
 PLC::~PLC() { deinit(); }
 
-void PLC::init_master()  // Master only
+void PLC::init_master()    // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
   logger(LOG_INFO, "+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name,
-          str_title.c_str(), str_desc.c_str());
+         str_title.c_str(), str_desc.c_str());
 
   for (auto &R : regs) {
     R.fullname = str_dev_name + "." + R.str_name;
@@ -100,7 +99,7 @@ void PLC::init_master()  // Master only
 
     R.rvalue = 777;  // TODO: remove for production
     logger(LOG_INFO, "+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
-            R.str_mode.c_str(), R.fullname.c_str());
+           R.str_mode.c_str(), R.fullname.c_str());
   }
 }
 
@@ -115,7 +114,8 @@ int PLC::mb_new_master()
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
-    logger(LOG_ERR, "%s:%d %s CTX allocate error.", ip_addr, tcp_port, dev_name);
+    logger(LOG_ERR, "%s:%d %s CTX allocate error.", ip_addr, tcp_port,
+           dev_name);
     rc = -1;
   } else
     logger(LOG_INFO, "%s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
@@ -123,7 +123,7 @@ int PLC::mb_new_master()
   return rc;
 }
 
-int PLC::mb_connect()  // Master only
+int PLC::mb_connect()    // Master only
 {
   if ((mb.errors > 0) || (ctx == nullptr)) {
     rc = mb_new_master();
@@ -143,7 +143,7 @@ int PLC::mb_connect()  // Master only
   return rc;
 }
 
-int PLC::read_master()  // Master only
+int PLC::read_master()    // Master only
 {
   rc = read_allregs();
   mb.status = rc;
@@ -158,7 +158,7 @@ int PLC::read_master()  // Master only
   return rc;
 }
 
-int PLC::read_allregs()  // Master only
+int PLC::read_allregs()                 // Master only
 {
   int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
@@ -179,7 +179,8 @@ int PLC::read_allregs()  // Master only
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
-    logger(LOG_ERR, "%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs, rc);
+    logger(LOG_ERR, "%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs,
+           rc);
   } else {
     mb.errors = 0;
     for (auto &r : regs)
@@ -191,7 +192,7 @@ int PLC::read_allregs()  // Master only
   return rc;
 }
 
-int PLC::write_master()  // Master only
+int PLC::write_master()    // Master only
 {
   for (auto &r : regs)
     rc = write_reg(r);
@@ -212,8 +213,8 @@ int PLC::write_reg(reg_t &r)
     if (rc == -1) {
       mb.errors++;
       mb.errors_wr++;
-      logger(LOG_ERR, "%s %s write reg: %s error: %s", ip_addr, dev_name, r.ch_name,
-             modbus_strerror(errno));
+      logger(LOG_ERR, "%s %s write reg: %s error: %s", ip_addr, dev_name,
+             r.ch_name, modbus_strerror(errno));
     } else {
       mb.errors = 0;
       r.rupdate = 0;
@@ -227,7 +228,7 @@ int PLC::write_reg(reg_t &r)
   return rc;
 }
 
-int PLC::update_master()  // Master only
+int PLC::update_master()    // Master only
 {
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
