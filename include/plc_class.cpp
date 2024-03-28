@@ -107,45 +107,37 @@ int PLC::mb_new_master()
 {
   rc = 0;
 
-  logger(LOG_INFO, "%s:%d %s try to close/free.", ip_addr, tcp_port, dev_name);
+  // logger(LOG_INFO, "%s:%d %s try to close/free.", ip_addr, tcp_port, dev_name);
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
+    rc = -1;
     logger(LOG_ERR, "%s:%d %s CTX allocate error.", ip_addr, tcp_port,
            dev_name);
-    rc = -1;
   } else
     logger(LOG_INFO, "%s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
   return rc;
 }
 
-int PLC::mb_connect()    // Master only
-{
-  if ((mb.errors > 0) || (ctx == nullptr)) {
-    rc = mb_new_master();
-    rc = modbus_connect(ctx);
 
-    if (rc == -1) {
-      logger(LOG_ERR, "%s %s connect error: %s ", ip_addr, dev_name,
-             modbus_strerror(errno));
-      modbus_free(ctx);
-      ctx = nullptr;
-      mb.errors++;
-      mb.errors_cn++;
-    }
-  }
-  modbus_flush(ctx);
-
-  return rc;
-}
 
 int PLC::read_master()    // Master only
 {
-  rc = read_allregs();
+  rc = 0;
+  att = 0;
+
+  while (att < attempts && rc <= 0) {
+    att++;
+    rc = mb_connect();
+    if (rc == 0)
+      rc = read_allregs();
+    mb.errors++;
+  }
+
   mb.status = rc;
 
   for (auto &r : regs) {
@@ -158,29 +150,47 @@ int PLC::read_master()    // Master only
   return rc;
 }
 
+int PLC::mb_connect()    // Master only
+{
+  if ((mb.errors > 0) || (ctx == nullptr)) {
+    rc = mb_new_master();
+    rc = modbus_connect(ctx);
+
+    if (rc == -1) {
+      modbus_free(ctx);
+      ctx = nullptr;
+      mb.errors++;
+      mb.errors_cn++;
+      if (att >= attempts)
+        logger(LOG_ERR, "%s %s connect error: %s ", ip_addr, dev_name,
+               modbus_strerror(errno));
+    }
+  }
+  modbus_flush(ctx);
+
+  return rc;
+}
+
 int PLC::read_allregs()                 // Master only
 {
   int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
-  rc = 0;
 
-  for (int i = 0; i < attempts && rc <= 0; i++) {
-    mb_connect();
-    rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
-    mb.errors++;
-  }
+  rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
 
   if (rc == -1) {
     mb.errors++;
     mb.errors_rd++;
-    logger(LOG_ERR, "%s %s read error: %s ", ip_addr, dev_name,
-           modbus_strerror(errno));
+    if (att >= attempts)
+      logger(LOG_ERR, "%s %s read error: %s ", ip_addr, dev_name,
+             modbus_strerror(errno));
   } else if (rc != nb_regs) {
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
-    logger(LOG_ERR, "%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs,
-           rc);
+    if (att >= attempts)
+      logger(LOG_ERR, "%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs,
+             rc);
   } else {
     mb.errors = 0;
     for (auto &r : regs)
@@ -266,34 +276,5 @@ uint64_t PLC::millis()
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
   return t;
 }
-
-/*
-    void PLC::new_str(const char *ch) {
-    char *new_ch = nullptr;
-    const char *save_ch = ch;
-    string s = (string)ch;
-    int len = strlen(ch) + 1;
-    new_ch = (char *)malloc(len);
-    //  strcpy(new_ch, ch);
-    //  new_ch[0] = (char)"_";
-
-    for (int i = 0; i <= len; i++)
-    new_ch[i] = ch[i];
-
-    ch = new_ch;
-    //  logger(LOG_INFO, "String copied: %s %s \n",  ch, new_ch);
-    //  ch = s.c_str();
-    logger(LOG_INFO, "String copied: %s %s \n", ch, new_ch);
-
-    if (save_ch == ch)
-    logger(LOG_INFO, "save_ch == ch! \n");
-    if (save_ch == new_ch)
-    logger(LOG_INFO, "save_ch == new_ch! \n");
-    if (ch == new_ch)
-    logger(LOG_INFO, "ch == new_ch! \n");
-
-    return;
-    }
-*/
 
 int PLC::get_rc() { return rc; }

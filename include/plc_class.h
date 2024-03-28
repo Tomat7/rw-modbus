@@ -19,15 +19,6 @@
 
 #define USE_SYSLOG
 
-//#include "./macros.h"
-/*
-    #ifdef USE_SYSLOG
-    #define LOGERR(...) (fprintf(stderr, __VA_ARGS__), syslog(LOG_ERR,
-    __VA_ARGS__)) #define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO,
-    __VA_ARGS__)) #else #define LOGERR(...) fprintf(stderr, __VA_ARGS__) #define
-    LOGINFO(...) printf(__VA_ARGS__) #endif
-*/
-
 using namespace std;
 
 struct reg_t {
@@ -108,6 +99,7 @@ private:
   modbus_t* ctx = nullptr;
   bool is_slave = false;
   int rc = -1;
+  int att = 0;
   int mb_new_master();
   int mb_new_slave();
   int mb_connect();
