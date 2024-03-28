@@ -51,25 +51,6 @@ void PLC::init_master() // Master only
   }
 }
 
-int PLC::mb_new_master()
-{
-  rc = 0;
-  // logger(LOG_INFO, "%s:%d %s try to close/free.", ip_addr, tcp_port,
-  // dev_name);
-  modbus_close(ctx);
-  modbus_free(ctx);
-  ctx = nullptr;
-
-  ctx = modbus_new_tcp(ip_addr, tcp_port);
-  if (ctx == nullptr) {
-    rc = -1;
-    logger(LOG_ERR, "%s:%d %s CTX allocate error.", ip_addr, tcp_port,
-           dev_name);
-  } else
-    logger(LOG_INFO, "%s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
-
-  return rc;
-}
 
 int PLC::read_master() // Master only
 {
@@ -100,7 +81,7 @@ int PLC::read_master() // Master only
 int PLC::mb_connect() // Master only
 {
   if ((mb.errors > 0) || (ctx == nullptr)) {
-    rc = mb_new_master();
+    rc = mb_ctx();
     rc = modbus_connect(ctx);
 
     if (rc == -1) {
@@ -201,7 +182,7 @@ int PLC::update_master() // Master only
 int PLC::set_timeout()
 {
   if (ctx == nullptr)
-    mb_new_master();
+    mb_ctx();
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {
@@ -213,11 +194,11 @@ int PLC::set_timeout()
 }
 
 /*
-void PLC::deinit()
-{
+  void PLC::deinit()
+  {
   modbus_close(ctx);
   modbus_free(ctx);
   logger(LOG_INFO, "- PLC closed, free and deleted: %s %s.", ip_addr, dev_name);
-}
+  }
 */
 

@@ -23,7 +23,7 @@ PLC::PLC() {
 
 PLC::~PLC() { deinit(); }
 
-int PLC::mb_new_master() {
+int PLC::mb_ctx() {
   rc = 0;
 
   //  if (ctx != nullptr) {
@@ -49,7 +49,7 @@ int PLC::mb_new_master() {
 
 int PLC::mb_connect() {
   if ((rc < 0) || (ctx == nullptr)) {
-    rc = mb_new_master();
+    rc = mb_ctx();
     //    if (rc == -1)
     //      return rc;
     rc = modbus_connect(ctx);
@@ -197,7 +197,7 @@ int PLC::update_master() {
 int PLC::set_timeout() {
 
   if (ctx == nullptr)
-    mb_new_master();
+    mb_ctx();
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {

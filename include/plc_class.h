@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 
+#define MB_SLAVE_CONN_MAX 5
 #define USE_SYSLOG
 
 using namespace std;
@@ -72,7 +73,13 @@ public:
   int read_master();   // for Master only
   int write_master();  // for Master only
   int update_master(); // for Master only
-  int check_slave();   // for Slave only. Need to call very often!
+  
+  int renew_mapping();  // for Slave only 
+  int renew_listen();  // for Slave only 
+  int renew_slave();  // for Slave only 
+  int check_slave();
+  void close_slave();
+  int handle_slave(int usec = 10000); // for Slave only. Need to call very often!
   int get_rc();
 //  void deinit();
   uint64_t millis();
@@ -99,7 +106,7 @@ private:
   bool is_slave = false;
   int rc = -1;
   int att = 0;
-  int mb_new_master();
+  int mb_ctx();
   int mb_new_slave();
   int mb_connect();
   int read_allregs();
@@ -107,4 +114,12 @@ private:
   int set_timeout();
   void logger(int prio, const char*, ...);
   static mutex logger_mux;
+
+  modbus_mapping_t* mb_mapping;
+  fd_set refset;
+  fd_set rdset;
+  uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
+  int server_socket = -1;
+  int master_socket;
+  int fdmax;
 };
