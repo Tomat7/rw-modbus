@@ -205,24 +205,31 @@ int PLC::read_allregs()                 // Master only
 int PLC::write_master()    // Master only
 {
   for (auto &r : regs)
-    rc = write_reg(r);
-
+    if (r.rmode && r.rupdate)
+    {
+      rc = 0;
+      att = 0;
+      while (att < attempts && rc <= 0)
+      {
+        att++;
+        rc = mb_connect();
+        if (rc == 0)
+          rc = write_reg(r);
+        mb.errors++;
+      }
+    }
   return rc;
 }
 
 int PLC::write_reg(reg_t &r)
 {
-  if (r.rmode && r.rupdate) {
-    rc = 0;
-    for (int i = 0; i < attempts && rc <= 0; i++) {
-      mb_connect();
-      rc = modbus_write_register(ctx, r.raddr, r.rvalue);
-      mb.errors++;
-    }
+  rc = modbus_write_register(ctx, r.raddr, r.rvalue);
 
-    if (rc == -1) {
-      mb.errors++;
-      mb.errors_wr++;
+  if (rc == -1)
+  {
+    mb.errors++;
+    mb.errors_wr++;
+    if (att >= attempts)
       logger(LOG_ERR, "%s %s write reg: %s error: %s", ip_addr, dev_name,
              r.ch_name, modbus_strerror(errno));
     } else {
@@ -232,8 +239,6 @@ int PLC::write_reg(reg_t &r)
 
     r.rstatus = rc;
     r.rerrors = mb.errors;
-    closelog();
-  }
 
   return rc;
 }
