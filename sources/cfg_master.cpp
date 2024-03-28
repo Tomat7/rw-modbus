@@ -85,7 +85,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
           cfgPLC[i].lookupValue("polling", plc.mb.interval_ms) &&
           cfgPLC[i].lookupValue("timeout", plc.mb.timeout_us))) {
       LOGERR("Error reading PLC configuration: %d\n", i);
-      continue;  // get out of current iteration if any field wrong in CFG-file
+      continue; // get out of current iteration if any field wrong in CFG-file
     }
 
     plc.reg_qty = cfgPLC[i]["regs"].getLength();
@@ -94,7 +94,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
 
     //    PLCset.push_back(plcnow);
     /*PLCset[i].init();*/
-    plc.init_master();  // Absolutely necessary to copy str to char* and other
+    plc.init_master(); // Absolutely necessary to copy str to char* and other
     LOGINFO("Configured REGs now: %d\n", (int)plc.regs.size());
     cout << endl;
 

@@ -20,8 +20,8 @@
 #define KWHT "\x1B[37m"
 
 #ifdef USE_SYSLOG
-#define LOGERR(...)                                                  \
-  (printf("\x1B[91m\n"), fprintf(stderr, __VA_ARGS__), printf(KNRM), \
+#define LOGERR(...)                                                            \
+  (printf("\x1B[91m\n"), fprintf(stderr, __VA_ARGS__), printf(KNRM),           \
    syslog(LOG_ERR, __VA_ARGS__))
 #define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO, __VA_ARGS__))
 #else

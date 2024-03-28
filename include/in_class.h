@@ -41,9 +41,9 @@ public:
   int check_console();
 
   const char* fname = nullptr;
-  int fds_fd = 0;  // for console
-  int fd = 0;      // file description
-  int wd = 0;      // watch description
+  int fds_fd = 0; // for console
+  int fd = 0;     // file description
+  int wd = 0;     // watch description
 
 private:
   int rc = -1;
