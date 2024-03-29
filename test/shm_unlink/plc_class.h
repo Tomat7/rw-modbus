@@ -49,7 +49,7 @@ public:
   int set_timeout();
   int mb_connect();
   int read_master();
-  void deinit();
+  void mb_deinit();
   uint64_t millis();
 
   const char *dev_title = nullptr;

@@ -83,7 +83,7 @@ public:
   int write_master();
   int update_master();
   int get_rc();
-  void deinit();
+  void mb_deinit();
   uint64_t millis();
 
   const char *dev_title = nullptr;

@@ -114,7 +114,7 @@ int PLC::set_timeout()
     return rc;
 }
 
-void PLC::deinit()
+void PLC::mb_deinit()
 {
     if (ctx != nullptr) {
         modbus_close(ctx);

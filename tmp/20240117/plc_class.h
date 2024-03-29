@@ -27,14 +27,14 @@ public:
     ~PLC()
     {
         cout << "- PLC deleted: " << dev_name << endl;
-        deinit();
+        mb_deinit();
     }
 
     int init(const char *_ip = "", int _port = 0);
     int set_timeout();
     int mb_connect();
     int read_master();
-    void deinit();
+    void mb_deinit();
     uint64_t millis();
 
     const char *dev_title;

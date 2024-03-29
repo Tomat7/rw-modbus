@@ -21,7 +21,7 @@ PLC::PLC() {
   LOGINFO("+ New PLC created.\n");
 }
 
-PLC::~PLC() { deinit(); }
+PLC::~PLC() { mb_deinit(); }
 
 int PLC::init(const char *_ip, int _port) {
   rc = 0;
@@ -130,7 +130,7 @@ int PLC::set_timeout() {
   return rc;
 }
 
-void PLC::deinit() {
+void PLC::mb_deinit() {
   if (ctx != nullptr) {
     LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
     modbus_close(ctx);

@@ -24,41 +24,66 @@ mutex PLC::logger_mux;
 
 PLC::~PLC()
 {
-  deinit();
+  mb_deinit();
+  logger(LOG_INFO, "- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 }
 
-void PLC::deinit()
+int PLC::get_rc() { return rc; }
+
+void PLC::mb_deinit()
 {
 
-  if (server_socket != -1)
-  {
-//    logger(LOG_INFO, "- PLC ready to close socket: %s %s.", ip_addr, dev_name);
+  if (server_socket != -1) {
     close(server_socket);
     server_socket = -1;
   }
 
-  if (mb_mapping != nullptr)
-  {
-//    logger(LOG_INFO, "- PLC ready to free mapping: %s %s.", ip_addr, dev_name);
-    modbus_mapping_free(mb_mapping);
-    mb_mapping = nullptr;
+  if (mbm != nullptr) {
+    modbus_mapping_free(mbm);
+    mbm = nullptr;
   }
 
-//  logger(LOG_INFO, "- PLC ready to close ctx & free: %s %s.", ip_addr, dev_name);
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
-  logger(LOG_INFO, "- PLC closed, free and deleted: %s %s.", ip_addr, dev_name);
-  
+//  logger(LOG_INFO, "- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+
   return;
 }
 
-void PLC::logger(int prio, const char *format, ...)
+
+int PLC::mb_ctx()
+{
+  rc = 0;
+  mb_deinit();
+
+  ctx = modbus_new_tcp(ip_addr, tcp_port);
+  if (ctx == nullptr) {
+    rc = -1;
+    logger(LOG_ERR, "- %s:%d %s CTX allocate error.", ip_addr, tcp_port,
+           dev_name);
+  } else
+    logger(LOG_INFO, "+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
+
+  return rc;
+}
+
+uint64_t PLC::millis()
+{
+#define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
+  uint64_t t;
+  t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
+  return t;
+}
+
+
+
+void PLC::logger(int prio, const char* format, ...)
 {
   logger_mux.lock();
-  FILE *fout = stdout;
-  if (prio == LOG_ERR)
-  {
+  FILE* fout = stdout;
+
+  if (prio == LOG_ERR) {
     fout = stderr;
     fprintf(fout, KRED);
   }
@@ -82,37 +107,5 @@ void PLC::logger(int prio, const char *format, ...)
   closelog();
   logger_mux.unlock();
 }
-
-int PLC::mb_ctx()
-{
-  rc = 0;
-  // logger(LOG_INFO, "%s:%d %s try to close/free.", ip_addr, tcp_port,
-  // dev_name);
-  modbus_close(ctx);
-  modbus_free(ctx);
-  ctx = nullptr;
-
-  ctx = modbus_new_tcp(ip_addr, tcp_port);
-  if (ctx == nullptr)
-  {
-    rc = -1;
-    logger(LOG_ERR, "%s:%d %s CTX allocate error.", ip_addr, tcp_port,
-           dev_name);
-  }
-  else
-    logger(LOG_INFO, "%s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
-
-  return rc;
-}
-
-uint64_t PLC::millis()
-{
-#define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
-  uint64_t t;
-  t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
-  return t;
-}
-
-int PLC::get_rc() { return rc; }
 
 // eof
