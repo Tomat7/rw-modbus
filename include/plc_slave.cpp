@@ -86,7 +86,7 @@ int PLC::renew_listen() // Slave only
 
 int PLC::renew_slave()
 {
-  close_slave();
+  deinit();
   rc = mb_ctx();
   if (rc != -1)
     rc = renew_mapping();
@@ -103,14 +103,7 @@ int PLC::check_slave()
   return rc;  
 }
 
-void PLC::close_slave()
-{
-  if (server_socket != -1)
-    close(server_socket);
-  modbus_free(ctx);
-  modbus_mapping_free(mb_mapping);
-  return;
-}
+
 
 int PLC::handle_slave(int usec)
 {

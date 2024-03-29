@@ -9,6 +9,7 @@
 
 #include <stdarg.h>
 #include <syslog.h>
+#include <unistd.h>
 #include <chrono>
 #include <mutex>
 
@@ -23,16 +24,41 @@ mutex PLC::logger_mux;
 
 PLC::~PLC()
 {
-  modbus_close(ctx);
-  modbus_free(ctx);
-  logger(LOG_INFO, "- PLC closed, free and deleted: %s %s.", ip_addr, dev_name);
+  deinit();
 }
 
-void PLC::logger(int prio, const char* format, ...)
+void PLC::deinit()
+{
+
+  if (server_socket != -1)
+  {
+//    logger(LOG_INFO, "- PLC ready to close socket: %s %s.", ip_addr, dev_name);
+    close(server_socket);
+    server_socket = -1;
+  }
+
+  if (mb_mapping != nullptr)
+  {
+//    logger(LOG_INFO, "- PLC ready to free mapping: %s %s.", ip_addr, dev_name);
+    modbus_mapping_free(mb_mapping);
+    mb_mapping = nullptr;
+  }
+
+//  logger(LOG_INFO, "- PLC ready to close ctx & free: %s %s.", ip_addr, dev_name);
+  modbus_close(ctx);
+  modbus_free(ctx);
+  ctx = nullptr;
+  logger(LOG_INFO, "- PLC closed, free and deleted: %s %s.", ip_addr, dev_name);
+  
+  return;
+}
+
+void PLC::logger(int prio, const char *format, ...)
 {
   logger_mux.lock();
-  FILE* fout = stdout;
-  if (prio == LOG_ERR) {
+  FILE *fout = stdout;
+  if (prio == LOG_ERR)
+  {
     fout = stderr;
     fprintf(fout, KRED);
   }
@@ -67,11 +93,13 @@ int PLC::mb_ctx()
   ctx = nullptr;
 
   ctx = modbus_new_tcp(ip_addr, tcp_port);
-  if (ctx == nullptr) {
+  if (ctx == nullptr)
+  {
     rc = -1;
     logger(LOG_ERR, "%s:%d %s CTX allocate error.", ip_addr, tcp_port,
            dev_name);
-  } else
+  }
+  else
     logger(LOG_INFO, "%s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
   return rc;

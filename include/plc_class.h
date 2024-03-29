@@ -68,6 +68,10 @@ public:
   PLC(string _ip = "none", string _name = "Master"); // for Master
   PLC(int _port, string _name = "Slave");            // for Slave
   ~PLC();                                            //
+  
+  void deinit();
+  int get_rc();
+  uint64_t millis();
 
   void init_master();  // for Master only (mandatory!)
   int read_master();   // for Master only
@@ -78,12 +82,8 @@ public:
   int renew_listen();  // for Slave only 
   int renew_slave();  // for Slave only 
   int check_slave();
-  void close_slave();
   int handle_slave(int usec = 10000); // for Slave only. Need to call very often!
-  int get_rc();
-//  void deinit();
-  uint64_t millis();
-
+  
   string str_title;
   string str_desc;
   string str_dev_name;
