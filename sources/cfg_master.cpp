@@ -127,7 +127,11 @@ void cfg_init_regs(const Setting &cfgREG, PLC* pn)
 
     regnow.rvalue = 555;
     //    cfg_print_reg_details(regnow);
-    pn->regs.push_back(regnow);
+//    pn->regs.push_back(regnow);
+//    LOGINFO("Try to fill regs regmap\n");
+    pn->regs[regnow.raddr] = regnow;
+//    pn->regs.insert(pair<int, reg_t>(regnow.raddr, regnow));
+//    LOGINFO("Done filling regs regmap\n");
   }
 
   return;

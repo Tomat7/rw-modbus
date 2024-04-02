@@ -32,7 +32,7 @@ void PLC::init_master() // Master only
   logger(LOG_INFO, "+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name,
          str_title.c_str(), str_desc.c_str());
 
-  for (auto &R : regs) {
+  for (auto &[n, R] : regs) {
     R.fullname = str_dev_name + "." + R.str_name;
     R.ch_name = R.str_name.c_str();
 
@@ -68,7 +68,7 @@ int PLC::read_master() // Master only
 
   mb.status = rc;
 
-  for (auto &r : regs) {
+  for (auto &[n, r] : regs) {
     r.rstatus = rc;
     r.rerrors = mb.errors;
   }
@@ -121,7 +121,7 @@ int PLC::read_allregs() // Master only
              nb_regs, rc);
   } else {
     mb.errors = 0;
-    for (auto &r : regs)
+    for (auto &[n, r] : regs)
       r.rvalue = mbregs[r.raddr - reg_min];
   }
 
@@ -132,7 +132,7 @@ int PLC::read_allregs() // Master only
 
 int PLC::write_master() // Master only
 {
-  for (auto &r : regs)
+  for (auto &[n, r] : regs)
     if (r.rmode && r.rupdate) {
       rc = 0;
       att = 0;

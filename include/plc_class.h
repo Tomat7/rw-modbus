@@ -15,6 +15,7 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include <map>
 
 #define MB_SLAVE_CONN_MAX 5
 #define USE_SYSLOG
@@ -22,8 +23,8 @@
 using namespace std;
 
 struct reg_t {
-  uint16_t rvalue = 0;
   int raddr = 0;
+  uint16_t rvalue = 0;
   int rstatus = 0; // -1 mean ERROR, any positive - is OK
   int rerrors = 0; // number of errors on MB func (init/connect/read)
   int rmode = 0;   // 1 - mean RW
@@ -94,7 +95,7 @@ public:
   int reg_max = 0; // maximal address of reg
   int reg_qty = 0; // number of regs
   mbdata_t mb;
-  std::vector<reg_t> regs;
+  std::map<int, reg_t> regs;
 
 private:
   modbus_t* ctx = nullptr;
