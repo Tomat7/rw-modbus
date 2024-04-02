@@ -78,7 +78,7 @@ void regs_update()
       else
         printf("  ");
 
-      if (local_val != remote_val)
+      if (rm.val != local_val)
       { // If new value got from SHM (SCADA?)
         rm.set_remote(local_val);
         printf("< %d", local_val);
