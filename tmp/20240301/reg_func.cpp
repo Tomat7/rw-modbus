@@ -24,7 +24,7 @@ void regs_init() {
       R.fullname = rn.c_str();
       R.rvalue = 5757; // TODO: remove for production!!
 
-      rmap_t rm;
+      RegMap_c rm;
       rm.ptr_reg = &R;
       rm.rdata.rvalue = R.rvalue;
       rm.rdata.rerrors = R.rerrors;
@@ -33,10 +33,10 @@ void regs_init() {
 
       rm.fd = create_shm_fd(rn.c_str());
       if (rm.fd != -1) {
-        rdata_t *addr = (rdata_t *)create_shm_addr(rm.fd, sizeof(rdata_t));
+        regdata_t *addr = (regdata_t *)create_shm_addr(rm.fd, sizeof(regdata_t));
         if (addr != nullptr) {
           LOGINFO("SHM: created %s\n", rn.c_str());
-          rm.ptr_shm = addr;
+          rm.ptr_data_shm = addr;
         }
       }
 
@@ -54,13 +54,13 @@ void regs_update() {
 
     const auto &plc = m.ptr_reg;
     auto &mem = m.rdata;
-    rdata_t shm;
+    regdata_t shm;
     uint16_t remote_val = plc->rvalue;
     uint16_t mem_val = mem.rvalue;
     uint16_t &shm_val = shm.rvalue;
 
     if (plc->rmode) {
-      memcpy(&shm, m.ptr_shm, sizeof(rdata_t));
+      memcpy(&shm, m.ptr_data_shm, sizeof(regdata_t));
 
       if (mem_val != remote_val)
         printf(" >");
@@ -80,7 +80,7 @@ void regs_update() {
     mem.rerrors = plc->rerrors;
     mem.rstatus = plc->rstatus;
 
-    memcpy(m.ptr_shm, &m.rdata, sizeof(rdata_t));
+    memcpy(m.ptr_data_shm, &m.rdata, sizeof(regdata_t));
     printf("  +\n");
   }
 

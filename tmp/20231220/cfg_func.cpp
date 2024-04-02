@@ -9,7 +9,7 @@ using namespace libconfig;
 int cfg_fill_plcset(const Setting &PLCs);
 
 Config cfg;
-PLC plcnow;
+PLC_c plcnow;
 //reg_t regnow;
 
 // This example reads the configuration file and displays

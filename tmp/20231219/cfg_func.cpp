@@ -44,7 +44,7 @@ int cfg_read(const char *cfg_file)
 
 // ===== Cycle for PLCs =====
         for (int i = 0; i < count_PLCs; ++i) {
-            PLC plcnow;
+            PLC_c plcnow;
             const Setting &plc = PLCs[i];
             const Setting &REGs = plc["regs"];
             const char *ptitle; 	// Just to show

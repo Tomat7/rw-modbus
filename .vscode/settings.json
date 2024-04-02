@@ -49,7 +49,10 @@
         "typeinfo": "cpp",
         "*.h++": "cpp",
         "map": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "condition_variable": "cpp",
+        "mutex": "cpp",
+        "cinttypes": "cpp"
     },
     "makefile.launchConfigurations": [
         {

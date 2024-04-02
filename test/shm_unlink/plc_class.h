@@ -40,10 +40,10 @@ struct reg_t {
   reg_t *rshm = nullptr;
 };
 
-class PLC {
+class PLC_c {
 public:
-  PLC();  // { LOGINFO("+ New PLC created."); }
-  ~PLC(); // { deinit(); }
+  PLC_c();  // { LOGINFO("+ New PLC created."); }
+  ~PLC_c(); // { deinit(); }
 
   int init(const char *_ip = "", int _port = 0);
   int set_timeout();

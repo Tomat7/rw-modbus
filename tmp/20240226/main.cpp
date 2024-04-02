@@ -13,9 +13,9 @@
 // using namespace std;
 // using namespace libconfig;
 
-map<string, rmap_t> REGmap;
+map<string, RegMap_c> REGmap;
 // map<string, rshm_t> SHMmap;
-vector<PLC> PLCset;
+vector<PLC_c> PLCset;
 int rc;
 
 // int main(int argc, char **argv) {

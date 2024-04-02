@@ -27,7 +27,7 @@ void regs_init() {
       R.fullname = rn.c_str();
       R.rvalue = 5757; // TODO: remove for production!!
 
-      rmap_t rm;
+      RegMap_c rm;
       rm.ptr_reg = &R;
       rm.rdata.rvalue = R.rvalue;
       rm.rdata.rerrors = R.rerrors;
@@ -36,10 +36,10 @@ void regs_init() {
 
       rm.fd = create_shm_fd(rn.c_str());
       if (rm.fd != -1) {
-        rdata_t *addr = (rdata_t *)create_shm_addr(rm.fd, sizeof(rdata_t));
+        regdata_t *addr = (regdata_t *)create_shm_addr(rm.fd, sizeof(regdata_t));
         if (addr != nullptr) {
           LOGINFO("SHM: created %s\n", rn.c_str());
-          rm.ptr_shm = addr;
+          rm.ptr_data_shm = addr;
         }
       }
 
@@ -92,7 +92,7 @@ void reg_print_name() {
     d.rerrors = r->rerrors;
     const void *ptr = &m.rdata;
 
-    memcpy(m.ptr_shm, ptr, sizeof(rdata_t));
+    memcpy(m.ptr_data_shm, ptr, sizeof(regdata_t));
     printf("   +\n");
 
     /*

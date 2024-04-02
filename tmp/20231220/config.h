@@ -17,7 +17,7 @@ struct reg_t {
     uint16_t rvalue;
 };
 
-struct PLC {
+struct PLC_c {
     const char *dev_name;
     const char *ip_addr;
     int reg_qty;
@@ -27,7 +27,7 @@ struct PLC {
 };
 
 extern map<string, uint16_t *> MBreg;
-extern vector<PLC> PLCset;
+extern vector<PLC_c> PLCset;
 
 int cfg_read(const char *cfg_file);
 //int cfg_fill_plc(const Setting &PLCs);

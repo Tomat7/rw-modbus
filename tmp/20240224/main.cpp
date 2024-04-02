@@ -15,7 +15,7 @@
 
 map<string, reg_t *> REGmap;
 map<string, rshm_t> SHMmap;
-vector<PLC> PLCset;
+vector<PLC_c> PLCset;
 int rc;
 
 // int main(int argc, char **argv) {

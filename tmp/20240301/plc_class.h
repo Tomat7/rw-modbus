@@ -45,7 +45,7 @@ struct reg_t {
   const char *ch_type = nullptr;
 };
 
-struct rdata_t {
+struct regdata_t {
   uint16_t rvalue = 0;
   int rstatus = 0; // -1 mean ERROR, any positive - is OK
   int rerrors = 0; // number of errors on MB func (init/connect/read)
@@ -53,10 +53,10 @@ struct rdata_t {
   int rtype = 0;   // 1 - mean FLOAT
 };
 
-struct rmap_t {
+struct RegMap_c {
   int fd = -1;              // descriptor of SHARED MEMORY
-  rdata_t rdata;            // the COPY of PLC data (for memcpy() to SHM)
-  rdata_t *ptr_shm = nullptr; // ptr to SHARED MEMORY data
+  regdata_t rdata;            // the COPY of PLC data (for memcpy() to SHM)
+  regdata_t *ptr_data_shm = nullptr; // ptr to SHARED MEMORY data
   reg_t *ptr_reg = nullptr;   // ptr to PLC data
 };
 
@@ -71,10 +71,10 @@ struct mbdata_t {
   uint32_t errors_cn = 0;    // counter of CONNECT errors (summ from start)
 };
 
-class PLC {
+class PLC_c {
 public:
-  PLC();  // { LOGINFO("+ New PLC created."); }
-  ~PLC(); // { deinit(); }
+  PLC_c();  // { LOGINFO("+ New PLC created."); }
+  ~PLC_c(); // { deinit(); }
 
   int mb_ctx(); // const char *_ip = "", int _port = 0);
   int set_timeout();

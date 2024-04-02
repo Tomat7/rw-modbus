@@ -16,7 +16,7 @@ static vector<uint64_t> oldt;
 
 void mb_update_master(int x)
 {
-  PLC &D = PLCset[x];
+  PLC_c &D = PLCset[x];
   oldt[x] = D.mb.timestamp_ms;
   res[x] = D.update_master();
   std::this_thread::yield();
@@ -25,7 +25,7 @@ void mb_update_master(int x)
 
 void mb_print_summary(int x)
 {
-  PLC &D = PLCset[x];
+  PLC_c &D = PLCset[x];
   printf("%-7s_dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
          D.dev_name, D.mb.timestamp_ms - oldt[x], res[x], D.mb.errors,
          D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());

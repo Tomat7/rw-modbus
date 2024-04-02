@@ -43,24 +43,24 @@ struct reg_t {
   //  reg_t *rshm = nullptr;
 };
 
-struct rdata_t {
+struct regdata_t {
   int rerrors = 0;
   int rmode = 0;
   int rtype = 0;
   uint16_t rvalue = 0;
 };
 
-struct rmap_t {
+struct RegMap_c {
   int fd = -1;              // descriptor of SHARED MEMORY
-  rdata_t *ptr_shm = nullptr;  // ptr to SHARED MEMORY data
+  regdata_t *ptr_data_shm = nullptr;  // ptr to SHARED MEMORY data
   reg_t *ptr_reg = nullptr;    // ptr to PLC data
-  rdata_t rdata;            // the COPY of PLC data (fot memcpy())
+  regdata_t rdata;            // the COPY of PLC data (fot memcpy())
 };
 
-class PLC {
+class PLC_c {
 public:
-  PLC();  // { LOGINFO("+ New PLC created."); }
-  ~PLC(); // { deinit(); }
+  PLC_c();  // { LOGINFO("+ New PLC created."); }
+  ~PLC_c(); // { deinit(); }
 
   int init(const char *_ip = "", int _port = 0);
   int set_timeout();

@@ -16,7 +16,7 @@
 
 #include <string>
 
-PLC::PLC(string _ip, string _name) // Master only
+PLC_c::PLC_c(string _ip, string _name) // Master only
 {
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
@@ -25,7 +25,7 @@ PLC::PLC(string _ip, string _name) // Master only
 
 // Destructor in plc_common.cpp
 
-void PLC::init_master() // Master only
+void PLC_c::init_master() // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
@@ -33,11 +33,12 @@ void PLC::init_master() // Master only
          str_title.c_str(), str_desc.c_str());
 
   for (auto &[n, R] : regs) {
+    auto &rd = R.data;
     R.fullname = str_dev_name + "." + R.str_name;
     R.ch_name = R.str_name.c_str();
 
-    R.rmode = (R.str_mode == "rw") ? 1 : 0;
-    R.rtype = (R.str_type == "f") ? 1 : 0;
+    rd.rmode = (R.str_mode == "rw") ? 1 : 0;
+    rd.rtype = (R.str_type == "f") ? 1 : 0;
 
     if (R.raddr < reg_min)
       reg_min = R.raddr;
@@ -45,14 +46,14 @@ void PLC::init_master() // Master only
     if (R.raddr > reg_max)
       reg_max = R.raddr;
 
-    R.rvalue = 777; // TODO: remove for production
+    rd.rvalue = 777; // TODO: remove for production
     logger(LOG_INFO, "+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
            R.str_mode.c_str(), R.fullname.c_str());
   }
 }
 
 
-int PLC::read_master() // Master only
+int PLC_c::read_master() // Master only
 {
   rc = 0;
   att = 0;
@@ -68,9 +69,10 @@ int PLC::read_master() // Master only
 
   mb.status = rc;
 
-  for (auto &[n, r] : regs) {
-    r.rstatus = rc;
-    r.rerrors = mb.errors;
+  for (auto &[n, R] : regs) {
+    auto &rd = R.data;
+    rd.rstatus = rc;
+    rd.rerrors = mb.errors;
   }
 
   mb.timestamp_ms = millis();
@@ -78,7 +80,7 @@ int PLC::read_master() // Master only
   return rc;
 }
 
-int PLC::mb_connect() // Master only
+int PLC_c::mb_connect() // Master only
 {
   if ((mb.errors > 0) || (ctx == nullptr)) {
     rc = mb_ctx();
@@ -99,7 +101,7 @@ int PLC::mb_connect() // Master only
   return rc;
 }
 
-int PLC::read_allregs() // Master only
+int PLC_c::read_allregs() // Master only
 {
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
@@ -121,8 +123,8 @@ int PLC::read_allregs() // Master only
              nb_regs, rc);
   } else {
     mb.errors = 0;
-    for (auto &[n, r] : regs)
-      r.rvalue = mbregs[r.raddr - reg_min];
+    for (auto &[n, R] : regs)
+      R.data.rvalue = mbregs[R.raddr - reg_min];
   }
 
   delete[] mbregs;
@@ -130,46 +132,49 @@ int PLC::read_allregs() // Master only
   return rc;
 }
 
-int PLC::write_master() // Master only
+int PLC_c::write_master() // Master only
 {
-  for (auto &[n, r] : regs)
-    if (r.rmode && r.rupdate) {
+  for (auto &[n, R] : regs) {
+    auto &rd = R.data;
+    if (rd.rmode && rd.rupdate) {
       rc = 0;
       att = 0;
       while (att < attempts && rc <= 0) {
         att++;
         rc = mb_connect();
         if (rc == 0)
-          rc = write_reg(r);
+          rc = write_reg(R);
         else
           mb.errors++;
       }
     }
+  }
   return rc;
 }
 
-int PLC::write_reg(reg_t &r)
+int PLC_c::write_reg(reg_t &R)
 {
-  rc = modbus_write_register(ctx, r.raddr, r.rvalue);
+  auto &rd = R.data;
+  rc = modbus_write_register(ctx, R.raddr, rd.rvalue);
 
   if (rc == -1) {
     mb.errors++;
     mb.errors_wr++;
     if (att >= attempts)
       logger(LOG_ERR, "%s %s write reg: %s error: %s", ip_addr, dev_name,
-             r.ch_name, modbus_strerror(errno));
+             R.ch_name, modbus_strerror(errno));
   } else {
     mb.errors = 0;
-    r.rupdate = 0;
+    rd.rupdate = 0;
   }
 
-  r.rstatus = rc;
-  r.rerrors = mb.errors;
+  rd.rstatus = rc;
+  rd.rerrors = mb.errors;
 
   return rc;
 }
 
-int PLC::update_master() // Master only
+int PLC_c::update_master() // Master only
 {
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
@@ -179,7 +184,7 @@ int PLC::update_master() // Master only
   return rc;
 }
 
-int PLC::set_timeout()
+int PLC_c::set_timeout()
 {
   if (ctx == nullptr)
     mb_ctx();

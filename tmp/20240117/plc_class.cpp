@@ -16,7 +16,7 @@ using namespace std;
 
 // PLC::PLC() {}
 
-int PLC::init(const char *_ip, int _port)
+int PLC_c::init(const char *_ip, int _port)
 {
     rc = 0;
 
@@ -50,7 +50,7 @@ int PLC::init(const char *_ip, int _port)
     return rc;
 }
 
-int PLC::mb_connect()
+int PLC_c::mb_connect()
 {
 
     if (ctx == nullptr) {
@@ -71,7 +71,7 @@ int PLC::mb_connect()
     return rc;
 }
 
-int PLC::read_master()
+int PLC_c::read_master()
 {
     rc = 0;
 
@@ -101,7 +101,7 @@ int PLC::read_master()
     return 0;
 }
 
-int PLC::set_timeout()
+int PLC_c::set_timeout()
 {
 
     if (ctx == nullptr)
@@ -114,7 +114,7 @@ int PLC::set_timeout()
     return rc;
 }
 
-void PLC::mb_deinit()
+void PLC_c::mb_deinit()
 {
     if (ctx != nullptr) {
         modbus_close(ctx);
@@ -122,7 +122,7 @@ void PLC::mb_deinit()
     }
 }
 
-uint64_t PLC::millis()
+uint64_t PLC_c::millis()
 {
 #define CAST_MILLIS duration_cast<milliseconds>
 

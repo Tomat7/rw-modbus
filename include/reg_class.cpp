@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <chrono>
 #include <mutex>
+#include <map>
 
 // ANSI color codes
 #define KNRM "\x1B[0m"
@@ -20,14 +21,91 @@
 #define KYEL "\x1B[33m"
 #define KBLU "\x1B[94m"
 
-mutex PLC_c::logger_mux;
+// mutex PLC_c::logger_mux;
 
-PLC_c::~PLC_c()
+RegMap_c::RegMap_c(int _fd, regdata_t *_shm, regdata_t *_plc, reg_t *_reg)
 {
-  mb_deinit();
-  logger(LOG_INFO, "- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  fd = _fd;
+  ptr_data_shm = _shm;
+  ptr_data_plc = _plc;
+  ptr_reg = _reg;
+  //  logger(LOG_INFO, "+ New RegMap created.");
 }
 
+RegMap_c::RegMap_c() {}
+
+RegMap_c::~RegMap_c()
+{
+  //  mb_deinit();
+  //  logger(LOG_INFO, "- RegMap unmapped: %s %s.", ip_addr, dev_name);
+}
+
+uint16_t RegMap_c::get_remote()
+{
+  if (ptr_data_plc != nullptr)
+    return ptr_data_plc->rvalue;
+  return 0;
+}
+
+uint16_t RegMap_c::get_local()
+{
+  if (ptr_data_shm != nullptr && fd != -1)
+  {
+    regdata_t mem;
+    memcpy(&mem, ptr_data_shm, sizeof(regdata_t));
+    return mem.rvalue;
+  }
+  return 0;
+}
+
+void RegMap_c::set_remote(uint16_t _val)
+{
+  if (ptr_data_plc != nullptr)
+  {
+    ptr_data_plc->rvalue = _val;
+    ptr_data_plc->rupdate = 1;
+  }
+}
+
+void RegMap_c::set_local(uint16_t _val)
+{
+  if (ptr_data_shm != nullptr)
+  {
+    regdata_t mem;
+    mem.rvalue = _val;
+    memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
+  }
+}
+
+void RegMap_c::sync_local(uint16_t _val)
+{
+  if (ptr_data_plc != nullptr && ptr_data_shm != nullptr)
+  {
+    regdata_t mem;
+    mem.rvalue = _val;
+    mem.rerrors = ptr_data_plc->rerrors;
+    mem.rstatus = ptr_data_plc->rstatus;
+    mem.rmode = ptr_data_plc->rmode;
+    mem.rtype = ptr_data_plc->rtype;
+    memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
+  }
+}
+
+int RegMap_c::get_mode()
+{
+  if (ptr_data_plc != nullptr)
+    return ptr_data_plc->rmode;
+  return -1;
+}
+
+int RegMap_c::get_type()
+{
+  if (ptr_data_plc != nullptr)
+    return ptr_data_plc->rtype;
+  return -1;
+}
+
+/*
 int PLC_c::get_rc() { return rc; }
 
 void PLC_c::mb_deinit()
@@ -107,5 +185,5 @@ void PLC_c::logger(int prio, const char* format, ...)
   closelog();
   logger_mux.unlock();
 }
-
+*/
 // eof

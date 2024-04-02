@@ -13,8 +13,8 @@
 // using namespace std;
 // using namespace libconfig;
 
-map<string, rmap_t> REGmap;
-vector<PLC> PLCset;
+map<string, RegMap_c> REGmap;
+vector<PLC_c> PLCset;
 int rc;
 Timer t;
 

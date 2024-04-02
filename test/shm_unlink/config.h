@@ -54,7 +54,7 @@
 // using namespace libconfig;
 
 extern std::map<string, reg_t *> REGmap;
-extern std::vector<PLC> PLCset;
+extern std::vector<PLC_c> PLCset;
 
 int cfg_read(const char *cfg_file);
 

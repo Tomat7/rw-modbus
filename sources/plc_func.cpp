@@ -20,7 +20,7 @@ void plc_show2()
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
       printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
-             R.raddr, R.rvalue, R.fullname.c_str());
+             R.raddr, R.data.rvalue, R.fullname.c_str());
     }
 }
 
@@ -57,7 +57,7 @@ void plc_print_reg_details(int i, int j)
 {
   cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
        << right << PLCset[i].regs[j].raddr << setw(7) << right
-       << PLCset[i].regs[j].rvalue << "  " << left << PLCset[i].regs[j].str_mode
+       << PLCset[i].regs[j].data.rvalue << "  " << left << PLCset[i].regs[j].str_mode
        << " " << endl;
   return;
 }

@@ -27,7 +27,7 @@
 //void mb_slave_print_reg(int /*reg_address*/);
 
 Timer t;
-PLC Slave(1502, 9);
+PLC_c Slave(1502, 9);
 uint16_t w;
 
 

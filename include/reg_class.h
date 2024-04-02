@@ -17,30 +17,68 @@
 #include <vector>
 #include <map>
 
-#include "reg_class.h"
-
 #define MB_SLAVE_CONN_MAX 5
 #define USE_SYSLOG
 
 using namespace std;
 
-struct mbdata_t {
-  int status = 0;            // rc value of last func (init/connect/read)
-  uint64_t timestamp_ms = 0; // milliseconds since the Epoch on last read
-  uint32_t interval_ms = 0;  // milliseconds between read request
-  uint32_t timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
-  uint32_t errors = 0;       // counter of any current ERRORS (reset if OK)
-  uint32_t errors_rd = 0;    // counter of READ errors (summ from start)
-  uint32_t errors_wr = 0;    // counter of WRITE errors (summ from start)
-  uint32_t errors_cn = 0;    // counter of CONNECT errors (summ from start)
+struct regdata_t {
+  uint16_t rvalue = 0;
+  int rupdate = 0; // 1 - need to write/update remote register
+  int rstatus = 0; // -1 mean ERROR, any positive - is OK
+  int rerrors = 0; // number of errors on MB func (init/connect/read)
+  int rmode = 0;   // 1 - mean RW
+  int rtype = 0;   // 1 - mean FLOAT (enum?)
 };
 
-class PLC_c
+struct reg_t {
+  int raddr = 0;
+  regdata_t data;
+  /*
+  uint16_t rvalue = 0;
+  int rupdate = 0; // 1 - need to write/update remote register
+  int rstatus = 0; // -1 mean ERROR, any positive - is OK
+  int rerrors = 0; // number of errors on MB func (init/connect/read)
+  int rmode = 0;   // 1 - mean RW
+  int rtype = 0;   // 1 - mean FLOAT
+  */
+  string fullname;
+  string str_name;
+  string str_mode;
+  string str_type;
+  const char* ch_name = nullptr;
+};
+
+
+class RegMap_c 
 {
 public:
-  PLC_c(string _ip = "none", string _name = "Master"); // for Master
-  PLC_c(int _port, int _m = 1, string _name = "Slave");            // for Slave
-  ~PLC_c();
+  RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
+  RegMap_c();
+  ~RegMap_c();
+
+  int fd = -1;                // descriptor of SHARED MEMORY
+  uint16_t val = 0;           // just for FUN! (to print with PLC & SHM)
+  regdata_t* ptr_data_shm = nullptr; // ptr to SHARED MEMORY (local) data
+  regdata_t* ptr_data_plc = nullptr; // ptr to SHARED MEMORY (remote) data
+  reg_t* ptr_reg = nullptr;   // ptr to PLC data
+
+  uint16_t get_remote();
+  uint16_t get_local();
+  void set_remote(uint16_t _val);
+  void set_local(uint16_t _val);
+  void sync_local(uint16_t _val);
+  int get_mode();
+  int get_type();
+};
+
+/*
+class PLC_t
+{
+public:
+  PLC_t(string _ip = "none", string _name = "Master"); // for Master
+  PLC_t(int _port, int _m = 1, string _name = "Slave");            // for Slave
+  ~PLC_t();
 
   void mb_deinit();
   int get_rc();
@@ -98,3 +136,5 @@ private:
   void work_client();   // for Slave only
   void logger(int prio, const char*, ...);
 };
+
+*/

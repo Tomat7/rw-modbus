@@ -99,14 +99,14 @@ int write_shm(string rn, uint16_t val)
 {
   int rc = -1;
   int fd = get_shm_fd(rn.c_str());
-  rdata_t* ptr_shm = (rdata_t*)get_shm_addr(fd, sizeof(rdata_t));
+  regdata_t* ptr_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
 
   if (ptr_shm != nullptr) {
     rc = 1;
-    rdata_t rdata;
-    memcpy(&rdata, ptr_shm, sizeof(rdata_t));
+    regdata_t rdata;
+    memcpy(&rdata, ptr_shm, sizeof(regdata_t));
     rdata.rvalue = val;
-    memcpy(ptr_shm, &rdata, sizeof(rdata_t));
+    memcpy(ptr_shm, &rdata, sizeof(regdata_t));
   }
 
   return rc;

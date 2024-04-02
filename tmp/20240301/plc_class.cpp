@@ -16,14 +16,14 @@
 
 #include "./plc_class.h"
 
-PLC::PLC() {
+PLC_c::PLC_c() {
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   LOGINFO("+ New PLC created.\n");
 }
 
-PLC::~PLC() { mb_deinit(); }
+PLC_c::~PLC_c() { mb_deinit(); }
 
-int PLC::mb_ctx() {
+int PLC_c::mb_ctx() {
   rc = 0;
 
   //  if (ctx != nullptr) {
@@ -47,7 +47,7 @@ int PLC::mb_ctx() {
   return rc;
 }
 
-int PLC::mb_connect() {
+int PLC_c::mb_connect() {
   if ((rc < 0) || (ctx == nullptr)) {
     rc = mb_ctx();
     //    if (rc == -1)
@@ -65,7 +65,7 @@ int PLC::mb_connect() {
   return rc;
 }
 
-int PLC::read_master() {
+int PLC_c::read_master() {
 
   rc = 0;
   for (int i = 0; i < try_qty && rc <= 0; i++)
@@ -97,7 +97,7 @@ int PLC::read_master() {
   return rc;
 }
 
-int PLC::read_allregs() {
+int PLC_c::read_allregs() {
 
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t *mbregs = new uint16_t[nb_regs];
@@ -132,7 +132,7 @@ int PLC::read_allregs() {
   return rc;
 }
 
-int PLC::write_master() {
+int PLC_c::write_master() {
   /*
     rc = connect();
     if (rc == -1) {
@@ -161,7 +161,7 @@ int PLC::write_master() {
   return rc;
 }
 
-int PLC::write_reg(reg_t &r) {
+int PLC_c::write_reg(reg_t &r) {
 
   if (r.rmode && r.rupdate) {
     mb_connect();
@@ -184,7 +184,7 @@ int PLC::write_reg(reg_t &r) {
   return rc;
 }
 
-int PLC::update_master() {
+int PLC_c::update_master() {
 
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
@@ -194,7 +194,7 @@ int PLC::update_master() {
   return rc;
 }
 
-int PLC::set_timeout() {
+int PLC_c::set_timeout() {
 
   if (ctx == nullptr)
     mb_ctx();
@@ -208,7 +208,7 @@ int PLC::set_timeout() {
   return rc;
 }
 
-void PLC::mb_deinit() {
+void PLC_c::mb_deinit() {
   if (ctx != nullptr) {
     LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
     modbus_close(ctx);
@@ -218,11 +218,11 @@ void PLC::mb_deinit() {
   LOGINFO("- PLC deleted: %s. \n", dev_name);
 }
 
-uint64_t PLC::millis() {
+uint64_t PLC_c::millis() {
 #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
   uint64_t t;
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
   return t;
 }
 
-int PLC::get_rc() { return rc; }
+int PLC_c::get_rc() { return rc; }

@@ -16,14 +16,14 @@
 
 #include "./plc_class.h"
 
-PLC::PLC() {
+PLC_c::PLC_c() {
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   LOGINFO("+ New PLC created.\n");
 }
 
-PLC::~PLC() { mb_deinit(); }
+PLC_c::~PLC_c() { mb_deinit(); }
 
-int PLC::init(const char *_ip, int _port) {
+int PLC_c::init(const char *_ip, int _port) {
   rc = 0;
 
   if (_port == 0) {
@@ -58,7 +58,7 @@ int PLC::init(const char *_ip, int _port) {
   return rc;
 }
 
-int PLC::mb_connect() {
+int PLC_c::mb_connect() {
   if (ctx == nullptr) {
     rc = init();
     if (rc == -1)
@@ -76,7 +76,7 @@ int PLC::mb_connect() {
   return rc;
 }
 
-int PLC::read_master() {
+int PLC_c::read_master() {
   rc = mb_connect();
   if (rc == -1)
     mb_errors++;
@@ -93,7 +93,7 @@ int PLC::read_master() {
   return rc;
 }
 
-int PLC::read_allregs() {
+int PLC_c::read_allregs() {
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t *mbregs = new uint16_t[nb_regs];
   rc = modbus_read_registers(ctx, reg_min, nb_regs, mbregs);
@@ -118,7 +118,7 @@ int PLC::read_allregs() {
   return rc;
 }
 
-int PLC::set_timeout() {
+int PLC_c::set_timeout() {
   if (ctx == nullptr)
     init();
 
@@ -131,7 +131,7 @@ int PLC::set_timeout() {
   return rc;
 }
 
-void PLC::mb_deinit() {
+void PLC_c::mb_deinit() {
   if (ctx != nullptr) {
     LOGINFO("%s %s close and free. \n", ip_addr, dev_name);
     modbus_close(ctx);
@@ -141,7 +141,7 @@ void PLC::mb_deinit() {
   LOGINFO("- PLC deleted: %s. \n", dev_name);
 }
 
-uint64_t PLC::millis() {
+uint64_t PLC_c::millis() {
 #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
 
   // using namespace std::chrono;

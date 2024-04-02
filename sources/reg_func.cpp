@@ -13,33 +13,41 @@
 #define MB_READ
 
 void regs_init();
-void reg_print(string, const reg_t*);
+void reg_print(string, const reg_t *);
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
 void regs_init()
 {
-  cout << endl << "===== reg_init =====" << endl;
+  cout << endl
+       << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
-    for (auto &[n, R] : D.regs) {
-      R.rvalue = 5757;  // TODO: remove for production!!
-      rmap_t rm;
-      rm.ptr_reg = &R;
-      rm.rdata.rvalue = R.rvalue;
-      rm.rdata.rerrors = R.rerrors;
-      rm.rdata.rmode = R.rmode;
-      rm.rdata.rtype = R.rtype;
+    for (auto &[n, R] : D.regs)
+    {
+      // auto &rd = R.data;
+      // R.data.rvalue = 5757;  // TODO: remove for production!!
+      // RegMap_c rm;
+      // rm.ptr_reg = &R;
+      // rm.ptr_data_plc = &R.data;
+      /*
+      rm.rdata.rvalue = rd.rvalue;
+      rm.rdata.rerrors = rd.rerrors;
+      rm.rdata.rmode = rd.rmode;
+      rm.rdata.rtype = rd.rtype;
+      */
 
-      rm.fd = create_shm_fd(R.fullname.c_str());
-      if (rm.fd != -1) {
-        rdata_t* addr = (rdata_t*)create_shm_addr(rm.fd, sizeof(rdata_t));
-        if (addr != nullptr) {
+      regdata_t *addr;
+      int fd = create_shm_fd(R.fullname.c_str());
+      if (fd != -1)
+      {
+        addr = (regdata_t *)create_shm_addr(fd, sizeof(regdata_t));
+        if (addr != nullptr)
+        {
           LOGINFO("SHM: created %s\n", R.fullname.c_str());
-          rm.ptr_shm = addr;
+          RegMap_c rm(fd, addr, &R.data, &R);
+          REGmap[R.fullname] = rm;
         }
       }
-
-      REGmap[R.fullname] = rm;
     }
 
   return;
@@ -50,39 +58,42 @@ void regs_update()
   printf("\n===== regs_update =====\n");
   bool is_eol = false;
 
-  for (auto &[rn, m] : REGmap) {
-    reg_print(rn, m.ptr_reg);
+  for (auto &[n, rm] : REGmap)
+  {
+    reg_print(n, rm.ptr_reg);
 
-    const auto &plc = m.ptr_reg;  // "plc" is pointer to PLC regs struct
-    auto &mem = m.rdata;
-    rdata_t shm;  // Temporary! For values from SHM. Now is empty.
-    uint16_t remote_val = plc->rvalue;  // Value from PLC
-    uint16_t mem_val = mem.rvalue;      // Value in memory (in REGmap)
-    uint16_t &shm_val = shm.rvalue;     // Value from SHM (will be!)
+    // const auto &plc = rm.ptr_data_plc;  // "plc" is pointer to PLC regs struct
+    // auto &shm = rm.ptr_data_shm;
+    // regdata_t mem;  // Temporary! For values from SHM. Now is empty.
+    uint16_t remote_val = rm.get_remote(); // Value from PLC
+    uint16_t local_val = rm.get_local();   // Value in memory (in REGmap)
+                                           //    uint16_t &shm_val = shm.rvalue;     // Value from SHM (will be!)
 
-    if (plc->rmode) {  // Is the Reg RW? If YES - get&check value from SHM.
-      memcpy(&shm, m.ptr_shm, sizeof(rdata_t));  // Copy from SHM to tmp struct.
+    if (rm.get_mode())
+    { // Is the Reg RW? If YES - get&check value from SHM.
+      //      memcpy(&shm, m.ptr_data_shm, sizeof(regdata_t));  // Copy from SHM to tmp struct.
 
-      if (mem_val != remote_val)  // If new value got from PLC
-        printf(" >");             // Print sign ">"
+      if (rm.val != remote_val) // If new value got from PLC
+        printf(" >");           // Print sign ">"
       else
         printf("  ");
 
-      if (mem_val != shm_val) {  // If new value got from SHM (SCADA?)
-        plc->rupdate = 1;
-        plc->rvalue = shm_val;  // Put new value from SHM to PLC
-        printf("< %d", shm_val);
-      } else
+      if (local_val != remote_val)
+      { // If new value got from SHM (SCADA?)
+        rm.set_remote(local_val);
+        printf("< %d", local_val);
+      }
+      else
         printf("  ");
+    }
+    else
+      printf("    "); // Reg is not RW
 
-    } else
-      printf("    ");  // Reg is not RW
-
-    mem.rvalue = remote_val;     // Put PLC value to REGmap
-    mem.rerrors = plc->rerrors;  // ... PLC errors
-    mem.rstatus = plc->rstatus;  // ... PLC status
-
-    memcpy(m.ptr_shm, &m.rdata, sizeof(rdata_t));
+    rm.val = remote_val; // Put PLC value to REGmap
+    rm.sync_local(remote_val);
+    // mem.rerrors = plc->data.rerrors;  // ... PLC errors
+    // mem.rstatus = plc->data.rstatus;  // ... PLC status
+    // memcpy(m.ptr_data_shm, &m.rdata, sizeof(regdata_t));
 
     if (is_eol)
       printf("  + %s\n", KNRM);
@@ -95,16 +106,16 @@ void regs_update()
   return;
 }
 
-void reg_print(string rn, const reg_t* r)
+void reg_print(string rn, const reg_t *r)
 {
-  const char* C = KNRM;
-  if (r->rerrors > 0)
+  const char *C = KNRM;
+  if (r->data.rerrors > 0)
     C = KRED;
 
-  if (r->rtype)
-    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)r->rvalue * 0.01);
+  if (r->data.rtype)
+    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)r->data.rvalue * 0.01);
   else
-    printf("%s%-14s %7d", C, rn.c_str(), r->rvalue);
+    printf("%s%-14s %7d", C, rn.c_str(), r->data.rvalue);
 
   return;
 }

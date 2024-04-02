@@ -11,8 +11,8 @@
 // using namespace std;
 // using namespace libconfig;
 
-std::map<string, rmap_t> REGmap;
-std::vector<PLC> PLCset;
+std::map<string, RegMap_c> REGmap;
+std::vector<PLC_c> PLCset;
 // INotify IN(CFG_DIR);
 
 int rc;

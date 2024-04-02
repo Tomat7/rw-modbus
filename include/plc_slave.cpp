@@ -23,7 +23,7 @@
 
 // Destructor in plc_common.cpp
 
-PLC::PLC(int _port, int _m, string _name) // Slave only
+PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
 {
   str_ip_addr = "0.0.0.0"; // Slave always listening on ALL addresses!
   tcp_port = _port;
@@ -36,7 +36,7 @@ PLC::PLC(int _port, int _m, string _name) // Slave only
          tcp_port, dev_name);
 }
 
-int PLC::renew_mapping() // Slave only
+int PLC_c::renew_mapping() // Slave only
 {
   rc = 0;
   if (mbm != nullptr) {
@@ -58,7 +58,7 @@ int PLC::renew_mapping() // Slave only
   return rc;
 }
 
-int PLC::renew_listen() // Slave only
+int PLC_c::renew_listen() // Slave only
 {
   rc = 0;
   if (server_socket != -1)
@@ -84,7 +84,7 @@ int PLC::renew_listen() // Slave only
   return rc;
 }
 
-int PLC::write_raw(int r, uint16_t val)
+int PLC_c::write_raw(int r, uint16_t val)
 {
   if (r > reg_max)
     return -1;
@@ -95,7 +95,7 @@ int PLC::write_raw(int r, uint16_t val)
   return rc;
 }
 
-uint16_t PLC::read_raw(int r)
+uint16_t PLC_c::read_raw(int r)
 {
   if (r > reg_max)
     return -1;
@@ -108,7 +108,7 @@ uint16_t PLC::read_raw(int r)
   return val;
 }
 
-int PLC::check_slave()
+int PLC_c::check_slave()
 {
   rc = 0;
   if ((mb.errors > 0) || (ctx == nullptr)) {
@@ -121,7 +121,7 @@ int PLC::check_slave()
   return rc;
 }
 
-int PLC::handle_slave(int usec)
+int PLC_c::handle_slave(int usec)
 {
   struct timeval tv;
   tv.tv_sec = 0;
@@ -155,7 +155,7 @@ int PLC::handle_slave(int usec)
   return fdmax;
 }
 
-void PLC::new_client() // Handle new connections
+void PLC_c::new_client() // Handle new connections
 {
   socklen_t addrlen;
   struct sockaddr_in clientaddr;
@@ -179,7 +179,7 @@ void PLC::new_client() // Handle new connections
   return;
 }
 
-void PLC::work_client()
+void PLC_c::work_client()
 {
   modbus_set_socket(ctx, master_socket);
   rc = modbus_receive(ctx, query);

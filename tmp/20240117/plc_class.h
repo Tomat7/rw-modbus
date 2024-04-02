@@ -16,15 +16,15 @@ struct reg_t {
     uint16_t rvalue;
 };
 
-class PLC
+class PLC_c
 {
 
 public:
-    PLC()
+    PLC_c()
     {
         cout << "+ New PLC created." << endl;
     }
-    ~PLC()
+    ~PLC_c()
     {
         cout << "- PLC deleted: " << dev_name << endl;
         mb_deinit();

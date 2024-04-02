@@ -12,9 +12,9 @@ using namespace std;
 using namespace libconfig;
 
 int cfg_init_plcset(const Setting &cfg);
-void cfg_init_regs(const Setting &reg, PLC* pn);
+void cfg_init_regs(const Setting &reg, PLC_c* pn);
 
-void cfg_print_plc_details(const PLC &pn);
+void cfg_print_plc_details(const PLC_c &pn);
 void cfg_print_reg_details(const reg_t &rn);
 
 // Config cfg;
@@ -74,7 +74,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
   for (int i = 0; i < nb_plcs; ++i) {
     //    PLC plcnow;
     //    cout << "plcnow created!" << endl;
-    PLC &plc = PLCset[i];
+    PLC_c &plc = PLCset[i];
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("title", plc.str_title) &&
           cfgPLC[i].lookupValue("desc", plc.str_desc) &&
@@ -106,7 +106,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
   return 0;
 }
 
-void cfg_init_regs(const Setting &cfgREG, PLC* pn)
+void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
 {
   int nb_regs = cfgREG.getLength();
 
@@ -133,7 +133,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC* pn)
   return;
 }
 
-void cfg_print_plc_details(const PLC &D)
+void cfg_print_plc_details(const PLC_c &D)
 {
   // ===== Output PLC details
   cout << setw(10) << left << D.str_desc << "  " << setw(10) << left
