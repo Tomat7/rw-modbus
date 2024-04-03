@@ -35,12 +35,12 @@ struct reg_t {
   int raddr = 0;
   regdata_t data;
   /*
-  uint16_t rvalue = 0;
-  int rupdate = 0; // 1 - need to write/update remote register
-  int rstatus = 0; // -1 mean ERROR, any positive - is OK
-  int rerrors = 0; // number of errors on MB func (init/connect/read)
-  int rmode = 0;   // 1 - mean RW
-  int rtype = 0;   // 1 - mean FLOAT
+    uint16_t rvalue = 0;
+    int rupdate = 0; // 1 - need to write/update remote register
+    int rstatus = 0; // -1 mean ERROR, any positive - is OK
+    int rerrors = 0; // number of errors on MB func (init/connect/read)
+    int rmode = 0;   // 1 - mean RW
+    int rtype = 0;   // 1 - mean FLOAT
   */
   string fullname;
   string str_name;
@@ -50,7 +50,7 @@ struct reg_t {
 };
 
 
-class RegMap_c 
+class RegMap_c
 {
 public:
   RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
@@ -58,7 +58,7 @@ public:
   ~RegMap_c();
 
   int fd = -1;                // descriptor of SHARED MEMORY
-  uint16_t val = 0;           // just for FUN! (to print with PLC & SHM)
+  uint16_t value = 0;           // just for FUN! (to print with PLC & SHM)
   regdata_t* ptr_data_shm = nullptr; // ptr to SHARED MEMORY (local) data
   regdata_t* ptr_data_plc = nullptr; // ptr to SHARED MEMORY (remote) data
   reg_t* ptr_reg = nullptr;   // ptr to PLC data
@@ -67,15 +67,16 @@ public:
   uint16_t get_local();
   void set_remote(uint16_t _val);
   void set_local(uint16_t _val);
-  void sync_local(uint16_t _val);
+  void sync(uint16_t _val);
+  void sync();
   int get_mode();
   int get_type();
 };
 
 /*
-class PLC_t
-{
-public:
+  class PLC_t
+  {
+  public:
   PLC_t(string _ip = "none", string _name = "Master"); // for Master
   PLC_t(int _port, int _m = 1, string _name = "Slave");            // for Slave
   ~PLC_t();
@@ -107,7 +108,7 @@ public:
   mbdata_t mb;
   std::map<int, reg_t> regs;
 
-private:
+  private:
   modbus_t* ctx = nullptr;
   modbus_mapping_t* mbm = nullptr;
   static mutex logger_mux;
@@ -135,6 +136,6 @@ private:
   void new_client();    // for Slave only
   void work_client();   // for Slave only
   void logger(int prio, const char*, ...);
-};
+  };
 
 */

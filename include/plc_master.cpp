@@ -52,7 +52,6 @@ void PLC_c::init_master() // Master only
   }
 }
 
-
 int PLC_c::read_master() // Master only
 {
   rc = 0;
@@ -179,7 +178,9 @@ int PLC_c::update_master() // Master only
   rc = 0;
   if (millis() - mb.timestamp_ms > mb.interval_ms) {
     rc = write_master();
+    //    logger(LOG_INFO, "Write_master finished... %s", dev_name);
     rc = read_master();
+    //    logger(LOG_INFO, "Read_master finished... %s", dev_name);
   }
   return rc;
 }
@@ -206,4 +207,3 @@ int PLC_c::set_timeout()
   logger(LOG_INFO, "- PLC closed, free and deleted: %s %s.", ip_addr, dev_name);
   }
 */
-

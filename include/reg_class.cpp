@@ -23,12 +23,13 @@
 
 // mutex PLC_c::logger_mux;
 
-RegMap_c::RegMap_c(int _fd, regdata_t *_shm, regdata_t *_plc, reg_t *_reg)
+RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
 {
   fd = _fd;
   ptr_data_shm = _shm;
   ptr_data_plc = _plc;
   ptr_reg = _reg;
+  sync();
   //  logger(LOG_INFO, "+ New RegMap created.");
 }
 
@@ -49,8 +50,7 @@ uint16_t RegMap_c::get_remote()
 
 uint16_t RegMap_c::get_local()
 {
-  if (ptr_data_shm != nullptr && fd != -1)
-  {
+  if (ptr_data_shm != nullptr && fd != -1) {
     regdata_t mem;
     memcpy(&mem, ptr_data_shm, sizeof(regdata_t));
     return mem.rvalue;
@@ -60,8 +60,7 @@ uint16_t RegMap_c::get_local()
 
 void RegMap_c::set_remote(uint16_t _val)
 {
-  if (ptr_data_plc != nullptr)
-  {
+  if (ptr_data_plc != nullptr) {
     ptr_data_plc->rvalue = _val;
     ptr_data_plc->rupdate = 1;
   }
@@ -69,19 +68,18 @@ void RegMap_c::set_remote(uint16_t _val)
 
 void RegMap_c::set_local(uint16_t _val)
 {
-  if (ptr_data_shm != nullptr)
-  {
+  if (ptr_data_shm != nullptr) {
     regdata_t mem;
     mem.rvalue = _val;
     memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
   }
 }
 
-void RegMap_c::sync_local(uint16_t _val)
+void RegMap_c::sync(uint16_t _val)
 {
-  if (ptr_data_plc != nullptr && ptr_data_shm != nullptr)
-  {
+  if (ptr_data_plc != nullptr && ptr_data_shm != nullptr) {
     regdata_t mem;
+    value = _val;
     mem.rvalue = _val;
     mem.rerrors = ptr_data_plc->rerrors;
     mem.rstatus = ptr_data_plc->rstatus;
@@ -89,6 +87,14 @@ void RegMap_c::sync_local(uint16_t _val)
     mem.rtype = ptr_data_plc->rtype;
     memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
   }
+  return;
+}
+
+
+void RegMap_c::sync()
+{
+  sync(get_remote());
+  return;
 }
 
 int RegMap_c::get_mode()
@@ -106,10 +112,10 @@ int RegMap_c::get_type()
 }
 
 /*
-int PLC_c::get_rc() { return rc; }
+  int PLC_c::get_rc() { return rc; }
 
-void PLC_c::mb_deinit()
-{
+  void PLC_c::mb_deinit()
+  {
 
   if (server_socket != -1) {
     close(server_socket);
@@ -124,14 +130,14 @@ void PLC_c::mb_deinit()
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
-//  logger(LOG_INFO, "- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  //  logger(LOG_INFO, "- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 
   return;
-}
+  }
 
 
-int PLC_c::mb_ctx()
-{
+  int PLC_c::mb_ctx()
+  {
   rc = 0;
   mb_deinit();
 
@@ -144,20 +150,20 @@ int PLC_c::mb_ctx()
     logger(LOG_INFO, "+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
   return rc;
-}
+  }
 
-uint64_t PLC_c::millis()
-{
-#define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
+  uint64_t PLC_c::millis()
+  {
+  #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
   uint64_t t;
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
   return t;
-}
+  }
 
 
 
-void PLC_c::logger(int prio, const char* format, ...)
-{
+  void PLC_c::logger(int prio, const char* format, ...)
+  {
   logger_mux.lock();
   FILE* fout = stdout;
 
@@ -184,6 +190,6 @@ void PLC_c::logger(int prio, const char* format, ...)
   fprintf(fout, "%s\n", KNRM);
   closelog();
   logger_mux.unlock();
-}
+  }
 */
 // eof
