@@ -19,6 +19,7 @@ int rc;
 
 static void close_sigint(int dummy)
 {
+  regs_deinit();
   LOGERR("Exit by Ctrl-C. Bye.\n");
   closelog();
   exit(dummy);

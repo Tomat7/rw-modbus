@@ -57,7 +57,7 @@ void* get_shm_addr(int fd, size_t sz)
 
   void* addr = mmap(0, sz + 1, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
 
-  if (addr == (reg_t*)-1) {
+  if (addr == (regdata_t*)-1) {
     LOGERR("SHM: mmap error for fd %d", fd);
     return nullptr;
   }
@@ -65,24 +65,30 @@ void* get_shm_addr(int fd, size_t sz)
   return addr;
 }
 
-void close_shm(int fd, void* addr, size_t sz)
+int close_shm(int fd, void* addr, size_t sz)
 {
-  munmap(addr, sz);
-  close(fd);
-  return;
+  int rc = 0;
+  rc = munmap(addr, sz);
+  if (rc == 0)
+    rc = close(fd);
+  return rc;
 }
 
-void close_fd(int fd)
+int close_fd(int fd)
 {
-  close(fd);
-  return;
+  int rc = close(fd);
+  return rc;
 }
 
-void unlink_shm(const char* rn)
+int unlink_shm(const char* rn)
 {
-  shm_unlink(rn);
-  LOGINFO("SHM: unlink %s\n", rn);
-  return;
+  int rc = shm_unlink(rn);
+  if (rc == 0)
+    LOGINFO("SHM: unlink %s\n", rn);
+  else
+    LOGERR("Can't unlink %s\n", rn);
+
+  return rc;
 }
 
 /*
@@ -110,6 +116,12 @@ int write_shm(string rn, uint16_t val)
   }
 
   return rc;
+}
+
+int write_rm(string rn, uint16_t val)
+{
+  REGmap[rn].set_shm_val(val);
+  return 0;
 }
 
 // eof

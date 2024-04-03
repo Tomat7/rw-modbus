@@ -32,18 +32,20 @@ int mb_slave_init();
 int mb_slave();
 
 void regs_init();
+void regs_deinit();
 void regs_update();
 void regs_update_shm();
-void reg_print(string, const reg_t*);
+//void reg_print(string, const reg_t*);
 
 int write_shm(string, uint16_t);
 int create_shm_fd(const char* fd);
 int get_shm_fd(const char* fd);
-void close_shm(int, reg_t*, size_t);
-void close_fd(int);
+int close_shm(int, void*, size_t);
+int close_fd(int);
+int unlink_shm(const char* rn);
+int write_rm(string rn, uint16_t val);
 
 void* create_shm_addr(int, size_t);
 void* get_shm_addr(int, size_t);
 
-// void mb_show_regs_full(int i);
-// void mb_show_regs_name();
+
