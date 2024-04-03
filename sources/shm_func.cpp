@@ -105,7 +105,10 @@ int write_shm(string rn, uint16_t val)
 {
   int rc = -1;
   int fd = get_shm_fd(rn.c_str());
-  regdata_t* ptr_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
+  if (fd != -1)
+    regdata_t* ptr_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
+  else
+    LOGERR("Can't get_shm_fd: %s\n", rn);
 
   if (ptr_shm != nullptr) {
     rc = 1;
@@ -113,7 +116,8 @@ int write_shm(string rn, uint16_t val)
     memcpy(&rdata, ptr_shm, sizeof(regdata_t));
     rdata.rvalue = val;
     memcpy(ptr_shm, &rdata, sizeof(regdata_t));
-  }
+  } else
+    LOGERR("Can't get pointer to: %s\n", rn);
 
   return rc;
 }
