@@ -72,7 +72,7 @@ int main()
       if (w > 599)
         w = 500;
 
-      write_rm("Kub.Pset", w);
+      write_shm("Kub.Pset", w);
       write_rm("Kub.millis", 0);
       write_rm("Buf.millis", 0);
       write_rm("Def.millis", 0);
@@ -81,7 +81,10 @@ int main()
       write_rm("TH42.millis", 0);
       write_rm("SF45.millis", 0);
       write_rm("SF47.millis", 0);
-      write_rm("GATE49.millis", 0);
+
+      write_shm("GATE49.close2", 65535);
+      write_shm("GATE49.open2", 0);
+      write_shm("GATE49.millis", 0);
 
       mm = t.millis();
 
