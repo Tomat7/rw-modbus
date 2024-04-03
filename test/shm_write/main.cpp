@@ -43,12 +43,12 @@ int main()
   t.stop();
   cout << "============ REG init finished." << endl;
   t.spent();
-
-  mb_slave_init();
-  printf("============ SLAVE init finished.\n");
-  fflush(stdout);
-  t.sleep_sec(3);
-
+  /*
+    mb_slave_init();
+    printf("============ SLAVE init finished.\n");
+    fflush(stdout);
+    t.sleep_sec(3);
+  */
   static uint16_t w = 500;
   uint64_t mm = t.millis();
 
@@ -66,7 +66,7 @@ int main()
       printf("%s", CLS);
       printf("%s", HOME);
       fflush(stdout);
-      regs_update();
+      regs_update_shm();
 
       w++;
       if (w > 599)

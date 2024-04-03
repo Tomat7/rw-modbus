@@ -63,10 +63,14 @@ public:
   regdata_t* ptr_data_plc = nullptr; // ptr to SHARED MEMORY (remote) data
   reg_t* ptr_reg = nullptr;   // ptr to PLC data
 
-  uint16_t get_remote();
+  uint16_t get_plc_val();
+  uint16_t get_shm_val();
   uint16_t get_local();
-  void set_remote(uint16_t _val);
+
+  void set_plc_val(uint16_t _val);
+  void set_shm_val(uint16_t _val);
   void set_local(uint16_t _val);
+
   void sync(uint16_t _val);
   void sync();
   int get_mode();

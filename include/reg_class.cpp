@@ -41,10 +41,17 @@ RegMap_c::~RegMap_c()
   //  logger(LOG_INFO, "- RegMap unmapped: %s %s.", ip_addr, dev_name);
 }
 
-uint16_t RegMap_c::get_remote()
+uint16_t RegMap_c::get_plc_val()
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rvalue;
+  return 0;
+}
+
+uint16_t RegMap_c::get_shm_val()
+{
+  if (ptr_data_shm != nullptr && fd != -1)
+    return ptr_data_shm->rvalue;
   return 0;
 }
 
@@ -58,12 +65,19 @@ uint16_t RegMap_c::get_local()
   return 0;
 }
 
-void RegMap_c::set_remote(uint16_t _val)
+
+void RegMap_c::set_plc_val(uint16_t _val)
 {
   if (ptr_data_plc != nullptr) {
     ptr_data_plc->rvalue = _val;
     ptr_data_plc->rupdate = 1;
   }
+}
+
+void RegMap_c::set_shm_val(uint16_t _val)
+{
+  if (ptr_data_shm != nullptr)
+    ptr_data_shm->rvalue = _val;
 }
 
 void RegMap_c::set_local(uint16_t _val)
@@ -93,7 +107,7 @@ void RegMap_c::sync(uint16_t _val)
 
 void RegMap_c::sync()
 {
-  sync(get_remote());
+  sync(get_plc_val());
   return;
 }
 

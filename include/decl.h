@@ -33,6 +33,7 @@ int mb_slave();
 
 void regs_init();
 void regs_update();
+void regs_update_shm();
 void reg_print(string, const reg_t*);
 
 int write_shm(string, uint16_t);

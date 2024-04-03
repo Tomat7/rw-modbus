@@ -13,7 +13,7 @@
 #define MB_READ
 
 void regs_init();
-void reg_print(string, const reg_t*);
+void reg_print(string, const regdata_t*);
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
 void regs_init()
@@ -56,39 +56,30 @@ void regs_update()
   bool is_eol = false;
 
   for (auto &[n, rm] : REGmap) {
-    reg_print(n, rm.ptr_reg);
 
-    // const auto &plc = rm.ptr_data_plc;  // "plc" is pointer to PLC regs struct
-    // auto &shm = rm.ptr_data_shm;
-    // regdata_t mem;  // Temporary! For values from SHM. Now is empty.
-    uint16_t plc_val = rm.get_remote(); // Value from PLC
-    uint16_t shm_val = rm.get_local();  // Value in memory (in REGmap)
-    uint16_t old_val = rm.value;        // Value in memory (in REGmap)
-    // uint16_t &shm_val = shm.rvalue;     // Value from SHM (will be!)
+    reg_print(n, rm.ptr_data_plc);
 
-    if (rm.get_mode()) {
-      // Is the Reg RW? If YES - get&check value from SHM.
-      //      memcpy(&shm, m.ptr_data_shm, sizeof(regdata_t));  // Copy from SHM to tmp struct.
+    uint16_t plc_val = rm.get_plc_val(); // Value from PLC
+    uint16_t shm_val = rm.get_local();   // Value in SHM
+    uint16_t old_val = rm.value;         // Value in memory (in REGmap)
+
+    if (rm.get_mode()) { // Is the Reg RW? If YES - get&check value from SHM.
 
       if (plc_val != old_val) // If new value got from PLC
         printf(" >");           // Print sign ">"
       else
         printf("  ");
 
-      if (shm_val != old_val) {
-        // If new value got from SHM (SCADA?)
-        rm.set_remote(shm_val);
+      if (shm_val != old_val) { // If new value got from SHM (SCADA?)
+        rm.set_plc_val(shm_val);
         printf("< %d", shm_val);
       } else
         printf("  ");
     } else
       printf("    "); // Reg is not RW
 
-    rm.value = plc_val; // Put PLC value to REGmap
+    rm.value = plc_val; // Save PLC value to REGmap
     rm.sync(plc_val);
-    // mem.rerrors = plc->data.rerrors;  // ... PLC errors
-    // mem.rstatus = plc->data.rstatus;  // ... PLC status
-    // memcpy(m.ptr_data_shm, &m.rdata, sizeof(regdata_t));
 
     if (is_eol)
       printf("  + %s\n", KNRM);
@@ -101,16 +92,51 @@ void regs_update()
   return;
 }
 
-void reg_print(string rn, const reg_t* r)
+void regs_update_shm()
+{
+  printf("\n===== regs_update =====\n");
+  bool is_eol = false;
+
+  for (auto &[n, rm] : REGmap) {
+    reg_print(n, rm.ptr_data_shm);
+
+    //uint16_t plc_val = rm.get_plc_val(); // Value from PLC
+    uint16_t shm_val = rm.get_local();  // Value in SHM
+    uint16_t old_val = rm.value;        // Value in memory (in REGmap)
+
+    if (rm.get_mode()) {// Is the Reg RW? If YES - get&check value from SHM.
+
+      if (shm_val != old_val) { // If new value got from SHM (SCADA?)
+        rm.set_plc_val(shm_val);
+        printf("< %d", old_val);
+      } else
+        printf("  ");
+    } else
+      printf("    "); // Reg is not RW
+
+    rm.sync();
+
+    if (is_eol)
+      printf("  + %s\n", KNRM);
+    else
+      printf("  +          %s", KNRM);
+
+    is_eol = !is_eol;
+  }
+
+  return;
+}
+
+void reg_print(string rn, const regdata_t* rd)
 {
   const char* C = KNRM;
-  if (r->data.rerrors > 0)
+  if (rd->rerrors > 0)
     C = KRED;
 
-  if (r->data.rtype)
-    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)r->data.rvalue * 0.01);
+  if (rd->rtype)
+    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)rd->rvalue * 0.01);
   else
-    printf("%s%-14s %7d", C, rn.c_str(), r->data.rvalue);
+    printf("%s%-14s %7d", C, rn.c_str(), rd->rvalue);
 
   return;
 }
