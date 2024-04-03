@@ -22,9 +22,20 @@ then
     git stash
     echo -e $GRE ==== Doing git PULL. $NC
     git pull -v 
-    echo -e $YEL ==== Doing git STASH CLEAR. $NC
-    git stash clear
+# --------------
+    echo -e $RED
+    read -p "==== Warning! Will CLEAR STASH & LOST ALL CHANGES! (Y/N): " ANS
+    echo -e $NC
+    if [ "$ANS" == "Y" ]
+    then
+	echo -e $YEL ==== Doing git STASH CLEAR. $NC
+	git stash clear
+    else
+	echo -e $BLU ==== STASH SAVED! Use: 'git stash pop/apply' $NC
+    fi
+# -------------
     echo -e $GRE ==== Finished. $NC
 else
     echo -e $BLU ==== Doing nothing. Relax and Bye! $NC
 fi
+
