@@ -12,10 +12,11 @@
 // Timer tt;
 
 int s = -1;
-modbus_t *ctx;
-modbus_mapping_t *mb_mapping;
+modbus_t* ctx;
+modbus_mapping_t* mb_mapping;
 
-int mb_slave_init() {
+int mb_slave_init()
+{
   cout << endl << "===== mb_slave_init =====" << endl;
   //  int ret = 0;
 
@@ -47,7 +48,8 @@ int mb_slave_init() {
   return 0;
 }
 
-int mb_slave() {
+int mb_slave()
+{
   //  cout << "===== mb_slave =====" << endl;
 
   uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
@@ -66,7 +68,7 @@ int mb_slave() {
 }
 
 /*
-int mb_update() {
+  int mb_update() {
   //  cout << "===== mb_update =====" << endl;
   int ret = 0;
 
@@ -80,6 +82,6 @@ int mb_update() {
   }
 
   return ret;
-}
+  }
 */
 // eof

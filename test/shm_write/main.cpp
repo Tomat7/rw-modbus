@@ -20,7 +20,8 @@ Timer t;
 
 // int main(int argc, char **argv) {
 
-int main() {
+int main()
+{
 
   t.start();
   cfg_master(CFG_DIR, CFG_FILE);
