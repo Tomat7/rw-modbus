@@ -18,9 +18,9 @@
 #include "./logger.h"
 #include "./shmem.h"
 
-RegMap_c::RegMap_c() {}
-
 RegMap_c::~RegMap_c() {}
+
+RegMap_c::RegMap_c() {}
 
 RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
 {
@@ -36,16 +36,15 @@ RegMap_c::RegMap_c(reg_t* _reg)
 {
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
+  const char* rn = ptr_reg->fullname.c_str();
+  logger(LOG_INFO, "RegMap: try to create %s", rn);
 
-  regdata_t* _shm;
-  int _fd = create_shm_fd(ptr_reg->fullname.c_str());
+  fd = create_shm_fd(rn);
   if (fd != -1) {
-    _shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
-    if (_shm != nullptr) {
-      fd = _fd;
-      ptr_data_shm = _shm;
+    ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
+    if (ptr_data_shm != nullptr) {
       sync();
-      //  logger(LOG_INFO, "+ New RegMap created.");
+      logger(LOG_INFO, "SHM: created %s, FD: %d\n", rn, fd);
     }
   }
 }

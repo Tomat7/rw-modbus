@@ -7,7 +7,7 @@
 #define CFG_DIR "./conf"
 #define CFG_FILE "modbus.cfg"
 #define USE_SYSLOG
-#define TIMEOUT_SEC 5
+#define TIMEOUT_SEC 3
 
 #define MB_SLAVE_CONN_MAX 5
 #define MB_SLAVE_PORT 1502

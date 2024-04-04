@@ -55,36 +55,36 @@ int main()
   for (;;) {
 
     read_console(1);
-      t.start();
-      printf("%s", CLS);
-      printf("%s", HOME);
-      fflush(stdout);
-      regs_update_shm();
+    t.start();
+    printf("%s", CLS);
+    printf("%s", HOME);
+    fflush(stdout);
+    regs_update_shm();
 
-      w++;
-      if (w > 599)
-        w = 500;
+    w++;
+    if (w > 599)
+      w = 500;
 
-      write_shm("Kub.Pset", w);
-      write_rm("Kub.millis", 0);
-      write_rm("Buf.millis", 0);
-      write_rm("Def.millis", 0);
+    write_shm("Kub.Pset", w);
+    write_rm("Kub.millis", 0);
+    write_rm("Buf.millis", 0);
+    write_rm("Def.millis", 0);
 
-      write_rm("TH41.millis", 0);
-      write_rm("TH42.millis", 0);
-      write_rm("SF45.millis", 0);
-      write_rm("SF47.millis", 0);
+    write_rm("TH41.millis", 0);
+    write_rm("TH42.millis", 0);
+    write_rm("SF45.millis", 0);
+    write_rm("SF47.millis", 0);
 
-      write_shm("GATE49.close2", 65535);
-      write_shm("GATE49.open2", 0);
-      write_shm("GATE49.millis", 0);
+    write_shm("GATE49.close2", 65535);
+    write_shm("GATE49.open2", 0);
+    write_shm("GATE49.millis", 0);
 
-      mm = t.millis();
+    mm = t.millis();
 
-      // mb_write();
-      t.stop();
-      cout << "============ REG print finished." << endl;
-      t.spent_auto("Printing: ");
+    // mb_write();
+    t.stop();
+    cout << "============ REG print finished." << endl;
+    t.spent_auto("Printing: ");
 
   }
 

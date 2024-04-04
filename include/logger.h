@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <iostream>
 #include <chrono>
 #include <mutex>
 

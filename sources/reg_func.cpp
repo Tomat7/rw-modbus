@@ -23,30 +23,22 @@ void regs_init()
 
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
-      // auto &rd = R.data;
-      // R.data.rvalue = 5757;  // TODO: remove for production!!
-      // RegMap_c rm;
-      // rm.ptr_reg = &R;
-      // rm.ptr_data_plc = &R.data;
+      logger(LOG_INFO, "RegMap init: try to create %s", R.fullname.c_str());
+      RegMap_c rm(&R);
+      REGmap[R.fullname] = rm;
       /*
-        rm.rdata.rvalue = rd.rvalue;
-        rm.rdata.rerrors = rd.rerrors;
-        rm.rdata.rmode = rd.rmode;
-        rm.rdata.rtype = rd.rtype;
+            regdata_t* addr;
+            int fd = create_shm_fd(R.fullname.c_str());
+            if (fd != -1) {
+              addr = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
+              if (addr != nullptr) {
+                LOGINFO("SHM: created %s, FD: %d\n", R.fullname.c_str(), fd);
+                RegMap_c rm(fd, addr, &R.data, &R);
+                REGmap[R.fullname] = rm;
+              }
+            }
       */
-
-      regdata_t* addr;
-      int fd = create_shm_fd(R.fullname.c_str());
-      if (fd != -1) {
-        addr = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
-        if (addr != nullptr) {
-          LOGINFO("SHM: created %s, FD: %d\n", R.fullname.c_str(), fd);
-          RegMap_c rm(fd, addr, &R.data, &R);
-          REGmap[R.fullname] = rm;
-        }
-      }
     }
-
   return;
 }
 
@@ -63,14 +55,16 @@ void regs_update()
     uint16_t shm_val = rm.get_local();   // Value in SHM
     uint16_t old_val = rm.value;         // Value in memory (in REGmap)
 
-    if (rm.get_mode()) { // Is the Reg RW? If YES - get&check value from SHM.
+    if (rm.get_mode()) {
+      // Is the Reg RW? If YES - get&check value from SHM.
 
       if (plc_val != old_val) // If new value got from PLC
-        printf(">");           // Print sign ">"
+        printf(">");          // Print sign ">"
       else
         printf(" ");
 
-      if (shm_val != old_val) { // If new value got from SHM (SCADA?)
+      if (shm_val != old_val) {
+        // If new value got from SHM (SCADA?)
         rm.set_plc_val(shm_val);
         printf("<%5d", shm_val);
       } else
@@ -102,17 +96,17 @@ void regs_update_shm()
   for (auto &[n, rm] : REGmap) {
     reg_print(n, rm.ptr_data_shm);
 
-    //uint16_t plc_val = rm.get_plc_val(); // Value from PLC
-    uint16_t shm_val = rm.get_local();  // Value in SHM
-    uint16_t old_val = rm.value;        // Value in memory (in REGmap)
+    // uint16_t plc_val = rm.get_plc_val(); // Value from PLC
+    uint16_t shm_val = rm.get_local(); // Value in SHM
+    uint16_t old_val = rm.value;       // Value in memory (in REGmap)
 
-    if (rm.get_mode()) {// Is the Reg RW? If YES - get&check value from SHM.
+    if (rm.get_mode()) {
+      // Is the Reg RW? If YES - get&check value from SHM.
 
       if (shm_val != old_val)
         printf("<%5d", old_val);
       else
         printf("      ");
-
     } else
       printf("      "); // Reg is not RW
 

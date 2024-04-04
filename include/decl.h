@@ -38,7 +38,6 @@ void regs_update_shm();
 //void reg_print(string, const reg_t*);
 
 /*
-  int write_shm(string, uint16_t);
   int create_shm_fd(const char* fd);
   int get_shm_fd(const char* fd);
   int close_shm(int, void*, size_t);
@@ -47,6 +46,7 @@ void regs_update_shm();
   void* get_shm_addr(int, size_t);
 */
 
-int unlink_shm(const char* rn);
+
+int write_shm(string, uint16_t);
 int write_rm(string rn, uint16_t val);
 
