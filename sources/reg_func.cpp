@@ -40,7 +40,7 @@ void regs_init()
       if (fd != -1) {
         addr = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
         if (addr != nullptr) {
-          LOGINFO("SHM: created %s\n", R.fullname.c_str());
+          LOGINFO("SHM: created %s, FD: %d\n", R.fullname.c_str(), fd);
           RegMap_c rm(fd, addr, &R.data, &R);
           REGmap[R.fullname] = rm;
         }
@@ -66,25 +66,27 @@ void regs_update()
     if (rm.get_mode()) { // Is the Reg RW? If YES - get&check value from SHM.
 
       if (plc_val != old_val) // If new value got from PLC
-        printf(" >");           // Print sign ">"
+        printf(">");           // Print sign ">"
       else
-        printf("  ");
+        printf(" ");
 
       if (shm_val != old_val) { // If new value got from SHM (SCADA?)
         rm.set_plc_val(shm_val);
-        printf("< %d", shm_val);
+        printf("<%5d", shm_val);
       } else
-        printf("  ");
+        printf("      ");
     } else
-      printf("    "); // Reg is not RW
+      printf("       "); // Reg is not RW
+
+    printf("~%2d ", rm.fd); // Show filedescriptor
 
     rm.value = plc_val; // Save PLC value to REGmap
     rm.sync(plc_val);
 
     if (is_eol)
-      printf("  + %s\n", KNRM);
+      printf(" + %s\n", KNRM);
     else
-      printf("  +          %s", KNRM);
+      printf(" +     %s", KNRM);
 
     is_eol = !is_eol;
   }
@@ -107,19 +109,20 @@ void regs_update_shm()
     if (rm.get_mode()) {// Is the Reg RW? If YES - get&check value from SHM.
 
       if (shm_val != old_val)
-        printf("< %d", old_val);
+        printf("<%5d", old_val);
       else
-        printf("  ");
+        printf("      ");
 
     } else
-      printf("    "); // Reg is not RW
+      printf("      "); // Reg is not RW
 
+    printf(" ~%2d", rm.fd); // Show filedescriptor
     rm.sync(shm_val);
 
     if (is_eol)
-      printf("  + %s\n", KNRM);
+      printf(" + %s\n", KNRM);
     else
-      printf("  +          %s", KNRM);
+      printf(" +     %s", KNRM);
 
     is_eol = !is_eol;
   }

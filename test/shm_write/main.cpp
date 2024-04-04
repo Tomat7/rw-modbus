@@ -53,15 +53,8 @@ int main()
   uint64_t mm = t.millis();
 
   for (;;) {
-    /*
-        t.start();
-        mb_read();
-        t.stop();
-        cout << "============ MB read finished." << endl;
-        t.spent_auto("MB: spent on 3xPLC by TCP: ");
-    */
 
-    if ((t.millis() - mm) > 1000) {
+    read_console(1);
       t.start();
       printf("%s", CLS);
       printf("%s", HOME);
@@ -92,16 +85,7 @@ int main()
       t.stop();
       cout << "============ REG print finished." << endl;
       t.spent_auto("Printing: ");
-    }
 
-    //    mb_slave();
-
-    /*
-        t.start();
-        t.sleep_sec(3);
-        t.stop();
-        t.spent();
-    */
   }
 
   //   getr();
