@@ -15,10 +15,13 @@ std::map<string, RegMap_c> REGmap;
 std::vector<PLC_c> PLCset;
 // INotify IN(CFG_DIR);
 
+regdata_t* P;
 int rc;
 
 static void close_sigint(int dummy)
 {
+  //printf("regdata_t size: %d\n", sizeof(regdata_t));
+  //printf("PLCset array size: %d\n", sizeof(PLCset));
   regs_deinit();
   LOGERR("Exit by Ctrl-C. Bye.\n");
   closelog();
@@ -47,6 +50,8 @@ int main()
     const char* x = nullptr;
     t.start(x);
     mb_update();
+    printf("regdata_t size: %d\n", sizeof(regdata_t));
+    printf("P array size: %d\n", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     int ch = read_console(TIMEOUT_SEC);
@@ -68,6 +73,7 @@ int main()
         wait_console(TIMEOUT_SEC);
       } else
       printf("!\n");
+
     fflush(stdout);
 
     //    wait_console(TIMEOUT_SEC);

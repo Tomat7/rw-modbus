@@ -146,6 +146,8 @@ void regs_deinit()
     unlink_shm(n.c_str());
   }
   REGmap.clear();
+//  delete[] P;
+
   return;
 }
 

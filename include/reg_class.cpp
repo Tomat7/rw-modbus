@@ -28,6 +28,7 @@ RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
   ptr_data_shm = _shm;
   ptr_data_plc = _plc;
   ptr_reg = _reg;
+  rn = ptr_reg->fullname.c_str();
   sync();
   //  logger(LOG_INFO, "+ New RegMap created.");
 }

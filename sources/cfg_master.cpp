@@ -11,6 +11,8 @@
 using namespace std;
 using namespace libconfig;
 
+int _regs = 0;
+
 int cfg_init_plcset(const Setting &cfg);
 void cfg_init_regs(const Setting &reg, PLC_c* pn);
 
@@ -66,14 +68,10 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
 
 int cfg_init_plcset(const Setting &cfgPLC)
 {
-  //  const Setting &cfgPLC = cf->lookup("plc");
   int nb_plcs = cfgPLC.getLength();
-
   PLCset.resize(nb_plcs);
-  // ===== Cycle for PLCs =====
+
   for (int i = 0; i < nb_plcs; ++i) {
-    // PLC plcx(1503);
-    //    cout << "plcnow created!" << endl;
     PLC_c &plc = PLCset[i];
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("title", plc.str_title) &&
@@ -89,19 +87,17 @@ int cfg_init_plcset(const Setting &cfgPLC)
     }
 
     plc.reg_qty = cfgPLC[i]["regs"].getLength();
-    //    cfg_print_plc_details(plc);
     cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
 
-    //    PLCset.push_back(plcnow);
-    /*PLCset[i].init();*/
     plc.init_master(); // Absolutely necessary to copy str to char* and other
     LOGINFO("Configured REGs now: %d\n", (int)plc.regs.size());
     cout << endl;
-
     // ===== End PLC filling  =====
   }
 
-  LOGINFO("Configured PLCs: %d\n", (int)PLCset.size());
+  //P = malloc(sizeof(regdata_t) * nb_plcs];
+  //P = new regdata_t[nb_plcs];
+  LOGINFO("Configured PLCs: %d, with %d regs\n", (int)PLCset.size(), _regs);
 
   return 0;
 }
@@ -109,6 +105,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
 void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
 {
   int nb_regs = cfgREG.getLength();
+  _regs += nb_regs;
 
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
