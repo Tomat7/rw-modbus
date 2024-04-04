@@ -32,7 +32,7 @@ PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;
-  logger(LOG_INFO, "+ New PLC created: %s:%d %s", str_ip_addr.c_str(),
+  logger(LOG_INFO, "+ New Slave PLC created: %s:%d %s", str_ip_addr.c_str(),
          tcp_port, dev_name);
 }
 
@@ -52,7 +52,7 @@ int PLC_c::renew_mapping() // Slave only
     mb.errors_cn++;
     rc = -1;
     if (att >= attempts)
-      logger(LOG_ERR, "Failed to allocate mapping: %s", modbus_strerror(errno));
+      logger(LOG_ERR, "MB Slave: failed to allocate mapping: %s", modbus_strerror(errno));
   }
 
   return rc;
@@ -72,7 +72,7 @@ int PLC_c::renew_listen() // Slave only
     mb.errors_rd++;
     rc = -1;
     if (att >= attempts)
-      logger(LOG_ERR, "Unable to listen TCP connection on port: %d", tcp_port);
+      logger(LOG_ERR, "MB Slave: unable to listen TCP on port: %d", tcp_port);
     return rc;
   }
 
@@ -137,7 +137,7 @@ int PLC_c::handle_slave(int usec)
   if (select(fdmax + 1, &rdset, NULL, NULL, &tv) == -1) {
     mb.errors++;
     rc = -1;
-    logger(LOG_ERR, "Server select() failure.");
+    logger(LOG_ERR, "MB Slave: server select() failure.");
     return rc;
   }
 
@@ -167,12 +167,12 @@ void PLC_c::new_client() // Handle new connections
 
   if (newfd == -1) {
     mb.errors_wr++;
-    logger(LOG_ERR, "Server accept() error.");
+    logger(LOG_ERR, "MB Slave: server accept() error.");
   } else {
     FD_SET(newfd, &refset);
     if (newfd > fdmax)
       fdmax = newfd; // Keep track of the maximum
-    logger(LOG_INFO, "New connection from %s:%d on socket %d",
+    logger(LOG_INFO, "MB Slave: new connection from %s:%d on socket %d",
            inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
   }
 
@@ -191,7 +191,7 @@ void PLC_c::work_client()
     FD_CLR(master_socket, &refset); // Remove from reference set
     if (master_socket == fdmax)
       fdmax--;
-    logger(LOG_INFO, "Connection closed on socket %d", master_socket);
+    logger(LOG_INFO, "MB Slave: connection closed on socket %d", master_socket);
   }
 
   return;

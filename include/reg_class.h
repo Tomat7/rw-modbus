@@ -54,6 +54,7 @@ class RegMap_c
 {
 public:
   RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
+  RegMap_c(reg_t* _reg);
   RegMap_c();
   ~RegMap_c();
 

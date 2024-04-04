@@ -17,7 +17,7 @@
 #include <vector>
 #include <map>
 
-#include "reg_class.h"
+#include "./reg_class.h"
 
 #define MB_SLAVE_CONN_MAX 5
 #define USE_SYSLOG

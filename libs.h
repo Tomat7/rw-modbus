@@ -24,3 +24,5 @@
 #include "include/macros.h"
 #include "include/plc_class.h"
 #include "include/timer.h"
+#include "include/logger.h"
+#include "include/shmem.h"
