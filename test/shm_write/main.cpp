@@ -30,27 +30,20 @@ int main()
   t.spent();
   t.sleep_ms(987);
 
-  /*
-    t.start();
-    plc_show();
-    t.stop();
-    cout << "============ PLC show finished." << endl;
-    t.spent();
-  */
-
   t.start();
   regs_init();
   t.stop();
   cout << "============ REG init finished." << endl;
   t.spent();
+
   /*
     mb_slave_init();
     printf("============ SLAVE init finished.\n");
     fflush(stdout);
     t.sleep_sec(3);
   */
+
   static uint16_t w = 500;
-  uint64_t mm = t.millis();
 
   for (;;) {
 
@@ -65,6 +58,7 @@ int main()
     if (w > 599)
       w = 500;
 
+    logger(LOG_INFO, "Try to write_SHM");
     write_shm("Kub.Pset", w);
     write_rm("Kub.millis", 0);
     write_rm("Buf.millis", 0);
@@ -79,9 +73,6 @@ int main()
     write_shm("GATE49.open2", 0);
     write_shm("GATE49.millis", 0);
 
-    mm = t.millis();
-
-    // mb_write();
     t.stop();
     cout << "============ REG print finished." << endl;
     t.spent_auto("Printing: ");
