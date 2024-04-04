@@ -36,7 +36,7 @@ RegMap_c::RegMap_c(reg_t* _reg)
 {
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
-  const char* rn = ptr_reg->fullname.c_str();
+  rn = ptr_reg->fullname.c_str();
   logger(LOG_INFO, "RegMap: try to create %s", rn);
 
   fd = create_shm_fd(rn);
@@ -49,7 +49,6 @@ RegMap_c::RegMap_c(reg_t* _reg)
   }
 }
 
-
 uint16_t RegMap_c::get_plc_val()
 {
   if (ptr_data_plc != nullptr)
@@ -59,14 +58,14 @@ uint16_t RegMap_c::get_plc_val()
 
 uint16_t RegMap_c::get_shm_val()
 {
-  if (ptr_data_shm != nullptr && fd != -1)
+  if (is_shm())
     return ptr_data_shm->rvalue;
   return 0;
 }
 
 uint16_t RegMap_c::get_local()
 {
-  if (ptr_data_shm != nullptr && fd != -1) {
+  if (is_shm()) {
     regdata_t mem;
     memcpy(&mem, ptr_data_shm, sizeof(regdata_t));
     return mem.rvalue;
@@ -84,17 +83,48 @@ void RegMap_c::set_plc_val(uint16_t _val)
 
 void RegMap_c::set_shm_val(uint16_t _val)
 {
-  if (ptr_data_shm != nullptr)
+  if (is_shm())
     ptr_data_shm->rvalue = _val;
 }
 
 void RegMap_c::set_local(uint16_t _val)
 {
-  if (ptr_data_shm != nullptr) {
+  if (is_shm()) {
     regdata_t mem;
     mem.rvalue = _val;
     memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
   }
+}
+
+bool RegMap_c::is_shm()
+{
+  bool ret = true;
+
+  int _fd = get_shm_fd(rn);
+  if (_fd == -1) {
+    ret = false;
+    if (fd != -1) {
+      close_shm(fd, ptr_data_shm, sizeof(regdata_t));
+      ptr_data_shm = nullptr;
+      fd = -1;
+    }
+  } else if (fd == -1) {
+    fd = _fd;
+    ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
+    if (ptr_data_shm != nullptr) {
+      sync();
+      logger(LOG_INFO, "SHM: created %s, FD: %d\n", rn, fd);
+    } else {
+      ret = false;
+      close_fd(fd);
+      fd = -1;
+    }
+  } else
+    close_fd(_fd);
+
+  printf(" ^%d_~%d", _fd, fd);
+
+  return ret;
 }
 
 void RegMap_c::sync(uint16_t _val)
@@ -131,4 +161,3 @@ int RegMap_c::get_type()
     return ptr_data_plc->rtype;
   return -1;
 }
-

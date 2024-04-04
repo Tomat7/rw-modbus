@@ -48,46 +48,43 @@ void reinit()
   init_all();
 }
 
-
 int write_shm(string rn, uint16_t val)
 {
+  regdata_t* ptr_shm = nullptr;
   int fd = get_shm_fd(rn.c_str());
   logger(LOG_INFO, "Reg: %s, got FD: %d", rn.c_str(), fd);
 
   if (fd == -1) {
-    logger(LOG_ERR, "Can't get_shm_fd: %s\n", rn.c_str());
+    logger(LOG_ERR, "Can't get_shm_fd: %s", rn.c_str());
     return -1;
-  }
-
-  regdata_t* ptr_shm = nullptr;
-  ptr_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
-  if (ptr_shm == nullptr) {
-    close_fd(fd);
-    logger(LOG_ERR, "Can't get pointer to: %s\n", rn.c_str());
-    return -1;
+  } else {
+    ptr_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
+    if (ptr_shm == nullptr) {
+      close_fd(fd);
+      logger(LOG_ERR, "Can't get pointer to: %s\n", rn.c_str());
+      return -1;
+    }
   }
 
   logger(LOG_INFO, "Reg: %s, FD: %d, got addr.", rn.c_str(), fd);
 
   regdata_t rdata;
-//  memcpy(&rdata, ptr_shm, sizeof(regdata_t));
+  memcpy(&rdata, ptr_shm, sizeof(regdata_t));
   rdata.rvalue = val;
-//  memcpy(ptr_shm, &rdata, sizeof(regdata_t));
+  memcpy(ptr_shm, &rdata, sizeof(regdata_t));
 
   logger(LOG_INFO, "Reg: %s, FD: %d. Finished - OK", rn.c_str(), fd);
 
-//  int rc = close_shm(fd, ptr_shm, sizeof(regdata_t));
   int rc = close_fd(fd);
-
   if (rc != 0)
-    logger(LOG_ERR, "Can't close_fd: %s\n", rn.c_str());
+    logger(LOG_ERR, "Can't close_fd: %s", rn.c_str());
 
   return rc;
 }
 
 int write_rm(string rn, uint16_t val)
 {
-//  REGmap[rn].set_shm_val(val);
+  //  REGmap[rn].set_shm_val(val);
   REGmap[rn].set_local(val);
 
   return 0;

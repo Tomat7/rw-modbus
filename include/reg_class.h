@@ -67,6 +67,7 @@ public:
   uint16_t get_plc_val();
   uint16_t get_shm_val();
   uint16_t get_local();
+  const char* rn = nullptr;
 
   void set_plc_val(uint16_t _val);
   void set_shm_val(uint16_t _val);
@@ -76,6 +77,7 @@ public:
   void sync();
   int get_mode();
   int get_type();
+  bool is_shm();
 };
 
 /*
