@@ -64,14 +64,16 @@ int main()
     write_rm("Buf.millis", 0);
     write_rm("Def.millis", 0);
 
-    write_rm("TH41.millis", 0);
-    write_rm("TH42.millis", 0);
-    write_rm("SF45.millis", 0);
-    write_rm("SF47.millis", 0);
+    cout << "Try write_rm to TH41" << endl;
+    write_rm("TH41.millis", 41);
+    write_rm("TH42.millis", 42);
+    write_rm("SF45.millis", 45);
+    write_rm("SF47.millis", 47);
 
+    cout << "Try write_shm to GATE49" << endl;
     write_shm("GATE49.close2", 65535);
     write_shm("GATE49.open2", 0);
-    write_shm("GATE49.millis", 0);
+    write_shm("GATE49.millis", 49);
 
     t.stop();
     cout << "============ REG print finished." << endl;

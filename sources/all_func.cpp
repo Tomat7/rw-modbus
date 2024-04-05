@@ -66,7 +66,7 @@ int write_shm(string rn, uint16_t val)
     }
   }
 
-  logger(LOG_INFO, "Reg: %s, FD: %d, got addr.", rn.c_str(), fd);
+  logger(LOG_INFO, "Reg: %s, FD: %d, addr: %x.", rn.c_str(), fd, ptr_shm);
 
   regdata_t rdata;
   memcpy(&rdata, ptr_shm, sizeof(regdata_t));
@@ -75,7 +75,7 @@ int write_shm(string rn, uint16_t val)
 
   logger(LOG_INFO, "Reg: %s, FD: %d. Finished - OK", rn.c_str(), fd);
 
-  int rc = close_fd(fd);
+  int rc = close_shm(fd, ptr_shm, sizeof(regdata_t));
   if (rc != 0)
     logger(LOG_ERR, "Can't close_fd: %s", rn.c_str());
 

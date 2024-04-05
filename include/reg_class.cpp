@@ -20,7 +20,7 @@
 
 RegMap_c::~RegMap_c() {}
 
-RegMap_c::RegMap_c() {}
+RegMap_c::RegMap_c() { printf("Opachki! %x", this);}
 
 RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
 {
@@ -90,6 +90,7 @@ void RegMap_c::set_shm_val(uint16_t _val)
 
 void RegMap_c::set_local(uint16_t _val)
 {
+  logger(LOG_INFO, "set_local() %d %s %x...\n", _val, rn, this);
   if (is_shm()) {
     regdata_t mem;
     mem.rvalue = _val;
@@ -114,7 +115,7 @@ bool RegMap_c::is_shm()
     ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      logger(LOG_INFO, "SHM: created %s, FD: %d\n", rn, fd);
+      logger(LOG_INFO, "SHM: created %s, FD: %d, addr: %x\n", rn, fd, ptr_data_shm);
     } else {
       ret = false;
       close_fd(fd);
@@ -123,7 +124,7 @@ bool RegMap_c::is_shm()
   } else
     close_fd(_fd);
 
-  printf(" ^%d_~%d", _fd, fd);
+  printf(" ^%d_~%d ", _fd, fd);
 
   return ret;
 }

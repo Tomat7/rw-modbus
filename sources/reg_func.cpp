@@ -90,11 +90,12 @@ void regs_update()
 
 void regs_update_shm()
 {
-  printf("\n===== regs_update =====\n");
+  printf("\n===== regs_update_shm =====\n");
   bool is_eol = false;
 
   for (auto &[n, rm] : REGmap) {
-    reg_print(n, rm.ptr_data_shm);
+    if (rm.is_shm())
+      reg_print(n, rm.ptr_data_shm);
 
     // uint16_t plc_val = rm.get_plc_val(); // Value from PLC
     uint16_t shm_val = rm.get_local(); // Value in SHM
