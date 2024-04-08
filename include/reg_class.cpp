@@ -38,14 +38,14 @@ RegMap_c::RegMap_c(reg_t* _reg)
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
   rn = ptr_reg->fullname.c_str();
-  LOGD("try to create %s", rn);
+  LOGF("try to create %s", rn);
 
   fd = create_shm_fd(rn);
   if (fd != -1) {
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGD("created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
+      LOGF("created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
     }
   }
 }
@@ -144,7 +144,7 @@ void RegMap_c::set_shm_val(uint16_t _val)
 
 void RegMap_c::set_local(uint16_t _val)
 {
-  LOGD(" %d %s %x...\n", _val, rn, this);
+  LOGD("%s(): %d %s %x.", __func__, _val, rn, this);
   if (is_shm()) {
     regdata_t mem;
     mem.rvalue = _val;

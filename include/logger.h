@@ -53,6 +53,14 @@
 #define LOGD(...)
 #endif
 
+
+#ifdef USE_DEBUG1
+#define STRF(A) string("%s()" + string(A)).c_str()
+#define LOGF(X, ...) logdebug(_FL_, LOG_DEBUG, STRF(X), __func__, __VA_ARGS__)
+#else
+#define LOGF(...)
+#endif
+
 #ifdef USE_DEBUG1
 #define DEBUGF(msg) printf("%s/%s(): %s", __FILE__, __func__, msg)
 #define DEBUGL(msg) printf("%s/line:%d:, %s", __FILE__, __LINE__, msg)
