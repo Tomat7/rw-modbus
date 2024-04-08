@@ -75,14 +75,14 @@ void logdebug(const char* logname, int prio, const char* format, ...)
   logger_mux.lock();
   FILE* fout = stdout;
 
-  if (prio == LOG_ERR) {
+  if (prio == LOG_DEBUG) {
     fout = stderr;
-    fprintf(fout, C_RED);
+    fprintf(fout, C_BLU);
+    fprintf(fout, "%s ", logname);
+    fprintf(fout, C_YEL);
   }
 
   openlog(logname, LOG_NDELAY, LOG_LOCAL1);
-
-  fprintf(fout, "%s ", logname);
 
   va_list arg1;
   va_list arg2;

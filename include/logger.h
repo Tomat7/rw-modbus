@@ -14,47 +14,41 @@
 #include <mutex>
 
 // ANSI color codes
-#ifdef C_NRM
-#undef C_NRM
-#endif
+#ifndef C_NRM
 #define C_NRM "\x1B[0m"
-
-#ifdef C_RED
-#undef C_RED
 #endif
+#ifndef C_RED
 #define C_RED "\x1B[91m"
-
-#ifdef C_GRN
-#undef C_GRN
 #endif
+#ifndef C_GRN
 #define C_GRN "\x1B[32m"
-
-#ifdef C_YEL
-#undef C_YEL
 #endif
+#ifndef C_YEL
 #define C_YEL "\x1B[33m"
-
-#ifdef C_BLU
-#undef C_BLU
 #endif
+#ifndef C_BLU
 #define C_BLU "\x1B[94m"
+#endif
 
 #define FILENAME (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#ifndef SYSLOG_NAME
+#define SYSLOG_NAME FILENAME
+#endif
 
 #define STRINGIFY_IMPL(x) #x
 #define STRINGIFY(x) STRINGIFY_IMPL(x)
 
-#define FILE_STRING __FILE__ ":" STRINGIFY(__LINE__)
-#define _FS_ FILE_STRING
+#define FILE_LINE __FILE__ ":" STRINGIFY(__LINE__)
+#define _FL_ FILE_LINE
 
 #define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
 #define LOGE(...) logger(SYSLOG_NAME, LOG_ERR, __VA_ARGS__)
 
-#define LOGI_FS(...) logger(FILE_STRING, LOG_INFO, __VA_ARGS__)
-#define LOGE_FS(...) logger(FILE_STRING, LOG_ERR, __VA_ARGS__)
+#define LOGIFL(...) logger(FILE_LINE, LOG_INFO, __VA_ARGS__)
+#define LOGEFL(...) logger(FILE_LINE, LOG_ERR, __VA_ARGS__)
 
 #ifdef USE_DEBUG1
-#define LOGD(...) logdebug(_FS_, LOG_DEBUG, __VA_ARGS__)
+#define LOGD(...) logdebug(_FL_, LOG_DEBUG, __VA_ARGS__)
 #else
 #define LOGD(...)
 #endif

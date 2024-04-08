@@ -19,9 +19,9 @@
 #include <vector>
 
 #include "include/decl.h"
-#include "include/logger.h"
 #include "include/in_class.h"
 #include "include/macros.h"
 #include "include/plc_class.h"
 #include "include/timer.h"
 #include "include/shmem.h"
+#include "include/logger.h"

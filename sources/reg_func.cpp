@@ -23,21 +23,9 @@ void regs_init()
 
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
-      logger(LOG_INFO, "RegMap init: try to create %s", R.fullname.c_str());
+      LOGD("%s(): try to create %s", __func__, R.fullname.c_str());
       RegMap_c rm(&R);
       REGmap[R.fullname] = rm;
-      /*
-            regdata_t* addr;
-            int fd = create_shm_fd(R.fullname.c_str());
-            if (fd != -1) {
-              addr = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
-              if (addr != nullptr) {
-                LOGINFO("SHM: created %s, FD: %d\n", R.fullname.c_str(), fd);
-                RegMap_c rm(fd, addr, &R.data, &R);
-                REGmap[R.fullname] = rm;
-              }
-            }
-      */
     }
   return;
 }

@@ -20,7 +20,7 @@
 
 RegMap_c::~RegMap_c() {}
 
-RegMap_c::RegMap_c() { D(printf("Opachki! %x\n", this);) }
+RegMap_c::RegMap_c() { LOGD("Construct! %x", this); }
 
 RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
 {
@@ -45,9 +45,62 @@ RegMap_c::RegMap_c(reg_t* _reg)
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGI("SHM: created %s, FD: %d\n", rn, fd);
+      LOGD("created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
     }
   }
+}
+
+bool RegMap_c::is_shm()
+{
+  bool ret = true;
+
+  int _fd = get_shm_fd(rn);
+  if (_fd == -1) {
+    ret = false;
+    if (fd != -1) {
+      close_shm(fd, ptr_data_shm, sizeof(regdata_t));
+      ptr_data_shm = nullptr;
+      fd = -1;
+    }
+  } else if (fd == -1) {
+    fd = _fd;
+    ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
+    if (ptr_data_shm != nullptr) {
+      sync();
+      LOGI("SHM: created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
+    } else {
+      ret = false;
+      close_fd(fd);
+      fd = -1;
+    }
+  } else
+    close_fd(_fd);
+
+  D(printf(" ^%d_~%d ", _fd, fd);)
+
+  return ret;
+}
+
+void RegMap_c::sync(uint16_t _val)
+{
+  if (ptr_data_plc != nullptr && ptr_data_shm != nullptr) {
+    regdata_t mem;
+    value = _val;
+    mem.rvalue = _val;
+    mem.rerrors = ptr_data_plc->rerrors;
+    mem.rstatus = ptr_data_plc->rstatus;
+    mem.rmode = ptr_data_plc->rmode;
+    mem.rtype = ptr_data_plc->rtype;
+    memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
+  }
+  return;
+}
+
+
+void RegMap_c::sync()
+{
+  sync(get_plc_val());
+  return;
 }
 
 uint16_t RegMap_c::get_plc_val()
@@ -77,7 +130,8 @@ uint16_t RegMap_c::get_local()
 void RegMap_c::set_plc_val(uint16_t _val)
 {
   if (ptr_data_plc != nullptr) {
-    ptr_data_plc->rvalue = _val;
+    if (ptr_data_plc->rvalue != _val)
+      ptr_data_plc->rvalue = _val;
     ptr_data_plc->rupdate = 1;
   }
 }
@@ -98,57 +152,6 @@ void RegMap_c::set_local(uint16_t _val)
   }
 }
 
-bool RegMap_c::is_shm()
-{
-  bool ret = true;
-
-  int _fd = get_shm_fd(rn);
-  if (_fd == -1) {
-    ret = false;
-    if (fd != -1) {
-      close_shm(fd, ptr_data_shm, sizeof(regdata_t));
-      ptr_data_shm = nullptr;
-      fd = -1;
-    }
-  } else if (fd == -1) {
-    fd = _fd;
-    ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
-    if (ptr_data_shm != nullptr) {
-      sync();
-      LOGI("SHM: created %s, FD: %d, addr: %x\n", rn, fd, ptr_data_shm);
-    } else {
-      ret = false;
-      close_fd(fd);
-      fd = -1;
-    }
-  } else
-    close_fd(_fd);
-
-  D(printf(" ^%d_~%d ", _fd, fd);)
-
-  return ret;
-}
-
-void RegMap_c::sync(uint16_t _val)
-{
-  if (ptr_data_plc != nullptr && ptr_data_shm != nullptr) {
-    regdata_t mem;
-    value = _val;
-    mem.rvalue = _val;
-    mem.rerrors = ptr_data_plc->rerrors;
-    mem.rstatus = ptr_data_plc->rstatus;
-    mem.rmode = ptr_data_plc->rmode;
-    mem.rtype = ptr_data_plc->rtype;
-    memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
-  }
-  return;
-}
-
-void RegMap_c::sync()
-{
-  sync(get_plc_val());
-  return;
-}
 
 int RegMap_c::get_mode()
 {

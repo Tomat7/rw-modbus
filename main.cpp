@@ -50,8 +50,8 @@ int main()
     const char* x = nullptr;
     t.start(x);
     mb_update();
-    LOGD("regdata_t size: %d\n", sizeof(regdata_t));
-    LOGD("P array size: %d\n", sizeof(P));
+    LOGD("regdata_t size: %d", sizeof(regdata_t));
+    LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     int ch = read_console(TIMEOUT_SEC);
