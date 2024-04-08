@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
-//#include <ncurses.h>
 #include <stdio.h>
 #include <string.h>
 #include <termios.h>
@@ -20,9 +19,9 @@
 #include <vector>
 
 #include "include/decl.h"
+#include "include/logger.h"
 #include "include/in_class.h"
 #include "include/macros.h"
 #include "include/plc_class.h"
 #include "include/timer.h"
-#include "include/logger.h"
 #include "include/shmem.h"

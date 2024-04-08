@@ -19,6 +19,12 @@
 
 #define MB_SLAVE_CONN_MAX 5
 #define USE_SYSLOG
+#define USE_DEBUG1
+
+#ifdef SYSLOG_NAME
+#undef SYSLOG_NAME
+#endif
+#define SYSLOG_NAME "REG-class"
 
 using namespace std;
 
@@ -34,14 +40,6 @@ struct regdata_t {
 struct reg_t {
   int raddr = 0;
   regdata_t data;
-  /*
-    uint16_t rvalue = 0;
-    int rupdate = 0; // 1 - need to write/update remote register
-    int rstatus = 0; // -1 mean ERROR, any positive - is OK
-    int rerrors = 0; // number of errors on MB func (init/connect/read)
-    int rmode = 0;   // 1 - mean RW
-    int rtype = 0;   // 1 - mean FLOAT
-  */
   string fullname;
   string str_name;
   string str_mode;

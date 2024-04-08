@@ -72,7 +72,7 @@ void regs_update()
     } else
       printf("       "); // Reg is not RW
 
-    printf("~%2d ", rm.fd); // Show filedescriptor
+    D(printf("~%2d ", rm.fd);) // Show filedescriptor
 
     rm.value = plc_val; // Save PLC value to REGmap
     rm.sync(plc_val);
@@ -111,7 +111,7 @@ void regs_update_shm()
     } else
       printf("      "); // Reg is not RW
 
-    printf(" ~%2d", rm.fd); // Show filedescriptor
+    D(printf(" ~%2d", rm.fd);) // Show filedescriptor
     rm.sync(shm_val);
 
     if (is_eol)
