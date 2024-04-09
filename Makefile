@@ -34,7 +34,6 @@ BLU='\033[0;94m'
 WHI='\033[0;97m'
 NC='\033[0m' # No Color
 
-
 # === C/CPP flags configuretion ===
 
 LDFLAGS= -Wall
@@ -55,8 +54,8 @@ CFLAGS+= $(TYPES_FLAGS)
 CFLAGS+= $(GLIBC_FLAGS)
 #CFLAGS+= -fanalyzer
 
-
 # === Check for DEBUG build ===
+
 $(info === The GOALS is: $(MAKECMDGOALS))
 
 ifeq ("debug","$(filter debug,$(MAKECMDGOALS))")
@@ -66,7 +65,7 @@ DO_DEBUG=YES
 $(info === Debug options activated! ===)
 endif
 
-# =============================
+# =====================================================================
 
 FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
  -Wfloat-equal -Wconversion -Wlogical-op -Wshift-overflow=2 \
@@ -75,18 +74,16 @@ FULL_FLAGS= -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 \
  -fsanitize=address -fsanitize=undefined -fno-sanitize-recover \
  -fstack-protector
 
-#===============================================================================
+#======================================================================
 
 SRCFORMAT1="./*.cpp,*.h"
 SRCFORMAT2="$(SRCDIR2)/*.cpp,*.h"
 SRCFORMAT3="$(SRCDIR3)/*.cpp,*.h"
 
-
 SRCLIST1= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR1)/*.cpp))
 SRCLIST2= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR2)/*.cpp)) 
 SRCLIST3= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR3)/*.cpp)) 
 SOURCELIST= $(SRCLIST1) $(SRCLIST2) $(SRCLIST3)
-
 
 DEPLIST1= $(wildcard $(OBJDIR)/$(SRCDIR1)/*.cpp.d)
 DEPLIST2= $(wildcard $(OBJDIR)/$(SRCDIR2)/*.cpp.d)
@@ -95,6 +92,7 @@ DEPLIST= $(DEPLIST1) $(DEPLIST2) $(DEPLIST3)
 
 include $(DEPLIST)
 
+#include $(wildcard $(OBJDIR)/*.cpp.d)
 
 # =============================================
 all: a.out
@@ -103,9 +101,10 @@ debug: clean a.out
 
 libtest: a.out
 
-# ============================================
+# ================ Linking ================================
+#a.out: #$(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
+
 a.out: $(SOURCELIST)
-#$(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
 ifdef DO_DEBUG
 	@echo -e $(GRE)"=== Linking with DEBUG: $@"$(NC)
 else
@@ -123,7 +122,7 @@ else
 	sleep 2
 endif
 
-
+#================== Compiling ==============================
 $(OBJDIR)/%.o: %.cpp
 ifeq ("YES","$(DO_DEBUG)")
 	@echo -e $(YEB)"=== Compiling with DEBUG: $<"$(NC)
@@ -134,13 +133,7 @@ endif
 #	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<
 #       gcc -c -MD $<
 
-# =====================================
-
-#include $(wildcard $(OBJDIR)/*.cpp.d)
-
-#include $(DEPLIST)
-
-# ======================================
+# ================== Cleaning =============================
 clean: format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
@@ -148,8 +141,7 @@ clean: format-linux
 	rm -rfv $(OBJDIR)/$(SRCDIR3)/*.o $(OBJDIR)/$(SRCDIR3)/*.d
 	rm -rfv a.out
 
-
-# ======================================
+# ================== Formatting ===========================
 # Simple format current directory only
 clang:
 	clang-format -i --verbose *.cpp *.h
@@ -157,7 +149,7 @@ clang:
 google:
 	clang-format -i -style=google --verbose *.cpp *.h
 
-# ALL FILE recursively!
+# ================ ALL FILE recursively! ==================
 # Reindent *.cpp to K&R code-style
 format-kr:
 	astyle $(ASFLAGS) -n --style=kr $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
