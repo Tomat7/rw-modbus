@@ -66,14 +66,14 @@ int write_shm(string rn, uint16_t val)
     }
   }
 
-  LOGD("%s(): R:%s, FD: %d, addr: %x.", __func__, rn.c_str(), fd, ptr_shm);
+  LOGD("R:%s, FD: %d, addr: %x.", rn.c_str(), fd, ptr_shm);
 
   regdata_t rdata;
   memcpy(&rdata, ptr_shm, sizeof(regdata_t));
   rdata.rvalue = val;
   memcpy(ptr_shm, &rdata, sizeof(regdata_t));
 
-  LOGD("%s(): R:%s, FD: %d. Finished - OK", __func__, rn.c_str(), fd);
+  LOGD("R:%s, FD: %d. Finished - OK", rn.c_str(), fd);
 
   int rc = close_shm(fd, ptr_shm, sizeof(regdata_t));
   if (rc != 0)

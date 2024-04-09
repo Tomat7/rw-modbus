@@ -23,7 +23,7 @@
 #define C_RED "\x1B[91m"
 #endif
 #ifndef C_GRN
-#define C_GRN "\x1B[32m"
+#define C_GRN "\x1B[92m"
 #endif
 #ifndef C_YEL
 #define C_YEL "\x1B[33m"
@@ -32,15 +32,18 @@
 #define C_BLU "\x1B[94m"
 #endif
 
+//const char* funcn(const char*);
+//const char* filename(const char*);
+//#define FILENAME filename(__FILE__)
+//#define FILENAME (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+
 #define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
         __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
 
-#define FILENAME (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #ifdef SYSLOG_NAME
 #undef SYSLOG_NAME
 #endif
 #define SYSLOG_NAME __FILENAME__
-
 
 #define STRINGIFY_IMPL(x) #x
 #define STRINGIFY(x) STRINGIFY_IMPL(x)
@@ -50,21 +53,13 @@
 
 #define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
 #define LOGE(...) logger(SYSLOG_NAME, LOG_ERR, __VA_ARGS__)
-
-#define LOGIFL(...) logger(FILE_LINE, LOG_INFO, __VA_ARGS__)
-#define LOGEFL(...) logger(FILE_LINE, LOG_ERR, __VA_ARGS__)
-
-#ifdef USE_DEBUG1
-#define LOGD(...) logdebug(_FL_, LOG_DEBUG, __VA_ARGS__)
-#else
-#define LOGD(...)
-#endif
+#define LOGW(...) logger(SYSLOG_NAME, LOG_WARNING, __VA_ARGS__)
 
 #ifdef USE_DEBUG1
 #define STRF(A) string("%s(): " + (string)A).c_str()
-#define LOGF(X, ...) logdebug(_FL_, LOG_DEBUG, STRF(X), __func__, __VA_ARGS__)
+#define LOGD(X, ...) logdebug(_FL_, LOG_DEBUG, STRF(X), __func__, __VA_ARGS__)
 #else
-#define LOGF(...)
+#define LOGD(...)
 #endif
 
 #ifdef USE_DEBUG1

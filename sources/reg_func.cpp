@@ -18,12 +18,11 @@ void reg_print(string, const regdata_t*);
 
 void regs_init()
 {
-  cout << endl
-       << "===== reg_init =====" << endl;
+  cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
-      LOGD("%s():  try to create %s", __func__, R.fullname.c_str());
+      LOGD("try to create %s", R.fullname.c_str());
       RegMap_c rm(&R);
       REGmap[R.fullname] = rm;
     }

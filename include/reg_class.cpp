@@ -44,14 +44,14 @@ RegMap_c::RegMap_c(reg_t* _reg)
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
   rn = ptr_reg->fullname.c_str();
-  LOGF("try to create %s", rn);
+  LOGD("try to create %s", rn);
 
   fd = create_shm_fd(rn);
   if (fd != -1) {
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGF("created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
+      LOGD("created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
     }
   }
 }
@@ -82,7 +82,7 @@ bool RegMap_c::is_shm()
   } else
     close_fd(_fd);
 
-  D(printf(" ^%d_~%d ", _fd, fd);)
+  D(printf(" ^%2d_~%2d ", _fd, fd);)
 
   return ret;
 }
@@ -150,7 +150,7 @@ void RegMap_c::set_shm_val(uint16_t _val)
 
 void RegMap_c::set_local(uint16_t _val)
 {
-  LOGD("%s(): %d %s %x.", __func__, _val, rn, this);
+  LOGD("%d %s %x.", _val, rn, this);
   if (is_shm()) {
     regdata_t mem;
     mem.rvalue = _val;

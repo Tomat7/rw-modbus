@@ -7,6 +7,7 @@
 
 #include <stdarg.h>
 #include <syslog.h>
+#include <string.h>
 #include <unistd.h>
 #include <chrono>
 #include <mutex>
@@ -23,7 +24,9 @@ void logger(int prio, const char* format, ...)
   if (prio == LOG_ERR) {
     fout = stderr;
     fprintf(fout, C_RED);
-  }
+  } else if (prio == LOG_WARNING)
+    fprintf(fout, C_GRN);
+
 
   openlog("RW-modbus", LOG_NDELAY, LOG_LOCAL1);
 
@@ -51,7 +54,8 @@ void logger(const char* logname, int prio, const char* format, ...)
   if (prio == LOG_ERR) {
     fout = stderr;
     fprintf(fout, C_RED);
-  }
+  } else if (prio == LOG_WARNING)
+    fprintf(fout, C_GRN);
 
   openlog(logname, LOG_NDELAY, LOG_LOCAL1);
 
@@ -99,4 +103,17 @@ void logdebug(const char* logname, int prio, const char* format, ...)
   logger_mux.unlock();
 }
 
+/*
+  const char* funcn(const char* fmt)
+  {
+  return string("%s(): " + (string)fmt).c_str();
+  }
+*/
+
+/*
+  const char* filename(const char* f)
+  {
+  return strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
+  }
+*/
 // eof
