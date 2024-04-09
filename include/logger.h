@@ -13,6 +13,8 @@
 #include <chrono>
 #include <mutex>
 
+#include "../config.h"
+
 // ANSI color codes
 #ifndef C_NRM
 #define C_NRM "\x1B[0m"
@@ -30,10 +32,15 @@
 #define C_BLU "\x1B[94m"
 #endif
 
+#define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
+        __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
+
 #define FILENAME (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#ifndef SYSLOG_NAME
-#define SYSLOG_NAME FILENAME
+#ifdef SYSLOG_NAME
+#undef SYSLOG_NAME
 #endif
+#define SYSLOG_NAME __FILENAME__
+
 
 #define STRINGIFY_IMPL(x) #x
 #define STRINGIFY(x) STRINGIFY_IMPL(x)
@@ -53,9 +60,8 @@
 #define LOGD(...)
 #endif
 
-
 #ifdef USE_DEBUG1
-#define STRF(A) string("%s()" + string(A)).c_str()
+#define STRF(A) string("%s(): " + (string)A).c_str()
 #define LOGF(X, ...) logdebug(_FL_, LOG_DEBUG, STRF(X), __func__, __VA_ARGS__)
 #else
 #define LOGF(...)

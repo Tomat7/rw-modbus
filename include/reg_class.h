@@ -21,11 +21,6 @@
 #define USE_SYSLOG
 #define USE_DEBUG1
 
-#ifdef SYSLOG_NAME
-#undef SYSLOG_NAME
-#endif
-#define SYSLOG_NAME "REG-class"
-
 using namespace std;
 
 struct regdata_t {

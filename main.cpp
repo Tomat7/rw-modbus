@@ -20,8 +20,8 @@ int rc;
 
 static void close_sigint(int dummy)
 {
-  //printf("regdata_t size: %d\n", sizeof(regdata_t));
-  //printf("PLCset array size: %d\n", sizeof(PLCset));
+  // printf("regdata_t size: %d\n", sizeof(regdata_t));
+  // printf("PLCset array size: %d\n", sizeof(PLCset));
   regs_deinit();
   LOGE("Exit by Ctrl-C. Bye.\n");
   closelog();

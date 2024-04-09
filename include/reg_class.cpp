@@ -14,9 +14,15 @@
 #include <mutex>
 #include <map>
 
+#include "./reg_class.h"
 #include "./plc_class.h"
 #include "./logger.h"
 #include "./shmem.h"
+
+#ifdef SYSLOG_NAME
+#undef SYSLOG_NAME
+#endif
+#define SYSLOG_NAME "REG-class"
 
 RegMap_c::~RegMap_c() {}
 

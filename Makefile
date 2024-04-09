@@ -87,6 +87,15 @@ SRCLIST2= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR2)/*.cpp))
 SRCLIST3= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR3)/*.cpp)) 
 SOURCELIST= $(SRCLIST1) $(SRCLIST2) $(SRCLIST3)
 
+
+DEPLIST1= $(wildcard $(OBJDIR)/$(SRCDIR1)/*.cpp.d)
+DEPLIST2= $(wildcard $(OBJDIR)/$(SRCDIR2)/*.cpp.d)
+DEPLIST3= $(wildcard $(OBJDIR)/$(SRCDIR3)/*.cpp.d)
+DEPLIST= $(DEPLIST1) $(DEPLIST2) $(DEPLIST3)
+
+include $(DEPLIST)
+
+
 # =============================================
 all: a.out
 
@@ -125,7 +134,11 @@ endif
 #	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<
 #       gcc -c -MD $<
 
-include $(wildcard $(OBJDIR)/*.cpp.d)
+# =====================================
+
+#include $(wildcard $(OBJDIR)/*.cpp.d)
+
+#include $(DEPLIST)
 
 # ======================================
 clean: format-linux

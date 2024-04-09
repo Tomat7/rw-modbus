@@ -23,7 +23,7 @@ void regs_init()
 
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
-      LOGD("%s(): try to create %s", __func__, R.fullname.c_str());
+      LOGD("%s():  try to create %s", __func__, R.fullname.c_str());
       RegMap_c rm(&R);
       REGmap[R.fullname] = rm;
     }

@@ -7,7 +7,6 @@
 #define CFG_DIR "./conf"
 #define CFG_FILE "modbus.cfg"
 #define USE_SYSLOG
-#define SYSLOG_NAME "RW-modbus"
 #define TIMEOUT_SEC 3
 
 #define MB_SLAVE_CONN_MAX 5
@@ -15,3 +14,7 @@
 #define MB_SLAVE_REGS_NB 50
 
 #define USE_DEBUG1
+
+#ifndef SYSLOG_NAME
+#define SYSLOG_NAME "RW-modbus"
+#endif
