@@ -32,10 +32,12 @@
 #define C_BLU "\x1B[94m"
 #endif
 
-//const char* funcn(const char*);
 //const char* filename(const char*);
 //#define FILENAME filename(__FILE__)
 //#define FILENAME (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+
+//const char* funcname(const char*);
+//#define STRF(A) funcname(A)
 
 #define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
         __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
@@ -51,24 +53,28 @@
 #define FILE_LINE __FILE__ ":" STRINGIFY(__LINE__)
 #define _FL_ FILE_LINE
 
-#define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
 #define LOGE(...) logger(SYSLOG_NAME, LOG_ERR, __VA_ARGS__)
 #define LOGW(...) logger(SYSLOG_NAME, LOG_WARNING, __VA_ARGS__)
 
+#define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
+#define LOGN(...) logger(SYSLOG_NAME, LOG_NOTICE, __VA_ARGS__)
+
 #ifdef USE_DEBUG1
-#define STRF(A) string("%s(): " + (string)A).c_str()
-#define LOGD(X, ...) logdebug(_FL_, LOG_DEBUG, STRF(X), __func__, __VA_ARGS__)
+#define STRF(S) string("%s(): " + (string)S).c_str()
+#define LOGD(F, ...) logdebug(_FL_, LOG_DEBUG, STRF(F), __func__, __VA_ARGS__)
 #else
 #define LOGD(...)
 #endif
 
-#ifdef USE_DEBUG1
-#define DEBUGF(msg) printf("%s/%s(): %s", __FILE__, __func__, msg)
-#define DEBUGL(msg) printf("%s/line:%d:, %s", __FILE__, __LINE__, msg)
-#else
-#define DEBUGF(msg) printf("%s/%s(): %s", __FILE__, __func__, msg)
-#define DEBUGL(msg) printf("%s, line: %d:, %s", __FILE__, __LINE__, msg)
-#endif
+/*
+  #ifdef USE_DEBUG1
+  #define DEBUGF(msg) printf("%s/%s(): %s", __FILE__, __func__, msg)
+  #define DEBUGL(msg) printf("%s/line:%d:, %s", __FILE__, __LINE__, msg)
+  #else
+  #define DEBUGF(msg) printf("%s/%s(): %s", __FILE__, __func__, msg)
+  #define DEBUGL(msg) printf("%s, line: %d:, %s", __FILE__, __LINE__, msg)
+  #endif
+*/
 
 #ifdef USE_DEBUG1
 #define D(a) a

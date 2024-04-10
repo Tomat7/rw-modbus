@@ -104,16 +104,15 @@ void logdebug(const char* logname, int prio, const char* format, ...)
 }
 
 /*
-  const char* funcn(const char* fmt)
+  const char* funcname(const char* fmt)
   {
   return string("%s(): " + (string)fmt).c_str();
   }
-*/
 
-/*
   const char* filename(const char* f)
   {
   return strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
   }
 */
+
 // eof
