@@ -53,6 +53,8 @@ void logger(const char* logname, int prio, const char* format, ...)
 
   if (prio == LOG_ERR) {
     fout = stderr;
+    fprintf(fout, C_BLU);
+    fprintf(fout, "%s ", logname);
     fprintf(fout, C_RED);
   } else if (prio == LOG_WARNING)
     fprintf(fout, C_GRN);

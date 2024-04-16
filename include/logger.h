@@ -53,7 +53,7 @@
 #define FILE_LINE __FILE__ ":" STRINGIFY(__LINE__)
 #define _FL_ FILE_LINE
 
-#define LOGE(...) logger(SYSLOG_NAME, LOG_ERR, __VA_ARGS__)
+#define LOGE(...) logger(FILE_LINE, LOG_ERR, __VA_ARGS__)
 #define LOGW(...) logger(SYSLOG_NAME, LOG_WARNING, __VA_ARGS__)
 
 #define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
