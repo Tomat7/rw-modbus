@@ -52,7 +52,7 @@ int write_shm(string rn, uint16_t val)
 {
   regdata_t* ptr_shm = nullptr;
   int fd = get_shm_fd(rn.c_str());
-  LOGI("Reg: %s, got FD: %d", rn.c_str(), fd);
+  LOGD("Reg: %s, got FD: %d", rn.c_str(), fd);
 
   if (fd == -1) {
     LOGE("Can't get_shm_fd: %s", rn.c_str());

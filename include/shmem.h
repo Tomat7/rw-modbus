@@ -24,8 +24,8 @@ int get_shm_fd(const char* rn);
 void* create_shm_addr(int fd, size_t sz);
 void* get_shm_addr(int fd, size_t sz);
 
-int close_shm(int, void*, size_t);
-int close_fd(int);
+int close_shm(int &, void*, size_t);
+int close_fd(int &);
 int unlink_shm(const char* rn);
 
 //int write_shm(string rn, uint16_t val);

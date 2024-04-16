@@ -51,7 +51,7 @@ RegMap_c::RegMap_c(reg_t* _reg)
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGD("created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
+      LOGD("created %s, FD: %d, SHM_addr: %x", rn, fd, ptr_data_shm);
     }
   }
 }
@@ -65,19 +65,19 @@ bool RegMap_c::is_shm()
     ret = false;
     if (fd != -1) {
       close_shm(fd, ptr_data_shm, sizeof(regdata_t));
-      ptr_data_shm = nullptr;
-      fd = -1;
+//      ptr_data_shm = nullptr;
+//      fd = -1;
     }
   } else if (fd == -1) {
     fd = _fd;
     ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGI("SHM: created %s, FD: %d, addr: %x", rn, fd, ptr_data_shm);
+      LOGI("SHM: created %s, FD: %d, SHM_addr: %x", rn, fd, ptr_data_shm);
     } else {
       ret = false;
       close_fd(fd);
-      fd = -1;
+//      fd = -1;
     }
   } else
     close_fd(_fd);
@@ -135,11 +135,11 @@ uint16_t RegMap_c::get_local()
 
 void RegMap_c::set_plc_val(uint16_t _val)
 {
-  if (ptr_data_plc != nullptr) {
-    if (ptr_data_plc->rvalue != _val)
+  if (ptr_data_plc != nullptr)
+    if (ptr_data_plc->rvalue != _val) {
       ptr_data_plc->rvalue = _val;
-    ptr_data_plc->rupdate = 1;
-  }
+      ptr_data_plc->rupdate = 1;
+    }
 }
 
 void RegMap_c::set_shm_val(uint16_t _val)

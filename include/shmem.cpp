@@ -72,21 +72,30 @@ void* get_shm_addr(int fd, size_t sz)
   return addr;
 }
 
-int close_shm(int fd, void* addr, size_t sz)
+int close_shm(int &fd, void* addr, size_t sz)
 {
   int rc = 0;
-  if (addr != nullptr)
+
+  if (addr != nullptr) {
     rc = munmap(addr, sz);
-  if (fd != -1)
+    addr = nullptr;
+  }
+
+  if (fd != -1) {
     rc = close(fd);
+    fd = -1;
+  }
+
   return rc;
 }
 
-int close_fd(int fd)
+int close_fd(int &fd)
 {
-  int rc = -1;
-  if (fd != -1)
+  int rc = 0;
+  if (fd != -1) {
     rc = close(fd);
+    fd = -1;
+  }
   return rc;
 }
 

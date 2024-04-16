@@ -88,13 +88,13 @@ void regs_update_shm()
     uint16_t shm_val = rm.get_local(); // Value in SHM
     uint16_t old_val = rm.value;       // Value in memory (in REGmap)
 
-    if (rm.get_mode()) {
-      // Is the Reg RW? If YES - get&check value from SHM.
+    if (rm.get_mode()) { // If the Reg RW - get&check value from SHM.
 
       if (shm_val != old_val)
         printf("<%5d", old_val);
       else
         printf("      ");
+
     } else
       printf("      "); // Reg is not RW
 
@@ -130,7 +130,7 @@ void regs_deinit()
 {
   for (auto &[n, rm] : REGmap) {
     close_shm(rm.fd, (void*)rm.ptr_data_shm, sizeof(regdata_t));
-    close_fd(rm.fd);
+//    close_fd(rm.fd);
     unlink_shm(n.c_str());
   }
   REGmap.clear();
