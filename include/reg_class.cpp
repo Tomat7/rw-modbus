@@ -24,7 +24,7 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-RegMap_c::~RegMap_c() {}
+RegMap_c::~RegMap_c() { LOGD("DEstruct! %x", this); }
 
 RegMap_c::RegMap_c() { LOGD("Construct! %x", this); }
 
@@ -51,25 +51,27 @@ RegMap_c::RegMap_c(reg_t* _reg)
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGD("created %s, FD: %d, SHM_addr: %x", rn, fd, ptr_data_shm);
+      LOGD("created %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
     }
   }
 }
 
-RegMap_c::RegMap_c(const char* _rn)
+RegMap_c::RegMap_c(string _rn)
 {
-  rn = _rn;
+  char* rx = new char[1 + strlen(_rn.c_str())];
+  strcpy(rx, _rn.c_str());
+  rn = rx;
   LOGD("try to open %s", rn);
 
   if (is_shm())
-    LOGI("Open %s, FD: %d, SHM_addr: %x", rn, fd, ptr_data_shm);
+    LOGD("Open %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
   else
     LOGE("Error open %s", rn);
 }
 
-RegMap_c::RegMap_c(string _rn)
+RegMap_c::RegMap_c(const char* _rn)
 {
-  RegMap_c(_rn.c_str());
+  RegMap_c((string)_rn);
 }
 
 bool RegMap_c::is_shm()
