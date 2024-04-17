@@ -12,7 +12,7 @@
 
 #define MB_READ
 
-void regs_init();
+//void regs_init();
 void reg_print(string, const regdata_t*);
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
@@ -22,9 +22,22 @@ void regs_init()
 
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
-      LOGD("try to create %s", R.fullname.c_str());
-      RegMap_c rm(&R);
-      REGmap[R.fullname] = rm;
+      LOGD("(Master) try to create %s", R.fullname.c_str());
+      //RegMap_c rm(&R);
+      //REGmap[R.fullname] = rm;
+      REGmap[R.fullname] = { &R };
+    }
+  return;
+}
+
+void regs_init_shm()
+{
+  cout << endl << "===== reg_init =====" << endl;
+
+  for (auto &D : PLCset)
+    for (auto &[n, R] : D.regs) {
+      LOGD("(Slave) try to create %s", R.fullname.c_str());
+      REGmap[R.fullname] = { R.fullname };
     }
   return;
 }
@@ -42,8 +55,7 @@ void regs_update()
     uint16_t shm_val = rm.get_local();   // Value in SHM
     uint16_t old_val = rm.value;         // Value in memory (in REGmap)
 
-    if (rm.get_mode()) {
-      // Is the Reg RW? If YES - get&check value from SHM.
+    if (rm.get_mode()) {  // If the Reg RW - get&check value from SHM.
 
       if (plc_val != old_val) // If new value got from PLC
         printf(">");          // Print sign ">"
@@ -110,6 +122,9 @@ void regs_update_shm()
 
     is_eol = !is_eol;
   }
+
+  if (is_eol)
+    printf("\n");
 
   return;
 }

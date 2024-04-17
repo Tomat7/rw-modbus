@@ -47,7 +47,9 @@ class RegMap_c
 {
 public:
   RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
-  RegMap_c(reg_t* _reg);
+  RegMap_c(reg_t* _reg);      // for PLC master
+  RegMap_c(const char* _rn);  // for Slave. PLC regs not initialized!
+  RegMap_c(string _rn);       // for Slave. PLC regs not initialized!
   RegMap_c();
   ~RegMap_c();
 

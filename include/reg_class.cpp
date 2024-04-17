@@ -56,48 +56,66 @@ RegMap_c::RegMap_c(reg_t* _reg)
   }
 }
 
+RegMap_c::RegMap_c(const char* _rn)
+{
+  rn = _rn;
+  LOGD("try to open %s", rn);
+
+  if (is_shm())
+    LOGI("Open %s, FD: %d, SHM_addr: %x", rn, fd, ptr_data_shm);
+  else
+    LOGE("Error open %s", rn);
+}
+
+RegMap_c::RegMap_c(string _rn)
+{
+  RegMap_c(_rn.c_str());
+}
+
 bool RegMap_c::is_shm()
 {
-  bool ret = true;
+  bool ret = false;
 
   int _fd = get_shm_fd(rn);
   D(printf(" ^%2d_~%2d ", _fd, fd);)
 
-  if (_fd == -1) {
-    ret = false;
-    if (fd != -1)
-      close_shm(fd, ptr_data_shm, sizeof(regdata_t));
-  } else if (fd == -1) {
+  if (_fd == -1) // No SHM found
+    close_shm(fd, ptr_data_shm, sizeof(regdata_t));
+  else if (fd != -1) {
+    // SHM - Ok && FD already Ok
+    close_fd(_fd); // All - Ok, close _fd
+    ret = true;
+  } else {
+    // SHM - Ok, but FD not ready yet
     fd = _fd;
     ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
-    if (ptr_data_shm != nullptr) {
-      sync();
-      LOGI("SHM: created %s, FD: %d, SHM_addr: %x", rn, fd, ptr_data_shm);
-    } else {
-      ret = false;
+    if (ptr_data_shm == nullptr)
       close_fd(fd);
-    }
-  } else
-    close_fd(_fd);
+    else
+      ret = true;
+  }
 
   return ret;
 }
 
 void RegMap_c::sync(uint16_t _val)
 {
-  if (ptr_data_plc != nullptr && ptr_data_shm != nullptr) {
+  value = _val;
+  if (ptr_data_shm != nullptr) {
     regdata_t mem;
-    value = _val;
     mem.rvalue = _val;
-    mem.rerrors = ptr_data_plc->rerrors;
-    mem.rstatus = ptr_data_plc->rstatus;
-    mem.rmode = ptr_data_plc->rmode;
-    mem.rtype = ptr_data_plc->rtype;
+
+    if (ptr_data_plc != nullptr) {
+      mem.rerrors = ptr_data_plc->rerrors;
+      mem.rstatus = ptr_data_plc->rstatus;
+      mem.rmode = ptr_data_plc->rmode;
+      mem.rtype = ptr_data_plc->rtype;
+    }
+
     memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
   }
   return;
 }
-
 
 void RegMap_c::sync()
 {
@@ -153,7 +171,6 @@ void RegMap_c::set_local(uint16_t _val)
     memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
   }
 }
-
 
 int RegMap_c::get_mode()
 {
