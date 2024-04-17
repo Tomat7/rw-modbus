@@ -129,7 +129,7 @@ void reg_print(string rn, const regdata_t* rd)
 void regs_deinit()
 {
   for (auto &[n, rm] : REGmap) {
-    close_shm(rm.fd, (void*)rm.ptr_data_shm, sizeof(regdata_t));
+    close_shm(rm.fd, rm.ptr_data_shm, sizeof(regdata_t));
 //    close_fd(rm.fd);
     unlink_shm(n.c_str());
   }
