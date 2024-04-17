@@ -1,4 +1,5 @@
-// #include <chrono>
+#pragma once
+
 #include <fcntl.h>
 // #include <iostream>
 #include <stdio.h>
@@ -8,9 +9,6 @@
 #include <unistd.h>
 
 #include <string>
-//#include <thread>
-
-#include "./reg_class.h"
 
 #define SHM_ERR_OPEN -1
 #define SHM_ERR_TRUNC -2
@@ -26,9 +24,10 @@ int get_shm_fd(const char* rn);
 void* create_shm_addr(int fd, size_t sz);
 void* get_shm_addr(int fd, size_t sz);
 
-//int close_shm(int &, T* &, size_t);
-int close_fd(int &);
 int unlink_shm(const char* rn);
+int close_fd(int &);
+
+//int close_shm(int &, T* &, size_t);
 
 template<typename T>
 int close_shm(int &fd, T* &addr, size_t sz)

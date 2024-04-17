@@ -61,13 +61,12 @@ bool RegMap_c::is_shm()
   bool ret = true;
 
   int _fd = get_shm_fd(rn);
+  D(printf(" ^%2d_~%2d ", _fd, fd);)
+
   if (_fd == -1) {
     ret = false;
-    if (fd != -1) {
+    if (fd != -1)
       close_shm(fd, ptr_data_shm, sizeof(regdata_t));
-//      ptr_data_shm = nullptr;
-//      fd = -1;
-    }
   } else if (fd == -1) {
     fd = _fd;
     ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
@@ -77,12 +76,9 @@ bool RegMap_c::is_shm()
     } else {
       ret = false;
       close_fd(fd);
-//      fd = -1;
     }
   } else
     close_fd(_fd);
-
-  D(printf(" ^%2d_~%2d ", _fd, fd);)
 
   return ret;
 }

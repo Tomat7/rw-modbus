@@ -72,6 +72,9 @@ void regs_update()
     is_eol = !is_eol;
   }
 
+  if (is_eol)
+    printf("\n");
+
   return;
 }
 
@@ -84,7 +87,6 @@ void regs_update_shm()
     if (rm.is_shm())
       reg_print(n, rm.ptr_data_shm);
 
-    // uint16_t plc_val = rm.get_plc_val(); // Value from PLC
     uint16_t shm_val = rm.get_local(); // Value in SHM
     uint16_t old_val = rm.value;       // Value in memory (in REGmap)
 
@@ -130,11 +132,9 @@ void regs_deinit()
 {
   for (auto &[n, rm] : REGmap) {
     close_shm(rm.fd, rm.ptr_data_shm, sizeof(regdata_t));
-//    close_fd(rm.fd);
     unlink_shm(n.c_str());
   }
   REGmap.clear();
-//  delete[] P;
 
   return;
 }

@@ -13,8 +13,9 @@
 #define MB_SLAVE_PORT 1502
 #define MB_SLAVE_REGS_NB 50
 
-#define USE_DEBUG1
-
 #ifndef SYSLOG_NAME
 #define SYSLOG_NAME "RW-modbus"
 #endif
+
+#define USE_DEBUG1
+//#define USE_DEBUG2

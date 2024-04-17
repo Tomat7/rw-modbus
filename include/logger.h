@@ -66,6 +66,12 @@
 #define LOGD(...)
 #endif
 
+#ifdef USE_DEBUG2
+#define D(a) a
+#else
+#define D(a)
+#endif
+
 /*
   #ifdef USE_DEBUG1
   #define DEBUGF(msg) printf("%s/%s(): %s", __FILE__, __func__, msg)
@@ -76,11 +82,6 @@
   #endif
 */
 
-#ifdef USE_DEBUG1
-#define D(a) a
-#else
-#define D(a)
-#endif
 
 using namespace std;
 
