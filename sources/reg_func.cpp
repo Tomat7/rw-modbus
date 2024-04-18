@@ -14,7 +14,7 @@
 
 //void regs_init();
 void reg_print(string, const regdata_t*);
-// void reg_init_name(string devname, string regname, uint16_t *val);
+void reg_print_shm(RegMap_c*);
 
 void regs_init()
 {
@@ -96,8 +96,8 @@ void regs_update_shm()
   bool is_eol = false;
 
   for (auto &[n, rm] : REGmap) {
-    if (rm.is_shm())
-      reg_print(n, rm.ptr_data_shm);
+
+    reg_print_shm(&rm);
 
     uint16_t shm_val = rm.get_local(); // Value in SHM
     uint16_t old_val = rm.value;       // Value in memory (in REGmap)
@@ -139,6 +139,30 @@ void reg_print(string rn, const regdata_t* rd)
     printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)rd->rvalue * 0.01);
   else
     printf("%s%-14s %7d", C, rn.c_str(), rd->rvalue);
+
+  return;
+}
+
+void reg_print_shm(RegMap_c* rm)
+{
+  int rerrors = 1;
+  int rtype = 0;
+  uint16_t rvalue = 0;
+
+  if (rm->is_shm()) {
+    regdata_t* rd = rm->ptr_data_shm;
+    rerrors = rd->rerrors;
+    rtype = rd->rtype;
+    rvalue = rd->rvalue;
+  }
+  const char* C = KNRM;
+  if (rerrors > 0)
+    C = KRED;
+
+  if (rtype)
+    printf("%s%-14s %7.2f", C, rm->rn, (int16_t)rvalue * 0.01);
+  else
+    printf("%s%-14s %7d", C, rm->rn, rvalue);
 
   return;
 }
