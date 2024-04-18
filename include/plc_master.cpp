@@ -67,6 +67,8 @@ int PLC_c::read_master() // Master only
   }
 
   mb.status = rc;
+  if (rc > 0)
+    mb.timestamp_ms = millis();
 
   for (auto &[n, R] : regs) {
     auto &rd = R.data;
@@ -74,7 +76,7 @@ int PLC_c::read_master() // Master only
     rd.rerrors = mb.errors;
   }
 
-  mb.timestamp_ms = millis();
+
 
   return rc;
 }

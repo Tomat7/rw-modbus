@@ -32,13 +32,6 @@
 #define C_BLU "\x1B[94m"
 #endif
 
-//const char* filename(const char*);
-//#define FILENAME filename(__FILE__)
-//#define FILENAME (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-
-//const char* funcname(const char*);
-//#define STRF(A) funcname(A)
-
 #define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
         __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
 
@@ -53,20 +46,28 @@
 #define FILE_LINE __FILE__ ":" STRINGIFY(__LINE__)
 #define _FL_ FILE_LINE
 
-#define LOGE(...) logger(FILE_LINE, LOG_ERR, __VA_ARGS__)
-#define LOGW(...) logger(SYSLOG_NAME, LOG_WARNING, __VA_ARGS__)
+#define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
+#define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)
+#define LOGW(...) logger(FILE_LINE, LOG_WARNING, __func__, __VA_ARGS__)
+#define LOGN(...) logger(FILE_LINE, LOG_NOTICE, __func__, __VA_ARGS__)
+#define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
 
-#define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
-#define LOGN(...) logger(SYSLOG_NAME, LOG_NOTICE, __VA_ARGS__)
+/*
+  #define LOGE(...) logger(FILE_LINE, LOG_ERR, __VA_ARGS__)
+  #define LOGW(...) logger(SYSLOG_NAME, LOG_WARNING, __VA_ARGS__)
 
-#ifdef USE_DEBUG1
+  #define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
+  #define LOGN(...) logger(SYSLOG_NAME, LOG_NOTICE, __VA_ARGS__)
+*/
+
+#ifdef LOGGER_DEBUG1
 #define STRF(S) string("%s(): " + (string)S).c_str()
 #define LOGD(F, ...) logdebug(_FL_, LOG_DEBUG, STRF(F), __func__, __VA_ARGS__)
 #else
 #define LOGD(...)
 #endif
 
-#ifdef USE_DEBUG2
+#ifdef PRINT_DEBUG2
 #define D(a) a
 #else
 #define D(a)
@@ -85,10 +86,15 @@
 
 using namespace std;
 
+extern int log_level;  // 0 - no messages at all, 9 - all on screen
+
 static mutex logger_mux;
 
 void logger(int prio, const char* format, ...);
-void logger(const char* logname, int prio, const char* format, ...);
+//void logger(const char* logname, int prio, const char* format, ...);
+void logger(const char* logname, int prio, const char* _func, const char* _fmt, ...);
 void logdebug(const char* logname, int prio, const char* format, ...);
+
+char* get_new_char(const char*);
 
 // eof

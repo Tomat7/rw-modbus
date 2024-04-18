@@ -23,7 +23,7 @@ static void close_sigint(int dummy)
   // printf("regdata_t size: %d\n", sizeof(regdata_t));
   // printf("PLCset array size: %d\n", sizeof(PLCset));
   regs_deinit();
-  LOGW("Exit by Ctrl-C. Bye.\n");
+  LOGN("Exit by Ctrl-C. Bye.\n");
   closelog();
   exit(dummy);
 }
@@ -57,12 +57,12 @@ int main()
     int ch = read_console(TIMEOUT_SEC);
     if (ch != -1)
       if (((char)ch == 'e') || ((char)ch == 'q')) {
-        LOGW("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
+        LOGN("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
         wait_console(TIMEOUT_SEC);
         // t.sleep_sec(3);
         return (EXIT_SUCCESS);
       } else if ((char)ch == 'r') {
-        LOGW("Char 'r' pressed. Full reconfiguration.\n");
+        LOGN("Char 'r' pressed. Full reconfiguration.\n");
         wait_console(TIMEOUT_SEC);
         reinit();
         // t.sleep_sec(3);

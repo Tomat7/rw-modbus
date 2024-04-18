@@ -18,8 +18,7 @@
 #include <map>
 
 #define MB_SLAVE_CONN_MAX 5
-#define USE_SYSLOG
-#define USE_DEBUG1
+//#define USE_SYSLOG
 
 using namespace std;
 

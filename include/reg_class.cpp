@@ -58,9 +58,12 @@ RegMap_c::RegMap_c(reg_t* _reg)
 
 RegMap_c::RegMap_c(string _rn)
 {
-  char* rx = new char[1 + strlen(_rn.c_str())];
-  strcpy(rx, _rn.c_str());
-  rn = rx;
+  /*
+    char* rx = new char[1 + strlen(_rn.c_str())];
+    strcpy(rx, _rn.c_str());
+    rn = rx;
+  */
+  rn = get_new_char(_rn.c_str());
   LOGD("try to open %s", rn);
 
   if (is_shm())

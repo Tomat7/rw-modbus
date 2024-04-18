@@ -14,8 +14,6 @@
 #define SHM_ERR_TRUNC -2
 #define SHM_ERR_MMAP -3
 
-#define USE_DEBUG1
-
 using namespace std;
 
 int create_shm_fd(const char* rn);

@@ -16,7 +16,6 @@
 #define SHM_ERR_TRUNC -2
 #define SHM_ERR_MMAP -3
 
-
 int create_shm_fd(const char* rname)
 {
   int fd = -1;

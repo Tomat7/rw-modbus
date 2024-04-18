@@ -34,12 +34,12 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
 
   try {
     cfg.readFile(cfile.c_str());
-    LOGI("I/O reading file OK: %s\n", cfile.c_str());
+    LOGN("I/O reading file OK: %s\n", cfile.c_str());
   } catch (const FileIOException &fioex) {
-    LOGE("I/O error while reading file: %s\n", cfile.c_str());
+    LOGA("I/O error while reading file: %s\n", cfile.c_str());
     return (EXIT_FAILURE);
   } catch (const ParseException &pex) {
-    LOGE("Parse error at %s:%d - %s\n", pex.getFile(), pex.getLine(),
+    LOGA("Parse error at %s:%d - %s\n", pex.getFile(), pex.getLine(),
          pex.getError());
     return (EXIT_FAILURE);
   }
@@ -47,9 +47,9 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
   // Get the top name.
   try {
     string name = cfg.lookup("maintitle");
-    LOGI("Config title: %s\n", name.c_str());
+    LOGN("Config title: %s\n", name.c_str());
   } catch (const SettingNotFoundException &nfex) {
-    LOGE("No 'nametitle' setting in configuration file.\n");
+    LOGA("No '%s' setting in configuration file.\n", "nametitle");
     return (EXIT_FAILURE);
   }
 
@@ -57,7 +57,7 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
   try {
     cfg_init_plcset(cfg.lookup("master"));
   } catch (const SettingNotFoundException &nfex) {
-    LOGE("Great ERROR! (no 'plc' settings?) Exiting.\n");
+    LOGA("Great ERROR! (no 'plc' settings?) Exiting.\n");
     return (EXIT_FAILURE);
   }
 
@@ -90,12 +90,12 @@ int cfg_init_plcset(const Setting &cfgPLC)
     cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
 
     plc.init_master(); // Absolutely necessary to copy str to char* and other
-    LOGI("Configured REGs now: %d\n", (int)plc.regs.size());
+    LOGN("Configured REGs now: %d", (int)plc.regs.size());
     cout << endl;
     // ===== End PLC filling  =====
   }
 
-  LOGI("Configured PLCs: %d, with %d regs\n", (int)PLCset.size(), _regs);
+  LOGN("Configured PLCs: %d, with %d regs", (int)PLCset.size(), _regs);
 
   return 0;
 }
@@ -121,12 +121,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
     }
 
     regnow.data.rvalue = 555; // TODO: remove for production!
-//    cfg_print_reg_details(regnow);
-//    pn->regs.push_back(regnow);
-//    LOGI("Try to fill regs regmap\n");
     pn->regs[regnow.raddr] = regnow;
-//    pn->regs.insert(pair<int, reg_t>(regnow.raddr, regnow));
-//    LOGI("Done filling regs regmap\n");
   }
 
   return;
