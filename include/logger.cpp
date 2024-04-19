@@ -84,7 +84,17 @@ void logger(const char* logname, int prio, const char* _func, const char* _fmt, 
   FILE* fout = stdout;
   const char* format = nullptr;
   const char* color = C_NRM;
+  bool no_any = (prio == LOG_ALERT || prio == LOG_NOTICE);
+  bool no_file = (log_level < 5);
+  bool no_path = (log_level < 7);
+  bool no_func = (log_level < 9);
+
   string fmt = (string)_func + "(): " + (string)_fmt;
+
+  if (log_level < 2)
+    logname = "";
+  else if (log_level < 5)
+    logname = strrchr(logname, '/') ? strrchr(logname, '/') + 1 : logname;
 
   if (prio == LOG_ERR || prio == LOG_ALERT) {
     fout = stderr;
@@ -101,8 +111,7 @@ void logger(const char* logname, int prio, const char* _func, const char* _fmt, 
     fprintf(fout, "%s", color);
   } else {
     format = fmt.c_str();
-    if (log_level > 4)
-      fprintf(fout, "%s%s%s ", C_BLU, logname, color);
+    fprintf(fout, "%s%s%s ", C_BLU, logname, color);
   }
 
   openlog(logname, LOG_NDELAY, LOG_LOCAL1);
