@@ -20,16 +20,28 @@
 #define C_NRM "\x1B[0m"
 #endif
 #ifndef C_RED
-#define C_RED "\x1B[91m"
+#define C_RED "\x1B[31m"
+#endif
+#ifndef C_REDB
+#define C_REDB "\x1B[91m"
 #endif
 #ifndef C_GRN
-#define C_GRN "\x1B[92m"
+#define C_GRN "\x1B[32m"
+#endif
+#ifndef C_GRNB
+#define C_GRNB "\x1B[92m"
 #endif
 #ifndef C_YEL
 #define C_YEL "\x1B[33m"
 #endif
+#ifndef C_YELB
+#define C_YELB "\x1B[93m"
+#endif
 #ifndef C_BLU
-#define C_BLU "\x1B[94m"
+#define C_BLU "\x1B[34m"
+#endif
+#ifndef C_BLUB
+#define C_BLUB "\x1B[94m"
 #endif
 
 #define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
@@ -47,10 +59,12 @@
 #define _FL_ FILE_LINE
 
 #define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
+#define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
 #define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)
 #define LOGW(...) logger(FILE_LINE, LOG_WARNING, __func__, __VA_ARGS__)
 #define LOGN(...) logger(FILE_LINE, LOG_NOTICE, __func__, __VA_ARGS__)
 #define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
+#define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)
 
 /*
   #define LOGE(...) logger(FILE_LINE, LOG_ERR, __VA_ARGS__)
@@ -59,14 +73,14 @@
   #define LOGI(...) logger(SYSLOG_NAME, LOG_INFO, __VA_ARGS__)
   #define LOGN(...) logger(SYSLOG_NAME, LOG_NOTICE, __VA_ARGS__)
 */
-
-#ifdef LOGGER_DEBUG1
-#define STRF(S) string("%s(): " + (string)S).c_str()
-#define LOGD(F, ...) logdebug(_FL_, LOG_DEBUG, STRF(F), __func__, __VA_ARGS__)
-#else
-#define LOGD(...)
-#endif
-
+/*
+  #ifdef LOGGER_DEBUG1
+  #define STRF(S) string("%s(): " + (string)S).c_str()
+  #define LOGD(F, ...) logdebug(_FL_, LOG_DEBUG, STRF(F), __func__, __VA_ARGS__)
+  #else
+  #define LOGD(...)
+  #endif
+*/
 #ifdef PRINT_DEBUG2
 #define D(a) a
 #else

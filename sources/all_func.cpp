@@ -48,6 +48,30 @@ void reinit()
   init_all();
 }
 
+void parse_char(int ch)
+{
+  if (((char)ch == 'e') || ((char)ch == 'q')) {
+    LOGN("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
+    wait_console(TIMEOUT_SEC);
+    exit(EXIT_SUCCESS);
+  } else if ((char)ch == 'r') {
+    LOGN("Char 'r' pressed. Full reconfiguration.\n");
+    wait_console(TIMEOUT_SEC);
+    reinit();
+  } else if (isdigit((char)ch)) {
+    int loglvl = (char)ch - '0';
+    log_level = 5;
+    LOGN("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
+    log_level = loglvl;
+    wait_console(TIMEOUT_SEC);
+  } else if ((char)ch == ' ')
+    printf("%s %s %s \n", KGRN, "=============================", KNRM);
+  else {
+    printf("Wow! What to do with: %s '%c'? %s \n", KBLU, (char)ch, KNRM);
+    wait_console(TIMEOUT_SEC * 2);
+  }
+}
+
 int write_shm(string rn, uint16_t val)
 {
   regdata_t* ptr_shm = nullptr;

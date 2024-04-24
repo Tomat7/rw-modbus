@@ -56,22 +56,8 @@ int main()
 
     int ch = read_console(TIMEOUT_SEC);
     if (ch != -1)
-      if (((char)ch == 'e') || ((char)ch == 'q')) {
-        LOGN("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
-        wait_console(TIMEOUT_SEC);
-        // t.sleep_sec(3);
-        return (EXIT_SUCCESS);
-      } else if ((char)ch == 'r') {
-        LOGN("Char 'r' pressed. Full reconfiguration.\n");
-        wait_console(TIMEOUT_SEC);
-        reinit();
-        // t.sleep_sec(3);
-      } else if ((char)ch == ' ')
-        printf("%s %s %s \n", KGRN, "=============================", KNRM);
-      else {
-        printf("%s %c %s \n", KBLU, (char)ch, KNRM);
-        wait_console(TIMEOUT_SEC);
-      } else
+      parse_char(ch);
+    else
       printf("!\n");
 
     fflush(stdout);
@@ -83,7 +69,7 @@ int main()
     //    t.spent();
   }
 
-  //   getr();
+//   getr();
 
   return (EXIT_SUCCESS);
 }

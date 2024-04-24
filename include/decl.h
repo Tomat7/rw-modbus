@@ -20,6 +20,7 @@ void wait_console(int _s = 0, int _us = 10000);
 
 void init_all();
 void reinit();
+void parse_char(int ch);
 
 int cfg_master(const char* cfg_dir, const char* cfg_file);
 

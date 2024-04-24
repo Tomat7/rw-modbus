@@ -15,7 +15,7 @@
 #include "./logger.h"
 
 // std::mutex logger_mux;
-int log_level = 5; // 0 - no messages at all, 9 - all on screen
+int log_level = 7; // 0 - no messages at all, 9 - all on screen
 
 void logger(int prio, const char* format, ...)
 {
@@ -83,22 +83,21 @@ void logger(const char* logname, int prio, const char* _func, const char* _fmt, 
 
   FILE* fout = stdout;
   const char* format = nullptr;
+  const char* fname = nullptr;
   const char* color = C_NRM;
-  bool no_any = (prio == LOG_ALERT || prio == LOG_NOTICE);
-  bool no_file = (log_level < 5);
-  bool no_path = (log_level < 7);
-  bool no_func = (log_level < 9);
 
+  bool no_file = (prio != 7 && log_level < 7);
+  bool no_func = (log_level < 9);
+  bool no_syslog = (prio > 5 && log_level < 9);
+  bool no_print = (prio > log_level);
   string fmt = (string)_func + "(): " + (string)_fmt;
 
-  if (log_level < 2)
-    logname = "";
-  else if (log_level < 5)
-    logname = strrchr(logname, '/') ? strrchr(logname, '/') + 1 : logname;
-
-  if (prio == LOG_ERR || prio == LOG_ALERT) {
+  if (prio == LOG_ALERT) {
     fout = stderr;
-    color = C_RED;
+    color = C_REDB;
+  } else if (prio == LOG_ERR) {
+    fout = stderr;
+    color = C_REDB;
   } else if (prio == LOG_NOTICE)
     color = C_GRN;
   else if (prio == LOG_DEBUG)
@@ -106,13 +105,19 @@ void logger(const char* logname, int prio, const char* _func, const char* _fmt, 
   else
     color = C_NRM;
 
-  if (prio == LOG_ALERT || prio == LOG_NOTICE) {
+  if (no_file && no_func) {
+    fname = "";
     format = _fmt;
-    fprintf(fout, "%s", color);
+  } else if (no_func) {
+    fname = strrchr(logname, '/') ? strrchr(logname, '/') + 1 : logname;
+    format = _fmt;
   } else {
+    fname = logname;
     format = fmt.c_str();
-    fprintf(fout, "%s%s%s ", C_BLU, logname, color);
   }
+
+  if (!no_print)
+    fprintf(fout, "%s%s%s ", C_BLU, fname, color);
 
   openlog(logname, LOG_NDELAY, LOG_LOCAL1);
 
@@ -121,8 +126,10 @@ void logger(const char* logname, int prio, const char* _func, const char* _fmt, 
 
   va_start(arg1, _fmt);
   va_copy(arg2, arg1);
-  vfprintf(fout, format, arg1);
-  vsyslog(prio, format, arg2);
+  if (!no_print)
+    vfprintf(fout, format, arg1);
+  if (!no_syslog)
+    vsyslog(prio, format, arg2);
   va_end(arg1);
   va_end(arg2);
 
@@ -167,15 +174,18 @@ char* get_new_char(const char* _oldch)
   return _newch;
 }
 
-/*
-  const char *funcname(const char *fmt)
-  {
-  return string("%s(): " + (string)fmt).c_str();
-  }
+const char* add_funcname(const char* _fmt, const char* _func)
+{
+  string fmt = (string)_func + "(): " + (string)_fmt;
+  _fmt = fmt.c_str();
+  return _fmt;
+}
 
-  const char *filename(const char *f)
-  {
-  return strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
-  }
-*/
+const char* extract_filename(const char* f)
+{
+  f = strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
+  return f;
+}
+
+
 // eof
