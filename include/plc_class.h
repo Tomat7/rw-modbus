@@ -26,7 +26,8 @@ using namespace std;
 
 struct mbdata_t {
   int status = 0;            // rc value of last func (init/connect/read)
-  uint64_t timestamp_ms = 0; // milliseconds since the Epoch on last read
+  uint64_t timestamp_try_ms = 0;    // milliseconds since the Epoch on last TRY
+  uint64_t timestamp_ok_ms = 0;     // milliseconds since the Epoch on last GOOD read
   uint32_t interval_ms = 0;  // milliseconds between read request
   uint32_t timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
   uint32_t errors = 0;       // counter of any current ERRORS (reset if OK)
@@ -96,5 +97,5 @@ private:
   int check_slave();    // for Slave only
   void new_client();    // for Slave only
   void work_client();   // for Slave only
-  void logger(int prio, const char*, ...);
+  // void logger(int prio, const char*, ...);
 };

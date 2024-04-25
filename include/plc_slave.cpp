@@ -21,6 +21,8 @@
 
 #include <string>
 
+#include "./logger.h"
+
 // Destructor in plc_common.cpp
 
 PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
@@ -32,8 +34,8 @@ PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;
-  logger(LOG_INFO, "+ New Slave PLC created: %s:%d %s", str_ip_addr.c_str(),
-         tcp_port, dev_name);
+  LOGN("+ New Slave PLC created: %s:%d %s", str_ip_addr.c_str(),
+       tcp_port, dev_name);
 }
 
 int PLC_c::renew_mapping() // Slave only
@@ -52,7 +54,7 @@ int PLC_c::renew_mapping() // Slave only
     mb.errors_cn++;
     rc = -1;
     if (att >= attempts)
-      logger(LOG_ERR, "MB Slave: failed to allocate mapping: %s", modbus_strerror(errno));
+      LOGE("MB Slave: failed to allocate mapping: %s", modbus_strerror(errno));
   }
 
   return rc;
@@ -72,7 +74,7 @@ int PLC_c::renew_listen() // Slave only
     mb.errors_rd++;
     rc = -1;
     if (att >= attempts)
-      logger(LOG_ERR, "MB Slave: unable to listen TCP on port: %d", tcp_port);
+      LOGE("MB Slave: unable to listen TCP on port: %d", tcp_port);
     return rc;
   }
 
@@ -80,7 +82,7 @@ int PLC_c::renew_listen() // Slave only
   FD_ZERO(&refset);               // Clear the reference set of socket
   FD_SET(server_socket, &refset); // Add the server socket
   fdmax = server_socket;          // Keep track of the max file descriptor
-  logger(LOG_INFO, "MB Slave ready on port %d.", tcp_port);
+  LOGN("MB Slave ready on port %d.", tcp_port);
   return rc;
 }
 
@@ -137,7 +139,7 @@ int PLC_c::handle_slave(int usec)
   if (select(fdmax + 1, &rdset, NULL, NULL, &tv) == -1) {
     mb.errors++;
     rc = -1;
-    logger(LOG_ERR, "MB Slave: server select() failure.");
+    LOGE("MB Slave: server select() failure.");
     return rc;
   }
 
@@ -167,13 +169,13 @@ void PLC_c::new_client() // Handle new connections
 
   if (newfd == -1) {
     mb.errors_wr++;
-    logger(LOG_ERR, "MB Slave: server accept() error.");
+    LOGE("MB Slave: server accept() error.");
   } else {
     FD_SET(newfd, &refset);
     if (newfd > fdmax)
       fdmax = newfd; // Keep track of the maximum
-    logger(LOG_INFO, "MB Slave: new connection from %s:%d on socket %d",
-           inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
+    LOGW("MB Slave: new connection from %s:%d on socket %d",
+         inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
   }
 
   return;
@@ -191,7 +193,7 @@ void PLC_c::work_client()
     FD_CLR(master_socket, &refset); // Remove from reference set
     if (master_socket == fdmax)
       fdmax--;
-    logger(LOG_INFO, "MB Slave: connection closed on socket %d", master_socket);
+    LOGW("MB Slave: connection closed on socket %d", master_socket);
   }
 
   return;

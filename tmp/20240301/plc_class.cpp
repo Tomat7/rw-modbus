@@ -79,7 +79,7 @@ int PLC_c::read_master() {
   }
 
   //  uint64_t old = mb.timestamp_ms;
-  mb.timestamp_ms = millis();
+  mb.timestamp_try_ms = millis();
 
   /*
     printf("%s _dT: %ld  err: %d cn: %d rd: %d wr: %d rc: %d\n", dev_name,
@@ -187,7 +187,7 @@ int PLC_c::write_reg(reg_t &r) {
 int PLC_c::update_master() {
 
   rc = 0;
-  if (millis() - mb.timestamp_ms > mb.interval_ms) {
+  if (millis() - mb.timestamp_try_ms > mb.interval_ms) {
     rc = write_master();
     rc = read_master();
   }

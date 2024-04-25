@@ -16,11 +16,13 @@
 
 #include <string>
 
+#include "./logger.h"
+
 PLC_c::PLC_c(string _ip, string _name) // Master only
 {
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
-  logger(LOG_INFO, "+ New PLC created: %s %s", ip_addr, dev_name);
+  LOGW("+ New PLC created: %s %s", ip_addr, dev_name);
 }
 
 // Destructor in plc_common.cpp
@@ -29,8 +31,8 @@ void PLC_c::init_master() // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
-  logger(LOG_INFO, "+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name,
-         str_title.c_str(), str_desc.c_str());
+  LOGN("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name,
+       str_title.c_str(), str_desc.c_str());
 
   for (auto &[n, R] : regs) {
     auto &rd = R.data;
@@ -47,8 +49,8 @@ void PLC_c::init_master() // Master only
       reg_max = R.raddr;
 
     rd.rvalue = 777; // TODO: remove for production
-    logger(LOG_INFO, "+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
-           R.str_mode.c_str(), R.fullname.c_str());
+    LOGN("+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
+         R.str_mode.c_str(), R.fullname.c_str());
   }
 }
 
@@ -66,9 +68,11 @@ int PLC_c::read_master() // Master only
       mb.errors++;
   }
 
+
   mb.status = rc;
+  mb.timestamp_try_ms = millis();
   if (rc > 0)
-    mb.timestamp_ms = millis();
+    mb.timestamp_ok_ms = millis();
 
   for (auto &[n, R] : regs) {
     auto &rd = R.data;
@@ -93,8 +97,8 @@ int PLC_c::mb_connect() // Master only
       mb.errors++;
       mb.errors_cn++;
       if (att >= attempts)
-        logger(LOG_ERR, "%s %s connect error: %s ", ip_addr, dev_name,
-               modbus_strerror(errno));
+        LOGE("%s %s connect error: %s ", ip_addr, dev_name,
+             modbus_strerror(errno));
     }
   }
   modbus_flush(ctx);
@@ -113,15 +117,15 @@ int PLC_c::read_allregs() // Master only
     mb.errors++;
     mb.errors_rd++;
     if (att >= attempts)
-      logger(LOG_ERR, "%s %s read error: %s ", ip_addr, dev_name,
-             modbus_strerror(errno));
+      LOGE("%s %s read error: %s ", ip_addr, dev_name,
+           modbus_strerror(errno));
   } else if (rc != nb_regs) {
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
     if (att >= attempts)
-      logger(LOG_ERR, "%s %s qty: expect %d, got %d", ip_addr, dev_name,
-             nb_regs, rc);
+      LOGE("%s %s qty: expect %d, got %d", ip_addr, dev_name,
+           nb_regs, rc);
   } else {
     mb.errors = 0;
     for (auto &[n, R] : regs)
@@ -162,8 +166,8 @@ int PLC_c::write_reg(reg_t &R)
     mb.errors++;
     mb.errors_wr++;
     if (att >= attempts)
-      logger(LOG_ERR, "%s %s write reg: %s error: %s", ip_addr, dev_name,
-             R.ch_name, modbus_strerror(errno));
+      LOGE("%s %s write reg: %s error: %s", ip_addr, dev_name,
+           R.ch_name, modbus_strerror(errno));
   } else {
     mb.errors = 0;
     rd.rupdate = 0;
@@ -178,11 +182,15 @@ int PLC_c::write_reg(reg_t &R)
 int PLC_c::update_master() // Master only
 {
   rc = 0;
-  if (millis() - mb.timestamp_ms > mb.interval_ms) {
+  uint64_t interval_ms = mb.interval_ms;
+  if (mb.errors > 2)
+    interval_ms = mb.interval_ms * 3;
+
+  if (millis() - mb.timestamp_try_ms > interval_ms) {
     rc = write_master();
-    //    logger(LOG_INFO, "Write_master finished... %s", dev_name);
+    // LOGD("Write_master finished... %s", dev_name);
     rc = read_master();
-    //    logger(LOG_INFO, "Read_master finished... %s", dev_name);
+    // LOGD("Read_master finished... %s", dev_name);
   }
   return rc;
 }
@@ -194,18 +202,11 @@ int PLC_c::set_timeout()
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {
-    logger(LOG_ERR, "%s %s set timeout failed: %s", ip_addr, dev_name,
-           modbus_strerror(errno));
+    LOGE("%s %s set timeout failed: %s", ip_addr, dev_name,
+         modbus_strerror(errno));
   }
 
   return rc;
 }
 
-/*
-  void PLC::deinit()
-  {
-  modbus_close(ctx);
-  modbus_free(ctx);
-  logger(LOG_INFO, "- PLC closed, free and deleted: %s %s.", ip_addr, dev_name);
-  }
-*/
+// eof

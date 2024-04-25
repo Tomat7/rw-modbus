@@ -62,7 +62,7 @@ struct RegMap_c {
 
 struct mbdata_t {
   int status = 0;            // rc value of last func (init/connect/read)
-  uint64_t timestamp_ms = 0; // milliseconds since the Epoch on last read
+  uint64_t timestamp_try_ms = 0; // milliseconds since the Epoch on last read
   uint32_t interval_ms = 0;  // milliseconds between read request
   uint32_t timeout_us = 0;   // miCRo seconds (!!) Modbus respose timeout
   uint32_t errors = 0;       // counter of any current ERRORS (reset if OK)

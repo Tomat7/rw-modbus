@@ -13,6 +13,8 @@
 #include <chrono>
 #include <mutex>
 
+#include "./logger.h"
+
 // ANSI color codes
 #define KNRM "\x1B[0m"
 #define KRED "\x1B[91m"
@@ -25,7 +27,7 @@ mutex PLC_c::logger_mux;
 PLC_c::~PLC_c()
 {
   mb_deinit();
-  logger(LOG_INFO, "- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  LOGN("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 }
 
 int PLC_c::get_rc() { return rc; }
@@ -46,7 +48,7 @@ void PLC_c::mb_deinit()
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
-//  logger(LOG_INFO, "- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+//  LOGI("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 
   return;
 }
@@ -60,10 +62,10 @@ int PLC_c::mb_ctx()
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
     rc = -1;
-    logger(LOG_ERR, "- %s:%d %s CTX allocate error.", ip_addr, tcp_port,
-           dev_name);
+    LOGE("- %s:%d %s CTX allocate error.", ip_addr, tcp_port,
+         dev_name);
   } else
-    logger(LOG_INFO, "+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
+    LOGN("+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
   return rc;
 }
@@ -77,9 +79,9 @@ uint64_t PLC_c::millis()
 }
 
 
-
-void PLC_c::logger(int prio, const char* format, ...)
-{
+/*
+  void PLC_c::logger(int prio, const char* format, ...)
+  {
   logger_mux.lock();
   FILE* fout = stdout;
 
@@ -106,6 +108,7 @@ void PLC_c::logger(int prio, const char* format, ...)
   fprintf(fout, "%s\n", KNRM);
   closelog();
   logger_mux.unlock();
-}
+  }
+*/
 
 // eof

@@ -90,12 +90,12 @@ int cfg_init_plcset(const Setting &cfgPLC)
     cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
 
     plc.init_master(); // Absolutely necessary to copy str to char* and other
-    LOGN("Configured REGs now: %d", (int)plc.regs.size());
+    LOGW("Configured REGs now: %d", (int)plc.regs.size());
     cout << endl;
     // ===== End PLC filling  =====
   }
 
-  LOGN("Configured PLCs: %d, with %d regs", (int)PLCset.size(), _regs);
+  LOGW("Configured PLCs: %d, with %d regs", (int)PLCset.size(), _regs);
 
   return 0;
 }

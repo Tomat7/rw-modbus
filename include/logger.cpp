@@ -99,8 +99,10 @@ void logger(const char* _logname, int _prio, const char* _func, const char* _fmt
     } else if (_prio == LOG_ERR) {
       fout = stderr;
       color = C_REDB;
-    } else if (_prio == LOG_NOTICE)
+    } else if (_prio == LOG_WARNING)
       color = C_GRN;
+    else if (_prio == LOG_NOTICE)
+      color = C_BLUB;
     else if (_prio == LOG_DEBUG)
       color = C_YEL;
     else
