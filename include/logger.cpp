@@ -77,49 +77,46 @@ void logger(int prio, const char* format, ...)
   }
 */
 
-void logger(const char* logname, int prio, const char* _func, const char* _fmt, ...)
+void logger(const char* _logname, int _prio, const char* _func, const char* _fmt, ...)
 {
   logger_mux.lock();
 
   FILE* fout = stdout;
-  const char* format = nullptr;
-  const char* fname = nullptr;
+  const char* format = _fmt;
+  const char* fname = _logname;
   const char* color = C_NRM;
 
-  bool no_file = (prio != 7 && log_level < 7);
+  bool no_file = !(_prio == 7 || log_level > 7);
   bool no_func = (log_level < 9);
-  bool no_syslog = (prio > 5 && log_level < 9);
-  bool no_print = (prio > log_level);
+  bool no_syslog = (_prio > 5 && log_level < 9);
+  bool no_print = (_prio > log_level);
   string fmt = (string)_func + "(): " + (string)_fmt;
 
-  if (prio == LOG_ALERT) {
-    fout = stderr;
-    color = C_REDB;
-  } else if (prio == LOG_ERR) {
-    fout = stderr;
-    color = C_REDB;
-  } else if (prio == LOG_NOTICE)
-    color = C_GRN;
-  else if (prio == LOG_DEBUG)
-    color = C_YEL;
-  else
-    color = C_NRM;
+  if (!no_print) {
+    if (_prio == LOG_ALERT) {
+      fout = stderr;
+      color = C_REDB;
+    } else if (_prio == LOG_ERR) {
+      fout = stderr;
+      color = C_REDB;
+    } else if (_prio == LOG_NOTICE)
+      color = C_GRN;
+    else if (_prio == LOG_DEBUG)
+      color = C_YEL;
+    else
+      color = C_NRM;
 
-  if (no_file && no_func) {
-    fname = "";
-    format = _fmt;
-  } else if (no_func) {
-    fname = strrchr(logname, '/') ? strrchr(logname, '/') + 1 : logname;
-    format = _fmt;
-  } else {
-    fname = logname;
-    format = fmt.c_str();
+    if (no_file && no_func)
+      fname = "";
+    else if (no_func)
+      fname = strrchr(_logname, '/') ? strrchr(_logname, '/') + 1 : _logname;
+    else
+      format = fmt.c_str();
+
+    fprintf(fout, "%s%s%s ", C_BLU, fname, color);
   }
 
-  if (!no_print)
-    fprintf(fout, "%s%s%s ", C_BLU, fname, color);
-
-  openlog(logname, LOG_NDELAY, LOG_LOCAL1);
+  openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
 
   va_list arg1;
   va_list arg2;
@@ -129,11 +126,15 @@ void logger(const char* logname, int prio, const char* _func, const char* _fmt, 
   if (!no_print)
     vfprintf(fout, format, arg1);
   if (!no_syslog)
-    vsyslog(prio, format, arg2);
+    vsyslog(_prio, format, arg2);
   va_end(arg1);
   va_end(arg2);
 
-  fprintf(fout, "%s\n", C_NRM);
+  if (!no_print)
+    fprintf(fout, "%s\n", C_NRM);
+  else
+    fprintf(fout, "%s", C_NRM);
+
   closelog();
   logger_mux.unlock();
 }
@@ -186,6 +187,5 @@ const char* extract_filename(const char* f)
   f = strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
   return f;
 }
-
 
 // eof
