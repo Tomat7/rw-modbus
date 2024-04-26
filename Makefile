@@ -41,11 +41,11 @@ CFLAGS= -c -Wall
 DEPFLAGS= -MD -MF
 ASFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
-WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 
+WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 -Wformat=2
 CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
 TYPES_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -fstack-protector
 GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2
-DEBUG_FLAGS= -g -fsanitize=address -fsanitize=undefined -fno-sanitize-recover 
+DEBUG_FLAGS= -g -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
 
 CFLAGS+= $(CPP_VER)
 CFLAGS+= $(WARN_FLAGS)
