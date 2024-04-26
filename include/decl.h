@@ -15,8 +15,8 @@ extern std::map<string, RegMap_c> REGmap;
 extern std::vector<PLC_c> PLCset;
 extern regdata_t* P;
 
-int read_console(time_t _sec = 0, suseconds_t _usec = 10000);
-void wait_console(int _s = 0, int _us = 10000);
+//int read_console(time_t _sec = 0, suseconds_t _usec = 10000);
+//void wait_console(int _s = 0, int _us = 10000);
 
 void init_all();
 void reinit();

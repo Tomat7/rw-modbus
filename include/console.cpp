@@ -6,14 +6,15 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
-//#include <time.h>
-//#include <sys/types.h>
+#include "./console.h"
+
+static struct termios oldt;
 
 int read_console(time_t _sec, suseconds_t _usec) // считываем с консоли
 {
   int rb = -1;
   int retval;
-  struct termios oldt, newt;
+  struct termios newt;
   struct timeval tv;
 
   // открываем терминал для реакции на клавиши без эха
@@ -42,3 +43,10 @@ void wait_console(int _s, int _us)
 {
   read_console((time_t)_s, (suseconds_t)_us);
 }
+
+void restore_console()
+{
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+}
+
+// eof

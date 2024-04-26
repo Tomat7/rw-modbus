@@ -24,3 +24,4 @@
 #include "include/plc_class.h"
 #include "include/shmem.h"
 #include "include/timer.h"
+#include "include/console.h"
