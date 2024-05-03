@@ -52,12 +52,6 @@ public:
   RegMap_c();
   ~RegMap_c();
 
-  int fd = -1;                // descriptor of SHARED MEMORY
-  uint16_t value = 0;           // just for FUN! (to print with PLC & SHM)
-  regdata_t* ptr_data_shm = nullptr; // ptr to SHARED MEMORY (local) data
-  regdata_t* ptr_data_plc = nullptr; // ptr to SHARED MEMORY (remote) data
-  reg_t* ptr_reg = nullptr;   // ptr to PLC data
-
   uint16_t get_plc_val();
   uint16_t get_shm_val();
   uint16_t get_local();
@@ -72,6 +66,13 @@ public:
   int get_mode();
   int get_type();
   bool is_shm();
+
+  int fd = -1;                // descriptor of SHARED MEMORY
+  uint16_t value = 0;           // just for FUN! (to print with PLC & SHM)
+  regdata_t* ptr_data_shm = nullptr; // ptr to SHARED MEMORY (local) data
+  regdata_t* ptr_data_plc = nullptr; // ptr to SHARED MEMORY (remote) data
+  reg_t* ptr_reg = nullptr;   // ptr to PLC data
+
 };
 
 /*

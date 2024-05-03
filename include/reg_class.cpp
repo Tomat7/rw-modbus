@@ -58,11 +58,6 @@ RegMap_c::RegMap_c(reg_t* _reg)
 
 RegMap_c::RegMap_c(string _rn)
 {
-  /*
-    char* rx = new char[1 + strlen(_rn.c_str())];
-    strcpy(rx, _rn.c_str());
-    rn = rx;
-  */
   rn = get_new_char(_rn.c_str());
   LOGD("try to open %s", rn);
 
@@ -84,14 +79,12 @@ bool RegMap_c::is_shm()
   int _fd = get_shm_fd(rn);
   D(printf(" ^%2d_~%2d ", _fd, fd);)
 
-  if (_fd == -1) // No SHM found
+  if (_fd == -1)  // No SHM found
     close_shm(fd, ptr_data_shm, sizeof(regdata_t));
-  else if (fd != -1) {
-    // SHM - Ok && FD already Ok
-    close_fd(_fd); // All - Ok, close _fd
+  else if (fd != -1) {  // SHM - Ok && FD already Ok
+    close_fd(_fd);  // All - Ok, close _fd
     ret = true;
-  } else {
-    // SHM - Ok, but FD not ready yet
+  } else {  // SHM - Ok, but FD not ready yet
     fd = _fd;
     ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm == nullptr)

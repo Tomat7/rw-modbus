@@ -177,6 +177,14 @@ char* get_new_char(const char* _oldch)
   return _newch;
 }
 
+char* add_slash(const char* _rn)
+{
+  char* _newch = new char[2 + strlen(_rn)];
+  strcat(_newch, "/");
+  strcat(_newch, _rn);
+  return _newch;
+}
+
 const char* add_funcname(const char* _fmt, const char* _func)
 {
   string fmt = (string)_func + "(): " + (string)_fmt;
