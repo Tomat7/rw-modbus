@@ -50,18 +50,20 @@ void reinit()
 
 void parse_char(int ch)
 {
+  int loglvl;
+
   if (((char)ch == 'e') || ((char)ch == 'q')) {
-    LOGW("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
+    LOGC("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
     wait_console(TIMEOUT_SEC);
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'r') {
-    LOGW("Char 'r' pressed. Full reconfiguration.\n");
+    LOGC("Char 'r' pressed. Full reconfiguration.\n");
     wait_console(TIMEOUT_SEC);
     reinit();
   } else if (isdigit((char)ch)) {
-    int loglvl = (char)ch - '0';
-    log_level = 5;
-    LOGW("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
+    loglvl = (char)ch - '0';  // new loglevel
+    log_level = 2;
+    LOGC("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
     log_level = loglvl;
     wait_console(TIMEOUT_SEC);
   } else if ((char)ch == ' ')

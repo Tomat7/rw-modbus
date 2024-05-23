@@ -66,6 +66,36 @@
 #define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
 #define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)
 
+#define LOGIFA(...) logif(rc, FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
+#define LOGIFC(...) logif(rc, FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
+#define LOGIFE(...) logif(rc, FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)
+#define LOGIFW(...) logif(rc, FILE_LINE, LOG_WARNING, __func__, __VA_ARGS__)
+#define LOGIFN(...) logif(rc, FILE_LINE, LOG_NOTICE, __func__, __VA_ARGS__)
+#define LOGIFI(...) logif(rc, FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
+#define LOGIFD(...) logif(rc, FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)
+
+
+#ifdef PRINT_DEBUG2
+#define D(a) a
+#else
+#define D(a)
+#endif
+
+
+using namespace std;
+
+extern int log_level;  // 0 - no messages at all, 9 - all on screen
+//static mutex logger_mux;
+
+//void logger(int prio, const char* format, ...);
+//void logger(const char* logname, int prio, const char* format, ...);
+void logger(const char* logname, int prio, const char* _func, const char* _fmt, ...);
+void logdebug(const char* logname, int prio, const char* format, ...);
+
+char* get_new_char(const char*);
+
+// eof
+
 /*
   #define LOGE(...) logger(FILE_LINE, LOG_ERR, __VA_ARGS__)
   #define LOGW(...) logger(SYSLOG_NAME, LOG_WARNING, __VA_ARGS__)
@@ -81,12 +111,6 @@
   #define LOGD(...)
   #endif
 */
-#ifdef PRINT_DEBUG2
-#define D(a) a
-#else
-#define D(a)
-#endif
-
 /*
   #ifdef USE_DEBUG1
   #define DEBUGF(msg) printf("%s/%s(): %s", __FILE__, __func__, msg)
@@ -96,19 +120,5 @@
   #define DEBUGL(msg) printf("%s, line: %d:, %s", __FILE__, __LINE__, msg)
   #endif
 */
-
-
-using namespace std;
-
-extern int log_level;  // 0 - no messages at all, 9 - all on screen
-
-static mutex logger_mux;
-
-void logger(int prio, const char* format, ...);
-//void logger(const char* logname, int prio, const char* format, ...);
-void logger(const char* logname, int prio, const char* _func, const char* _fmt, ...);
-void logdebug(const char* logname, int prio, const char* format, ...);
-
-char* get_new_char(const char*);
 
 // eof

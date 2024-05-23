@@ -10,6 +10,7 @@
 #include "./in_class.h"
 
 #define FILE_W "/tmp/aaa"
+#define MASK_MON (IN_MODIFY | IN_CREATE | IN_MOVE | IN_DELETE | IN_CLOSE_WRITE)
 
 /*  Читаем все доступные события из файлового дескриптора «fd».
     wd — таблица дескрипторов сторожков для каталогов из argv.
@@ -17,14 +18,16 @@
     argv — список наблюдаемых каталогов.
     Элемент 0 в wd и argv не используется. */
 
-INotify IN(FILE_W);
+INotify IN(FILE_W, MASK_MON);
 
-static void close_sigint(int dummy) {
+static void close_sigint(int dummy)
+{
   //  IN.deinit();
   exit(dummy);
 }
 
-int main(/*int argc, char *argv[]*/) {
+int main(/*int argc, char *argv[]*/)
+{
 
   signal(SIGINT, close_sigint);
 

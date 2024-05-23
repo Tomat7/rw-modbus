@@ -118,6 +118,8 @@ ifdef DO_DEBUG
 	@echo "==="
 	sleep 3
 else
+	@echo -e $(GRE)"=== Ready. ==="$(NC)
+	@ls -Fog --color $@
 	@echo -e $(GRE)"=== Done. ==="$(NC)
 	sleep 2
 endif

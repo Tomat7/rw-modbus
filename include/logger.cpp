@@ -14,68 +14,9 @@
 
 #include "./logger.h"
 
-// std::mutex logger_mux;
+static std::mutex logger_mux;  // already defined in .h
 int log_level = 7; // 0 - no messages at all, 9 - all on screen
 
-void logger(int prio, const char* format, ...)
-{
-  logger_mux.lock();
-  FILE* fout = stdout;
-
-  if (prio == LOG_ERR) {
-    fout = stderr;
-    fprintf(fout, C_RED);
-  } else if (prio == LOG_WARNING)
-    fprintf(fout, C_GRN);
-
-  openlog("RW-modbus", LOG_NDELAY, LOG_LOCAL1);
-
-  va_list arg1;
-  va_list arg2;
-
-  va_start(arg1, format);
-  va_copy(arg2, arg1);
-  vfprintf(fout, format, arg1);
-  vsyslog(prio, format, arg2);
-  va_end(arg1);
-  va_end(arg2);
-
-  fprintf(fout, "%s\n", C_NRM);
-  closelog();
-  logger_mux.unlock();
-}
-
-/*
-  void logger(const char* logname, int prio, const char* format, ...)
-  {
-  logger_mux.lock();
-  FILE* fout = stdout;
-
-  if (prio == LOG_ERR) {
-    fout = stderr;
-    fprintf(fout, C_BLU);
-    fprintf(fout, "%s ", logname);
-    fprintf(fout, C_RED);
-  } else if (prio == LOG_WARNING)
-    fprintf(fout, C_GRN);
-
-  openlog(logname, LOG_NDELAY, LOG_LOCAL1);
-
-  va_list arg1;
-  va_list arg2;
-
-  va_start(arg1, format);
-  va_copy(arg2, arg1);
-  vfprintf(fout, format, arg1);
-  vsyslog(prio, format, arg2);
-  va_end(arg1);
-  va_end(arg2);
-
-  fprintf(fout, "%s\n", C_NRM);
-  closelog();
-  logger_mux.unlock();
-  }
-*/
 
 void logger(const char* _logname, int _prio, const char* _func, const char* _fmt, ...)
 {
@@ -96,6 +37,9 @@ void logger(const char* _logname, int _prio, const char* _func, const char* _fmt
     if (_prio == LOG_ALERT) {
       fout = stderr;
       color = C_REDB;
+    } else if (_prio == LOG_CRIT) {
+      fout = stderr;
+      color = C_GRNB;
     } else if (_prio == LOG_ERR) {
       fout = stderr;
       color = C_REDB;
@@ -140,6 +84,7 @@ void logger(const char* _logname, int _prio, const char* _func, const char* _fmt
   closelog();
   logger_mux.unlock();
 }
+
 
 void logdebug(const char* logname, int prio, const char* format, ...)
 {
@@ -197,5 +142,67 @@ const char* extract_filename(const char* f)
   f = strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
   return f;
 }
+
+/*
+  void logger(int prio, const char* format, ...)
+  {
+  logger_mux.lock();
+  FILE* fout = stdout;
+
+  if (prio == LOG_ERR) {
+    fout = stderr;
+    fprintf(fout, C_RED);
+  } else if (prio == LOG_WARNING)
+    fprintf(fout, C_GRN);
+
+  openlog("RW-modbus", LOG_NDELAY, LOG_LOCAL1);
+
+  va_list arg1;
+  va_list arg2;
+
+  va_start(arg1, format);
+  va_copy(arg2, arg1);
+  vfprintf(fout, format, arg1);
+  vsyslog(prio, format, arg2);
+  va_end(arg1);
+  va_end(arg2);
+
+  fprintf(fout, "%s\n", C_NRM);
+  closelog();
+  logger_mux.unlock();
+  }
+*/
+/*
+  void logger(const char* logname, int prio, const char* format, ...)
+  {
+  logger_mux.lock();
+  FILE* fout = stdout;
+
+  if (prio == LOG_ERR) {
+    fout = stderr;
+    fprintf(fout, C_BLU);
+    fprintf(fout, "%s ", logname);
+    fprintf(fout, C_RED);
+  } else if (prio == LOG_WARNING)
+    fprintf(fout, C_GRN);
+
+  openlog(logname, LOG_NDELAY, LOG_LOCAL1);
+
+  va_list arg1;
+  va_list arg2;
+
+  va_start(arg1, format);
+  va_copy(arg2, arg1);
+  vfprintf(fout, format, arg1);
+  vsyslog(prio, format, arg2);
+  va_end(arg1);
+  va_end(arg2);
+
+  fprintf(fout, "%s\n", C_NRM);
+  closelog();
+  logger_mux.unlock();
+  }
+*/
+
 
 // eof

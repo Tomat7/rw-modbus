@@ -2,11 +2,11 @@
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 //
 // Other (C) https://ru.manpages.org/inotify/7
-// https://stackoverflow.com/questions/4664975/monitoring-file-using-inotify
+// timer & millis() (c)
+// https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include "./in_class.h"
-
+#include <chrono>
 #include <errno.h>
 #include <poll.h>
 #include <stdio.h>
@@ -15,12 +15,13 @@
 #include <syslog.h>
 #include <unistd.h>
 
-#include <chrono>
+#include "./in_class.h"
 
 INotify::~INotify() { deinit(); }
 
 INotify::INotify(const char* fn, uint32_t mask)
 {
+
   openlog("INotify", LOG_NDELAY, LOG_LOCAL1);
 
   if (fn != nullptr) {
@@ -35,26 +36,20 @@ INotify::INotify(const char* fn, uint32_t mask)
     exit(EXIT_FAILURE);
   }
 
-  const char* wobj = "directory";
-  wd = inotify_add_watch(fd, fname, evt_mask | IN_ONLYDIR);
-  if ((wd == -1) && (errno == ENOTDIR)) {
-    is_file = true;
-    wobj = "file";
-    wd = inotify_add_watch(fd, fname, evt_mask);
-  }
-
+  wd = inotify_add_watch(fd, fname, evt_mask);
   if (wd == -1) {
     LOGERR("WD error: %s\n", fname);
     perror("inotify_add_watch");
     exit(EXIT_FAILURE);
   } else
-    LOGINFO("New watching %s: %s \n", wobj, fname);
+    LOGINFO("New watching: %s \n", fname);
 
   return;
 }
 
 int INotify::check()
 {
+
   rc = 0;
   struct pollfd fds = {fd, POLLIN, 0};
   int poll_num = poll(&fds, 1, -1);
@@ -77,51 +72,42 @@ int INotify::check()
 
 int INotify::get_event()
 {
+
   char buf[4096] __attribute__((aligned(__alignof__(struct inotify_event))));
   const struct inotify_event* event;
   ssize_t length;
   char* ptr;
   rc = 0;
-  // проходим по всем событиям, которые прочитаем из файлового дескриптора IN
+  // проходим по всем событиям, которые можем прочитать
+  // из файлового дескриптора inotify
   for (;;) {
     // Читаем несколько событий. Если неблокирующий read() не найдёт
     // событий для чтения, то вернёт -1 с errno равным EAGAIN.
+    // В этом случае выходим из цикла.
     length = read(fd, buf, sizeof buf);
-
     if (length == -1 && errno != EAGAIN) {
       LOGERR("Error watching: %s \n", fname);
       perror("read");
       exit(EXIT_FAILURE);
     }
     if (length <= 0)
-      break; // ничего не нашли
+      break;
 
-    // проходим по всем событиям в буфере
+    /* проходим по всем событиям в буфере */
     for (ptr = buf; ptr < buf + length;
          ptr += sizeof(struct inotify_event) + event->len) {
+
       event = (const struct inotify_event*)ptr;
-      /*
-            if ((event->mask & evt_mask) && (event->len)) {
-              rc = 1;
-              if (event->mask & IN_ISDIR) // печатаем тип события
-                LOGINFO("Directory changed: %s \n", event->name);
-              else
-                LOGINFO("File changed: %s \n", event->name);
-            }
-      */
 
-      if (event->mask & evt_mask) {
-        rc = 1;
-        LOGINFO("+%x", evt_mask);
-
-        if (is_file)
-          LOGINFO("File changed: %s.\n", fname);
-
+      if (event->mask & evt_mask) { // печатаем тип события
         if (event->len) {
-          if (event->mask & IN_ISDIR) // печатаем тип события
+
+          if (event->mask & IN_ISDIR)
             LOGINFO("Directory changed: %s \n", event->name);
           else
             LOGINFO("File changed: %s \n", event->name);
+
+          rc = 1;
         }
       }
     }
@@ -134,6 +120,5 @@ void INotify::deinit()
   inotify_rm_watch(fd, wd);
   close(fd);
   LOGINFO("Stop watching: %s\n", fname);
-  closelog();
   return;
 }

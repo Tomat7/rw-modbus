@@ -35,13 +35,20 @@ INotify::INotify(const char* fn, uint32_t mask)
     exit(EXIT_FAILURE);
   }
 
-  wd = inotify_add_watch(fd, fname, evt_mask);
+  const char* wobj = "directory";
+  wd = inotify_add_watch(fd, fname, evt_mask | IN_ONLYDIR);
+  if ((wd == -1) && (errno == ENOTDIR)) {
+    is_file = true;
+    wobj = "file";
+    wd = inotify_add_watch(fd, fname, evt_mask);
+  }
+
   if (wd == -1) {
     LOGERR("WD error: %s\n", fname);
     perror("inotify_add_watch");
     exit(EXIT_FAILURE);
   } else
-    LOGINFO("New watching: %s \n", fname);
+    LOGINFO("New watching %s: %s \n", wobj, fname);
 
   return;
 }
@@ -94,12 +101,19 @@ int INotify::get_event()
          ptr += sizeof(struct inotify_event) + event->len) {
       event = (const struct inotify_event*)ptr;
 
-      if ((event->mask & evt_mask) && (event->len)) {
+      if (event->mask & evt_mask) {
         rc = 1;
-        if (event->mask & IN_ISDIR) // печатаем тип события
-          LOGINFO("Directory changed: %s \n", event->name);
-        else
-          LOGINFO("File changed: %s \n", event->name);
+        LOGINFO("+ %d ", evt_mask);
+
+        if (is_file)
+          LOGINFO("File changed: %s.\n", fname);
+
+        if (event->len) {
+          if (event->mask & IN_ISDIR) // печатаем тип события
+            LOGINFO("Directory changed: %s \n", event->name);
+          else
+            LOGINFO("File changed: %s \n", event->name);
+        }
       }
     }
   }
