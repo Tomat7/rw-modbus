@@ -184,9 +184,9 @@ void PLC_c::set_reg(int raddr, uint16_t rval)
 {
   regdata_t &d = regs[raddr].data;
   if ((d.rtype == 1) && (d.rvalue != rval)) {
-      d.rvalue = rval;
-      d.rupdate = 1;
-    }
+    d.rvalue = rval;
+    d.rupdate = 1;
+  }
 }
 
 void PLC_c::set_reg(string rname, uint16_t rval)
