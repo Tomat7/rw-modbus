@@ -24,7 +24,8 @@
     __VA_ARGS__)) #else #define LOGERR(...) fprintf(stderr, __VA_ARGS__) #define
     LOGINFO(...) printf(__VA_ARGS__) #endif
 */
-#define MASK_MONITORING (IN_MODIFY | IN_CREATE | IN_MOVED_FROM | IN_MOVED_TO | IN_DELETE)
+#define MASK_MONITORING                                                        \
+  (IN_MODIFY | IN_CREATE | IN_MOVED_FROM | IN_MOVED_TO | IN_DELETE)
 
 // using namespace std;
 

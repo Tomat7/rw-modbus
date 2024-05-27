@@ -33,7 +33,7 @@ void plc_show1()
 
   for (int i = 0; i < nb_plcs; ++i) { // Cycle for PLCs
     plc_print_details(i);
-//    for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
+    //    for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
     for (auto &[n, R] : PLCset[i].regs)
       plc_print_reg_details(i, n);
 
@@ -42,7 +42,6 @@ void plc_show1()
 
   return;
 }
-
 
 void plc_print_details(int i)
 {
@@ -57,8 +56,8 @@ void plc_print_reg_details(int i, int j)
 {
   cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
        << right << PLCset[i].regs[j].raddr << setw(7) << right
-       << PLCset[i].regs[j].data.rvalue << "  " << left << PLCset[i].regs[j].str_mode
-       << " " << endl;
+       << PLCset[i].regs[j].data.rvalue << "  " << left
+       << PLCset[i].regs[j].str_mode << " " << endl;
   return;
 }
 

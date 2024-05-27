@@ -7,11 +7,11 @@
 
 #include "./plc_class.h"
 
+#include <chrono>
+#include <mutex>
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
-#include <chrono>
-#include <mutex>
 
 #include "./logger.h"
 
@@ -48,11 +48,10 @@ void PLC_c::mb_deinit()
   modbus_close(ctx);
   modbus_free(ctx);
   ctx = nullptr;
-//  LOGI("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  //  LOGI("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 
   return;
 }
-
 
 int PLC_c::mb_ctx()
 {
@@ -62,8 +61,7 @@ int PLC_c::mb_ctx()
   ctx = modbus_new_tcp(ip_addr, tcp_port);
   if (ctx == nullptr) {
     rc = -1;
-    LOGE("- %s:%d %s CTX allocate error.", ip_addr, tcp_port,
-         dev_name);
+    LOGE("- %s:%d %s CTX allocate error.", ip_addr, tcp_port, dev_name);
   } else
     LOGN("+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
@@ -77,7 +75,6 @@ uint64_t PLC_c::millis()
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
   return t;
 }
-
 
 /*
   void PLC_c::logger(int prio, const char* format, ...)

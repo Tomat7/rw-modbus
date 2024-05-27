@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 
+#include "include/console.h"
 #include "include/decl.h"
 #include "include/in_class.h"
 #include "include/logger.h"
@@ -24,4 +25,3 @@
 #include "include/plc_class.h"
 #include "include/shmem.h"
 #include "include/timer.h"
-#include "include/console.h"

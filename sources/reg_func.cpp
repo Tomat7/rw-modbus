@@ -12,7 +12,7 @@
 
 #define MB_READ
 
-//void regs_init();
+// void regs_init();
 void reg_print(string, const regdata_t*);
 void reg_print_shm(RegMap_c*);
 
@@ -23,9 +23,9 @@ void regs_init()
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
       LOGD("(Master) try to create %s", R.fullname.c_str());
-      //RegMap_c rm(&R);
-      //REGmap[R.fullname] = rm;
-      REGmap[R.fullname] = { &R };
+      // RegMap_c rm(&R);
+      // REGmap[R.fullname] = rm;
+      REGmap[R.fullname] = {&R};
     }
   return;
 }
@@ -37,7 +37,7 @@ void regs_init_shm()
   for (auto &D : PLCset)
     for (auto &[n, R] : D.regs) {
       LOGD("(Slave) try to create %s", R.fullname.c_str());
-      REGmap[R.fullname] = { R.fullname };
+      REGmap[R.fullname] = {R.fullname};
     }
   return;
 }
@@ -55,7 +55,7 @@ void regs_update()
     uint16_t shm_val = rm.get_local();   // Value in SHM
     uint16_t old_val = rm.value;         // Value in memory (in REGmap)
 
-    if (rm.get_mode()) {  // If the Reg RW - get&check value from SHM.
+    if (rm.get_mode()) { // If the Reg RW - get&check value from SHM.
 
       if (plc_val != old_val) // If new value got from PLC
         printf(">");          // Print sign ">"

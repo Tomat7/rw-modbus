@@ -2,11 +2,11 @@
 // https://unixforum.org/memberlist.php?mode=viewprofile&u=31191&sid=bb9fec4ccd505e1fa135cbf5c0e9af52
 // Stolen from here https://unixforum.org/viewtopic.php?t=113242
 //
+#include "./console.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
-#include "./console.h"
 
 static struct termios oldt;
 
@@ -44,9 +44,6 @@ void wait_console(int _s, int _us)
   read_console((time_t)_s, (suseconds_t)_us);
 }
 
-void restore_console()
-{
-  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-}
+void restore_console() { tcsetattr(STDIN_FILENO, TCSANOW, &oldt); }
 
 // eof

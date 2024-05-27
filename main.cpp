@@ -68,7 +68,7 @@ int main()
     //    t.spent();
   }
 
-//   getr();
+  //   getr();
 
   return (EXIT_SUCCESS);
 }

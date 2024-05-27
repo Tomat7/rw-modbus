@@ -8,14 +8,14 @@
 #include "./plc_class.h"
 
 #include <arpa/inet.h>
+#include <errno.h>
 #include <modbus/modbus.h>
 #include <netinet/in.h>
-#include <sys/select.h>
-#include <sys/socket.h>
-#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/select.h>
+#include <sys/socket.h>
 #include <syslog.h>
 #include <unistd.h>
 
@@ -34,8 +34,8 @@ PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;
-  LOGN("+ New Slave PLC created: %s:%d %s", str_ip_addr.c_str(),
-       tcp_port, dev_name);
+  LOGN("+ New Slave PLC created: %s:%d %s", str_ip_addr.c_str(), tcp_port,
+       dev_name);
 }
 
 int PLC_c::renew_mapping() // Slave only
@@ -150,7 +150,7 @@ int PLC_c::handle_slave(int usec)
 
     if (master_socket == server_socket) // Client asking a new connection
       new_client();
-    else                                // Existing connection
+    else // Existing connection
       work_client();
   }
 

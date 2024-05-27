@@ -61,7 +61,7 @@ void parse_char(int ch)
     wait_console(TIMEOUT_SEC);
     reinit();
   } else if (isdigit((char)ch)) {
-    loglvl = (char)ch - '0';  // new loglevel
+    loglvl = (char)ch - '0'; // new loglevel
     log_level = 2;
     LOGC("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
     log_level = loglvl;

@@ -8,12 +8,12 @@
 #include "./plc_class.h"
 
 #include <errno.h>
+#include <math.h>
 #include <modbus/modbus.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
-#include <math.h>
 
 #include <string>
 
@@ -32,8 +32,8 @@ void PLC_c::init_master() // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
-  LOGN("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name,
-       str_title.c_str(), str_desc.c_str());
+  LOGN("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name, str_title.c_str(),
+       str_desc.c_str());
 
   for (auto &[n, R] : regs) {
     auto &rd = R.data;
@@ -69,7 +69,6 @@ int PLC_c::read_master() // Master only
       mb.errors++;
   }
 
-
   mb.status = rc;
   mb.timestamp_try_ms = millis();
   if (rc > 0)
@@ -80,8 +79,6 @@ int PLC_c::read_master() // Master only
     rd.rstatus = rc;
     rd.rerrors = mb.errors;
   }
-
-
 
   return rc;
 }
@@ -118,15 +115,13 @@ int PLC_c::read_allregs() // Master only
     mb.errors++;
     mb.errors_rd++;
     if (att >= attempts)
-      LOGE("%s %s read error: %s ", ip_addr, dev_name,
-           modbus_strerror(errno));
+      LOGE("%s %s read error: %s ", ip_addr, dev_name, modbus_strerror(errno));
   } else if (rc != nb_regs) {
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
     if (att >= attempts)
-      LOGE("%s %s qty: expect %d, got %d", ip_addr, dev_name,
-           nb_regs, rc);
+      LOGE("%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs, rc);
   } else {
     mb.errors = 0;
     for (auto &[n, R] : regs)
@@ -167,8 +162,8 @@ int PLC_c::write_reg(reg_t &R)
     mb.errors++;
     mb.errors_wr++;
     if (att >= attempts)
-      LOGE("%s %s write reg: %s error: %s", ip_addr, dev_name,
-           R.ch_name, modbus_strerror(errno));
+      LOGE("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
+           modbus_strerror(errno));
   } else {
     mb.errors = 0;
     rd.rupdate = 0;

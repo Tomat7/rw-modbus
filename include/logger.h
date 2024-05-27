@@ -6,12 +6,12 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
+#include <chrono>
+#include <iostream>
+#include <mutex>
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
-#include <iostream>
-#include <chrono>
-#include <mutex>
 
 #include "../config.h"
 
@@ -44,8 +44,9 @@
 #define C_BLUB "\x1B[94m"
 #endif
 
-#define __FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
-        __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
+#define __FILENAME__                                                           \
+  (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1     \
+                                    : __FILE__)
 
 #ifdef SYSLOG_NAME
 #undef SYSLOG_NAME
@@ -74,22 +75,21 @@
 #define LOGIFI(...) logif(rc, FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
 #define LOGIFD(...) logif(rc, FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)
 
-
 #ifdef PRINT_DEBUG2
 #define D(a) a
 #else
 #define D(a)
 #endif
 
-
 using namespace std;
 
-extern int log_level;  // 0 - no messages at all, 9 - all on screen
-//static mutex logger_mux;
+extern int log_level; // 0 - no messages at all, 9 - all on screen
+// static mutex logger_mux;
 
-//void logger(int prio, const char* format, ...);
-//void logger(const char* logname, int prio, const char* format, ...);
-void logger(const char* logname, int prio, const char* _func, const char* _fmt, ...);
+// void logger(int prio, const char* format, ...);
+// void logger(const char* logname, int prio, const char* format, ...);
+void logger(const char* logname, int prio, const char* _func, const char* _fmt,
+            ...);
 void logdebug(const char* logname, int prio, const char* format, ...);
 
 char* get_new_char(const char*);

@@ -5,20 +5,20 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <stdarg.h>
-#include <syslog.h>
-#include <string.h>
-#include <unistd.h>
 #include <chrono>
 #include <mutex>
+#include <stdarg.h>
+#include <string.h>
+#include <syslog.h>
+#include <unistd.h>
 
 #include "./logger.h"
 
-static std::mutex logger_mux;  // already defined in .h
-int log_level = 7; // 0 - no messages at all, 9 - all on screen
+static std::mutex logger_mux; // already defined in .h
+int log_level = 7;            // 0 - no messages at all, 9 - all on screen
 
-
-void logger(const char* _logname, int _prio, const char* _func, const char* _fmt, ...)
+void logger(const char* _logname, int _prio, const char* _func,
+            const char* _fmt, ...)
 {
   logger_mux.lock();
 
@@ -84,7 +84,6 @@ void logger(const char* _logname, int _prio, const char* _func, const char* _fmt
   closelog();
   logger_mux.unlock();
 }
-
 
 void logdebug(const char* logname, int prio, const char* format, ...)
 {
@@ -203,6 +202,5 @@ const char* extract_filename(const char* f)
   logger_mux.unlock();
   }
 */
-
 
 // eof
