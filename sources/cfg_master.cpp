@@ -34,7 +34,7 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
 
   try {
     cfg.readFile(cfile.c_str());
-    LOGN("I/O reading file OK: %s\n", cfile.c_str());
+    LOGW("I/O reading file OK: %s", cfile.c_str());
   } catch (const FileIOException &fioex) {
     LOGA("I/O error while reading file: %s\n", cfile.c_str());
     return (EXIT_FAILURE);
@@ -47,11 +47,30 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
   // Get the top name.
   try {
     string name = cfg.lookup("maintitle");
-    LOGN("Config title: %s\n", name.c_str());
+    LOGW("Config title: %s", name.c_str());
   } catch (const SettingNotFoundException &nfex) {
     LOGA("No '%s' setting in configuration file.\n", "nametitle");
     return (EXIT_FAILURE);
   }
+
+  // Set LogLevel.
+  try {
+    int _log = cfg.lookup("loglevel");
+    log_level = _log;
+    LOGW("Set LOG_LEVEL to: %d.", log_level);
+  } catch (const SettingNotFoundException &nfex) {
+    LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
+  }
+
+
+  try {
+    Setting &L = cfg.lookup("plclisthome");
+    string pl = L[0];
+    LOGW("PLC list [0]: %s, total: %d.", pl.c_str(), L.getLength());
+  } catch (const SettingNotFoundException &nfex) {
+    LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
+  }
+
 
   // Output a list of all PLCs in the inventory.
   try {
@@ -90,12 +109,12 @@ int cfg_init_plcset(const Setting &cfgPLC)
     cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
 
     plc.init_master(); // Absolutely necessary to copy str to char* and other
-    LOGW("Configured REGs now: %d", (int)plc.regs.size());
-    cout << endl;
+    LOGW("Configured PLC: %s, with: %d regs", plc.dev_name, (int)plc.regs.size());
+//    cout << endl;
     // ===== End PLC filling  =====
   }
 
-  LOGW("Configured PLCs: %d, with %d regs", (int)PLCset.size(), _regs);
+  LOGW("Total PLCs: %d, with %d regs", (int)PLCset.size(), _regs);
 
   return 0;
 }

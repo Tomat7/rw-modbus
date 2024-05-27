@@ -47,6 +47,7 @@
 #define __FILENAME__                                                           \
   (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1     \
                                     : __FILE__)
+#define LOG_LEVEL_DEFAULT 7
 
 #ifdef SYSLOG_NAME
 #undef SYSLOG_NAME

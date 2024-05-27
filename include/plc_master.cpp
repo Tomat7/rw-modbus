@@ -23,7 +23,7 @@ PLC_c::PLC_c(string _ip, string _name) // Master only
 {
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
-  LOGW("+ New PLC created: %s %s", ip_addr, dev_name);
+  LOGN("+ New PLC created: %s %s", ip_addr, dev_name);
 }
 
 // Destructor in plc_common.cpp
@@ -177,26 +177,40 @@ int PLC_c::write_reg(reg_t &R)
 
 void PLC_c::set_reg(int raddr, uint16_t rval)
 {
-  regdata_t &d = regs[raddr].data;
-  if ((d.rtype == 1) && (d.rvalue != rval)) {
-    d.rvalue = rval;
-    d.rupdate = 1;
+  regdata_t &rd = regs[raddr].data;
+  if ((rd.rmode == 1) && (rd.rvalue != rval)) {
+    rd.rvalue = rval;
+    rd.rupdate = 1;
+    LOGD("%d %d", raddr, rval);
   }
 }
 
 void PLC_c::set_reg(string rname, uint16_t rval)
 {
-  for (auto &[n, r] : regs) {
+  for (auto &[a, r] : regs) {
     if (r.str_name == rname)
-      set_reg(n, rval);
+      set_reg(a, rval);
   }
 }
 
-void PLC_c::set_reg(int raddr, float fval)
+uint16_t PLC_c::get_reg(string rname)
 {
+  uint16_t rval = 0;
+  for (auto &[a, r] : regs) {
+    if (r.str_name == rname)
+      rval = r.data.rvalue;
+  }
+  return rval;
+}
+
+
+/*
+  void PLC_c::set_reg(int raddr, float fval)
+  {
   int16_t rval = (int16_t)round(fval * 100);
   set_reg(raddr, (uint16_t)rval);
-}
+  }
+*/
 
 int PLC_c::update_master() // Master only
 {

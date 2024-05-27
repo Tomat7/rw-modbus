@@ -15,7 +15,7 @@
 #include "./logger.h"
 
 static std::mutex logger_mux; // already defined in .h
-int log_level = 7;            // 0 - no messages at all, 9 - all on screen
+int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)
@@ -29,7 +29,7 @@ void logger(const char* _logname, int _prio, const char* _func,
 
   bool no_file = !(_prio == 7 || log_level > 7);
   bool no_func = (log_level < 9);
-  bool no_syslog = (_prio > 5 && log_level < 9);
+  bool no_syslog = (_prio > 4 && log_level < 9);
   bool no_print = (_prio > log_level);
   string fmt = (string)_func + "(): " + (string)_fmt;
 

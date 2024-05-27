@@ -54,11 +54,11 @@ public:
   int update_master(); // for Master only
 
   void set_reg(int raddr, uint16_t rval);
-  void set_reg(int raddr, float fval);
+//  void set_reg(int raddr, float fval);
   void set_reg(string rname, uint16_t rval);
+  uint16_t get_reg(string rname);
 
-  int handle_slave(
-    int usec = 10000); // for Slave only. Need to call very often!
+  int handle_slave(int usec = 10000); // for Slave only. Call very often!
   int write_raw(int r, uint16_t val); // for Slave only
   uint16_t read_raw(int r);           // for Slave only
 

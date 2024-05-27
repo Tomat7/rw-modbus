@@ -20,6 +20,7 @@ std::vector<string> SHset {"SF45", "SF47"} ;
 
 regdata_t* P;
 int rc;
+bool isNight = true;
 
 static void close_sigint(int dummy)
 {
@@ -48,51 +49,55 @@ int main()
 //  init_all();
 
 //  for (;;) {
-    printf("%s", CLS);
-    printf("%s", HOME);
-    fflush(stdout);
-    
-    uint64_t nb_plcs = PLCset.size();
-  
-    for (i = 0; i < nb_plcs; i++)
-       PLCmap[PLCset[i].str_dev_name] = i;
+//  printf("%s", CLS);
+//  printf("%s", HOME);
+  fflush(stdout);
+
+  uint64_t nb_plcs = PLCset.size();
+
+  for (i = 0; i < nb_plcs; i++)
+    PLCmap[PLCset[i].str_dev_name] = i;
 
 //    t.start();
 //    regs_update();
-//    t.spent_auto("============ REG print finished in: ");
+//    t.spent_a
+//  uto("============ REG print finished in: ");
 
 //    const char* x = nullptr;
 //    t.start(x);
-    mb_update();
+  mb_update();
 //    LOGD("regdata_t size: %d", sizeof(regdata_t));
 //    LOGD("P array size: %d", sizeof(P));
 //    t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-    for (auto &S : SHset)
-    {
-	PLC_c &D = PLCset[PLCmap[S]];
-        uint16_t &millis = D.regs[0].data.rvalue;
-	if (millis > 30) { 
-	    millis = 0;
-	    D.set_reg("open2", 65500);
-	    D.set_reg("close2", 0);
-	}
+  for (auto &S : SHset) {
+    PLC_c &D = PLCset[PLCmap[S]];
+//    regdata_t &rd = D.regs[0].data;
+    if ((isNight) && (D.get_reg("open2") < 65500)) {
+      LOGD("%s %s %d", D.ip_addr, D.dev_name, D.get_reg("millis"));
+      D.set_reg("millis", 0);
+      D.set_reg("open2", 65005);
+      D.set_reg("close2", 1);
     }
+  }
 
-    /*
-        int ch = read_console(TIMEOUT_SEC);
-        if (ch != -1)
-          parse_char(ch);
-        else
-          printf("!\n");
-    */
-    fflush(stdout);
 
-    //    wait_console(TIMEOUT_SEC);
+  mb_write();
 
-    //    t.start(x);
-    //    t.sleep_ms(TMOUT);
-    //    t.spent();
+  /*
+      int ch = read_console(TIMEOUT_SEC);
+      if (ch != -1)
+        parse_char(ch);
+      else
+        printf("!\n");
+  */
+  fflush(stdout);
+
+  //    wait_console(TIMEOUT_SEC);
+
+  //    t.start(x);
+  //    t.sleep_ms(TMOUT);
+  //    t.spent();
 //  }
 
   //   getr();
