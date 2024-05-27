@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
+#include <math.h>
 
 #include <string>
 
@@ -177,6 +178,29 @@ int PLC_c::write_reg(reg_t &R)
   rd.rerrors = mb.errors;
 
   return rc;
+}
+
+void PLC_c::set_reg(int raddr, uint16_t rval)
+{
+  regdata_t &d = regs[raddr].data;
+  if ((d.rtype == 1) && (d.rvalue != rval)) {
+      d.rvalue = rval;
+      d.rupdate = 1;
+    }
+}
+
+void PLC_c::set_reg(string rname, uint16_t rval)
+{
+  for (auto &[n, r] : regs) {
+    if (r.str_name == rname)
+      set_reg(n, rval);
+  }
+}
+
+void PLC_c::set_reg(int raddr, float fval)
+{
+  int16_t rval = (int16_t)round(fval * 100);
+  set_reg(raddr, (uint16_t)rval);
 }
 
 int PLC_c::update_master() // Master only
