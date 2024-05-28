@@ -11,10 +11,12 @@
 // using namespace std;
 // using namespace libconfig;
 
+
 std::map<string, RegMap_c> REGmap;
-std::map<string, uint64_t> PLCmap;
 std::vector<PLC_c> PLCset;
-std::vector<string> SHset {"SF45", "SF47"} ;
+
+std::map<string, uint64_t> PLCmap;
+std::vector<string> SHset {"TH41", "TH42", "SF45"} ;
 
 // INotify IN(CFG_DIR);
 
@@ -72,6 +74,9 @@ int main()
 
   for (auto &S : SHset) {
     PLC_c &D = PLCset[PLCmap[S]];
+    LOGD("Check 1 %s %d", S.c_str(), PLCmap[S]);
+    LOGD("Check 2 %s %s %d", D.ip_addr, D.dev_name, D.get_reg("millis"));
+
 //    regdata_t &rd = D.regs[0].data;
     if ((isNight) && (D.get_reg("open2") < 65500)) {
       LOGD("%s %s %d", D.ip_addr, D.dev_name, D.get_reg("millis"));
