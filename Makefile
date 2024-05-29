@@ -41,15 +41,15 @@ CFLAGS= -c -Wall
 DEPFLAGS= -MD -MF
 ASFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
-LTO_FLAGS= -flto
-WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -O2 -Wformat=2
+OPT_FLAGS= -flto=auto -Os
+WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -Wformat=2
 CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
 TYPES_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -fstack-protector
 GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2
 DEBUG_FLAGS= -g -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
 
 CFLAGS+= $(CPP_VER)
-CFLAGS+= $(LTO_FLAGS)
+CFLAGS+= $(OPT_FLAGS)
 CFLAGS+= $(WARN_FLAGS)
 CFLAGS+= $(CHECK_FLAGS)
 CFLAGS+= $(TYPES_FLAGS)
@@ -57,7 +57,7 @@ CFLAGS+= $(GLIBC_FLAGS)
 #CFLAGS+= -fanalyzer
 
 LDFLAGS+= $(CPP_VER)
-LDFLAGS+= $(LTO_FLAGS)
+LDFLAGS+= $(OPT_FLAGS)
 #LDFLAGS+= $(CHECK_FLAGS)
 
 

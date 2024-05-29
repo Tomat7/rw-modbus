@@ -44,6 +44,7 @@ void init_all()
 void reinit()
 {
   deinit_all();
+  wait_console(TIMEOUT_SEC);
   init_all();
 }
 
