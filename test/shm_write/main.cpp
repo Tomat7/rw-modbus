@@ -57,13 +57,13 @@ int main()
     w++;
     if (w > 599)
       w = 500;
-
-    logger(LOG_INFO, "Try to write_SHM");
-    write_shm("Kub.Pset", w);
-    write_rm("Kub.millis", 0);
-    write_rm("Buf.millis", 0);
-    write_rm("Def.millis", 0);
-
+    /*
+        logger(LOG_INFO, "Try to write_SHM");
+        write_shm("Kub.Pset", w);
+        write_rm("Kub.millis", 0);
+        write_rm("Buf.millis", 0);
+        write_rm("Def.millis", 0);
+    */
     cout << "Try write_rm to TH41" << endl;
     write_rm("TH41.millis", 41);
     write_rm("TH42.millis", 42);

@@ -61,4 +61,10 @@ void plc_print_reg_details(int i, int j)
   return;
 }
 
+void plc_deinit()
+{
+  PLCset.clear();
+  return;
+}
+
 // eof

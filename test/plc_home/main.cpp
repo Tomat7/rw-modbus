@@ -26,7 +26,7 @@ bool isNight = true;
 
 static void close_sigint(int dummy)
 {
-  regs_deinit();
+  regs_deinit_shm();
   restore_console();
   LOGN("Exit by Ctrl-C. Bye.\n");
   closelog();

@@ -6,7 +6,7 @@
 
 #include "./config.h"
 #include "./libs.h"
-//#include "./plc_class.h"
+// #include "./plc_class.h"
 
 using namespace std;
 using namespace libconfig;
@@ -24,7 +24,8 @@ void cfg_print_reg_details(const reg_t &rn);
 int cfg_master(const char* cfg_dir, const char* cfg_file)
 {
   // Read the file. If there is an error, report it and exit.
-  cout << endl << "======= cfg_read_mbset =======" << endl;
+  cout << endl
+       << "======= cfg_read_mbset =======" << endl;
 
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
@@ -54,15 +55,18 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
   }
 
   // Set LogLevel.
-  try {
-    int _log = cfg.lookup("loglevel");
-    log_level = _log;
-    LOGW("Set LOG_LEVEL to: %d.", log_level);
-  } catch (const SettingNotFoundException &nfex) {
-    LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
-  }
+  if (log_level == 0) {
+    try {
+      int _log = cfg.lookup("loglevel");
+      log_level = _log;
+      LOGW("Set LOG_LEVEL to: %d.", log_level);
+    } catch (const SettingNotFoundException &nfex) {
+      LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
+    }
+  } else
+    LOGW("LOG_LEVEL is: %d.", log_level);
 
-
+// ========== TEST !!!
   try {
     Setting &L = cfg.lookup("plclisthome");
     string pl = L[0];
@@ -70,7 +74,7 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
   } catch (const SettingNotFoundException &nfex) {
     LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
   }
-
+// ==========  end of TEST
 
   // Output a list of all PLCs in the inventory.
   try {
@@ -110,7 +114,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
 
     plc.init_master(); // Absolutely necessary to copy str to char* and other
     LOGW("Configured PLC: %s, with: %d regs", plc.dev_name, (int)plc.regs.size());
-//    cout << endl;
+    //    cout << endl;
     // ===== End PLC filling  =====
   }
 

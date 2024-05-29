@@ -167,14 +167,18 @@ void reg_print_shm(RegMap_c* rm)
   return;
 }
 
-void regs_deinit()
+void regs_deinit_shm()
 {
   for (auto &[n, rm] : REGmap) {
     close_shm(rm.fd, rm.ptr_data_shm, sizeof(regdata_t));
     unlink_shm(n.c_str());
   }
-  REGmap.clear();
+  return;
+}
 
+void regs_deinit()
+{
+  REGmap.clear();
   return;
 }
 

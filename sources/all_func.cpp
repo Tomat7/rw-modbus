@@ -43,9 +43,15 @@ void init_all()
 
 void reinit()
 {
-  REGmap.clear();
-  PLCset.clear();
+  deinit_all();
   init_all();
+}
+
+void deinit_all()
+{
+  regs_deinit_shm();
+  regs_deinit();
+  plc_deinit();
 }
 
 void parse_char(int ch)
@@ -55,6 +61,7 @@ void parse_char(int ch)
   if (((char)ch == 'e') || ((char)ch == 'q')) {
     LOGC("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
     wait_console(TIMEOUT_SEC);
+    deinit_all();
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'r') {
     LOGC("Char 'r' pressed. Full reconfiguration.\n");

@@ -20,7 +20,7 @@ int rc;
 
 static void close_sigint(int dummy)
 {
-  regs_deinit();
+  deinit_all();
   restore_console();
   LOGN("Exit by Ctrl-C. Bye.\n");
   closelog();
@@ -34,6 +34,7 @@ int main()
   Timer t;
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
+  log_level = 0;
 
   init_all();
 
