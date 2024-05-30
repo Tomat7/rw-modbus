@@ -20,7 +20,8 @@ int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)
 {
-  logger_mux.lock();
+//  logger_mux.lock();
+  const std::lock_guard<std::mutex> lock(logger_mux);
 
   FILE* fout = stdout;
   const char* format = _fmt;
@@ -82,12 +83,13 @@ void logger(const char* _logname, int _prio, const char* _func,
     fprintf(fout, "%s", C_NRM);
 
   closelog();
-  logger_mux.unlock();
+//  logger_mux.unlock();
 }
 
 void logdebug(const char* logname, int prio, const char* format, ...)
 {
-  logger_mux.lock();
+//  logger_mux.lock();
+  const std::lock_guard<std::mutex> lock(logger_mux);
   FILE* fout = stdout;
 
   if (prio == LOG_DEBUG) {
@@ -111,7 +113,7 @@ void logdebug(const char* logname, int prio, const char* format, ...)
 
   fprintf(fout, "%s\n", C_NRM);
   closelog();
-  logger_mux.unlock();
+//  logger_mux.unlock();
 }
 
 char* get_new_char(const char* _oldch)
@@ -141,66 +143,5 @@ const char* extract_filename(const char* f)
   f = strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
   return f;
 }
-
-/*
-  void logger(int prio, const char* format, ...)
-  {
-  logger_mux.lock();
-  FILE* fout = stdout;
-
-  if (prio == LOG_ERR) {
-    fout = stderr;
-    fprintf(fout, C_RED);
-  } else if (prio == LOG_WARNING)
-    fprintf(fout, C_GRN);
-
-  openlog("RW-modbus", LOG_NDELAY, LOG_LOCAL1);
-
-  va_list arg1;
-  va_list arg2;
-
-  va_start(arg1, format);
-  va_copy(arg2, arg1);
-  vfprintf(fout, format, arg1);
-  vsyslog(prio, format, arg2);
-  va_end(arg1);
-  va_end(arg2);
-
-  fprintf(fout, "%s\n", C_NRM);
-  closelog();
-  logger_mux.unlock();
-  }
-*/
-/*
-  void logger(const char* logname, int prio, const char* format, ...)
-  {
-  logger_mux.lock();
-  FILE* fout = stdout;
-
-  if (prio == LOG_ERR) {
-    fout = stderr;
-    fprintf(fout, C_BLU);
-    fprintf(fout, "%s ", logname);
-    fprintf(fout, C_RED);
-  } else if (prio == LOG_WARNING)
-    fprintf(fout, C_GRN);
-
-  openlog(logname, LOG_NDELAY, LOG_LOCAL1);
-
-  va_list arg1;
-  va_list arg2;
-
-  va_start(arg1, format);
-  va_copy(arg2, arg1);
-  vfprintf(fout, format, arg1);
-  vsyslog(prio, format, arg2);
-  va_end(arg1);
-  va_end(arg2);
-
-  fprintf(fout, "%s\n", C_NRM);
-  closelog();
-  logger_mux.unlock();
-  }
-*/
 
 // eof
