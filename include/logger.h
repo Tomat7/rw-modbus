@@ -44,6 +44,8 @@
 #define C_BLUB "\x1B[94m"
 #endif
 
+#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
+
 #define __FILENAME__                                                           \
   (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1     \
                                     : __FILE__)

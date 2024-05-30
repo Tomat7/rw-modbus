@@ -21,7 +21,7 @@ void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)
 {
 //  logger_mux.lock();
-  const std::lock_guard<std::mutex> lock(logger_mux);
+  LOCK_GUARD(logger_mux);
 
   FILE* fout = stdout;
   const char* format = _fmt;
@@ -89,7 +89,7 @@ void logger(const char* _logname, int _prio, const char* _func,
 void logdebug(const char* logname, int prio, const char* format, ...)
 {
 //  logger_mux.lock();
-  const std::lock_guard<std::mutex> lock(logger_mux);
+  LOCK_GUARD(logger_mux);
   FILE* fout = stdout;
 
   if (prio == LOG_DEBUG) {
