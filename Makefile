@@ -41,7 +41,9 @@ CFLAGS= -c -Wall
 DEPFLAGS= -MD -MF
 ASFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
-OPT_FLAGS= -flto=auto -Os
+# ===
+
+OPT_FLAGS= -flto=auto -O2
 WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -Wformat=2
 CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
 TYPES_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -fstack-protector
@@ -119,13 +121,13 @@ else
 endif
 	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
 ifdef DO_DEBUG
-	@echo "==="
-	@echo "=== Finished with DEBUG! ==="
-	@echo "=== The size of executable file will be REALLY BIG. ==="
-	@echo "==="
+	@echo -e $(GRE)"=== Finished with DEBUG! ==="$(NC)
+	@ls -Fog --color $@
+	@echo -e $(GRE)"=== The size of executable file are REALLY BIG. ==="$(NC)
+	@echo -e $(GRE)"=== Ready! ==="$(NC)
 	sleep 3
 else
-	@echo -e $(GRE)"=== Ready. ==="$(NC)
+	@echo -e $(GRE)"=== Finished. ==="$(NC)
 	@ls -Fog --color $@
 	@echo -e $(GRE)"=== Done. ==="$(NC)
 	sleep 2

@@ -21,7 +21,7 @@ void regs_init()
   cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
-    for (auto &[n, R] : D.regs) {
+    for (auto &[a, R] : D.regs) {
       LOGD("(Master) try to create %s", R.fullname.c_str());
       // RegMap_c rm(&R);
       // REGmap[R.fullname] = rm;
@@ -35,7 +35,7 @@ void regs_init_shm()
   cout << endl << "===== reg_init =====" << endl;
 
   for (auto &D : PLCset)
-    for (auto &[n, R] : D.regs) {
+    for (auto &[a, R] : D.regs) {
       LOGD("(Slave) try to create %s", R.fullname.c_str());
       REGmap[R.fullname] = {R.fullname};
     }

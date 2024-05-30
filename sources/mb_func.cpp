@@ -12,12 +12,12 @@
 // using namespace libconfig;
 
 static vector<int> res;
-static vector<uint64_t> oldt;
+static vector<uint64_t> prev_ts;
 
 void mb_update_master(int x)
 {
   PLC_c &D = PLCset[x];
-  oldt[x] = D.mb.timestamp_try_ms;
+  prev_ts[x] = D.mb.timestamp_try_ms;
   res[x] = D.update_master();
   std::this_thread::yield();
   return;
@@ -27,7 +27,7 @@ void mb_print_summary(int x)
 {
   PLC_c &D = PLCset[x];
   printf("%-7s_dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
-         D.dev_name, D.mb.timestamp_try_ms - oldt[x], res[x], D.mb.errors,
+         D.dev_name, D.mb.timestamp_try_ms - prev_ts[x], res[x], D.mb.errors,
          D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
 }
 
@@ -38,7 +38,7 @@ int mb_update()
   uint64_t nb_plcs = PLCset.size();
   vector<thread> thr(nb_plcs);
   res.resize((int)nb_plcs);
-  oldt.resize(nb_plcs);
+  prev_ts.resize(nb_plcs);
 
   for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
@@ -51,7 +51,7 @@ int mb_update()
     mb_print_summary((int)i);
 
   res.clear();
-  oldt.clear();
+  prev_ts.clear();
 
   return 0;
 }

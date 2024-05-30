@@ -22,7 +22,7 @@
 #define KYEL "\x1B[33m"
 #define KBLU "\x1B[94m"
 
-mutex PLC_c::logger_mux;
+// mutex PLC_c::logger_mux;
 
 PLC_c::~PLC_c()
 {
@@ -76,36 +76,5 @@ uint64_t PLC_c::millis()
   return t;
 }
 
-/*
-  void PLC_c::logger(int prio, const char* format, ...)
-  {
-  logger_mux.lock();
-  FILE* fout = stdout;
-
-  if (prio == LOG_ERR) {
-    fout = stderr;
-    fprintf(fout, KRED);
-  }
-
-  if (is_slave)
-    openlog("MB_slave", LOG_NDELAY, LOG_LOCAL1);
-  else
-    openlog("MB_master", LOG_NDELAY, LOG_LOCAL1);
-
-  va_list arg1;
-  va_list arg2;
-
-  va_start(arg1, format);
-  va_copy(arg2, arg1);
-  vfprintf(fout, format, arg1);
-  vsyslog(prio, format, arg2);
-  va_end(arg1);
-  va_end(arg2);
-
-  fprintf(fout, "%s\n", KNRM);
-  closelog();
-  logger_mux.unlock();
-  }
-*/
 
 // eof

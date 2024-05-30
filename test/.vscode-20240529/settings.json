@@ -66,7 +66,6 @@
          "name": "Default",
          "makeArgs": []
      },
-/*
      {
         "name": "Debug",
         "makeArgs": ["debug"]
@@ -79,7 +78,6 @@
          "name": "Print make version",
          "makeArgs": ["--version"]
      }
-*/
-    ],
+],
 "C_Cpp.errorSquiggles": "disabled"
 }

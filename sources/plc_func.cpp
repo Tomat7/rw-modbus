@@ -18,7 +18,7 @@ void plc_show2()
 {
   cout << endl << "===== plc_show2 =====" << endl;
   for (auto &D : PLCset)
-    for (auto &[n, R] : D.regs) {
+    for (auto &[a, R] : D.regs) {
       printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
              R.raddr, R.data.rvalue, R.fullname.c_str());
     }
@@ -34,8 +34,8 @@ void plc_show1()
   for (int i = 0; i < nb_plcs; ++i) { // Cycle for PLCs
     plc_print_details(i);
     //    for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
-    for (auto &[n, R] : PLCset[i].regs)
-      plc_print_reg_details(i, n);
+    for (auto &[a, R] : PLCset[i].regs)
+      plc_print_reg_details(i, a);
 
     cout << endl;
   }

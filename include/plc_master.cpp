@@ -35,7 +35,7 @@ void PLC_c::init_master() // Master only
   LOGN("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name, str_title.c_str(),
        str_desc.c_str());
 
-  for (auto &[n, R] : regs) {
+  for (auto &[a, R] : regs) {
     auto &rd = R.data;
     R.fullname = str_dev_name + "." + R.str_name;
     R.ch_name = R.str_name.c_str();
@@ -74,7 +74,7 @@ int PLC_c::read_master() // Master only
   if (rc > 0)
     mb.timestamp_ok_ms = millis();
 
-  for (auto &[n, R] : regs) {
+  for (auto &[a, R] : regs) {
     auto &rd = R.data;
     rd.rstatus = rc;
     rd.rerrors = mb.errors;
@@ -124,7 +124,7 @@ int PLC_c::read_allregs() // Master only
       LOGE("%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs, rc);
   } else {
     mb.errors = 0;
-    for (auto &[n, R] : regs)
+    for (auto &[a, R] : regs)
       R.data.rvalue = mbregs[R.raddr - reg_min];
   }
 
@@ -135,7 +135,7 @@ int PLC_c::read_allregs() // Master only
 
 int PLC_c::write_master() // Master only
 {
-  for (auto &[n, R] : regs) {
+  for (auto &[a, R] : regs) {
     auto &rd = R.data;
     if (rd.rmode && rd.rupdate) {
       rc = 0;
@@ -175,55 +175,67 @@ int PLC_c::write_reg(reg_t &R)
   return rc;
 }
 
-void PLC_c::set_reg(int raddr, uint16_t rval)
+int PLC_c::set_reg(int raddr, uint16_t rval)
 {
   regdata_t &rd = regs[raddr].data;
-  if ((rd.rmode == 1) && (rd.rvalue != rval)) {
-    rd.rvalue = rval;
-    rd.rupdate = 1;
-    LOGD("%d %d", raddr, rval);
-  }
+
+  if (rd.rmode == 1) {
+    if (rd.rvalue != rval) {
+      rd.rvalue = rval;
+      rd.rupdate = 1;
+      LOGD("%d %d", raddr, rval);
+      rc = 1; // Update is ok
+    } else
+      rc = 0; // No update necessary
+  } else
+    rc = -1; // Reg is not WRITABLE
+
+  return rc;
 }
 
-void PLC_c::set_reg(string rname, uint16_t rval)
+int PLC_c::set_reg(string rname, uint16_t rval)
 {
+  rc = -2; // rname not found
+
   for (auto &[a, r] : regs) {
-    if (r.str_name == rname)
-      set_reg(a, rval);
+    if (r.str_name == rname) {
+      rc = set_reg(a, rval);
+      break;
+    }
   }
+
+  return rc;
 }
 
 uint16_t PLC_c::get_reg(string rname)
 {
   uint16_t rval = 0;
+  rc = -1;
+
   for (auto &[a, r] : regs) {
-    if (r.str_name == rname)
+    if (r.str_name == rname) {
       rval = r.data.rvalue;
+      rc = 1;
+      break;
+    }
   }
+
   return rval;
 }
-
-
-/*
-  void PLC_c::set_reg(int raddr, float fval)
-  {
-  int16_t rval = (int16_t)round(fval * 100);
-  set_reg(raddr, (uint16_t)rval);
-  }
-*/
 
 int PLC_c::update_master() // Master only
 {
   rc = 0;
   uint64_t interval_ms = mb.interval_ms;
+
   if (mb.errors > 2)
     interval_ms = mb.interval_ms * 3;
 
   if (millis() - mb.timestamp_try_ms > interval_ms) {
     rc = write_master();
-    // LOGD("Write_master finished... %s", dev_name);
+    if (rc == -1)
+      return rc;
     rc = read_master();
-    // LOGD("Read_master finished... %s", dev_name);
   }
   return rc;
 }

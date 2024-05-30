@@ -27,8 +27,7 @@ using namespace std;
 struct mbdata_t {
   int status = 0;                // rc value of last func (init/connect/read)
   uint64_t timestamp_try_ms = 0; // milliseconds since the Epoch on last TRY
-  uint64_t timestamp_ok_ms =
-    0;                    // milliseconds since the Epoch on last GOOD read
+  uint64_t timestamp_ok_ms = 0;  // ms since the Epoch on last GOOD read
   uint32_t interval_ms = 0; // milliseconds between read request
   uint32_t timeout_us = 0;  // miCRo seconds (!!) Modbus respose timeout
   uint32_t errors = 0;      // counter of any current ERRORS (reset if OK)
@@ -53,9 +52,8 @@ public:
   int write_master();  // for Master only
   int update_master(); // for Master only
 
-  void set_reg(int raddr, uint16_t rval);
-//  void set_reg(int raddr, float fval);
-  void set_reg(string rname, uint16_t rval);
+  int set_reg(int raddr, uint16_t rval);
+  int set_reg(string rname, uint16_t rval);
   uint16_t get_reg(string rname);
 
   int handle_slave(int usec = 10000); // for Slave only. Call very often!
@@ -79,7 +77,7 @@ public:
 private:
   modbus_t* ctx = nullptr;
   modbus_mapping_t* mbm = nullptr;
-  static mutex logger_mux;
+//static mutex logger_mux;
 
   bool is_slave = false;
   int rc = -1;
