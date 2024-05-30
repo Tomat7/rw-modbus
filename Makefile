@@ -28,6 +28,7 @@ LIBS+= $(LIBCONFIG) $(LIBMODBUS)
 
 RED='\033[0;91m'
 GRE="\033[0;32m"
+GRB="\033[0;92m"
 YEL="\033[0;93m"
 YEB="\033[1;33m"
 BLU='\033[0;94m'
@@ -43,35 +44,60 @@ ASFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
 # ===
 
-OPT_FLAGS= -flto=auto -O2
-WARN_FLAGS=  -Wextra -Wfatal-errors -pedantic -Wformat=2
-CHECK_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond -Wlogical-op
-TYPES_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -fstack-protector
-GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2
-DEBUG_FLAGS= -g -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
+OPTIM_FLAGS= -flto=auto -O2
+WARN1_FLAGS=  -Wextra -Wfatal-errors -pedantic -Wformat=2
+WARN2_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond
+WARN3_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wlogical-op
+GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fstack-protector
+SANIT_FLAGS= -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
+DEBUG_FLAGS= -g -DDEBUG_FLAG
 
 CFLAGS+= $(CPP_VER)
-CFLAGS+= $(OPT_FLAGS)
-CFLAGS+= $(WARN_FLAGS)
-CFLAGS+= $(CHECK_FLAGS)
-CFLAGS+= $(TYPES_FLAGS)
-CFLAGS+= $(GLIBC_FLAGS)
+#CFLAGS+= $(OPTIM_FLAGS)
+CFLAGS+= $(WARN1_FLAGS)
+CFLAGS+= $(WARN2_FLAGS)
+CFLAGS+= $(WARN3_FLAGS)
+#CFLAGS+= $(GLIBC_FLAGS)
+#CFLAGS+= $(SANIT_FLAGS)
 #CFLAGS+= -fanalyzer
 
 LDFLAGS+= $(CPP_VER)
-LDFLAGS+= $(OPT_FLAGS)
-#LDFLAGS+= $(CHECK_FLAGS)
+#LDFLAGS+= $(OPTIM_FLAGS)
 
 
 # === Check for DEBUG build ===
 
 $(info === The GOALS is: $(MAKECMDGOALS))
 
+ifeq ("check","$(filter check,$(MAKECMDGOALS))")
+OPTIM_FLAGS=
+CFLAGS+= $(GLIBC_FLAGS)
+CFLAGS+= $(SANIT_FLAGS)
+LDFLAGS+= $(GLIBC_FLAGS)
+LDFLAGS+= $(SANIT_FLAGS)
+MESSAGE=" with CHECK"
+$(info === FULL CHECK options activated! ===)
+endif
+
 ifeq ("debug","$(filter debug,$(MAKECMDGOALS))")
+OPTIM_FLAGS=
 CFLAGS+= $(DEBUG_FLAGS)
 LDFLAGS+= $(DEBUG_FLAGS)
 DO_DEBUG=YES
-$(info === Debug options activated! ===)
+MESSAGE="DEBUG"
+$(info === DEDUG options activated! ===)
+endif
+
+ifeq ("fulldebug","$(filter fulldebug,$(MAKECMDGOALS))")
+OPTIM_FLAGS=
+CFLAGS+= $(GLIBC_FLAGS)
+CFLAGS+= $(SANIT_FLAGS)
+CFLAGS+= $(DEBUG_FLAGS)
+LDFLAGS+= $(SANIT_FLAGS)
+LDFLAGS+= $(DEBUG_FLAGS)
+DO_DEBUG=YES
+MESSAGE="FULL DEBUG!"
+$(info === FULL Debug options activated! ===)
 endif
 
 # =====================================================================
@@ -106,41 +132,45 @@ include $(DEPLIST)
 # =============================================
 all: a.out
 
+run: clean a.out
+
+check: clean a.out
+
 debug: clean a.out
 
-libtest: a.out
+fulldebug: clean a.out
 
 # ================ Linking ================================
 #a.out: #$(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
 
 a.out: $(SOURCELIST)
 ifdef DO_DEBUG
-	@echo -e $(GRE)"=== Linking with DEBUG: $@"$(NC)
+	@echo -e $(GRE)"=== Linking with $(MESSAGE): $@"$(NC)
 else
-	@echo -e $(GRE)"=== Linking: $@"$(NC)
+	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
 endif
-	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
+	$(CC) $(LDFLAGS) $(OPTIM_FLAGS) $^ -o $@ $(LIBS)
 ifdef DO_DEBUG
-	@echo -e $(GRE)"=== Finished with DEBUG! ==="$(NC)
+	@echo -e $(GRE)"=== Finished with $(MESSAGE) ===" $(MESSAGE) $(NC)
 	@ls -Fog --color $@
 	@echo -e $(GRE)"=== The size of executable file are REALLY BIG. ==="$(NC)
 	@echo -e $(GRE)"=== Ready! ==="$(NC)
 	sleep 3
 else
-	@echo -e $(GRE)"=== Finished. ==="$(NC)
+	@echo -e $(GRE)"=== Finished. $(MESSAGE) ==="$(NC)
 	@ls -Fog --color $@
-	@echo -e $(GRE)"=== Done. ==="$(NC)
+	@echo -e $(GRE)"=== Done. $(MESSAGE) ===" $(NC)
 	sleep 2
 endif
 
 #================== Compiling ==============================
 $(OBJDIR)/%.o: %.cpp
 ifeq ("YES","$(DO_DEBUG)")
-	@echo -e $(YEB)"=== Compiling with DEBUG: $<"$(NC)
+	@echo -e $(YEB)"=== Compiling with $(MESSAGE): $<"$(NC)
 else
-	@echo -e $(YEL)"=== Compiling: $<"$(NC)
+	@echo -e $(YEL)"=== Compiling$(MESSAGE): $<"$(NC)
 endif
-	$(CC) $(CFLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
+	$(CC) $(CFLAGS) $(OPTIM_FLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 #	$(CC) -dumpdir obj/ $(CFLAGS) $(DEPFLAGS) ./obj/$<.d $<
 #       gcc -c -MD $<
 

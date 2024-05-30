@@ -59,6 +59,11 @@
             "cwd": "/home/star9999/src/rw-modbus",
             "binaryPath": "/home/star9999/src/rw-modbus/a.out",
             "binaryArgs": []
+        },
+        {
+            "cwd": "/home/star0413/src/rw-modbus",
+            "binaryPath": "/home/star0413/src/rw-modbus/a.out",
+            "binaryArgs": []
         }
     ],
      "makefile.configurations": [
