@@ -24,8 +24,7 @@ void cfg_print_reg_details(const reg_t &rn);
 int cfg_master(const char* cfg_dir, const char* cfg_file)
 {
   // Read the file. If there is an error, report it and exit.
-  cout << endl
-       << "======= cfg_read_mbset =======" << endl;
+  printf("\n======= cfg_read_mbset =======\n");
 
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
@@ -114,7 +113,6 @@ int cfg_init_plcset(const Setting &cfgPLC)
 
     plc.init_master(); // Absolutely necessary to copy str to char* and other
     LOGW("Configured PLC: %s, with: %d regs", plc.dev_name, (int)plc.regs.size());
-    //    cout << endl;
     // ===== End PLC filling  =====
   }
 
@@ -150,26 +148,8 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
   return;
 }
 
-void cfg_print_plc_details(const PLC_c &D)
-{
-  // ===== Output PLC details
-  cout << setw(10) << left << D.str_desc << "  " << setw(10) << left
-       << D.str_dev_name << "  " << setw(20) << left << D.str_ip_addr << "  "
-       << D.reg_qty << endl;
-  return;
-}
-
-void cfg_print_reg_details(const reg_t &R)
-{
-  // ===== Output REG details
-  cout << "       " << setw(9) << left << R.str_name << "" << setw(3) << right
-       << R.raddr << " " << setw(5) << left << R.str_mode << "  " << endl;
-  return;
-}
-
 void cfg_deinit()
 {
-  //    cfg.clear();
   PLCset.clear();
 }
 

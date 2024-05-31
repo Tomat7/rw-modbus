@@ -16,7 +16,7 @@ void plc_print_reg_details(int i, int j);
 
 void plc_show2()
 {
-  cout << endl << "===== plc_show2 =====" << endl;
+  printf("\n===== plc_show2 =====\n");
   for (auto &D : PLCset)
     for (auto &[a, R] : D.regs) {
       printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
@@ -26,18 +26,16 @@ void plc_show2()
 
 void plc_show1()
 {
-  cout << endl << "===== plc_show1 =====" << endl;
+  printf("\n===== plc_show1 =====\n");
 
   int nb_plcs = static_cast<int>(PLCset.size());
-  cout << "Total PLCs: " << nb_plcs << endl;
+  printf("Total PLCs: %d\n", nb_plcs);
 
   for (int i = 0; i < nb_plcs; ++i) { // Cycle for PLCs
     plc_print_details(i);
     //    for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
     for (auto &[a, R] : PLCset[i].regs)
       plc_print_reg_details(i, a);
-
-    cout << endl;
   }
 
   return;
@@ -45,19 +43,29 @@ void plc_show1()
 
 void plc_print_details(int i)
 {
-  cout << setw(7) << left << PLCset[i].str_dev_name << "  " << setw(3) << left
-       << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
-       << "  " << PLCset[i].mb.interval_ms << "  " << PLCset[i].mb.timeout_us
-       << endl;
+  printf("\n===== plc_print_details =====\n");
+  printf("%-8s %-4d %-16s %4d %7d\n", PLCset[i].dev_name, PLCset[i].reg_qty,
+         PLCset[i].ip_addr, PLCset[i].mb.interval_ms, PLCset[i].mb.timeout_us);
+  /*
+    cout << setw(7) << left << PLCset[i].str_dev_name << "  " << setw(3) << left
+         << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
+         << "  " << PLCset[i].mb.interval_ms << "  " << PLCset[i].mb.timeout_us
+         << endl;
+  */
   return;
 }
 
 void plc_print_reg_details(int i, int j)
 {
-  cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
-       << right << PLCset[i].regs[j].raddr << setw(7) << right
-       << PLCset[i].regs[j].data.rvalue << "  " << left
-       << PLCset[i].regs[j].str_mode << " " << endl;
+  reg_t &R = PLCset[i].regs[j];
+  printf("   %-9s %2d %7d %-s\n", R.ch_name, R.raddr, R.data.rvalue,
+         R.str_mode.c_str());
+  /*
+    cout << "       " << setw(9) << left << PLCset[i].regs[j].ch_name << setw(3)
+         << right << PLCset[i].regs[j].raddr << setw(7) << right
+         << PLCset[i].regs[j].data.rvalue << "  " << left
+         << PLCset[i].regs[j].str_mode << " " << endl;
+  */
   return;
 }
 

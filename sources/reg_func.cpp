@@ -18,7 +18,7 @@ void reg_print_shm(RegMap_c*);
 
 void regs_init()
 {
-  cout << endl << "===== reg_init =====" << endl;
+  printf("\n===== reg_init =====\n");
 
   for (auto &D : PLCset)
     for (auto &[a, R] : D.regs) {
@@ -32,7 +32,7 @@ void regs_init()
 
 void regs_init_shm()
 {
-  cout << endl << "===== reg_init =====" << endl;
+  printf("\n===== reg_init =====\n");
 
   for (auto &D : PLCset)
     for (auto &[a, R] : D.regs) {

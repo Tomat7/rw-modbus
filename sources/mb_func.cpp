@@ -33,7 +33,7 @@ void mb_print_summary(int x)
 
 int mb_update()
 {
-  //  cout << "===== mb_update =====" << endl;
+  //  "===== mb_update ====="
   uint64_t i = 0;
   uint64_t nb_plcs = PLCset.size();
   vector<thread> thr(nb_plcs);
@@ -58,7 +58,7 @@ int mb_update()
 
 int mb_read()
 {
-  cout << endl << "===== mb_read =====" << endl;
+  printf("\n===== mb_read =====\n");
   int ret = 0;
 
   for (auto &D : PLCset) {
@@ -73,7 +73,7 @@ int mb_read()
 
 int mb_write()
 {
-  cout << endl << "===== mb_write =====" << endl;
+  printf("\n===== mb_write =====\n");
 
   for (auto &D : PLCset) {
     D.write_master();
