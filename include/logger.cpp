@@ -40,7 +40,7 @@ void logger(const char* _logname, int _prio, const char* _func,
       color = C_REDB;
     } else if (_prio == LOG_CRIT) {
       fout = stderr;
-      color = C_GRNB;
+      color = C_YELB;
     } else if (_prio == LOG_ERR) {
       fout = stderr;
       color = C_REDB;

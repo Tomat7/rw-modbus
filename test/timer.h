@@ -5,7 +5,7 @@
 // Other (c)
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
-
+#include <stdio.h>
 #include <chrono> // для функций из std::chrono
 #include <thread>
 
@@ -33,14 +33,14 @@ public:
   void start(const char* txt = "Timer started... \n")
   {
     if (txt != nullptr)
-      cout << txt;
+      printf("%s", txt);
     begin = steady_clock::now();
   }
 
   void stop(const char* txt = "Timer stopped... \n")
   {
     if (txt != nullptr)
-      cout << txt;
+      printf("%s", txt);
     end = steady_clock::now();
   }
 
@@ -52,36 +52,38 @@ public:
 
   int64_t elapsed_ms() const
   {
-    auto msec = duration_cast<milliseconds>(end - begin);
-    return msec.count();
+    auto sec = duration_cast<milliseconds>(end - begin);
+    return sec.count();
   }
 
   int64_t elapsed_us() const
   {
-    auto usec = duration_cast<microseconds>(end - begin);
-    return usec.count();
+    auto sec = duration_cast<microseconds>(end - begin);
+    return sec.count();
   }
 
   // ============================
 
-  void spent_sec(int p = 6, const char* txt1 = "Time spent: ",
+  void spent_sec(int p = 3, const char* txt1 = "Time spent: ",
                  const char* txt2 = " second.")
   {
-    cout << txt1 << fixed << setprecision(p) << (elapsed_sec()) << txt2 << '\n';
+    printf("%s %.*f %s\n", txt1, p, elapsed_sec(), txt2);
+//  cout << txt1 << fixed << setprecision(p) << (elapsed_sec()) << txt2 << '\n';
   }
 
-  void spent_ms(int p = 6, const char* txt1 = "Time spent: ",
+  void spent_ms(const char* txt1 = "Time spent: ",
                 const char* txt2 = " msec.")
   {
-    cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) << txt2
-         << '\n';
+    printf("%s %ld %s\n", txt1, elapsed_ms(), txt2);
+//  cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) << txt2
+//  << '\n';
   }
 
-  void spent_us(int p = 6,
-                const char* txt1 = "Time spent: ", const char* txt2 = " us.")
+  void spent_us(const char* txt1 = "Time spent: ", const char* txt2 = " us.")
   {
-    cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000000)
-         << txt2 << '\n';
+    printf("%s %ld %s\n", txt1, elapsed_us(), txt2);
+//  cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000000)
+//  << txt2 << '\n';
   }
 
   void spent_auto(const char* txt1 = "Time spent: ")
@@ -89,12 +91,16 @@ public:
     end = steady_clock::now();
     double _duration = elapsed_sec();
 
-    if (_duration > 1)
+    if (_duration > 100)
+      spent_sec(0, txt1);
+    if (_duration > 10)
+      spent_sec(1, txt1);
+    else if (_duration > 1)
       spent_sec(2, txt1);
-    else if (_duration * 1000 > 1)
-      spent_ms(1, txt1);
+    else if (_duration * 1000 > 2)
+      spent_ms(txt1);
     else
-      spent_us(0, txt1);
+      spent_us(txt1);
   }
 
   void spent() { spent_auto(); }
@@ -127,6 +133,7 @@ public:
   {
     return CAST_MICROS(system_clock::now().time_since_epoch()).count();
   }
+
 };
 
 // eof

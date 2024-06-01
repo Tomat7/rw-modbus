@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <iostream>
 #include <libconfig.h++>
+#include <set>
 #include <map>
 #include <string>
 #include <vector>

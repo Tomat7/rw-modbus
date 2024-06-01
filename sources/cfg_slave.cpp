@@ -13,17 +13,12 @@ using namespace libconfig;
 
 static int total_regs = 0;
 
-int cfg_init_plcset(const Setting &cfg, const Setting &pl);
-void cfg_init_regs(const Setting &reg, PLC_c* pn);
-
-void cfg_print_plc_details(const PLC_c &pn);
-void cfg_print_reg_details(const reg_t &rn);
+int cfg_init_plcset_(const Setting &cfg);
+void cfg_init_regs_(const Setting &reg, PLC_c* pn);
 
 // Config cfg;
 
-using cchar = const char;
-
-int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
+int cfg_master_(const char* cfg_dir, const char* cfg_file, string cfg_mode)
 {
   // Read the file. If there is an error, report it and exit.
   printf("\n======= cfg_read_mbset =======\n");
@@ -60,26 +55,26 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     try {
       int _log = cfg.lookup("loglevel");
       log_level = _log;
-      LOGC("Set LOG_LEVEL to: %d.", log_level);
+      LOGW("Set LOG_LEVEL to: %d.", log_level);
     } catch (const SettingNotFoundException &nfex) {
       LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
     }
   } else
-    LOGC("LOG_LEVEL is: %d.", log_level);
+    LOGW("LOG_LEVEL is: %d.", log_level);
 
-  // Get list of PLC for configuration
-  Setting* PLClist;
+// ========== TEST !!!
   try {
-    PLClist = &cfg.lookup("plc_list_" + string(cfg_mode));
-    LOGW("Mode: '%s', PLCs in list: %d.", cfg_mode, PLClist->getLength());
+    Setting &PL = cfg.lookup("plc_list_" + cfg_mode);
+    string pl = PL[0];
+    LOGW("PLC list [0]: %s, total: %d.", pl.c_str(), PL.getLength());
   } catch (const SettingNotFoundException &nfex) {
-    LOGA("No 'plc_list_'%s configured!", cfg_mode);
-    return (EXIT_FAILURE);
+    LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
   }
+// ==========  end of TEST
 
-  // Fill a list of all PLCs in the inventory.
+  // Output a list of all PLCs in the inventory.
   try {
-    cfg_init_plcset(cfg.lookup(cfg_mode), *PLClist);
+    cfg_init_plcset_(cfg.lookup("master"));
   } catch (const SettingNotFoundException &nfex) {
     LOGA("Great ERROR! (no 'plc' settings?) Exiting.\n");
     return (EXIT_FAILURE);
@@ -90,31 +85,12 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   return (EXIT_SUCCESS);
 }
 
-int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
+int cfg_init_plcset_(const Setting &cfgPLC)
 {
-  bool isCheckName = true;
-  int nb_plc_cfg = cfgPLC.getLength();
-  int nb_plc_list = listPLC.getLength();
-  printf("\n %d %d \n", nb_plc_list, nb_plc_cfg);
+  int nb_plcs = cfgPLC.getLength();
+  PLCset.resize(nb_plcs);
 
-  set<string> PLClst;
-
-  const string &p0 = listPLC[0];
-  if ((p0 == "all") || (p0 == "ALL")) {
-    isCheckName = false;
-    PLCset.resize(nb_plc_cfg);
-    LOGC("List with %d PLCs ignored. Will read '%s' %d PLCs from configfile!",
-         nb_plc_list, p0.c_str(), nb_plc_cfg);
-  } else {
-    PLCset.resize(nb_plc_list);
-    for (int i = 0; i < nb_plc_list; ++i) {
-      const string &p = listPLC[i];
-      printf("%s \n", p.c_str());
-      PLClst.insert(p);
-    }
-  }
-
-  for (int i = 0; i < nb_plc_cfg; ++i) {
+  for (int i = 0; i < nb_plcs; ++i) {
     PLC_c &plc = PLCset[i];
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("title", plc.str_title) &&
@@ -129,26 +105,20 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       continue; // get out of current iteration if any field wrong in CFG-file
     }
 
-    if (isCheckName && !PLClst.count(plc.str_dev_name))
-      continue;
-
     plc.reg_qty = cfgPLC[i]["regs"].getLength();
-    cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
+    cfg_init_regs_(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
 
     plc.init_master(); // Absolutely necessary to copy str to char* and other
     LOGW("Configured PLC: %s, with: %d regs", plc.dev_name, (int)plc.regs.size());
     // ===== End PLC filling  =====
   }
 
-  LOGC("Total PLCs: %d, with %d regs", (int)PLCset.size(), total_regs);
-
-  if (isCheckName && (nb_plc_cfg != nb_plc_list))
-    LOGA("Wrong PLCs number! Configured: %d, required: %d.", nb_plc_cfg, nb_plc_list);
+  LOGW("Total PLCs: %d, with %d regs", (int)PLCset.size(), total_regs);
 
   return 0;
 }
 
-void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
+void cfg_init_regs_(const Setting &cfgREG, PLC_c* pn)
 {
   int nb_regs = cfgREG.getLength();
   total_regs += nb_regs;
@@ -175,9 +145,10 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
   return;
 }
 
-void cfg_deinit()
+void cfg_deinit_()
 {
   PLCset.clear();
 }
+
 
 // eof

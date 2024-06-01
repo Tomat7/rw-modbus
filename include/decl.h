@@ -23,7 +23,7 @@ void deinit_all();
 void reinit();
 void parse_char(int ch);
 
-int cfg_master(const char* cfg_dir, const char* cfg_file);
+int cfg_master(const char* cfg_dir, const char* cfg_file, const char* cfg_mode = "master");
 
 void plc_show1();
 void plc_show2();

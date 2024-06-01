@@ -2,6 +2,7 @@
     "files.associations": {
         "iostream": "cpp",
         "iomanip": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "*.h++": "cpp"
     }
 }

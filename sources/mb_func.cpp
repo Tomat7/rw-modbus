@@ -26,7 +26,7 @@ void mb_update_master(int x)
 void mb_print_summary(int x)
 {
   PLC_c &D = PLCset[x];
-  printf("%-7s_dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
+  printf("%-7s_dT: %4ld ret: %2d err: %3d conn: %3d rd: %3d wr: %3d rc: %2d\n",
          D.dev_name, D.mb.timestamp_try_ms - prev_ts[x], res[x], D.mb.errors,
          D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
 }
