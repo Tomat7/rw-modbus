@@ -5,6 +5,7 @@ CC=g++
 
 CPP_VER= -std=c++17
 OBJDIR=./tmp/obj
+OUTFILE=a.out
 
 SRCDIR1=./
 SRCDIR2=include
@@ -69,6 +70,23 @@ LDFLAGS+= $(CPP_VER)
 
 $(info === The GOALS is: $(MAKECMDGOALS))
 
+ifeq ("master","$(filter master,$(MAKECMDGOALS))")
+OPTIM_FLAGS=
+CFLAGS+= -DMB_MASTER
+MESSAGE=" MASTER"
+OUTFILE=mb_master
+$(info === MASTER mode activated! ===)
+endif
+
+ifeq ("slave","$(filter slave,$(MAKECMDGOALS))")
+OPTIM_FLAGS=
+CFLAGS+= -DMB_SLAVE
+MESSAGE=" SLAVE"
+OUTFILE=mb_slave
+$(info === SLAVE mode activated! ===)
+endif
+
+
 ifeq ("check","$(filter check,$(MAKECMDGOALS))")
 OPTIM_FLAGS=
 CFLAGS+= $(GLIBC_FLAGS)
@@ -130,7 +148,11 @@ include $(DEPLIST)
 #include $(wildcard $(OBJDIR)/*.cpp.d)
 
 # =============================================
-all: a.out
+all: master
+
+master: a.out
+
+slave: a.out
 
 run: clean a.out
 
@@ -149,16 +171,18 @@ ifdef DO_DEBUG
 else
 	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
 endif
-	$(CC) $(LDFLAGS) $(OPTIM_FLAGS) $^ -o $@ $(LIBS)
+	$(CC) $(LDFLAGS) $(OPTIM_FLAGS) $^ -o ./tmp/$@ $(LIBS)
 ifdef DO_DEBUG
 	@echo -e $(GRE)"=== Finished with $(MESSAGE) ===" $(MESSAGE) $(NC)
-	@ls -Fog --color $@
+	cp --force ./tmp/$@ $(OUTFILE)
+	@ls -Fog --color $(OUTFILE)
 	@echo -e $(GRE)"=== The size of executable file are REALLY BIG. ==="$(NC)
 	@echo -e $(GRE)"=== Ready! ==="$(NC)
 	sleep 3
 else
 	@echo -e $(GRE)"=== Finished. $(MESSAGE) ==="$(NC)
-	@ls -Fog --color $@
+	cp --force ./tmp/$@ $(OUTFILE)
+	@ls -Fog --color $(OUTFILE)
 	@echo -e $(GRE)"=== Done. $(MESSAGE) ===" $(NC)
 	sleep 2
 endif
