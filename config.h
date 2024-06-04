@@ -4,7 +4,7 @@
 // https://31.44.7.12:55972/panel/
 // http://85.117.235.21:55971/
 
-#define CFG_DIR "./conf"
+#define CFG_DIR "/var/tmp/conf"
 #define CFG_FILE "modbus.cfg"
 
 #ifdef DEBUG_FLAG

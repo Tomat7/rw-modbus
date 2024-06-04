@@ -17,7 +17,7 @@ void init_all()
   int ret = 0;
 
   t.start();
-  ret = cfg_master(CFG_DIR, CFG_FILE);
+  ret = cfg_master(CFG_DIR, CFG_FILE, mode);
   t.spent_auto("============ Cfg finished in: ");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);

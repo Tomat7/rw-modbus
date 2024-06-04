@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "./config.h"
 #include "./libs.h"
@@ -73,15 +74,15 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     PLClist = &cfg.lookup("plc_list_" + string(cfg_mode));
     LOGW("Mode: '%s', PLCs in list: %d.", cfg_mode, PLClist->getLength());
   } catch (const SettingNotFoundException &nfex) {
-    LOGA("No 'plc_list_'%s configured!", cfg_mode);
+    LOGA("No 'plc_list_%s' configured!", cfg_mode);
     return (EXIT_FAILURE);
   }
 
   // Fill a list of all PLCs in the inventory.
   try {
-    cfg_init_plcset(cfg.lookup(cfg_mode), *PLClist);
+    cfg_init_plcset(cfg.lookup("PLC"), *PLClist);
   } catch (const SettingNotFoundException &nfex) {
-    LOGA("Great ERROR! (no 'plc' settings?) Exiting.\n");
+    LOGA("Great ERROR! (no 'PLC' settings?) Exiting.\n");
     return (EXIT_FAILURE);
   }
 
@@ -129,8 +130,12 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       continue; // get out of current iteration if any field wrong in CFG-file
     }
 
-    if (isCheckName && !PLClst.count(plc.str_dev_name))
+    printf("+ %s \n", plc.str_dev_name.c_str());
+    if (isCheckName && !PLClst.count(plc.str_dev_name)) {
+      //plc.init_master();
       continue;
+    }
+    printf("++ %s \n", plc.str_dev_name.c_str());
 
     plc.reg_qty = cfgPLC[i]["regs"].getLength();
     cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);

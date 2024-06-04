@@ -18,6 +18,8 @@
 using namespace std;
 using namespace chrono;
 
+using cchar = const char;
+
 class Timer
 {
 private:
@@ -32,14 +34,14 @@ private:
 public:
   Timer() {}
 
-  void start(const char* txt = "Timer started... \n")
+  void start(cchar* txt = "Timer started... \n")
   {
     if (txt != nullptr)
       cout << txt;
     begin = steady_clock::now();
   }
 
-  void stop(const char* txt = "Timer stopped... \n")
+  void stop(cchar* txt = "Timer stopped... \n")
   {
     if (txt != nullptr)
       cout << txt;
@@ -66,21 +68,19 @@ public:
 
   // ============================
 
-  void spent_sec(int p = 6, const char* txt1 = "Time spent: ",
-                 const char* txt2 = " second.")
+  void spent_sec(int p = 6, cchar* txt1 = "Time spent: ", cchar* txt2 = " second.")
   {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec()) << txt2 << '\n';
   }
 
-  void spent_ms(int p = 6, const char* txt1 = "Time spent: ",
-                const char* txt2 = " msec.")
+  void spent_ms(int p = 6, cchar* txt1 = "Time spent: ",
+                cchar* txt2 = " msec.")
   {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) << txt2
          << '\n';
   }
 
-  void spent_us(int p = 6,
-                const char* txt1 = "Time spent: ", const char* txt2 = " us.")
+  void spent_us(int p = 6, cchar* txt1 = "Time spent: ", cchar* txt2 = " us.")
   {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000000)
          << txt2 << '\n';

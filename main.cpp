@@ -2,6 +2,7 @@
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -13,29 +14,35 @@
 
 std::map<string, RegMap_c> REGmap;
 std::vector<PLC_c> PLCset;
+
 // INotify IN(CFG_DIR);
 
-regdata_t* P;
+const char* mode = "master";
 int rc;
 
 static void close_sigint(int dummy)
 {
   deinit_all();
   restore_console();
-  LOGN("Exit by Ctrl-C. Bye.\n");
+  LOGC("Exit by Ctrl-C. Bye.\n");
   closelog();
   exit(dummy);
 }
 
-
 // int main(int argc, char **argv) {
 
-int main()
+int main(int argc, char** argv)
 {
   Timer t;
+  std::set<string> Mode{MBREGS_MODES};
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-  log_level = 0;
+  log_level = 7;
+
+  if ((argc > 1) && (Mode.count(string(argv[1]))))
+    mode = argv[1];
+
+  LOGC("Mode: %s", mode);
 
   init_all();
 
@@ -52,7 +59,7 @@ int main()
     t.start(x);
     mb_update();
     LOGD("regdata_t size: %d", sizeof(regdata_t));
-    LOGD("P array size: %d", sizeof(P));
+    //    LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     int ch = read_console(TIMEOUT_SEC);
