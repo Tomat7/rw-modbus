@@ -20,7 +20,7 @@
 #include "./reg_class.h"
 
 #define MB_SLAVE_CONN_MAX 5
-//#define USE_SYSLOG
+// #define USE_SYSLOG
 
 using namespace std;
 
@@ -28,19 +28,24 @@ struct mbdata_t {
   int status = 0;                // rc value of last func (init/connect/read)
   uint64_t timestamp_try_ms = 0; // milliseconds since the Epoch on last TRY
   uint64_t timestamp_ok_ms = 0;  // ms since the Epoch on last GOOD read
-  uint32_t interval_ms = 0; // milliseconds between read request
-  uint32_t timeout_us = 0;  // miCRo seconds (!!) Modbus respose timeout
-  uint32_t errors = 0;      // counter of any current ERRORS (reset if OK)
-  uint32_t errors_rd = 0;   // counter of READ errors (summ from start)
-  uint32_t errors_wr = 0;   // counter of WRITE errors (summ from start)
-  uint32_t errors_cn = 0;   // counter of CONNECT errors (summ from start)
+  uint32_t interval_ms = 0;      // milliseconds between read request
+  uint32_t timeout_us = 0;       // miCRo seconds (!!) Modbus respose timeout
+  uint32_t errors = 0;           // counter of any current ERRORS (reset if OK)
+  uint32_t errors_rd = 0;        // counter of READ errors (summ from start)
+  uint32_t errors_wr = 0;        // counter of WRITE errors (summ from start)
+  uint32_t errors_cn = 0;        // counter of CONNECT errors (summ from start)
 };
 
 class PLC_c
 {
 public:
-  PLC_c(string _ip = "none", string _name = "Master");  // for Master
-  PLC_c(int _port, int _m = 1, string _name = "Slave"); // for Slave
+  // for Master
+  PLC_c(string _ip = "none", string _name = "Master");
+  PLC_c(string _devname, string _ip, string _title, string _desc,
+        int _port, int _atm, int _ms, int _us);
+
+  // for Slave
+  PLC_c(int _port, int _m = 1, string _name = "Slave");
   ~PLC_c();
 
   void mb_deinit();
@@ -77,7 +82,7 @@ public:
 private:
   modbus_t* ctx = nullptr;
   modbus_mapping_t* mbm = nullptr;
-//static mutex logger_mux;
+  // static mutex logger_mux;
 
   bool is_slave = false;
   int rc = -1;

@@ -5,7 +5,7 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <chrono>
+// #include <chrono>
 #include <mutex>
 #include <stdarg.h>
 #include <string.h>
@@ -28,8 +28,8 @@ void logger(const char* _logname, int _prio, const char* _func,
   const char* fname = _logname;
   const char* color = C_NRM;
 
-  bool no_file = !(_prio == 7 || log_level > 7);
-  bool no_func = (log_level < 9);
+  bool no_filename = !(_prio == 7 || log_level > 7);
+  bool no_funcname = (log_level < 9);
   bool no_syslog = (_prio > 4 && log_level < 9);
   bool no_print = (_prio > log_level);
   string fmt = (string)_func + "(): " + (string)_fmt;
@@ -53,9 +53,9 @@ void logger(const char* _logname, int _prio, const char* _func,
     else
       color = C_NRM;
 
-    if (no_file && no_func)
+    if (no_filename && no_funcname)
       fname = "";
-    else if (no_func)
+    else if (no_funcname)
       fname = strrchr(_logname, '/') ? strrchr(_logname, '/') + 1 : _logname;
     else
       format = fmt.c_str();

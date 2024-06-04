@@ -26,6 +26,25 @@ PLC_c::PLC_c(string _ip, string _name) // Master only
   LOGN("+ New PLC created: %s %s", ip_addr, dev_name);
 }
 
+PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
+             int _port, int _att, int _ms, int _us)
+{
+  str_dev_name = _devname;
+  dev_name = str_dev_name.c_str();
+
+  str_ip_addr = _ip;
+  ip_addr = str_ip_addr.c_str();
+
+  str_title = _title;
+  str_desc = _desc;
+  tcp_port = _port;
+  attempts = _att;
+  mb.interval_ms = _ms;
+  mb.timeout_us = _us;
+
+  LOGN("+ New PLC created: %s %s", ip_addr, dev_name);
+}
+
 // Destructor in plc_common.cpp
 
 void PLC_c::init_master() // Master only

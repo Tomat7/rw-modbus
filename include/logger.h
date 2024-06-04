@@ -6,14 +6,14 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <chrono>
-#include <iostream>
+// #include <chrono>
+// #include <iostream>
 #include <mutex>
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
 
-#include "../config.h"
+#include "../config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 
 // ANSI color codes
 #ifndef C_NRM
