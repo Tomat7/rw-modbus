@@ -71,10 +71,8 @@ void* get_shm_addr(int fd, size_t sz)
   return addr;
 }
 
-/*
-  export template<typename T>
-  int close_shm(int &fd, T* &addr, size_t sz)
-  {
+int close_shm(int &fd, void* addr, size_t sz)
+{
   int rc = 0;
 
   if (addr != nullptr) {
@@ -88,8 +86,7 @@ void* get_shm_addr(int fd, size_t sz)
   }
 
   return rc;
-  }
-*/
+}
 
 int close_fd(int &fd)
 {
