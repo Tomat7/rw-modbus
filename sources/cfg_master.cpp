@@ -64,6 +64,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
       log_level = _log;
       LOGC("Set LOG_LEVEL to: %d.", log_level);
     } catch (const SettingNotFoundException &nfex) {
+      log_level = LOG_LEVEL_DEFAULT;
       LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
     }
   } else
@@ -96,7 +97,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
   bool isCheckName = true;
   int nb_plc_cfg = cfgPLC.getLength();
   int nb_plc_list = listPLC.getLength();
-  int nb_plc_done = 0;
+  int nb_plc_ready = 0;
   LOGW("Total PLCs in config: %d, in the list: %d.", nb_plc_cfg, nb_plc_list);
 
   set<string> PLClst;
@@ -109,17 +110,23 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
          nb_plc_list, p0.c_str(), nb_plc_cfg);
   } else {
     PLCset.reserve(nb_plc_list);
-    for (int i = 0; i < nb_plc_list; ++i) {
-//      const string &p = listPLC[i];
-//      printf("%s \n", p.c_str());
+    for (int i = 0; i < nb_plc_list; ++i)
       PLClst.insert(listPLC[i]);
-    }
   }
 
   for (int i = 0; i < nb_plc_cfg; ++i) {
-    string _devname;
-    if (!cfgPLC[i].lookupValue("name", _devname)) {
-      LOGA("Error reading PLC 'name' configuration: %d\n", i);
+    string _devname, _title, _desc, _ip;
+    int _port, _att, _ms, _us;
+    // ===== Check the record which expect to get for CFG-file.
+    if (!(cfgPLC[i].lookupValue("name", _devname) &&
+          cfgPLC[i].lookupValue("title", _title) &&
+          cfgPLC[i].lookupValue("desc", _desc) &&
+          cfgPLC[i].lookupValue("ip", _ip) &&
+          cfgPLC[i].lookupValue("port", _port) &&
+          cfgPLC[i].lookupValue("attempts", _att) &&
+          cfgPLC[i].lookupValue("polling", _ms) &&
+          cfgPLC[i].lookupValue("timeout", _us))) {
+      LOGA("Error reading PLC configuration: %d\n", i);
       continue; // get out of current iteration if any field wrong in CFG-file
     }
 
@@ -127,35 +134,20 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       continue; // get out of current iteration if PLC not in list
     }
 
-    string _title, _desc, _ip;
-    int _port, _atm, _ms, _us;
-    // ===== Check the record which expect to get for CFG-file.
-    if (!(cfgPLC[i].lookupValue("title", _title) &&
-          cfgPLC[i].lookupValue("desc", _desc) &&
-          cfgPLC[i].lookupValue("ip", _ip) &&
-          cfgPLC[i].lookupValue("port", _port) &&
-          cfgPLC[i].lookupValue("attempts", _atm) &&
-          cfgPLC[i].lookupValue("polling", _ms) &&
-          cfgPLC[i].lookupValue("timeout", _us))) {
-      LOGA("Error reading PLC configuration: %d\n", i);
-      continue; // get out of current iteration if any field wrong in CFG-file
-    }
-
-    PLCset.emplace_back(_devname, _ip, _title, _desc, _port, _atm, _ms, _us);
+    PLCset.emplace_back(_devname, _ip, _title, _desc, _port, _att, _ms, _us);
     PLCset.back().reg_qty = cfgPLC[i]["regs"].getLength();
-
     cfg_init_regs(cfgPLC[i]["regs"], &PLCset.back());
-    nb_plc_done++;
+    PLCset.back().init_master(); // Necessary to copy str to char* and others
+    nb_plc_ready++;
 
-    PLCset.back().init_master(); // Absolutely necessary to copy str to char* and other
-    LOGW("Configured PLC: %s, with: %d regs", PLCset.back().dev_name, (int)PLCset.back().regs.size());
+    LOGN("Configured PLC: %s, with: %d regs", PLCset.back().dev_name, (int)PLCset.back().regs.size());
     // ===== End PLC filling  =====
   }
 
   LOGC("Total PLCs: %d, with %d regs", (int)PLCset.size(), total_regs);
 
-  if (isCheckName && (nb_plc_done != nb_plc_list))
-    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_done, nb_plc_list);
+  if (isCheckName && (nb_plc_ready != nb_plc_list))
+    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready, nb_plc_list);
 
   return 0;
 }

@@ -3,6 +3,8 @@
         "iostream": "cpp",
         "iomanip": "cpp",
         "chrono": "cpp",
-        "*.h++": "cpp"
+        "*.h++": "cpp",
+        "*.tcc": "cpp",
+        "string": "cpp"
     }
 }

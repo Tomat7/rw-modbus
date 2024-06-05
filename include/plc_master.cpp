@@ -42,7 +42,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
   mb.interval_ms = _ms;
   mb.timeout_us = _us;
 
-  LOGN("+ New PLC created: %s %s", ip_addr, dev_name);
+  LOGI("+ New PLC created: %s %s", ip_addr, dev_name);
 }
 
 // Destructor in plc_common.cpp
@@ -51,7 +51,7 @@ void PLC_c::init_master() // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
-  LOGN("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name, str_title.c_str(),
+  LOGI("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name, str_title.c_str(),
        str_desc.c_str());
 
   for (auto &[a, R] : regs) {
@@ -69,7 +69,7 @@ void PLC_c::init_master() // Master only
       reg_max = R.raddr;
 
     rd.rvalue = 777; // TODO: remove for production
-    LOGN("+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
+    LOGI("+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
          R.str_mode.c_str(), R.fullname.c_str());
   }
 }

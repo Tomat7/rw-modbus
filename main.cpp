@@ -39,10 +39,21 @@ int main(int argc, char** argv)
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   log_level = 7;
 
-  if ((argc > 1) && (Mode.count(string(argv[1]))))
-    mode = argv[1];
+  if (argc > 1) {
+    if (Mode.count(string(argv[1])))
+      mode = argv[1];
+    else
+      LOGC("Argument '%s' ignored.", argv[1]);
+  }
 
-  LOGC("Mode: %s", mode);
+  if (argc > 2) {
+    char ch = *argv[2];
+    if ((strlen(argv[2]) == 1) && (isdigit((char)ch))) {
+      log_level = int((char)ch - '0');
+      LOGC("LOG_LEVEL set to: %d", log_level);
+    } else
+      LOGC("Argument '%s' ignored.", argv[2]);
+  }
 
   init_all();
 
