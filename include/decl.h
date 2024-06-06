@@ -16,13 +16,15 @@ using std::right;
 using std::setw;
 using std::string;
 
+extern int timeout_sec;
 extern cchar* mode;
 extern std::map<string, RegMap_c> REGmap;
 extern std::vector<PLC_c> PLCset;
 //extern regdata_t* P;
 
-#define MBREGS_MODES "master", "slave", "scada"
+#define MODBUS_MODES "master", "slave", "scada"
 
+bool isdebug();
 void init_all();
 void deinit_all();
 void reinit();

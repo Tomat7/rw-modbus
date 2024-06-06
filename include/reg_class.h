@@ -34,8 +34,8 @@ struct regdata_t {
 struct reg_t {
   int raddr = 0;
   regdata_t data;
-  string fullname;
-  string str_name;
+  string fullname; // Master and Slave (reference of): PLC_name:reg_name
+  string str_name; // reg_name
   string str_mode;
   string str_type;
   const char* ch_name = nullptr;
@@ -69,7 +69,7 @@ public:
   int fd = -1;                       // descriptor of SHARED MEMORY
   uint16_t value = 0;                // just for FUN! (to print with PLC & SHM)
   regdata_t* ptr_data_shm = nullptr; // ptr to SHARED MEMORY (local) data
-  regdata_t* ptr_data_plc = nullptr; // ptr to SHARED MEMORY (remote) data
+  regdata_t* ptr_data_plc = nullptr; // ptr to SHARED MEMORY (PLC/MB) data
   reg_t* ptr_reg = nullptr;          // ptr to PLC data
 };
 

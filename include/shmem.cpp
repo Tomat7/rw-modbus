@@ -71,23 +71,6 @@ void* get_shm_addr(int fd, size_t sz)
   return addr;
 }
 
-int close_shm(int &fd, void* addr, size_t sz)
-{
-  int rc = 0;
-
-  if (addr != nullptr) {
-    rc = munmap(addr, sz);
-    addr = nullptr;
-  }
-
-  if (fd != -1) {
-    rc = close(fd);
-    fd = -1;
-  }
-
-  return rc;
-}
-
 int close_fd(int &fd)
 {
   int rc = 0;
@@ -108,5 +91,24 @@ int unlink_shm(const char* rn)
 
   return rc;
 }
+
+/*
+  int close_shm(int &fd, auto* addr, size_t sz)
+  {
+  int rc = 0;
+
+  if (addr != nullptr) {
+    rc = munmap(addr, sz);
+    addr = nullptr;
+  }
+
+  if (fd != -1) {
+    rc = close(fd);
+    fd = -1;
+  }
+
+  return rc;
+  }
+*/
 
 // eof

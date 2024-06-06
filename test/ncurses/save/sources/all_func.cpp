@@ -25,24 +25,24 @@ void init_all()
   
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
-  wait_console(TIMEOUT_SEC);
+  wait_console(timeout_sec);
   sleep(3);
 
   plc_show2();
   PRINTF("=============   33333333333\n");
-  wait_console(TIMEOUT_SEC);
+  wait_console(timeout_sec);
   sleep(3);
 
   t.start();
   plc_show1();
   t.spent_auto("============ PLC show finished in: ");
-  wait_console(TIMEOUT_SEC);
+  wait_console(timeout_sec);
   sleep(3);
 
   t.start();
   regs_init();
   t.spent_auto("============ REG init finished in: ");
-  wait_console(TIMEOUT_SEC);
+  wait_console(timeout_sec);
   //  t.sleep_ms(TMOUT);
   sleep(3);
 
@@ -52,7 +52,7 @@ void init_all()
 void reinit()
 {
   deinit_all();
-  wait_console(TIMEOUT_SEC);
+  wait_console(timeout_sec);
   init_all();
 }
 
@@ -69,24 +69,24 @@ void parse_char(int ch)
 
   if (((char)ch == 'e') || ((char)ch == 'q')) {
     LOGC("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
-    wait_console(TIMEOUT_SEC);
+    wait_console(timeout_sec);
     deinit_all();
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'r') {
     LOGC("Char 'r' pressed. Full reconfiguration.\n");
-    wait_console(TIMEOUT_SEC);
+    wait_console(timeout_sec);
     reinit();
   } else if (isdigit((char)ch)) {
     loglvl = (char)ch - '0'; // new loglevel
     log_level = 2;
     LOGC("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
     log_level = loglvl;
-    wait_console(TIMEOUT_SEC);
+    wait_console(timeout_sec);
   } else if ((char)ch == ' ')
     PRINTF("%s %s %s \n", KGRN, "=============================", KNRM);
   else {
     PRINTF("Wow! What to do with: %s '%c'? %s \n", KBLU, (char)ch, KNRM);
-    wait_console(TIMEOUT_SEC * 2);
+    wait_console(timeout_sec * 2);
   }
 }
 

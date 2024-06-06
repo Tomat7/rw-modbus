@@ -81,8 +81,7 @@ public:
 
 private:
   modbus_t* ctx = nullptr;
-  modbus_mapping_t* mbm = nullptr;
-  // static mutex logger_mux;
+  modbus_mapping_t* mbm = nullptr;  // Slave only?
 
   bool is_slave = false;
   int rc = -1;

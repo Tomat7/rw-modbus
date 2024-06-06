@@ -18,6 +18,7 @@ std::vector<PLC_c> PLCset;
 // INotify IN(CFG_DIR);
 
 const char* mode = "master";
+int timeout_sec = TIMEOUT_SEC;
 int rc;
 
 static void close_sigint(int dummy)
@@ -34,7 +35,7 @@ static void close_sigint(int dummy)
 int main(int argc, char** argv)
 {
   Timer t;
-  std::set<string> Mode{MBREGS_MODES};
+  std::set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   log_level = 7;
@@ -73,7 +74,7 @@ int main(int argc, char** argv)
     //    LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-    int ch = read_console(TIMEOUT_SEC);
+    int ch = read_console(timeout_sec);
     if (ch != -1)
       parse_char(ch);
     else

@@ -25,11 +25,11 @@ void* get_shm_addr(int fd, size_t sz);
 int unlink_shm(const char* rn);
 int close_fd(int &);
 
-int close_shm(int &, void*, size_t);
+// int close_shm(int &, auto*, size_t);
 
-/*
-  template <typename T> int close_shm(int &fd, T* &addr, size_t sz)
-  {
+template <typename T>
+int close_shm(int &fd, T* &addr, size_t sz)
+{
   int rc = 0;
 
   if (addr != nullptr) {
@@ -43,5 +43,6 @@ int close_shm(int &, void*, size_t);
   }
 
   return rc;
-  }
-*/
+}
+
+// eof

@@ -61,7 +61,7 @@ int main()
     LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-    int ch = read_console(TIMEOUT_SEC);
+    int ch = read_console(timeout_sec);
 //    if (ch != -1)
 //      parse_char(ch);
 //    else

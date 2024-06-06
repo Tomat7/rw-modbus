@@ -13,35 +13,35 @@
 // using namespace std;
 // using namespace libconfig;
 
-  map<string, RegMap_c> REGmap;
-  vector<PLC_c> PLCset;
-  int rc;
-  Timer t;
+map<string, RegMap_c> REGmap;
+vector<PLC_c> PLCset;
+int rc;
+Timer t;
 
-  // int main(int argc, char **argv) {
+// int main(int argc, char **argv) {
 
 
 int main()
 {
-/*
-    t.start();
-    cfg_master(CFG_DIR, CFG_FILE);
-    t.stop();
-    cout << "============ Cfg finished." << endl;
-    t.spent();
-    t.sleep_ms(987);
+  /*
+      t.start();
+      cfg_master(CFG_DIR, CFG_FILE);
+      t.stop();
+      cout << "============ Cfg finished." << endl;
+      t.spent();
+      t.sleep_ms(987);
 
-    t.start();
-    regs_init_shm();
-    t.stop();
-    cout << "============ REG init finished." << endl;
-    t.spent();
-*/
-    /*
-      mb_slave_init();
-      printf("============ SLAVE init finished.\n");
-      fflush(stdout);
-      t.sleep_sec(3);
+      t.start();
+      regs_init_shm();
+      t.stop();
+      cout << "============ REG init finished." << endl;
+      t.spent();
+  */
+  /*
+    mb_slave_init();
+    printf("============ SLAVE init finished.\n");
+    fflush(stdout);
+    t.sleep_sec(3);
   */
 
   static uint16_t w = 500;

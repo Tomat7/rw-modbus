@@ -45,9 +45,11 @@ void PLC_c::mb_deinit()
     mbm = nullptr;
   }
 
-  modbus_close(ctx);
-  modbus_free(ctx);
-  ctx = nullptr;
+  if (ctx != nullptr) {
+    modbus_close(ctx);
+    modbus_free(ctx);
+    ctx = nullptr;
+  }
   //  LOGI("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 
   return;
@@ -75,6 +77,5 @@ uint64_t PLC_c::millis()
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
   return t;
 }
-
 
 // eof

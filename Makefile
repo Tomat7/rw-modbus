@@ -46,7 +46,7 @@ ASFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 # ===
 
 OPTIM_FLAGS= -flto=auto -O2
-WARN1_FLAGS=  -Wextra -Wfatal-errors -pedantic -Wformat=2
+WARN1_FLAGS=  -Wextra -Wfatal-errors -pedantic -Wformat=2 -fconcepts
 WARN2_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond
 WARN3_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wlogical-op
 GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fstack-protector

@@ -34,7 +34,7 @@ PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;
-  LOGN("+ New Slave PLC created: %s:%d %s", str_ip_addr.c_str(), tcp_port,
+  LOGD("+ New Slave PLC created: %s:%d %s", str_ip_addr.c_str(), tcp_port,
        dev_name);
 }
 
