@@ -1,6 +1,9 @@
 // cfg_func.cpp --------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#define COMPILE_SLAVE
+#ifdef COMPILE_SLAVE
+
 #include <string>
 #include <vector>
 
@@ -13,12 +16,12 @@ using namespace libconfig;
 
 static int total_regs = 0;
 
-int cfg_init_plcset_(const Setting &cfg);
-void cfg_init_regs_(const Setting &reg, PLC_c* pn);
+int cfg_init_slave(const Setting &cfg);
+void cfg_init_slave_regs(const Setting &reg, PLC_c* pn);
 
-// Config cfg;
+using cchar = const char;
 
-int cfg_master_(const char* cfg_dir, const char* cfg_file, string cfg_mode)
+int cfg_slave(const char* cfg_dir, const char* cfg_file, const char* cfg_mode)
 {
   // Read the file. If there is an error, report it and exit.
   printf("\n======= cfg_read_mbset =======\n");
@@ -46,7 +49,7 @@ int cfg_master_(const char* cfg_dir, const char* cfg_file, string cfg_mode)
     string name = cfg.lookup("maintitle");
     LOGW("Config title: %s", name.c_str());
   } catch (const SettingNotFoundException &nfex) {
-    LOGA("No '%s' setting in configuration file.\n", "nametitle");
+    LOGA("No '%s' setting in cfg file for %s.\n", "nametitle", cfg_mode);
     return (EXIT_FAILURE);
   }
 
@@ -55,26 +58,28 @@ int cfg_master_(const char* cfg_dir, const char* cfg_file, string cfg_mode)
     try {
       int _log = cfg.lookup("loglevel");
       log_level = _log;
-      LOGW("Set LOG_LEVEL to: %d.", log_level);
+      LOGC("Set LOG_LEVEL to: %d.", log_level);
     } catch (const SettingNotFoundException &nfex) {
+      log_level = LOG_LEVEL_DEFAULT;
       LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
     }
   } else
-    LOGW("LOG_LEVEL is: %d.", log_level);
+    LOGC("LOG_LEVEL is: %d.", log_level);
 
-// ========== TEST !!!
-  try {
-    Setting &PL = cfg.lookup("plc_list_" + cfg_mode);
-    string pl = PL[0];
-    LOGW("PLC list [0]: %s, total: %d.", pl.c_str(), PL.getLength());
-  } catch (const SettingNotFoundException &nfex) {
-    LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
-  }
-// ==========  end of TEST
+  /*
+    // Get list of PLC for configuration
+    Setting* PLClist;
+    try {
+      PLClist = &cfg.lookup("plc_list_" + string(cfg_mode));
+    } catch (const SettingNotFoundException &nfex) {
+      LOGA("No 'plc_list_%s' configured!", cfg_mode);
+    //    return (EXIT_FAILURE);
+    }
+  */
 
   // Output a list of all PLCs in the inventory.
   try {
-    cfg_init_plcset_(cfg.lookup("master"));
+    cfg_init_slave(cfg.lookup("slave"));
   } catch (const SettingNotFoundException &nfex) {
     LOGA("Great ERROR! (no 'plc' settings?) Exiting.\n");
     return (EXIT_FAILURE);
@@ -85,40 +90,18 @@ int cfg_master_(const char* cfg_dir, const char* cfg_file, string cfg_mode)
   return (EXIT_SUCCESS);
 }
 
-int cfg_init_plcset_(const Setting &cfgPLC)
+int cfg_init_slave(const Setting &cfgSlave)
 {
-  int nb_plcs = cfgPLC.getLength();
-  PLCset.resize(nb_plcs);
-
-  for (int i = 0; i < nb_plcs; ++i) {
-    PLC_c &plc = PLCset[i];
-    // ===== Check the record which expect to get for CFG-file.
-    if (!(cfgPLC[i].lookupValue("title", plc.str_title) &&
-          cfgPLC[i].lookupValue("desc", plc.str_desc) &&
-          cfgPLC[i].lookupValue("name", plc.str_dev_name) &&
-          cfgPLC[i].lookupValue("ip", plc.str_ip_addr) &&
-          cfgPLC[i].lookupValue("port", plc.tcp_port) &&
-          cfgPLC[i].lookupValue("attempts", plc.attempts) &&
-          cfgPLC[i].lookupValue("polling", plc.mb.interval_ms) &&
-          cfgPLC[i].lookupValue("timeout", plc.mb.timeout_us))) {
-      LOGE("Error reading PLC configuration: %d\n", i);
-      continue; // get out of current iteration if any field wrong in CFG-file
-    }
-
-    plc.reg_qty = cfgPLC[i]["regs"].getLength();
-    cfg_init_regs_(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
-
-    plc.init_master(); // Absolutely necessary to copy str to char* and other
-    LOGW("Configured PLC: %s, with: %d regs", plc.dev_name, (int)plc.regs.size());
-    // ===== End PLC filling  =====
-  }
-
-  LOGW("Total PLCs: %d, with %d regs", (int)PLCset.size(), total_regs);
+  Slave.reg_qty = cfgSlave.getLength();
+  cfg_init_slave_regs(cfgSlave, &Slave);
+  Slave.init_regs(); // Absolutely necessary to copy str to char* and other
+  LOGW("Configured Slave with: %d regs", (int)Slave.regs.size());
+//  LOGW("Total Slave's regs: %d", total_regs);
 
   return 0;
 }
 
-void cfg_init_regs_(const Setting &cfgREG, PLC_c* pn)
+void cfg_init_slave_regs(const Setting &cfgREG, PLC_c* pn)
 {
   int nb_regs = cfgREG.getLength();
   total_regs += nb_regs;
@@ -130,12 +113,28 @@ void cfg_init_regs_(const Setting &cfgREG, PLC_c* pn)
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgREG[j].lookupValue("rname", regnow.str_name) &&
           cfgREG[j].lookupValue("raddr", regnow.raddr) &&
-          cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
-          cfgREG[j].lookupValue("rtype", regnow.str_type))) {
-      LOGE("Error reading config on PLC: %s REG: %d\n",
+          cfgREG[j].lookupValue("source", regnow.fullname) //&&
+          //  cfgREG[j].lookupValue("rtype", regnow.str_type)
+         )) {
+      LOGE("Error reading config on Slave, REG: %d\n",
            pn->str_dev_name.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
+    }
+
+    LOGE("-- %s %d %s", regnow.str_name.c_str(), regnow.raddr, regnow.fullname.c_str());
+
+    if (regnow.fullname == "-") {
+      if (!(cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
+            cfgREG[j].lookupValue("rtype", regnow.str_type))) {
+        LOGE("Error reading config on Slave, vREG: %d\n",
+             pn->str_dev_name.c_str(), j);
+        exit(EXIT_FAILURE);
+        continue;
+      }
+    } else {
+      regnow.str_mode = "rw";
+      regnow.str_type = "i";
     }
 
     regnow.data.rvalue = 555; // TODO: remove for production!
@@ -150,5 +149,5 @@ void cfg_deinit_()
   PLCset.clear();
 }
 
-
+#endif
 // eof

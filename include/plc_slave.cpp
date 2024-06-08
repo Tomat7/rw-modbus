@@ -31,6 +31,7 @@ PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
   tcp_port = _port;
   reg_max = _m;
   str_desc = _name;
+  str_title = _name;
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;
@@ -82,7 +83,7 @@ int PLC_c::renew_listen() // Slave only
   FD_ZERO(&refset);               // Clear the reference set of socket
   FD_SET(server_socket, &refset); // Add the server socket
   fdmax = server_socket;          // Keep track of the max file descriptor
-  LOGN("MB Slave ready on port %d.", tcp_port);
+  LOGN("MB Slave listen on port %d.", tcp_port);
   return rc;
 }
 
@@ -97,15 +98,15 @@ int PLC_c::write_raw(int r, uint16_t val)
   return rc;
 }
 
-uint16_t PLC_c::read_raw(int r)
+uint16_t PLC_c::read_raw(int addr)
 {
-  if (r > reg_max)
+  if (addr > reg_max)
     return -1;
 
   uint16_t val = 0;
   rc = check_slave();
   if (rc != -1)
-    val = mbm->tab_registers[r];
+    val = mbm->tab_registers[addr];
 
   return val;
 }

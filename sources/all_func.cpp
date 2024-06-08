@@ -18,10 +18,18 @@ void init_all()
 
   t.start();
   ret = cfg_master(CFG_DIR, CFG_FILE, mode);
-  t.spent_auto("============ Cfg finished in: ");
+  t.spent_auto("============ Cfg Master finished in: ");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
   wait_console(timeout_sec);
+  // ==================================
+  t.start();
+  ret = cfg_slave(CFG_DIR, CFG_FILE, "slave");
+  t.spent_auto("============ Cfg Slave finished in: ");
+  if (ret == EXIT_FAILURE)
+    exit(EXIT_FAILURE);
+  wait_console(timeout_sec);
+  // ==================================
 
   plc_show2();
   printf("===222\n");
@@ -63,6 +71,7 @@ void deinit_all()
   regs_deinit_shm();
   regs_deinit();
   plc_deinit();
+  Slave.mb_deinit();
 }
 
 void parse_char(int ch)

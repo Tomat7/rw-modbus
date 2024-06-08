@@ -28,13 +28,13 @@ struct regdata_t {
   int rstatus = 0; // -1 mean ERROR, any positive - is OK
   int rerrors = 0; // number of errors on MB func (init/connect/read)
   int rmode = 0;   // 1 - mean RW
-  int rtype = 0;   // 1 - mean FLOAT (enum?)
+  int rtype = 0;   // 0 - uint16_t, 1 - mean FLOAT (enum?), 2 - int16_t
 };
 
 struct reg_t {
   int raddr = 0;
   regdata_t data;
-  string fullname; // Master and Slave (reference of): PLC_name:reg_name
+  string fullname; // Master and Slave (reference of): PLC_name.reg_name
   string str_name; // reg_name
   string str_mode;
   string str_type;

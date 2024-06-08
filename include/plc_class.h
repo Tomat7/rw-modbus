@@ -45,14 +45,14 @@ public:
         int _port, int _atm, int _ms, int _us);
 
   // for Slave
-  PLC_c(int _port, int _m = 1, string _name = "Slave");
+  PLC_c(int _port = 502, int _m = 1, string _name = "Slave");
   ~PLC_c();
 
   void mb_deinit();
   int get_rc();
   uint64_t millis();
 
-  void init_master();  // for Master only (mandatory!)
+  void init_regs();  // for Master only (mandatory!)
   int read_master();   // for Master only
   int write_master();  // for Master only
   int update_master(); // for Master only
@@ -60,6 +60,7 @@ public:
   int set_reg(int raddr, uint16_t rval);
   int set_reg(string rname, uint16_t rval);
   uint16_t get_reg(string rname);
+  uint16_t get_reg(int raddr);
 
   int handle_slave(int usec = 10000); // for Slave only. Call very often!
   int write_raw(int r, uint16_t val); // for Slave only

@@ -14,6 +14,7 @@
 
 std::map<string, RegMap_c> REGmap;
 std::vector<PLC_c> PLCset;
+PLC_c Slave(1502);
 
 // INotify IN(CFG_DIR);
 
@@ -74,7 +75,9 @@ int main(int argc, char** argv)
     //    LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-    int ch = read_console(timeout_sec);
+    Slave.handle_slave(timeout_sec * 1000000);
+
+    int ch = read_console(0, 1000000);
     if (ch != -1)
       parse_char(ch);
     else

@@ -137,7 +137,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
     PLCset.emplace_back(_devname, _ip, _title, _desc, _port, _att, _ms, _us);
     PLCset.back().reg_qty = cfgPLC[i]["regs"].getLength();
     cfg_init_regs(cfgPLC[i]["regs"], &PLCset.back());
-    PLCset.back().init_master(); // Necessary to copy str to char* and others
+    PLCset.back().init_regs(); // Necessary to copy str to char* and others
     nb_plc_ready++;
 
     LOGN("Configured PLC: %s, with: %d regs", PLCset.back().dev_name, (int)PLCset.back().regs.size());

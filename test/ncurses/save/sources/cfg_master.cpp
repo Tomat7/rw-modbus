@@ -111,7 +111,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
     plc.reg_qty = cfgPLC[i]["regs"].getLength();
     cfg_init_regs(cfgPLC[i]["regs"], &plc /*PLCset[i]*/);
 
-    plc.init_master(); // Absolutely necessary to copy str to char* and other
+    plc.init_regs(); // Absolutely necessary to copy str to char* and other
     LOGW("Configured PLC: %s, with: %d regs", plc.dev_name, (int)plc.regs.size());
     // ===== End PLC filling  =====
   }

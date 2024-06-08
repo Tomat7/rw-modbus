@@ -47,32 +47,6 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
 
 // Destructor in plc_common.cpp
 
-void PLC_c::init_master() // Master only
-{
-  ip_addr = str_ip_addr.c_str();
-  dev_name = str_dev_name.c_str();
-  LOGI("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name, str_title.c_str(),
-       str_desc.c_str());
-
-  for (auto &[a, R] : regs) {
-    auto &rd = R.data;
-    R.fullname = str_dev_name + "." + R.str_name;
-    R.ch_name = R.str_name.c_str();
-
-    rd.rmode = (R.str_mode == "rw") ? 1 : 0;
-    rd.rtype = (R.str_type == "f") ? 1 : 0;
-
-    if (R.raddr < reg_min)
-      reg_min = R.raddr;
-
-    if (R.raddr > reg_max)
-      reg_max = R.raddr;
-
-    rd.rvalue = 777; // TODO: remove for production
-    LOGI("+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
-         R.str_mode.c_str(), R.fullname.c_str());
-  }
-}
 
 int PLC_c::read_master() // Master only
 {
@@ -196,19 +170,19 @@ int PLC_c::write_reg(reg_t &R)
 
 int PLC_c::set_reg(int raddr, uint16_t rval)
 {
-  regdata_t &rd = regs[raddr].data;
-
-  if (rd.rmode == 1) {
-    if (rd.rvalue != rval) {
-      rd.rvalue = rval;
-      rd.rupdate = 1;
-      LOGD("%d %d", raddr, rval);
-      rc = 1; // Update is ok
-    } else
-      rc = 0; // No update necessary
-  } else
-    rc = -1; // Reg is not WRITABLE
-
+  rc = -1;
+  if (raddr <= reg_max) {
+    regdata_t &rd = regs[raddr].data;
+    if (rd.rmode == 1) {
+      if (rd.rvalue != rval) {
+        rd.rvalue = rval;
+        rd.rupdate = 1;
+        LOGD("%d %d", raddr, rval);
+        rc = 1; // Update is ok
+      } else
+        rc = 0; // No update necessary
+    }
+  }
   return rc;
 }
 
@@ -239,6 +213,17 @@ uint16_t PLC_c::get_reg(string rname)
     }
   }
 
+  return rval;
+}
+
+uint16_t PLC_c::get_reg(int raddr)
+{
+  uint16_t rval = 0;
+  rc = -1;
+  if (raddr <= reg_max) {
+    rval = regs[raddr].data.rvalue;
+    rc = 1;
+  }
   return rval;
 }
 

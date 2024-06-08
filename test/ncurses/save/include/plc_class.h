@@ -47,7 +47,7 @@ public:
   int get_rc();
   uint64_t millis();
 
-  void init_master();  // for Master only (mandatory!)
+  void init_regs();  // for Master only (mandatory!)
   int read_master();   // for Master only
   int write_master();  // for Master only
   int update_master(); // for Master only

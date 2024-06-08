@@ -28,7 +28,7 @@ PLC_c::PLC_c(string _ip, string _name) // Master only
 
 // Destructor in plc_common.cpp
 
-void PLC_c::init_master() // Master only
+void PLC_c::init_regs() // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();

@@ -61,6 +61,7 @@ void deinit_all()
   regs_deinit_shm();
   regs_deinit();
   plc_deinit();
+  Slave.deinit;
 }
 
 void parse_char(int ch)
