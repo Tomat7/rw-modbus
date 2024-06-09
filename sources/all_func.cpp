@@ -41,7 +41,7 @@ void init_all()
   wait_console(timeout_sec);
 
   t.start();
-  regs_init();
+  regs_create_from_masters();
   t.spent_auto("============ REG init finished in: ");
   wait_console(timeout_sec);
   //  t.sleep_ms(TMOUT);

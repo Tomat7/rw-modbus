@@ -16,11 +16,11 @@
 void reg_print(string, const regdata_t*);
 void reg_print_shm(RegMap_c*);
 
-void regs_init()
+void regs_create_from_masters()
 {
   PRINTF("\n===== reg_init =====\n");
 
-  for (auto &D : PLCset)
+  for (auto &D : PLCvec)
     for (auto &[a, R] : D.regs) {
       LOGD("(Master) try to create %s", R.fullname.c_str());
       // RegMap_c rm(&R);
@@ -34,7 +34,7 @@ void regs_init_shm()
 {
   PRINTF("\n===== reg_init =====\n");
 
-  for (auto &D : PLCset)
+  for (auto &D : PLCvec)
     for (auto &[a, R] : D.regs) {
       LOGD("(Slave) try to create %s", R.fullname.c_str());
       REGmap[R.fullname] = {R.fullname};

@@ -52,20 +52,25 @@ public:
   int get_rc();
   uint64_t millis();
 
-  void init_regs();  // for Master only (mandatory!)
+  // For Master only
+  void init_regs();    // for Master only (mandatory!)
   int read_master();   // for Master only
   int write_master();  // for Master only
   int update_master(); // for Master only
 
+  // For Slave only.
+  int handle_slave(int usec = 10000); // for Slave only. Call very often!
+  int write_raw(int r, uint16_t val); // for Slave only
+  uint16_t read_raw(int r);           // for Slave only
+  int update_slave();                 // for Slave only. Copy raw to regs (map).
+
+  // Set/Get local values. NO real update to PLC.
   int set_reg(int raddr, uint16_t rval);
   int set_reg(string rname, uint16_t rval);
   uint16_t get_reg(string rname);
   uint16_t get_reg(int raddr);
 
-  int handle_slave(int usec = 10000); // for Slave only. Call very often!
-  int write_raw(int r, uint16_t val); // for Slave only
-  uint16_t read_raw(int r);           // for Slave only
-
+  // Common properties
   string str_title;
   string str_desc;
   string str_dev_name;
@@ -78,11 +83,11 @@ public:
   int reg_max = 0;  // maximal address of reg
   int reg_qty = 0;  // number of regs
   mbdata_t mb;
-  std::map<int, reg_t> regs;
+  std::map<int, reg_t> regs; // All regs here.
 
 private:
   modbus_t* ctx = nullptr;
-  modbus_mapping_t* mbm = nullptr;  // Slave only?
+  modbus_mapping_t* mbm = nullptr; // Slave only?
 
   bool is_slave = false;
   int rc = -1;

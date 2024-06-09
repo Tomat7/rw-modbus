@@ -12,7 +12,7 @@ using std::setw;
 using std::string;
 
 extern std::map<string, RegMap_c> REGmap;
-extern std::vector<PLC_c> PLCset;
+extern std::vector<PLC_c> PLCvec;
 extern regdata_t* P;
 
 // int read_console(time_t _sec = 0, suseconds_t _usec = 10000);
@@ -35,7 +35,7 @@ int mb_update();
 int mb_slave_init();
 int mb_slave();
 
-void regs_init();
+void regs_create_from_masters();
 void regs_init_shm();
 void regs_update();
 void regs_update_shm();

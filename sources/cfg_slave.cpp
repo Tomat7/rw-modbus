@@ -146,7 +146,7 @@ void cfg_init_slave_regs(const Setting &cfgREG, PLC_c* pn)
 
 void cfg_deinit_()
 {
-  PLCset.clear();
+  PLCvec.clear();
 }
 
 #endif

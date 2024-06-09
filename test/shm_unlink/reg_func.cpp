@@ -13,14 +13,14 @@
 // using ::std;
 // using ::libconfig;
 
-void regs_init();
+void regs_create_from_masters();
 void reg_print_name();
 // void reg_init_name(string devname, string regname, uint16_t *val);
 
-void regs_init() {
+void regs_create_from_masters() {
   cout << endl << "===== reg_init =====" << endl;
 
-  for (auto &D : PLCset)
+  for (auto &D : PLCvec)
     for (auto &R : D.regs) {
       string reg = (string)D.dev_name + "." + (string)R.ch_name;
       REGmap[reg] = &R;

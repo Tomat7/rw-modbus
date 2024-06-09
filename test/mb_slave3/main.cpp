@@ -14,7 +14,7 @@
 // using namespace libconfig;
 
 map<string, RegMap_c> REGmap;
-vector<PLC_c> PLCset;
+vector<PLC_c> PLCvec;
 int rc;
 Timer t;
 
@@ -38,7 +38,7 @@ int main() {
   */
 
   t.start();
-  regs_init();
+  regs_create_from_masters();
   t.stop();
   cout << "============ REG init finished." << endl;
   t.spent();

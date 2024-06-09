@@ -19,7 +19,7 @@ using std::string;
 extern int timeout_sec;
 extern cchar* mode;
 extern std::map<string, RegMap_c> REGmap;
-extern std::vector<PLC_c> PLCset;
+extern std::vector<PLC_c> PLCvec;
 extern PLC_c Slave;
 //extern regdata_t* P;
 
@@ -44,12 +44,13 @@ int mb_update();
 int mb_slave_init();
 int mb_slave();
 
-void regs_init();
+void regs_create_from_masters();
 void regs_init_shm();
 void regs_update();
 void regs_update_shm();
 void regs_deinit_shm();
 void regs_deinit();
+bool reg_exist(string);
 // void reg_print(string, const reg_t*);
 
 int write_shm(string, uint16_t);

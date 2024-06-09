@@ -91,10 +91,10 @@ int cfg_master(const char* cfg_dir, const char* cfg_file)
 int cfg_init_plcset(const Setting &cfgPLC)
 {
   int nb_plcs = cfgPLC.getLength();
-  PLCset.resize(nb_plcs);
+  PLCvec.resize(nb_plcs);
 
   for (int i = 0; i < nb_plcs; ++i) {
-    PLC_c &plc = PLCset[i];
+    PLC_c &plc = PLCvec[i];
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("title", plc.str_title) &&
           cfgPLC[i].lookupValue("desc", plc.str_desc) &&
@@ -116,7 +116,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
     // ===== End PLC filling  =====
   }
 
-  LOGW("Total PLCs: %d, with %d regs", (int)PLCset.size(), _regs);
+  LOGW("Total PLCs: %d, with %d regs", (int)PLCvec.size(), _regs);
 
   return 0;
 }
@@ -150,7 +150,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
 
 void cfg_deinit()
 {
-  PLCset.clear();
+  PLCvec.clear();
 }
 
 // eof

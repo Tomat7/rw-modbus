@@ -105,11 +105,11 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
   const string &p0 = listPLC[0];
   if ((p0 == "all") || (p0 == "ALL")) {
     isCheckName = false;
-    PLCset.reserve(nb_plc_cfg);
+    PLCvec.reserve(nb_plc_cfg);
     LOGC("List with %d PLCs ignored. Will read '%s' %d PLCs from configfile!",
          nb_plc_list, p0.c_str(), nb_plc_cfg);
   } else {
-    PLCset.reserve(nb_plc_list);
+    PLCvec.reserve(nb_plc_list);
     for (int i = 0; i < nb_plc_list; ++i)
       PLClst.insert(listPLC[i]);
   }
@@ -134,17 +134,17 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       continue; // get out of current iteration if PLC not in list
     }
 
-    PLCset.emplace_back(_devname, _ip, _title, _desc, _port, _att, _ms, _us);
-    PLCset.back().reg_qty = cfgPLC[i]["regs"].getLength();
-    cfg_init_regs(cfgPLC[i]["regs"], &PLCset.back());
-    PLCset.back().init_regs(); // Necessary to copy str to char* and others
+    PLCvec.emplace_back(_devname, _ip, _title, _desc, _port, _att, _ms, _us);
+    PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
+    cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
+    PLCvec.back().init_regs(); // Necessary to copy str to char* and others
     nb_plc_ready++;
 
-    LOGN("Configured PLC: %s, with: %d regs", PLCset.back().dev_name, (int)PLCset.back().regs.size());
+    LOGN("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name, (int)PLCvec.back().regs.size());
     // ===== End PLC filling  =====
   }
 
-  LOGC("Total PLCs: %d, with %d regs", (int)PLCset.size(), total_regs);
+  LOGC("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
     LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready, nb_plc_list);
@@ -181,7 +181,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
 
 void cfg_deinit()
 {
-  PLCset.clear();
+  PLCvec.clear();
 }
 
 // eof

@@ -12,7 +12,7 @@
 int mb_read() {
   cout << endl << "===== mb_read =====" << endl;
 
-  for (auto &D : PLCset)
+  for (auto &D : PLCvec)
     D.read_master();
 
   /*

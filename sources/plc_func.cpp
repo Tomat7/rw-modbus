@@ -17,7 +17,7 @@ void plc_print_reg_details(int i, int j);
 void plc_show2()
 {
   printf("\n===== plc_show2 =====\n");
-  for (auto &D : PLCset)
+  for (auto &D : PLCvec)
     for (auto &[a, R] : D.regs) {
       printf("%s: %s.%s (%d) %d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
              R.raddr, R.data.rvalue, R.fullname.c_str());
@@ -28,13 +28,13 @@ void plc_show1()
 {
   printf("\n===== plc_show1 =====\n");
 
-  int nb_plcs = static_cast<int>(PLCset.size());
+  int nb_plcs = static_cast<int>(PLCvec.size());
   printf("Total PLCs: %d\n", nb_plcs);
 
   for (int i = 0; i < nb_plcs; ++i) { // Cycle for PLCs
     plc_print_details(i);
     //    for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
-    for (auto &[a, R] : PLCset[i].regs)
+    for (auto &[a, R] : PLCvec[i].regs)
       plc_print_reg_details(i, a);
   }
 
@@ -44,8 +44,8 @@ void plc_show1()
 void plc_print_details(int i)
 {
   printf("\n===== plc_print_details =====\n");
-  printf("%-8s %-4d %-16s %4d %7d\n", PLCset[i].dev_name, PLCset[i].reg_qty,
-         PLCset[i].ip_addr, PLCset[i].mb.interval_ms, PLCset[i].mb.timeout_us);
+  printf("%-8s %-4d %-16s %4d %7d\n", PLCvec[i].dev_name, PLCvec[i].reg_qty,
+         PLCvec[i].ip_addr, PLCvec[i].mb.interval_ms, PLCvec[i].mb.timeout_us);
   /*
     cout << setw(7) << left << PLCset[i].str_dev_name << "  " << setw(3) << left
          << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr
@@ -57,7 +57,7 @@ void plc_print_details(int i)
 
 void plc_print_reg_details(int i, int j)
 {
-  reg_t &R = PLCset[i].regs[j];
+  reg_t &R = PLCvec[i].regs[j];
   printf("   %-9s %2d %7d %-s\n", R.ch_name, R.raddr, R.data.rvalue,
          R.str_mode.c_str());
   /*
@@ -71,7 +71,7 @@ void plc_print_reg_details(int i, int j)
 
 void plc_deinit()
 {
-  PLCset.clear();
+  PLCvec.clear();
   return;
 }
 

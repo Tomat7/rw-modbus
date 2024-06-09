@@ -15,7 +15,7 @@
 
 map<string, RegMap_c> REGmap;
 //map<string, rshm_t> SHMmap;
-vector<PLC_c> PLCset;
+vector<PLC_c> PLCvec;
 int rc;
 
 // int main(int argc, char **argv) {
@@ -36,7 +36,7 @@ int main() {
   t.spent();
 
   t.start();
-  regs_init();
+  regs_create_from_masters();
   t.stop();
   cout << "============ REG init finished." << endl;
   t.spent();

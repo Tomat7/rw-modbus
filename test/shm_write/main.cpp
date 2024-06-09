@@ -14,7 +14,7 @@
 // using namespace libconfig;
 
 map<string, RegMap_c> REGmap;
-vector<PLC_c> PLCset;
+vector<PLC_c> PLCvec;
 int rc;
 Timer t;
 

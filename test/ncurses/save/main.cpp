@@ -12,7 +12,7 @@
 // using namespace libconfig;
 
 std::map<string, RegMap_c> REGmap;
-std::vector<PLC_c> PLCset;
+std::vector<PLC_c> PLCvec;
 // INotify IN(CFG_DIR);
 
 regdata_t* P;

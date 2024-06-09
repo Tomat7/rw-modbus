@@ -95,11 +95,11 @@ int cfg_init_plcset() {
     cout << endl;
     LOGINFO("Configured REGs now: %d\n", (int)plcnow.regs.size());
     // cout << "Configured REGs now: " << plcnow.regs.size() << endl;
-    PLCset.push_back(plcnow);
+    PLCvec.push_back(plcnow);
     // ===== End PLC filling  =====
   }
 
-  LOGINFO("Configured PLCs: %d\n", (int)PLCset.size());
+  LOGINFO("Configured PLCs: %d\n", (int)PLCvec.size());
   // cout << "Configured PLCs: " << PLCset.size() << endl;
   return 0;
 }

@@ -100,6 +100,67 @@ int PLC_c::mb_ctx()
   return rc;
 }
 
+int PLC_c::set_reg(int raddr, uint16_t rval) // Set reg locally != write PLC.
+{
+  rc = -1;
+  if (raddr <= reg_max) {
+    regdata_t &rd = regs[raddr].data;
+    if (rd.rmode == 1) {
+      if (rd.rvalue != rval) {
+        rd.rvalue = rval;
+        rd.rupdate = 1;
+        LOGD("%d %d", raddr, rval);
+        rc = 1; // Update is ok
+      } else
+        rc = 0; // No update necessary
+    }
+  }
+  return rc;
+}
+
+int PLC_c::set_reg(string rname, uint16_t rval)
+{
+  rc = -2; // rname not found
+
+  for (auto &[a, r] : regs) {
+    if (r.str_name == rname) {
+      rc = set_reg(a, rval);
+      break;
+    }
+  }
+
+  return rc;
+}
+
+uint16_t PLC_c::get_reg(int raddr) // Set reg's local value != read PLC.
+{
+  uint16_t rval = 0;
+  rc = -1;
+  if (regs.count(raddr)) {
+    rval = regs[raddr].data.rvalue;
+    rc = 1;
+  }
+  return rval;
+}
+
+
+uint16_t PLC_c::get_reg(string rname) // Set reg's local value != read PLC.
+{
+  uint16_t rval = 0;
+  rc = -1;
+
+  for (auto &[a, r] : regs) {
+    if (r.str_name == rname) {
+      rval = r.data.rvalue;
+      rc = 1;
+      break;
+    }
+  }
+
+  return rval;
+}
+
+
 uint64_t PLC_c::millis()
 {
 #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>

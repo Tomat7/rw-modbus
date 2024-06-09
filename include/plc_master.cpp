@@ -47,8 +47,29 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
 
 // Destructor in plc_common.cpp
 
+int PLC_c::mb_connect() // Master only
+{
+  if ((mb.errors > 0) || (ctx == nullptr)) {
+    rc = mb_ctx();
+    rc = modbus_connect(ctx);
 
-int PLC_c::read_master() // Master only
+    if (rc == -1) {
+      modbus_free(ctx);
+      ctx = nullptr;
+      mb.errors++;
+      mb.errors_cn++;
+      if (att >= attempts)
+        LOGE("%s %s connect error: %s ", ip_addr, dev_name,
+             modbus_strerror(errno));
+    }
+  }
+  modbus_flush(ctx);
+
+  return rc;
+}
+
+
+int PLC_c::read_master() // Master only. Read directly from PLC.
 {
   rc = 0;
   att = 0;
@@ -76,28 +97,8 @@ int PLC_c::read_master() // Master only
   return rc;
 }
 
-int PLC_c::mb_connect() // Master only
-{
-  if ((mb.errors > 0) || (ctx == nullptr)) {
-    rc = mb_ctx();
-    rc = modbus_connect(ctx);
 
-    if (rc == -1) {
-      modbus_free(ctx);
-      ctx = nullptr;
-      mb.errors++;
-      mb.errors_cn++;
-      if (att >= attempts)
-        LOGE("%s %s connect error: %s ", ip_addr, dev_name,
-             modbus_strerror(errno));
-    }
-  }
-  modbus_flush(ctx);
-
-  return rc;
-}
-
-int PLC_c::read_allregs() // Master only
+int PLC_c::read_allregs() // Master only. Read (raw) directly from PLC.
 {
   int nb_regs = reg_max - reg_min + 1; // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
@@ -126,7 +127,7 @@ int PLC_c::read_allregs() // Master only
   return rc;
 }
 
-int PLC_c::write_master() // Master only
+int PLC_c::write_master() // Master only. Write all regs directly to PLC.
 {
   for (auto &[a, R] : regs) {
     auto &rd = R.data;
@@ -146,7 +147,7 @@ int PLC_c::write_master() // Master only
   return rc;
 }
 
-int PLC_c::write_reg(reg_t &R)
+int PLC_c::write_reg(reg_t &R) // Master only. Write (raw) reg directly to PLC.
 {
   auto &rd = R.data;
   rc = modbus_write_register(ctx, R.raddr, rd.rvalue);
@@ -168,66 +169,8 @@ int PLC_c::write_reg(reg_t &R)
   return rc;
 }
 
-int PLC_c::set_reg(int raddr, uint16_t rval)
-{
-  rc = -1;
-  if (raddr <= reg_max) {
-    regdata_t &rd = regs[raddr].data;
-    if (rd.rmode == 1) {
-      if (rd.rvalue != rval) {
-        rd.rvalue = rval;
-        rd.rupdate = 1;
-        LOGD("%d %d", raddr, rval);
-        rc = 1; // Update is ok
-      } else
-        rc = 0; // No update necessary
-    }
-  }
-  return rc;
-}
 
-int PLC_c::set_reg(string rname, uint16_t rval)
-{
-  rc = -2; // rname not found
-
-  for (auto &[a, r] : regs) {
-    if (r.str_name == rname) {
-      rc = set_reg(a, rval);
-      break;
-    }
-  }
-
-  return rc;
-}
-
-uint16_t PLC_c::get_reg(string rname)
-{
-  uint16_t rval = 0;
-  rc = -1;
-
-  for (auto &[a, r] : regs) {
-    if (r.str_name == rname) {
-      rval = r.data.rvalue;
-      rc = 1;
-      break;
-    }
-  }
-
-  return rval;
-}
-
-uint16_t PLC_c::get_reg(int raddr)
-{
-  uint16_t rval = 0;
-  rc = -1;
-  if (raddr <= reg_max) {
-    rval = regs[raddr].data.rvalue;
-    rc = 1;
-  }
-  return rval;
-}
-
-int PLC_c::update_master() // Master only
+int PLC_c::update_master() // Master only.
 {
   rc = 0;
   uint64_t interval_ms = mb.interval_ms;

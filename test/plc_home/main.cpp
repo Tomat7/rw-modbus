@@ -13,7 +13,7 @@
 
 
 std::map<string, RegMap_c> REGmap;
-std::vector<PLC_c> PLCset;
+std::vector<PLC_c> PLCvec;
 
 std::map<string, uint64_t> PLCmap;
 std::vector<string> SHset {"TH41", "TH42", "SF45"} ;
@@ -55,10 +55,10 @@ int main()
 //  printf("%s", HOME);
   fflush(stdout);
 
-  uint64_t nb_plcs = PLCset.size();
+  uint64_t nb_plcs = PLCvec.size();
 
   for (i = 0; i < nb_plcs; i++)
-    PLCmap[PLCset[i].str_dev_name] = i;
+    PLCmap[PLCvec[i].str_dev_name] = i;
 
 //    t.start();
 //    regs_update();
@@ -73,7 +73,7 @@ int main()
 //    t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
   for (auto &S : SHset) {
-    PLC_c &D = PLCset[PLCmap[S]];
+    PLC_c &D = PLCvec[PLCmap[S]];
     LOGD("Check 1 %s %d", S.c_str(), PLCmap[S]);
     LOGD("Check 2 %s %s %d", D.ip_addr, D.dev_name, D.get_reg("millis"));
 

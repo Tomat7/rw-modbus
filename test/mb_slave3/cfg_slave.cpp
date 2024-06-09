@@ -69,12 +69,12 @@ int cfg_init_plcset(const Setting &cfgPLC)
   //  const Setting &cfgPLC = cf->lookup("plc");
   int nb_plcs = cfgPLC.getLength();
 
-  PLCset.resize(nb_plcs);
+  PLCvec.resize(nb_plcs);
   // ===== Cycle for PLCs =====
   for (int i = 0; i < nb_plcs; ++i) {
     //    PLC plcnow;
     //    cout << "plcnow created!" << endl;
-    PLC_c &plc = PLCset[i];
+    PLC_c &plc = PLCvec[i];
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("title", plc.str_title) &&
           cfgPLC[i].lookupValue("desc", plc.str_desc) &&
@@ -101,7 +101,7 @@ int cfg_init_plcset(const Setting &cfgPLC)
     // ===== End PLC filling  =====
   }
 
-  LOGINFO("Configured PLCs: %d\n", (int)PLCset.size());
+  LOGINFO("Configured PLCs: %d\n", (int)PLCvec.size());
 
   return 0;
 }
@@ -153,7 +153,7 @@ void cfg_print_reg_details(const reg_t &R)
 void cfg_deinit()
 {
   //    cfg.clear();
-  PLCset.clear();
+  PLCvec.clear();
 }
 
 // eof

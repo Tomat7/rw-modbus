@@ -16,32 +16,6 @@
 void reg_print(string, const regdata_t*);
 void reg_print_shm(RegMap_c*);
 
-void regs_init()
-{
-  printf("\n===== reg_init =====\n");
-
-  for (auto &D : PLCset)
-    for (auto &[a, R] : D.regs) {
-      LOGD("(Master) try to create %s", R.fullname.c_str());
-      // RegMap_c rm(&R);
-      // REGmap[R.fullname] = rm;
-      REGmap[R.fullname] = {&R};
-    }
-  return;
-}
-
-void regs_init_shm()
-{
-  printf("\n===== reg_init =====\n");
-
-  for (auto &D : PLCset)
-    for (auto &[a, R] : D.regs) {
-      LOGD("(Slave) try to create %s", R.fullname.c_str());
-      REGmap[R.fullname] = {R.fullname};
-    }
-  return;
-}
-
 void regs_update()
 {
   printf("\n===== regs_update =====\n");
@@ -62,8 +36,7 @@ void regs_update()
       else
         printf(" ");
 
-      if (shm_val != old_val) {
-        // If new value got from SHM (SCADA?)
+      if (shm_val != old_val) { // If new value got from SHM (SCADA?)
         rm.set_plc_val(shm_val);
         printf("<%5d", shm_val);
       } else
@@ -167,19 +140,5 @@ void reg_print_shm(RegMap_c* rm)
   return;
 }
 
-void regs_deinit_shm()
-{
-  for (auto &[n, rm] : REGmap) {
-    close_shm(rm.fd, rm.ptr_data_shm, sizeof(regdata_t));
-    unlink_shm(n.c_str());
-  }
-  return;
-}
-
-void regs_deinit()
-{
-  REGmap.clear();
-  return;
-}
 
 // eof

@@ -54,13 +54,13 @@
 // using namespace libconfig;
 
 extern std::map<string, reg_t *> REGmap;
-extern std::vector<PLC_c> PLCset;
+extern std::vector<PLC_c> PLCvec;
 
 int cfg_read(const char *cfg_file);
 
 int plc_show1();
 int mb_read();
-void regs_init();
+void regs_create_from_masters();
 void reg_print_name();
 
 int create_shm_fd(const char* rn);
