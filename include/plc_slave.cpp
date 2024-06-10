@@ -27,6 +27,7 @@
 
 PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
 {
+  lock_init();
   str_ip_addr = "0.0.0.0"; // Slave always listening on ALL addresses!
   tcp_port = _port;
   reg_max = _m;
@@ -132,6 +133,8 @@ int PLC_c::handle_slave(int usec)
   tv.tv_sec = 0;
   tv.tv_usec = usec;
 
+  lock_now();
+
   rc = check_slave();
   if (rc == -1)
     return rc;
@@ -156,6 +159,8 @@ int PLC_c::handle_slave(int usec)
     else // Existing connection
       work_client();
   }
+
+  unlock_now();
 
   return fdmax;
 }

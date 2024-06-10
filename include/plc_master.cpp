@@ -21,6 +21,7 @@
 
 PLC_c::PLC_c(string _ip, string _name) // Master only
 {
+  lock_init();
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
   LOGN("+ New PLC created: %s %s", ip_addr, dev_name);
@@ -29,6 +30,7 @@ PLC_c::PLC_c(string _ip, string _name) // Master only
 PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
              int _port, int _att, int _ms, int _us)
 {
+  lock_init();
   str_dev_name = _devname;
   dev_name = str_dev_name.c_str();
 
@@ -68,21 +70,21 @@ int PLC_c::mb_connect() // Master only
   return rc;
 }
 
-
 int PLC_c::read_master() // Master only. Read directly from PLC.
 {
-//  LOCK_GUARD(network_mux);
-
+  //  LOCK_GUARD(network_mux);
   rc = 0;
   att = 0;
 
   while (att < attempts && rc <= 0) {
+    lock_now();
     att++;
     rc = mb_connect();
     if (rc == 0)
       rc = read_allregs();
     else
       mb.errors++;
+    unlock_now();
   }
 
   mb.status = rc;
@@ -98,7 +100,6 @@ int PLC_c::read_master() // Master only. Read directly from PLC.
 
   return rc;
 }
-
 
 int PLC_c::read_allregs() // Master only. Read (raw) directly from PLC.
 {
@@ -131,7 +132,7 @@ int PLC_c::read_allregs() // Master only. Read (raw) directly from PLC.
 
 int PLC_c::write_master() // Master only. Write all regs directly to PLC.
 {
-//  LOCK_GUARD(network_mux);
+  //  LOCK_GUARD(network_mux);
 
   for (auto &[a, R] : regs) {
     auto &rd = R.data;
@@ -139,12 +140,14 @@ int PLC_c::write_master() // Master only. Write all regs directly to PLC.
       rc = 0;
       att = 0;
       while (att < attempts && rc <= 0) {
+        lock_now();
         att++;
         rc = mb_connect();
         if (rc == 0)
           rc = write_reg(R);
         else
           mb.errors++;
+        unlock_now();
       }
     }
   }
@@ -172,7 +175,6 @@ int PLC_c::write_reg(reg_t &R) // Master only. Write (raw) reg directly to PLC.
 
   return rc;
 }
-
 
 int PLC_c::update_master() // Master only.
 {

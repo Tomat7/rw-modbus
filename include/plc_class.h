@@ -16,6 +16,7 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include <atomic>
 
 #include "./reg_class.h"
 
@@ -88,7 +89,20 @@ public:
 
 private:
   modbus_t* ctx = nullptr;
-  mutable std::mutex network_mux;
+  //  mutable std::mutex network_mux;
+  // volatile  atomic <bool> lock { false };
+  // std::atomic_flag lock = ATOMIC_FLAG_INIT;
+  volatile atomic_flag* lockflag = nullptr;
+
+  inline __attribute__((always_inline))
+  void lock_init() { lockflag = new atomic_flag(ATOMIC_FLAG_INIT); };
+
+  inline __attribute__((always_inline))
+  void lock_now() { lockflag->test_and_set(std::memory_order_acquire); };
+
+  inline __attribute__((always_inline))
+  void unlock_now() { lockflag->clear(std::memory_order_release); };
+
   bool is_slave = false;
   int rc = -1;
   int att = 0;

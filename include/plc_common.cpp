@@ -26,11 +26,17 @@
 
 PLC_c::~PLC_c()
 {
+  lock_now();
   mb_deinit();
+//  unlock_now();
+  delete lockflag;
   LOGN("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 }
 
 int PLC_c::get_rc() { return rc; }
+
+//inline //__attribute__((always_inline))
+//inline void PLC_c::init_lock() { lockflag = new atomic_flag(ATOMIC_FLAG_INIT); }
 
 void PLC_c::init_regs() // Master only
 {
@@ -56,7 +62,7 @@ void PLC_c::init_regs() // Master only
       reg_max = R.raddr;
 
     rd.rvalue = 777; // TODO: remove for production
-    LOGI("+ REG init: %-7s %2d %2s [%s]", R.ch_name, R.raddr,
+    LOGI("+ REG init: %-9s %2d %2s [%s]", R.ch_name, R.raddr,
          R.str_mode.c_str(), R.fullname.c_str());
   }
 }
