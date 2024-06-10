@@ -24,9 +24,9 @@ int rc;
 
 static void close_sigint(int dummy)
 {
+  LOGC("Exit by Ctrl-C. Bye.\n");
   deinit_all();
   restore_console();
-  LOGC("Exit by Ctrl-C. Bye.\n");
   closelog();
   exit(dummy);
 }

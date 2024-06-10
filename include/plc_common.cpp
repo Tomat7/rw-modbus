@@ -64,6 +64,7 @@ void PLC_c::init_regs() // Master only
 
 void PLC_c::mb_deinit()
 {
+//  LOCK_GUARD(network_mux);
 
   if (server_socket != -1) {
     close(server_socket);

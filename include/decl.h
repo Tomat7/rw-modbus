@@ -18,8 +18,8 @@ using std::string;
 
 extern int timeout_sec;
 extern cchar* mode;
-extern std::map<string, RegMap_c> REGmap;
-extern std::vector<PLC_c> PLCvec;
+extern map<string, RegMap_c> REGmap;
+extern vector<PLC_c> PLCvec;
 extern PLC_c Slave;
 //extern regdata_t* P;
 
@@ -36,7 +36,7 @@ int cfg_slave(const char* cfg_dir, const char* cfg_file, const char* cfg_mode = 
 
 void plc_show1();
 void plc_show2();
-void plc_deinit();
+void mb_deinit();
 
 int mb_read();
 int mb_write();

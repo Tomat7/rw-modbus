@@ -68,10 +68,9 @@ void reinit()
 
 void deinit_all()
 {
-  regs_deinit_shm();
   regs_deinit();
-  plc_deinit();
-  Slave.mb_deinit();
+  regs_deinit_shm();
+  mb_deinit();
 }
 
 void parse_char(int ch)

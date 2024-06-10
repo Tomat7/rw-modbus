@@ -19,6 +19,7 @@
 
 #include "./reg_class.h"
 
+#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 #define MB_SLAVE_CONN_MAX 5
 // #define USE_SYSLOG
 
@@ -83,22 +84,14 @@ public:
   int reg_max = 0;  // maximal address of reg
   int reg_qty = 0;  // number of regs
   mbdata_t mb;
-  std::map<int, reg_t> regs; // All regs here.
+  map<int, reg_t> regs; // All regs here.
 
 private:
   modbus_t* ctx = nullptr;
-  modbus_mapping_t* mbm = nullptr; // Slave only?
-
+  mutable std::mutex network_mux;
   bool is_slave = false;
   int rc = -1;
   int att = 0;
-
-  fd_set refset;
-  fd_set rdset;
-  uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
-  int server_socket = -1;
-  int master_socket;
-  int fdmax;
 
   int mb_ctx();
   int mb_connect();
@@ -106,10 +99,19 @@ private:
   int write_reg(reg_t &);
   int set_timeout();
 
+  // For Slave only
+  modbus_mapping_t* mbm = nullptr;
+  uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
+  fd_set refset;
+  fd_set rdset;
+
+  int server_socket = -1;
+  int master_socket;
+  int fdmax;
+
   int renew_mapping(); // for Slave only
   int renew_listen();  // for Slave only
   int check_slave();   // for Slave only
   void new_client();   // for Slave only
   void work_client();  // for Slave only
-  // void logger(int prio, const char*, ...);
 };

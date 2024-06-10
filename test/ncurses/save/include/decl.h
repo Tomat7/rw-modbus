@@ -27,7 +27,7 @@ int cfg_master(const char* cfg_dir, const char* cfg_file);
 
 void plc_show1();
 void plc_show2();
-void plc_deinit();
+void mb_deinit();
 
 int mb_read();
 int mb_write();

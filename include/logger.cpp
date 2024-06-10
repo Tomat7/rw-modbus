@@ -14,7 +14,7 @@
 
 #include "./logger.h"
 
-static std::mutex logger_mux; // already defined in .h
+static mutex logger_mux; // already defined in .h
 int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 
 void logger(const char* _logname, int _prio, const char* _func,

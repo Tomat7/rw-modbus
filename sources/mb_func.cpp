@@ -11,6 +11,7 @@
 // using namespace std;
 // using namespace libconfig;
 
+static mutex mbupdate_mux;
 static vector<int> res;
 static vector<uint64_t> prev_ts;
 
@@ -40,11 +41,23 @@ int mb_update()
   res.resize((int)nb_plcs);
   prev_ts.resize(nb_plcs);
 
+  mbupdate_mux.lock();
+  printf("mb_update locked\n");
+
   for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
+  printf("mb_update threads started\n");
 
-  for (auto &th : thr)
+  for (auto &th : thr) {
+    printf("mb_update READY to JOIN\n");
     th.join();
+  }
+
+  printf("mb_update all JOINED\n");
+
+  printf("mb_update READY for UN-lock\n");
+  mbupdate_mux.unlock();
+  printf("mb_update UN-locked\n");
 
   printf("\n");
   for (i = 0; i < nb_plcs; i++)
@@ -81,6 +94,19 @@ int mb_write()
   }
 
   return 0;
+}
+
+void mb_deinit()
+{
+  printf("mb_deinit READY to lock\n");
+  mbupdate_mux.lock();
+  printf("mb_deinit locked\n");
+  PLCvec.clear();
+  Slave.mb_deinit();
+  printf("mb_deinit READY for UN-lock\n");
+  mbupdate_mux.unlock();
+  printf("mb_deinit UN-locked\n");
+  return;
 }
 
 // eof

@@ -71,6 +71,8 @@ int PLC_c::mb_connect() // Master only
 
 int PLC_c::read_master() // Master only. Read directly from PLC.
 {
+//  LOCK_GUARD(network_mux);
+
   rc = 0;
   att = 0;
 
@@ -129,6 +131,8 @@ int PLC_c::read_allregs() // Master only. Read (raw) directly from PLC.
 
 int PLC_c::write_master() // Master only. Write all regs directly to PLC.
 {
+//  LOCK_GUARD(network_mux);
+
   for (auto &[a, R] : regs) {
     auto &rd = R.data;
     if (rd.rmode && rd.rupdate) {
