@@ -9,6 +9,7 @@
 
 #include <chrono>
 #include <mutex>
+#include <thread>
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
@@ -27,16 +28,19 @@
 PLC_c::~PLC_c()
 {
   lock_now();
+  while (!(lock_mux->try_lock()) && !is_slave)
+    std::this_thread::yield();
+
   mb_deinit();
-//  unlock_now();
-  delete lockflag;
+  //  unlock_now();
+  delete lock_mux;
   LOGN("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
 }
 
 int PLC_c::get_rc() { return rc; }
 
-//inline //__attribute__((always_inline))
-//inline void PLC_c::init_lock() { lockflag = new atomic_flag(ATOMIC_FLAG_INIT); }
+// inline //__attribute__((always_inline))
+// inline void PLC_c::init_lock() { lockflag = new atomic_flag(ATOMIC_FLAG_INIT); }
 
 void PLC_c::init_regs() // Master only
 {
@@ -67,10 +71,9 @@ void PLC_c::init_regs() // Master only
   }
 }
 
-
 void PLC_c::mb_deinit()
 {
-//  LOCK_GUARD(network_mux);
+  //  LOCK_GUARD(network_mux);
 
   if (server_socket != -1) {
     close(server_socket);
@@ -150,7 +153,6 @@ uint16_t PLC_c::get_reg(int raddr) // Set reg's local value != read PLC.
   return rval;
 }
 
-
 uint16_t PLC_c::get_reg(string rname) // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
@@ -166,7 +168,6 @@ uint16_t PLC_c::get_reg(string rname) // Set reg's local value != read PLC.
 
   return rval;
 }
-
 
 uint64_t PLC_c::millis()
 {

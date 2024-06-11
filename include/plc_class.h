@@ -23,6 +23,7 @@
 #define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 #define MB_SLAVE_CONN_MAX 5
 // #define USE_SYSLOG
+#define LOCK_INIT() lock_mux = new mutex
 
 using namespace std;
 
@@ -102,7 +103,11 @@ private:
 
   inline __attribute__((always_inline))
   void unlock_now() { lockflag->clear(std::memory_order_release); };
+// ============
 
+  mutex* lock_mux = nullptr;
+
+// ============
   bool is_slave = false;
   int rc = -1;
   int att = 0;
