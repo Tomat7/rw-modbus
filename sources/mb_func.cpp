@@ -53,8 +53,6 @@ int mb_update()
     th.join();
   }
 
-  printf("mb_update all JOINED\n");
-
   printf("mb_update READY for UN-lock\n");
   mbupdate_mux.unlock();
   printf("mb_update UN-locked\n");
@@ -99,7 +97,14 @@ int mb_write()
 void mb_deinit()
 {
   printf("mb_deinit READY to lock\n");
-  mbupdate_mux.lock();
+//  mbupdate_mux.lock();
+  int i = 0;
+  while (!mbupdate_mux.try_lock() && (i < 3)) {
+    std::this_thread::yield();
+    sleep(1);
+    i++;
+  }
+
   printf("mb_deinit locked\n");
   PLCvec.clear();
   Slave.mb_deinit();
