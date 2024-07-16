@@ -133,10 +133,10 @@ SRCFORMAT1="./*.cpp,*.h"
 SRCFORMAT2="$(SRCDIR2)/*.cpp,*.h"
 SRCFORMAT3="$(SRCDIR3)/*.cpp,*.h"
 
-SRCLIST1= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR1)/*.cpp))
-SRCLIST2= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR2)/*.cpp)) 
-SRCLIST3= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR3)/*.cpp)) 
-SOURCELIST= $(SRCLIST1) $(SRCLIST2) $(SRCLIST3)
+OBJLIST1= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR1)/*.cpp))
+OBJLIST2= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR2)/*.cpp)) 
+OBJLIST3= $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard $(SRCDIR3)/*.cpp)) 
+OBJLIST= $(OBJLIST1) $(OBJLIST2) $(OBJLIST3)
 
 DEPLIST1= $(wildcard $(OBJDIR)/$(SRCDIR1)/*.cpp.d)
 DEPLIST2= $(wildcard $(OBJDIR)/$(SRCDIR2)/*.cpp.d)
@@ -165,7 +165,7 @@ fulldebug: clean a.out
 # ================ Linking ================================
 #a.out: #$(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard *.cpp)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(wildcard include/*.cpp))
 
-a.out: $(SOURCELIST)
+a.out: $(OBJLIST)
 ifdef DO_DEBUG
 	@echo -e $(GRE)"=== Linking with $(MESSAGE): $@"$(NC)
 else
@@ -200,6 +200,17 @@ endif
 
 # ================== Cleaning =============================
 clean: format-linux
+	@echo -e $(BLU)"=== Obj list-1..."$(NC)
+	@echo $(OBJLIST1)
+	@echo -e $(BLU)"=== Obj list-2..."$(NC)
+	@echo $(OBJLIST2)
+	@echo -e $(BLU)"=== Obj list-2..."$(NC)
+	@echo $(OBJLIST3)
+	@echo -e $(BLU)"=== Obj list-FULL..."$(NC)
+	@echo $(OBJLIST)
+
+	@echo -e $(BLU)"=== Depencies list..."$(NC)
+	echo $(DEPLIST)
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 	rm -rfv $(OBJDIR)/*.o $(OBJDIR)/*.d
 	rm -rfv $(OBJDIR)/$(SRCDIR2)/*.o $(OBJDIR)/$(SRCDIR2)/*.d
