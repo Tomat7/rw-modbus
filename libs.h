@@ -2,20 +2,20 @@
 // config.h ---------------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#include <ctype.h>
 #include <modbus/modbus.h>
 #include <stdio.h>
 #include <string.h>
 #include <syslog.h>
 #include <termios.h>
 #include <unistd.h>
-#include <ctype.h>
 
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <libconfig.h++>
-#include <set>
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 

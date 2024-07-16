@@ -94,9 +94,9 @@ int cfg_init_slave(const Setting &cfgSlave)
 {
   Slave.reg_qty = cfgSlave.getLength();
   cfg_init_slave_regs(cfgSlave, &Slave);
-  Slave.init_regs(); // Absolutely necessary to copy str to char* and other
+  Slave.init_regs();  // Absolutely necessary to copy str to char* and other
   LOGW("Configured Slave with: %d regs", (int)Slave.regs.size());
-//  LOGW("Total Slave's regs: %d", total_regs);
+  //  LOGW("Total Slave's regs: %d", total_regs);
 
   return 0;
 }
@@ -113,16 +113,17 @@ void cfg_init_slave_regs(const Setting &cfgREG, PLC_c* pn)
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgREG[j].lookupValue("rname", regnow.str_name) &&
           cfgREG[j].lookupValue("raddr", regnow.raddr) &&
-          cfgREG[j].lookupValue("source", regnow.fullname) //&&
+          cfgREG[j].lookupValue("source", regnow.fullname)  //&&
           //  cfgREG[j].lookupValue("rtype", regnow.str_type)
          )) {
-      LOGE("Error reading config on Slave, REG: %d\n",
-           pn->str_dev_name.c_str(), j);
+      LOGE("Error reading config on Slave, REG: %d\n", pn->str_dev_name.c_str(),
+           j);
       exit(EXIT_FAILURE);
       continue;
     }
 
-    LOGE("-- %s %d %s", regnow.str_name.c_str(), regnow.raddr, regnow.fullname.c_str());
+    LOGE("-- %s %d %s", regnow.str_name.c_str(), regnow.raddr,
+         regnow.fullname.c_str());
 
     if (regnow.fullname == "-") {
       if (!(cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
@@ -137,17 +138,14 @@ void cfg_init_slave_regs(const Setting &cfgREG, PLC_c* pn)
       regnow.str_type = "i";
     }
 
-    regnow.data.rvalue = 555; // TODO: remove for production!
+    regnow.data.rvalue = 555;  // TODO: remove for production!
     pn->regs[regnow.raddr] = regnow;
   }
 
   return;
 }
 
-void cfg_deinit_()
-{
-  PLCvec.clear();
-}
+void cfg_deinit_() { PLCvec.clear(); }
 
 #endif
 // eof

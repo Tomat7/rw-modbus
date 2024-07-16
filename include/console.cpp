@@ -3,6 +3,7 @@
 // Stolen from here https://unixforum.org/viewtopic.php?t=113242
 //
 #include "./console.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
@@ -10,7 +11,7 @@
 
 static struct termios old_term;
 
-int read_console(time_t _sec, suseconds_t _usec) // считываем с консоли
+int read_console(time_t _sec, suseconds_t _usec)  // считываем с консоли
 {
   int rb = -1;
   int retval;
@@ -25,9 +26,9 @@ int read_console(time_t _sec, suseconds_t _usec) // считываем с кон
 
   fd_set rfds;
   FD_ZERO(&rfds);
-  FD_SET(STDIN_FILENO, &rfds); // 0 - стандартный вход
-  tv.tv_sec = _sec; // задаём время ожидания в секундах
-  tv.tv_usec = _usec; // ... в микросекундах
+  FD_SET(STDIN_FILENO, &rfds);  // 0 - стандартный вход
+  tv.tv_sec = _sec;  // задаём время ожидания в секундах
+  tv.tv_usec = _usec;  // ... в микросекундах
   retval = select(1, &rfds, NULL, NULL, &tv);
 
   if (retval && FD_ISSET(STDIN_FILENO, &rfds))

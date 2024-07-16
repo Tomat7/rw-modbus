@@ -1,9 +1,9 @@
 // cfg_func.cpp --------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
 
 #include "./config.h"
 #include "./libs.h"
@@ -127,27 +127,29 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
           cfgPLC[i].lookupValue("polling", _ms) &&
           cfgPLC[i].lookupValue("timeout", _us))) {
       LOGA("Error reading PLC configuration: %d\n", i);
-      continue; // get out of current iteration if any field wrong in CFG-file
+      continue;  // get out of current iteration if any field wrong in CFG-file
     }
 
     if (isCheckName && !PLClst.count(_devname)) {
-      continue; // get out of current iteration if PLC not in list
+      continue;  // get out of current iteration if PLC not in list
     }
 
     PLCvec.emplace_back(_devname, _ip, _title, _desc, _port, _att, _ms, _us);
     PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
     cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
-    PLCvec.back().init_regs(); // Necessary to copy str to char* and others
+    PLCvec.back().init_regs();  // Necessary to copy str to char* and others
     nb_plc_ready++;
 
-    LOGN("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name, (int)PLCvec.back().regs.size());
+    LOGN("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
+         (int)PLCvec.back().regs.size());
     // ===== End PLC filling  =====
   }
 
   LOGC("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
-    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready, nb_plc_list);
+    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready,
+         nb_plc_list);
 
   return 0;
 }
@@ -172,16 +174,13 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
       continue;
     }
 
-    regnow.data.rvalue = 555; // TODO: remove for production!
+    regnow.data.rvalue = 555;  // TODO: remove for production!
     pn->regs[regnow.raddr] = regnow;
   }
 
   return;
 }
 
-void cfg_deinit()
-{
-  PLCvec.clear();
-}
+void cfg_deinit() { PLCvec.clear(); }
 
 // eof

@@ -5,8 +5,6 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include "./plc_class.h"
-
 #include <arpa/inet.h>
 #include <errno.h>
 #include <modbus/modbus.h>
@@ -22,14 +20,15 @@
 #include <string>
 
 #include "./logger.h"
+#include "./plc_class.h"
 
 // Destructor in plc_common.cpp
 
-PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
+PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
 {
   lock_init();
   lock_mux = new mutex;
-  str_ip_addr = "0.0.0.0"; // Slave always listening on ALL addresses!
+  str_ip_addr = "0.0.0.0";  // Slave always listening on ALL addresses!
   tcp_port = _port;
   reg_max = _m;
   str_desc = _name;
@@ -41,7 +40,7 @@ PLC_c::PLC_c(int _port, int _m, string _name) // Slave only
        dev_name);
 }
 
-int PLC_c::renew_mapping() // Slave only
+int PLC_c::renew_mapping()  // Slave only
 {
   rc = 0;
   if (mbm != nullptr) {
@@ -63,7 +62,7 @@ int PLC_c::renew_mapping() // Slave only
   return rc;
 }
 
-int PLC_c::renew_listen() // Slave only
+int PLC_c::renew_listen()  // Slave only
 {
   rc = 0;
   if (server_socket != -1)
@@ -82,9 +81,9 @@ int PLC_c::renew_listen() // Slave only
   }
 
   modbus_flush(ctx);
-  FD_ZERO(&refset);               // Clear the reference set of socket
-  FD_SET(server_socket, &refset); // Add the server socket
-  fdmax = server_socket;          // Keep track of the max file descriptor
+  FD_ZERO(&refset);                // Clear the reference set of socket
+  FD_SET(server_socket, &refset);  // Add the server socket
+  fdmax = server_socket;           // Keep track of the max file descriptor
   LOGN("MB Slave listen on port %d.", tcp_port);
   return rc;
 }
@@ -128,7 +127,7 @@ int PLC_c::check_slave()
 
 int PLC_c::handle_slave(int usec)
 {
-//  LOCK_GUARD(network_mux);
+  //  LOCK_GUARD(network_mux);
 
   struct timeval tv;
   tv.tv_sec = 0;
@@ -156,9 +155,9 @@ int PLC_c::handle_slave(int usec)
     if (!FD_ISSET(master_socket, &rdset))
       continue;
 
-    if (master_socket == server_socket) // Client asking a new connection
+    if (master_socket == server_socket)  // Client asking a new connection
       new_client();
-    else // Existing connection
+    else  // Existing connection
       work_client();
   }
 
@@ -168,7 +167,7 @@ int PLC_c::handle_slave(int usec)
   return fdmax;
 }
 
-void PLC_c::new_client() // Handle new connections
+void PLC_c::new_client()  // Handle new connections
 {
   socklen_t addrlen;
   struct sockaddr_in clientaddr;
@@ -184,7 +183,7 @@ void PLC_c::new_client() // Handle new connections
   } else {
     FD_SET(newfd, &refset);
     if (newfd > fdmax)
-      fdmax = newfd; // Keep track of the maximum
+      fdmax = newfd;  // Keep track of the maximum
     LOGW("MB Slave: new connection from %s:%d on socket %d",
          inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
   }
@@ -199,9 +198,9 @@ void PLC_c::work_client()
 
   if (rc > 0)
     modbus_reply(ctx, query, rc, mbm);
-  else if (rc == -1) { // connection closing or any errors.
+  else if (rc == -1) {  // connection closing or any errors.
     close(master_socket);
-    FD_CLR(master_socket, &refset); // Remove from reference set
+    FD_CLR(master_socket, &refset);  // Remove from reference set
     if (master_socket == fdmax)
       fdmax--;
     LOGW("MB Slave: connection closed on socket %d", master_socket);

@@ -24,7 +24,7 @@
     __VA_ARGS__)) #else #define LOGERR(...) fprintf(stderr, __VA_ARGS__) #define
     LOGINFO(...) printf(__VA_ARGS__) #endif
 */
-#define MASK_MONITORING                                                        \
+#define MASK_MONITORING \
   (IN_MODIFY | IN_CREATE | IN_MOVED_FROM | IN_MOVED_TO | IN_DELETE)
 
 // using namespace std;
@@ -42,9 +42,9 @@ public:
   int check_console();
 
   const char* fname = nullptr;
-  int fds_fd = 0; // for console
-  int fd = 0;     // file description
-  int wd = 0;     // watch description
+  int fds_fd = 0;  // for console
+  int fd = 0;      // file description
+  int wd = 0;      // watch description
 
 private:
   int rc = -1;

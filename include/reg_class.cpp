@@ -5,18 +5,20 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <chrono>
+#include "./reg_class.h"
+
 #include <fcntl.h>
-#include <map>
-#include <mutex>
 #include <stdarg.h>
 #include <sys/mman.h>
 #include <syslog.h>
 #include <unistd.h>
 
+#include <chrono>
+#include <map>
+#include <mutex>
+
 #include "./logger.h"
 #include "./plc_class.h"
-#include "./reg_class.h"
 #include "./shmem.h"
 
 #ifdef SYSLOG_NAME
@@ -29,7 +31,6 @@ RegMap_c::~RegMap_c() { LOGD("DEstruct! %x %s", this, this->rn); }
 RegMap_c::RegMap_c() { LOGD("Construct! %x", this); }
 
 RegMap_c::RegMap_c(const char* _rn) { RegMap_c((string)_rn); }
-
 
 RegMap_c::RegMap_c(string _rn)
 {
@@ -70,7 +71,6 @@ RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
   //  LOGI("+ New RegMap created.");
 }
 
-
 bool RegMap_c::is_shm()
 {
   bool ret = false;
@@ -78,12 +78,12 @@ bool RegMap_c::is_shm()
   int _fd = get_shm_fd(rn);
   D(printf(" ^%2d_~%2d ", _fd, fd);)
 
-  if (_fd == -1) // No SHM found
+  if (_fd == -1)  // No SHM found
     close_shm(fd, ptr_data_shm, sizeof(regdata_t));
-  else if (fd != -1) { // SHM - Ok && FD already Ok
-    close_fd(_fd);     // All - Ok, close _fd
+  else if (fd != -1) {  // SHM - Ok && FD already Ok
+    close_fd(_fd);      // All - Ok, close _fd
     ret = true;
-  } else { // SHM - Ok, but FD not ready yet
+  } else {  // SHM - Ok, but FD not ready yet
     fd = _fd;
     ptr_data_shm = (regdata_t*)get_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm == nullptr)

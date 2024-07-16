@@ -52,10 +52,7 @@ void regs_init_shm()
   return;
 }
 
-bool reg_exist(string _rn)
-{
-  return REGmap.count(_rn);
-}
+bool reg_exist(string _rn) { return REGmap.count(_rn); }
 
 void regs_deinit_shm()
 {

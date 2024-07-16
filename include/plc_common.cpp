@@ -5,16 +5,16 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include "./plc_class.h"
-
-#include <chrono>
-#include <mutex>
-#include <thread>
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
 
+#include <chrono>
+#include <mutex>
+#include <thread>
+
 #include "./logger.h"
+#include "./plc_class.h"
 
 // ANSI color codes
 #define KNRM "\x1B[0m"
@@ -40,9 +40,10 @@ PLC_c::~PLC_c()
 int PLC_c::get_rc() { return rc; }
 
 // inline //__attribute__((always_inline))
-// inline void PLC_c::init_lock() { lockflag = new atomic_flag(ATOMIC_FLAG_INIT); }
+// inline void PLC_c::init_lock() { lockflag = new
+// atomic_flag(ATOMIC_FLAG_INIT); }
 
-void PLC_c::init_regs() // Master only
+void PLC_c::init_regs()  // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
@@ -65,7 +66,7 @@ void PLC_c::init_regs() // Master only
     if (R.raddr > reg_max)
       reg_max = R.raddr;
 
-    rd.rvalue = 777; // TODO: remove for production
+    rd.rvalue = 777;  // TODO: remove for production
     LOGI("+ REG init: %-9s %2d %2s [%s]", R.ch_name, R.raddr,
          R.str_mode.c_str(), R.fullname.c_str());
   }
@@ -110,7 +111,7 @@ int PLC_c::mb_ctx()
   return rc;
 }
 
-int PLC_c::set_reg(int raddr, uint16_t rval) // Set reg locally != write PLC.
+int PLC_c::set_reg(int raddr, uint16_t rval)  // Set reg locally != write PLC.
 {
   rc = -1;
   if (raddr <= reg_max) {
@@ -120,9 +121,9 @@ int PLC_c::set_reg(int raddr, uint16_t rval) // Set reg locally != write PLC.
         rd.rvalue = rval;
         rd.rupdate = 1;
         LOGD("%d %d", raddr, rval);
-        rc = 1; // Update is ok
+        rc = 1;  // Update is ok
       } else
-        rc = 0; // No update necessary
+        rc = 0;  // No update necessary
     }
   }
   return rc;
@@ -130,7 +131,7 @@ int PLC_c::set_reg(int raddr, uint16_t rval) // Set reg locally != write PLC.
 
 int PLC_c::set_reg(string rname, uint16_t rval)
 {
-  rc = -2; // rname not found
+  rc = -2;  // rname not found
 
   for (auto &[a, r] : regs) {
     if (r.str_name == rname) {
@@ -142,7 +143,7 @@ int PLC_c::set_reg(string rname, uint16_t rval)
   return rc;
 }
 
-uint16_t PLC_c::get_reg(int raddr) // Set reg's local value != read PLC.
+uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;
@@ -153,7 +154,7 @@ uint16_t PLC_c::get_reg(int raddr) // Set reg's local value != read PLC.
   return rval;
 }
 
-uint16_t PLC_c::get_reg(string rname) // Set reg's local value != read PLC.
+uint16_t PLC_c::get_reg(string rname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;

@@ -22,31 +22,30 @@ void regs_update()
   bool is_eol = false;
 
   for (auto &[n, rm] : REGmap) {
-
     reg_print(n, rm.ptr_data_plc);
 
-    uint16_t plc_val = rm.get_plc_val(); // Value from PLC
-    uint16_t shm_val = rm.get_local();   // Value in SHM
-    uint16_t old_val = rm.value;         // Value in memory (in REGmap)
+    uint16_t plc_val = rm.get_plc_val();  // Value from PLC
+    uint16_t shm_val = rm.get_local();    // Value in SHM
+    uint16_t old_val = rm.value;          // Value in memory (in REGmap)
 
-    if (rm.get_mode()) { // If the Reg RW - get&check value from SHM.
+    if (rm.get_mode()) {  // If the Reg RW - get&check value from SHM.
 
-      if (plc_val != old_val) // If new value got from PLC
-        printf(">");          // Print sign ">"
+      if (plc_val != old_val)  // If new value got from PLC
+        printf(">");           // Print sign ">"
       else
         printf(" ");
 
-      if (shm_val != old_val) { // If new value got from SHM (SCADA?)
+      if (shm_val != old_val) {  // If new value got from SHM (SCADA?)
         rm.set_plc_val(shm_val);
         printf("<%5d", shm_val);
       } else
         printf("      ");
     } else
-      printf("       "); // Reg is not RW
+      printf("       ");  // Reg is not RW
 
-    D(printf("~%2d ", rm.fd);) // Show filedescriptor
+    D(printf("~%2d ", rm.fd);)  // Show filedescriptor
 
-    rm.value = plc_val; // Save PLC value to REGmap
+    rm.value = plc_val;  // Save PLC value to REGmap
     rm.sync(plc_val);
 
     if (is_eol)
@@ -69,13 +68,12 @@ void regs_update_shm()
   bool is_eol = false;
 
   for (auto &[n, rm] : REGmap) {
-
     reg_print_shm(&rm);
 
-    uint16_t shm_val = rm.get_local(); // Value in SHM
-    uint16_t old_val = rm.value;       // Value in memory (in REGmap)
+    uint16_t shm_val = rm.get_local();  // Value in SHM
+    uint16_t old_val = rm.value;        // Value in memory (in REGmap)
 
-    if (rm.get_mode()) { // If the Reg RW - get&check value from SHM.
+    if (rm.get_mode()) {  // If the Reg RW - get&check value from SHM.
 
       if (shm_val != old_val)
         printf("<%5d", old_val);
@@ -83,9 +81,9 @@ void regs_update_shm()
         printf("      ");
 
     } else
-      printf("      "); // Reg is not RW
+      printf("      ");  // Reg is not RW
 
-    D(printf(" ~%2d", rm.fd);) // Show filedescriptor
+    D(printf(" ~%2d", rm.fd);)  // Show filedescriptor
     rm.sync(shm_val);
 
     if (is_eol)
@@ -139,6 +137,5 @@ void reg_print_shm(RegMap_c* rm)
 
   return;
 }
-
 
 // eof

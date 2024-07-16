@@ -8,10 +8,11 @@
 
 // #include <chrono>
 // #include <iostream>
-#include <mutex>
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
+
+#include <mutex>
 
 #include "../config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 
@@ -46,8 +47,8 @@
 
 #define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 
-#define __FILENAME__                                                           \
-  (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1     \
+#define __FILENAME__                                                       \
+  (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 \
                                     : __FILE__)
 #define LOG_LEVEL_DEFAULT 7
 
@@ -86,7 +87,7 @@
 
 using namespace std;
 
-extern int log_level; // 0 - no messages at all, 9 - all on screen
+extern int log_level;  // 0 - no messages at all, 9 - all on screen
 // static mutex logger_mux;
 
 // void logger(int prio, const char* format, ...);

@@ -21,7 +21,7 @@ extern cchar* mode;
 extern map<string, RegMap_c> REGmap;
 extern vector<PLC_c> PLCvec;
 extern PLC_c Slave;
-//extern regdata_t* P;
+// extern regdata_t* P;
 
 #define MODBUS_MODES "master", "slave", "scada"
 
@@ -31,8 +31,10 @@ void deinit_all();
 void reinit();
 void parse_char(int ch);
 
-int cfg_master(const char* cfg_dir, const char* cfg_file, const char* cfg_mode = "master");
-int cfg_slave(const char* cfg_dir, const char* cfg_file, const char* cfg_mode = "slave");
+int cfg_master(const char* cfg_dir, const char* cfg_file,
+               const char* cfg_mode = "master");
+int cfg_slave(const char* cfg_dir, const char* cfg_file,
+              const char* cfg_mode = "slave");
 
 void plc_show1();
 void plc_show2();

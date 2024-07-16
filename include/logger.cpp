@@ -6,21 +6,22 @@
 //
 
 // #include <chrono>
-#include <mutex>
+#include "./logger.h"
+
 #include <stdarg.h>
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
 
-#include "./logger.h"
+#include <mutex>
 
-static mutex logger_mux; // already defined in .h
+static mutex logger_mux;            // already defined in .h
 int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)
 {
-//  logger_mux.lock();
+  //  logger_mux.lock();
   LOCK_GUARD(logger_mux);
 
   FILE* fout = stdout;
@@ -83,12 +84,12 @@ void logger(const char* _logname, int _prio, const char* _func,
     fprintf(fout, "%s", C_NRM);
 
   closelog();
-//  logger_mux.unlock();
+  //  logger_mux.unlock();
 }
 
 void logdebug(const char* logname, int prio, const char* format, ...)
 {
-//  logger_mux.lock();
+  //  logger_mux.lock();
   LOCK_GUARD(logger_mux);
   FILE* fout = stdout;
 
@@ -113,7 +114,7 @@ void logdebug(const char* logname, int prio, const char* format, ...)
 
   fprintf(fout, "%s\n", C_NRM);
   closelog();
-//  logger_mux.unlock();
+  //  logger_mux.unlock();
 }
 
 char* get_new_char(const char* _oldch)

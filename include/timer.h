@@ -6,9 +6,9 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include <iostream>
+#include <chrono>  // для функций из std::chrono
 #include <iomanip>
-#include <chrono> // для функций из std::chrono
+#include <iostream>
 #include <thread>
 
 #define CAST_SECONDS duration_cast<second_t>
@@ -68,13 +68,14 @@ public:
 
   // ============================
 
-  void spent_sec(int p = 6, cchar* txt1 = "Time spent: ", cchar* txt2 = " second.")
+  void spent_sec(int p = 6,
+                 cchar* txt1 = "Time spent: ", cchar* txt2 = " second.")
   {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec()) << txt2 << '\n';
   }
 
-  void spent_ms(int p = 6, cchar* txt1 = "Time spent: ",
-                cchar* txt2 = " msec.")
+  void spent_ms(int p = 6,
+                cchar* txt1 = "Time spent: ", cchar* txt2 = " msec.")
   {
     cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) << txt2
          << '\n';
@@ -105,7 +106,7 @@ public:
 
   void sleep_sec(int s)
   {
-    this_thread::sleep_for(seconds(s)); // std::chrono::
+    this_thread::sleep_for(seconds(s));  // std::chrono::
   }
 
   void sleep_ms(int ms)
