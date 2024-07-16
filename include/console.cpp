@@ -11,7 +11,7 @@
 
 static struct termios old_term;
 
-int read_console(time_t _sec, suseconds_t _usec)  // считываем с консоли
+int read_console(time_t _sec, suseconds_t _usec)   // считываем с консоли
 {
   int rb = -1;
   int retval;

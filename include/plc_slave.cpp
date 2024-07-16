@@ -24,7 +24,7 @@
 
 // Destructor in plc_common.cpp
 
-PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
+PLC_c::PLC_c(int _port, int _m, string _name)   // Slave only
 {
   lock_init();
   lock_mux = new mutex;
@@ -40,7 +40,7 @@ PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
        dev_name);
 }
 
-int PLC_c::renew_mapping()  // Slave only
+int PLC_c::renew_mapping()   // Slave only
 {
   rc = 0;
   if (mbm != nullptr) {
@@ -62,7 +62,7 @@ int PLC_c::renew_mapping()  // Slave only
   return rc;
 }
 
-int PLC_c::renew_listen()  // Slave only
+int PLC_c::renew_listen()   // Slave only
 {
   rc = 0;
   if (server_socket != -1)
@@ -167,7 +167,7 @@ int PLC_c::handle_slave(int usec)
   return fdmax;
 }
 
-void PLC_c::new_client()  // Handle new connections
+void PLC_c::new_client()   // Handle new connections
 {
   socklen_t addrlen;
   struct sockaddr_in clientaddr;
