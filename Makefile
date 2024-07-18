@@ -1,15 +1,25 @@
 # https://microsin.net/programming/arm/learning-makefile-with-simple-examples.html
 # https://runebook.dev/ru/docs/gnu_make/foreach-function
 # https://habr.com/ru/articles/534304/
-
-$(info === The GOALS is: $(MAKECMDGOALS))
+#
+# To view defaults (implicit variables): make -p
+# or https://runebook.dev/ru/docs/gnu_make/-index-
+# Default:
+# COMPILE.cpp = $(COMPILE.cc)
+# COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+# LINK.o = $(CC) $(LDFLAGS) $(TARGET_ARCH)
 
 .DEFAULT_GOAL := all
-CPP_VER= -std=c++17
-CC=g++
+$(info === The GOALS is: $(MAKECMDGOALS))
 
-# === Directories & files ===
+# CXX = g++
+# for using with LINK.o
+CC=$(CXX)
+CXX_VER= -std=c++17
+
+# === Directories & files & libraries===
 SRCDIRS=. include sources
+LIBS=libmodbus libconfig++
 OBJDIR =./tmp/obj
 OUTFILE=a.out
 
@@ -25,20 +35,92 @@ OBJFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.o))
 ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
 CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 
-# === Add libs here ===
-LIBS= -lrt -lpthread
-LIBCONFIG=$(shell pkg-config libconfig++ --libs)
-LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
-#LIBNCURSES=$(shell pkg-config ncurses --libs)
+OUTF=$(shell ls -Fog $(OUTFILE))
 
-LIBS+= $(LIBCONFIG) $(LIBMODBUS) 
-# $(LIBNCURSES)
+# === Add libs here ===
+LDLIBS= -lrt -lpthread
+LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
+
+#LIBCONFIG=$(shell pkg-config --libs libconfig++)
+#LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
+#LIBNCURSES=$(shell pkg-config ncurses --libs)
+#LDLIBS+= $(LIBCONFIG) $(LIBMODBUS) $(LIBNCURSES)
 
 #LIBS= -lconfig -lmodbus
 #INCLUDES = -I/usr/include/modbus
 #SOURCES=plc32.cpp plc_read.cpp
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=hello
+
+# === C/CPP flags configuretion ===
+CXXFLAGS= -Wall $(CXX_VER)
+LDFLAGS = -Wall $(CXX_VER)
+DEPFLAGS= -MD -MF $(OBJDIR)
+OPTFLAGS= -flto=auto -O2
+
+ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
+
+# === Stolen here https://codeforces.com/blog/entry/15547
+WARN1_FLAGS= -Wextra -Wfatal-errors -pedantic -Wformat=2 -fconcepts
+WARN2_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond
+WARN3_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wlogical-op
+GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 
+SANIT_FLAGS= -fstack-protector -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
+DEBUG_FLAGS= -g -DDEBUG_FLAG
+
+CXXFLAGS+= $(WARN1_FLAGS)
+CXXFLAGS+= $(WARN2_FLAGS)
+CXXFLAGS+= $(WARN3_FLAGS)
+#CXXFLAGS+= $(GLIBC_FLAGS)
+#CXXFLAGS+= $(SANIT_FLAGS)
+#CXXFLAGS+= -fanalyzer
+
+# === Check for DEBUG build ===
+
+ifeq ("master","$(filter master,$(MAKECMDGOALS))")
+CPPFLAGS+= -DMB_MASTER
+MESSAGE=" MASTER"
+OUTFILE=mb_master
+$(info === MASTER mode activated! ===)
+endif
+
+ifeq ("slave","$(filter slave,$(MAKECMDGOALS))")
+CPPFLAGS+= -DMB_SLAVE
+MESSAGE=" SLAVE"
+OUTFILE=mb_slave
+$(info === SLAVE mode activated! ===)
+endif
+
+ifeq ("check","$(filter check,$(MAKECMDGOALS))")
+OPTFLAGS=
+CPPFLAGS+= $(GLIBC_FLAGS)
+CXXFLAGS+= $(SANIT_FLAGS)
+#LDFLAGS+= $(GLIBC_FLAGS)
+LDFLAGS+= $(SANIT_FLAGS)
+MESSAGE=" with CHECK"
+$(info === FULL CHECK options activated! ===)
+endif
+
+ifeq ("debug","$(filter debug,$(MAKECMDGOALS))")
+OPTFLAGS=
+CPPFLAGS+= $(DEBUG_FLAGS)
+#LDFLAGS+= $(DEBUG_FLAGS)
+DO_DEBUG=YES
+MESSAGE=" with DEBUG"
+$(info === DEDUG options activated! ===)
+endif
+
+ifeq ("fulldebug","$(filter fulldebug,$(MAKECMDGOALS))")
+OPTFLAGS=
+CXXFLAGS+= $(GLIBC_FLAGS)
+CXXFLAGS+= $(SANIT_FLAGS)
+CPPFLAGS+= $(DEBUG_FLAGS)
+LDFLAGS+= $(SANIT_FLAGS)
+LDFLAGS+= $(DEBUG_FLAGS)
+DO_DEBUG=YES
+MESSAGE=" FULL DEBUG!"
+$(info === FULL Debug options activated! ===)
+endif
 
 # === Colors (just for fun) ===
 RED='\033[0;91m'
@@ -50,99 +132,27 @@ BLU='\033[0;94m'
 WHI='\033[0;97m'
 NC='\033[0m' # No Color
 
-# === C/CPP flags configuretion ===
-LDFLAGS= -Wall $(CPP_VER)
-CFLAGS= -c -Wall $(CPP_VER)
-DEPFLAGS= -MD -MF
-OPTFLAGS= -flto=auto -O2
-
-ASFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
-
-# === Sloten here https://codeforces.com/blog/entry/15547
-WARN1_FLAGS= -Wextra -Wfatal-errors -pedantic -Wformat=2 -fconcepts
-WARN2_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond
-WARN3_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wlogical-op
-GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fstack-protector
-SANIT_FLAGS= -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
-DEBUG_FLAGS= -g -DDEBUG_FLAG
-
-CFLAGS+= $(WARN1_FLAGS)
-CFLAGS+= $(WARN2_FLAGS)
-CFLAGS+= $(WARN3_FLAGS)
-#CFLAGS+= $(GLIBC_FLAGS)
-#CFLAGS+= $(SANIT_FLAGS)
-#CFLAGS+= -fanalyzer
-
-# === Check for DEBUG build ===
-
-ifeq ("master","$(filter master,$(MAKECMDGOALS))")
-OPTFLAGS=
-CFLAGS+= -DMB_MASTER
-MESSAGE=" MASTER"
-OUTFILE=mb_master
-$(info === MASTER mode activated! ===)
-endif
-
-ifeq ("slave","$(filter slave,$(MAKECMDGOALS))")
-OPTFLAGS=
-CFLAGS+= -DMB_SLAVE
-MESSAGE=" SLAVE"
-OUTFILE=mb_slave
-$(info === SLAVE mode activated! ===)
-endif
-
-ifeq ("check","$(filter check,$(MAKECMDGOALS))")
-OPTFLAGS=
-CFLAGS+= $(GLIBC_FLAGS)
-CFLAGS+= $(SANIT_FLAGS)
-LDFLAGS+= $(GLIBC_FLAGS)
-LDFLAGS+= $(SANIT_FLAGS)
-MESSAGE=" with CHECK"
-$(info === FULL CHECK options activated! ===)
-endif
-
-ifeq ("debug","$(filter debug,$(MAKECMDGOALS))")
-OPTFLAGS=
-CFLAGS+= $(DEBUG_FLAGS)
-LDFLAGS+= $(DEBUG_FLAGS)
-DO_DEBUG=YES
-MESSAGE=" with DEBUG"
-$(info === DEDUG options activated! ===)
-endif
-
-ifeq ("fulldebug","$(filter fulldebug,$(MAKECMDGOALS))")
-OPTFLAGS=
-CFLAGS+= $(GLIBC_FLAGS)
-CFLAGS+= $(SANIT_FLAGS)
-CFLAGS+= $(DEBUG_FLAGS)
-LDFLAGS+= $(SANIT_FLAGS)
-LDFLAGS+= $(DEBUG_FLAGS)
-DO_DEBUG=YES
-MESSAGE=" FULL DEBUG!"
-$(info === FULL Debug options activated! ===)
-endif
-
 # =====================================================================
 
 include $(DEPFILES)
 
-all: master
-master: a.out
-slave: a.out
+all: $(OUTFILE)
+master: $(OUTFILE)
+slave: $(OUTFILE)
 
-run: clean a.out
-check: clean a.out
-debug: clean a.out
-fulldebug: clean a.out
+run: clean $(OUTFILE)
+check: clean $(OUTFILE)
+debug: clean $(OUTFILE)
+fulldebug: clean $(OUTFILE)
 
 # ================ Linking ================================
-a.out: $(OBJLIST)
+#a.out: $(OBJLIST)
+$(OUTFILE): $(OBJLIST)
 	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
-	$(CC) $(LDFLAGS) $(OPTFLAGS) $^ -o ./tmp/$@ $(LIBS)
-	@echo -e $(GRE)"=== Finished$(MESSAGE)==="$(NC)
-	cp --force ./tmp/$@ $(OUTFILE)
+#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $(CXXFLAGS) $^ -o $(OUTFILE) $(LIBS)
+	$(LINK.o) $(OPTFLAGS) $^ $(LDLIBS) -o $@
+	@echo -e $(GRE)"=== Finished$(MESSAGE) ==="$(NC)
 	@ls -Fog --color $(OUTFILE)
-	@echo -e $(GRE)"=== Done$(MESSAGE)===" $(NC)
 ifdef DO_DEBUG
 	@echo -e $(GRE)"=== The size of executable file are REALLY BIG. ==="$(NC)
 endif
@@ -151,7 +161,8 @@ endif
 #================== Compiling ==============================
 $(OBJDIR)/%.o: %.cpp
 	@echo -e $(YEL)"=== Compiling$(MESSAGE): $<"$(NC)
-	$(CC) $(CFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(OBJDIR)/$<.d -o $@ $<
+#	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
+	$(COMPILE.cpp) $(OPTFLAGS) $(DEPFLAGS)/$<.d -o $@ $<
 
 # ================== Cleaning =============================
 clean: format-linux
@@ -170,20 +181,18 @@ google:
 # ================ ALL FILE recursively! ==================
 # Reindent *.cpp to Linux code-style
 format-linux:
-	astyle $(ASFLAGS) -n -s2 --style=linux $(ASTYLEFILES)
-#astyle $(ASFLAGS) -n -s2 --style=linux $(SRCFORMAT1), $(SRCFORMAT2), $(SRCFORMAT3)
-#"./*.cpp,*.h", "include/*.cpp,*.h"
+	astyle $(ASTYLEFLAGS) -n -s2 --style=linux $(ASTYLEFILES)
 
 format-kr:
-	astyle $(ASFLAGS) -n --style=kr $(ASTYLEFILES)
+	astyle $(ASTYLEFLAGS) -n --style=kr $(ASTYLEFILES)
 
 format-allman:
-	astyle $(ASFLAGS) -n --style=allman $(ASTYLEFILES)
+	astyle $(ASTYLEFLAGS) -n --style=allman $(ASTYLEFILES)
 
 format-google2:
-	astyle $(ASFLAGS) -n -s2 --style=google $(ASTYLEFILES)
+	astyle $(ASTYLEFLAGS) -n -s2 --style=google $(ASTYLEFILES)
 
-# Reindent *.cpp to LLVM code-style
+# Reindent *.cpp to LLVM code-style by clang-format
 format-clang:
 	clang-format -i -style=LLVM --verbose $(CLANGFILES)
 
