@@ -1,6 +1,8 @@
 # https://microsin.net/programming/arm/learning-makefile-with-simple-examples.html
 # https://runebook.dev/ru/docs/gnu_make/foreach-function
 # https://habr.com/ru/articles/534304/
+# https://wiki.gentoo.org/wiki/GCC_optimization
+# https://microsin.net/programming/arm/install-linux-in-microsoft-windows10-via-wsl.html
 #
 # To view defaults (implicit variables): make -p
 # or https://runebook.dev/ru/docs/gnu_make/-index-
@@ -76,6 +78,7 @@ CXXFLAGS+= $(WARN3_FLAGS)
 #CXXFLAGS+= -fanalyzer
 
 # === Check for DEBUG build ===
+MESSAGE_DEBUG="==="
 
 ifeq ("master","$(filter master,$(MAKECMDGOALS))")
 CPPFLAGS+= -DMB_MASTER
@@ -107,6 +110,7 @@ CPPFLAGS+= $(DEBUG_FLAGS)
 #LDFLAGS+= $(DEBUG_FLAGS)
 DO_DEBUG=YES
 MESSAGE=" with DEBUG"
+MESSAGE_DEBUG="=== The size of executable file are REALLY BIG. ==="
 $(info === DEDUG options activated! ===)
 endif
 
@@ -119,6 +123,7 @@ LDFLAGS+= $(SANIT_FLAGS)
 LDFLAGS+= $(DEBUG_FLAGS)
 DO_DEBUG=YES
 MESSAGE=" FULL DEBUG!"
+MESSAGE_DEBUG="=== The size of executable file are EXTREMELY BIG. ==="
 $(info === FULL Debug options activated! ===)
 endif
 
@@ -149,13 +154,11 @@ fulldebug: clean $(OUTFILE)
 #a.out: $(OBJLIST)
 $(OUTFILE): $(OBJLIST)
 	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
-#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $(CXXFLAGS) $^ -o $(OUTFILE) $(LIBS)
+#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(OUTFILE) $(LDLIBS)
 	$(LINK.o) $(OPTFLAGS) $^ $(LDLIBS) -o $@
 	@echo -e $(GRE)"=== Finished$(MESSAGE) ==="$(NC)
 	@ls -Fog --color $(OUTFILE)
-ifdef DO_DEBUG
-	@echo -e $(GRE)"=== The size of executable file are REALLY BIG. ==="$(NC)
-endif
+	@echo -e $(GRE)$(MESSAGE_DEBUG)$(NC)
 	sleep 2
 
 #================== Compiling ==============================
