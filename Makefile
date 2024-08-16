@@ -128,7 +128,7 @@ $(info === FULL Debug options activated! ===)
 endif
 
 # === Colors (just for fun) ===
-RED='\033[0;91m'
+RED='\033[0;91m' \033[32m<text> 
 GRE="\033[0;32m"
 GRB="\033[0;92m"
 YEL="\033[0;93m"

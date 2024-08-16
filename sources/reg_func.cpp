@@ -126,6 +126,7 @@ void reg_print_shm(RegMap_c* rm)
     rtype = rd->rtype;
     rvalue = rd->rvalue;
   }
+
   const char* C = KNRM;
   if (rerrors > 0)
     C = KRED;

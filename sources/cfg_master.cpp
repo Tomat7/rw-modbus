@@ -38,6 +38,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
 
   try {
     cfg.readFile(cfile.c_str());
+    printf("=======================\n");
     LOGW("I/O reading file OK: %s", cfile.c_str());
   } catch (const FileIOException &fioex) {
     LOGA("I/O error while reading file: %s\n", cfile.c_str());

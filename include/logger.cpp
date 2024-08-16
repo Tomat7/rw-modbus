@@ -24,7 +24,8 @@ void logger(const char* _logname, int _prio, const char* _func,
   //  logger_mux.lock();
   LOCK_GUARD(logger_mux);
 
-  FILE* fout = stdout;
+  // https://www.gnu.org/software/libc/manual/html_node/Creating-a-Pipe.html
+
   const char* format = _fmt;
   const char* fname = _logname;
   const char* color = C_NRM;
@@ -35,17 +36,26 @@ void logger(const char* _logname, int _prio, const char* _func,
   bool no_print = (_prio > log_level);
   string fmt = (string)_func + "(): " + (string)_fmt;
 
+  int pipefd[2];
+  pipe(pipefd);                     // make a pipe
+
+  // FILE* fout = stdout;
+  FILE* fout = fdopen(pipefd[1], "w");    // pipe to stream
+  openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
+
+#define ef(a) else if (a)
+  {
+    /* code */
+  }
+
   if (!no_print) {
-    if (_prio == LOG_ALERT) {
-      fout = stderr;
+    if (_prio == LOG_ALERT)
       color = C_REDB;
-    } else if (_prio == LOG_CRIT) {
-      fout = stderr;
-      color = C_YELB;
-    } else if (_prio == LOG_ERR) {
-      fout = stderr;
+    ef (_prio == LOG_CRIT)
+    color = C_YELB;
+    else if (_prio == LOG_ERR)
       color = C_REDB;
-    } else if (_prio == LOG_WARNING)
+    else if (_prio == LOG_WARNING)
       color = C_GRN;
     else if (_prio == LOG_NOTICE)
       color = C_BLUB;
@@ -63,8 +73,6 @@ void logger(const char* _logname, int _prio, const char* _func,
 
     fprintf(fout, "%s%s%s ", C_BLU, fname, color);
   }
-
-  openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
 
   va_list arg1;
   va_list arg2;
@@ -84,6 +92,19 @@ void logger(const char* _logname, int _prio, const char* _func,
     fprintf(fout, "%s", C_NRM);
 
   closelog();
+  fclose(fout);
+  close(pipefd[1]);
+
+  fout = fdopen (pipefd[0], "r");
+  char buffer[MESSAGE_MAX_LEN] = {0};
+  char* bufc = fgets(buffer, MESSAGE_MAX_LEN+1, fout);
+
+  if (bufc != nullptr)
+    printf("%s", bufc);
+  else
+    printf("bufc overload");
+  fclose (fout);
+
   //  logger_mux.unlock();
 }
 

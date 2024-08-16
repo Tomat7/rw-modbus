@@ -16,6 +16,8 @@
 
 #include "../config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 
+#define MESSAGE_MAX_LEN 100
+
 // ANSI color codes
 #ifndef C_NRM
 #define C_NRM "\x1B[0m"

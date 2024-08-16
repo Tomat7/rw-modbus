@@ -24,7 +24,7 @@
 using namespace std;
 
 struct regdata_t {
-  atomic<uint16_t> rvalue = 0;
+  uint16_t rvalue = 0;
   int rupdate = 0;  // 1 - need to write/update remote register
   int rstatus = 0;  // -1 mean ERROR, any positive - is OK
   int rerrors = 0;  // number of errors on MB func (init/connect/read)
