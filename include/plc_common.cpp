@@ -17,11 +17,14 @@
 #include "./plc_class.h"
 
 // ANSI color codes
-#define KNRM "\x1B[0m"
-#define KRED "\x1B[91m"
-#define KGRN "\x1B[32m"
-#define KYEL "\x1B[33m"
-#define KBLU "\x1B[94m"
+
+/*
+  #define KNRM "\x1B[0m"
+  #define KRED "\x1B[91m"
+  #define KGRN "\x1B[32m"
+  #define KYEL "\x1B[33m"
+  #define KBLU "\x1B[94m"
+*/
 
 // mutex PLC_c::logger_mux;
 

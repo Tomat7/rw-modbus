@@ -14,44 +14,10 @@
 
 #include <mutex>
 
+#include "./macros.h"
 #include "../config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 
 #define MESSAGE_MAX_LEN 100
-
-// ANSI color codes
-#ifndef C_NRM
-#define C_NRM "\x1B[0m"
-#endif
-#ifndef C_RED
-#define C_RED "\x1B[31m"
-#endif
-#ifndef C_REDB
-#define C_REDB "\x1B[91m"
-#endif
-#ifndef C_GRN
-#define C_GRN "\x1B[32m"
-#endif
-#ifndef C_GRNB
-#define C_GRNB "\x1B[92m"
-#endif
-#ifndef C_YEL
-#define C_YEL "\x1B[33m"
-#endif
-#ifndef C_YELB
-#define C_YELB "\x1B[93m"
-#endif
-#ifndef C_BLU
-#define C_BLU "\x1B[34m"
-#endif
-#ifndef C_BLUB
-#define C_BLUB "\x1B[94m"
-#endif
-
-#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
-
-#define __FILENAME__                                                       \
-  (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 \
-                                    : __FILE__)
 #define LOG_LEVEL_DEFAULT 7
 
 #ifdef SYSLOG_NAME
@@ -59,10 +25,12 @@
 #endif
 #define SYSLOG_NAME __FILENAME__
 
-#define STRINGIFY_IMPL(x) #x
-#define STRINGIFY(x) STRINGIFY_IMPL(x)
+/*
+  #define STRINGIFY_IMPL(x) #x
+  #define STRINGIFY(x) STRINGIFY_IMPL(x)
+*/
 
-#define FILE_LINE __FILE__ ":" STRINGIFY(__LINE__)
+#define FILE_LINE __FILE__ ":" STR(__LINE__)
 #define _FL_ FILE_LINE
 
 #define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)

@@ -49,9 +49,9 @@ void regs_update()
     rm.sync(plc_val);
 
     if (is_eol)
-      printf(" + %s\n", KNRM);
+      printf(" + %s\n", NRM);
     else
-      printf(" +     %s", KNRM);
+      printf(" +     %s", NRM);
 
     is_eol = !is_eol;
   }
@@ -87,9 +87,9 @@ void regs_update_shm()
     rm.sync(shm_val);
 
     if (is_eol)
-      printf(" + %s\n", KNRM);
+      printf(" + %s\n", NRM);
     else
-      printf(" +     %s", KNRM);
+      printf(" +     %s", NRM);
 
     is_eol = !is_eol;
   }
@@ -102,9 +102,9 @@ void regs_update_shm()
 
 void reg_print(string rn, const regdata_t* rd)
 {
-  const char* C = KNRM;
+  const char* C = NRM;
   if (rd->rerrors > 0)
-    C = KRED;
+    C = C_RED;
 
   if (rd->rtype)
     printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)rd->rvalue * 0.01);
@@ -127,9 +127,9 @@ void reg_print_shm(RegMap_c* rm)
     rvalue = rd->rvalue;
   }
 
-  const char* C = KNRM;
+  const char* C = NRM;
   if (rerrors > 0)
-    C = KRED;
+    C = C_RED;
 
   if (rtype)
     printf("%s%-14s %7.2f", C, rm->rn, (int16_t)rvalue * 0.01);

@@ -93,9 +93,9 @@ void parse_char(int ch)
     log_level = loglvl;
     wait_console(timeout_sec);
   } else if ((char)ch == ' ')
-    printf("%s %s %s \n", KGRN, "=============================", KNRM);
+    printf("%s %s %s \n", C_GRN, "=============================", C_NRM);
   else {
-    printf("Wow! What to do with: %s '%c'? %s \n", KBLU, (char)ch, KNRM);
+    printf("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NRM);
     wait_console(timeout_sec * 2);
   }
 }

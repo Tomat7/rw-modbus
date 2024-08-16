@@ -43,16 +43,12 @@ void logger(const char* _logname, int _prio, const char* _func,
   FILE* fout = fdopen(pipefd[1], "w");    // pipe to stream
   openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
 
-#define ef(a) else if (a)
-  {
-    /* code */
-  }
 
   if (!no_print) {
     if (_prio == LOG_ALERT)
       color = C_REDB;
-    ef (_prio == LOG_CRIT)
-    color = C_YELB;
+    else if (_prio == LOG_CRIT)
+      color = C_YELB;
     else if (_prio == LOG_ERR)
       color = C_REDB;
     else if (_prio == LOG_WARNING)
@@ -96,8 +92,8 @@ void logger(const char* _logname, int _prio, const char* _func,
   close(pipefd[1]);
 
   fout = fdopen (pipefd[0], "r");
-  char buffer[MESSAGE_MAX_LEN] = {0};
-  char* bufc = fgets(buffer, MESSAGE_MAX_LEN+1, fout);
+  char buffer[MESSAGE_MAX_LEN+1] = {0};
+  char* bufc = fgets(buffer, MESSAGE_MAX_LEN, fout);
 
   if (bufc != nullptr)
     printf("%s", bufc);

@@ -18,12 +18,13 @@
 #include <string>
 #include <vector>
 
+#include "./macros.h"
 #include "./reg_class.h"
 
-#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
+//#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 #define MB_SLAVE_CONN_MAX 5
 // #define USE_SYSLOG
-#define LOCK_INIT() lock_mux = new mutex
+//#define LOCK_INIT(m) m = new mutex
 
 using namespace std;
 
