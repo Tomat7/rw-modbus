@@ -1,6 +1,7 @@
-// #include <chrono>
+
+#include "shmem.h"
+
 #include <fcntl.h>
-// #include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
@@ -10,8 +11,7 @@
 #include <mutex>
 #include <thread>
 
-#include "./logger.h"
-#include "./shmem.h"
+#include "include/logger.h"
 
 #define SHM_ERR_OPEN -1
 #define SHM_ERR_TRUNC -2

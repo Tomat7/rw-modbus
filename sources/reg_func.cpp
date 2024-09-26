@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "./config.h"
-#include "./libs.h"
+#include "config.h"
+#include "libs.h"
 
 #define MB_READ
 

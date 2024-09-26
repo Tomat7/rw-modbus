@@ -5,7 +5,7 @@
 // https://stackoverflow.com/questions/4664975/monitoring-file-using-inotify
 //
 
-#include "./in_class.h"
+#include "include/inotify/in_class.h"
 
 #include <errno.h>
 #include <poll.h>

@@ -14,8 +14,8 @@
 
 #include <mutex>
 
-#include "./macros.h"
-#include "../config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
+#include "include/macros.h"
+#include "config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 
 #define MESSAGE_MAX_LEN 100
 #define LOG_LEVEL_DEFAULT 7

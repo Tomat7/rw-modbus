@@ -15,8 +15,8 @@
 
 #include <string>
 
-#include "./logger.h"
-#include "./plc_class.h"
+#include "include/logger.h"
+#include "plc_class.h"
 
 PLC_c::PLC_c(string _ip, string _name)   // Master only
 {

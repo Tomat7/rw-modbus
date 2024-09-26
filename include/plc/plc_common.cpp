@@ -13,8 +13,8 @@
 #include <mutex>
 #include <thread>
 
-#include "./logger.h"
-#include "./plc_class.h"
+#include "include/logger.h"
+#include "plc_class.h"
 
 // ANSI color codes
 

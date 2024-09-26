@@ -20,10 +20,12 @@ CC=$(CXX)
 CXX_VER= -std=c++17
 
 # === Directories & files & libraries===
-SRCDIRS=. include sources
-LIBS=libmodbus libconfig++
-OBJDIR =./tmp/obj
 OUTFILE=a.out
+OBJDIR =./tmp/obj
+SUBDIRS= include sources
+
+ALLDIRS= $(foreach dir,$(SUBDIRS),$(shell find -L $(dir) -maxdepth 1 -type d))
+SRCDIRS=. $(ALLDIRS)
 
 $(shell mkdir $(OBJDIR) 2>/dev/null)
 $(foreach dir,$(SRCDIRS),$(shell mkdir $(OBJDIR)/$(dir) 2>/dev/null))
@@ -40,6 +42,8 @@ CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 OUTF=$(shell ls -Fog $(OUTFILE))
 
 # === Add libs here ===
+INCLUDES = -I.
+LIBS=libmodbus libconfig++
 LDLIBS= -lrt -lpthread
 LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
@@ -47,9 +51,8 @@ LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 #LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
 #LIBNCURSES=$(shell pkg-config ncurses --libs)
 #LDLIBS+= $(LIBCONFIG) $(LIBMODBUS) $(LIBNCURSES)
-
 #LIBS= -lconfig -lmodbus
-#INCLUDES = -I/usr/include/modbus
+#INCLUDES = -I.
 #SOURCES=plc32.cpp plc_read.cpp
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=hello
@@ -165,13 +168,14 @@ $(OUTFILE): $(OBJLIST)
 $(OBJDIR)/%.o: %.cpp
 	@echo -e $(YEL)"=== Compiling$(MESSAGE): $<"$(NC)
 #	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
-	$(COMPILE.cpp) $(OPTFLAGS) $(DEPFLAGS)/$<.d -o $@ $<
+	$(COMPILE.cpp) $(INCLUDES) $(OPTFLAGS) $(DEPFLAGS)/$<.d -o $@ $<
 
 # ================== Cleaning =============================
 clean: format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 	@rm -rfv $(OBJFILES) $(DEPFILES)
 	rm -rfv a.out
+	@echo $(SRCDIR1)
 
 # ================== Formatting ===========================
 # Simple format current directory only

@@ -18,8 +18,8 @@
 #include <string>
 #include <vector>
 
-#include "./macros.h"
-#include "./reg_class.h"
+#include "include/macros.h"
+#include "include/reg/reg_class.h"
 
 //#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 #define MB_SLAVE_CONN_MAX 5

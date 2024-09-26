@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "./config.h"
-#include "./libs.h"
+#include "config.h"
+#include "libs.h"
 // #include "./plc_class.h"
 
 using namespace std;

@@ -19,8 +19,8 @@
 
 #include <string>
 
-#include "./logger.h"
-#include "./plc_class.h"
+#include "include/logger.h"
+#include "plc_class.h"
 
 // Destructor in plc_common.cpp
 

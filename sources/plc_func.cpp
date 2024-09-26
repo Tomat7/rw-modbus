@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "./config.h"
-#include "./libs.h"
+#include "config.h"
+#include "libs.h"
 
 // using namespace std;
 // using namespace libconfig;

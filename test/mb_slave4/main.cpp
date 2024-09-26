@@ -16,10 +16,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "./config.h"
-#include "./libs.h"
+#include "config.h"
+#include "libs.h"
 
-#include "include/plc_class.h"
+#include "include/plc/plc_class.h"
 
 //int mb_slave_init();
 //int mb_slave_check(int usec = 1000000);

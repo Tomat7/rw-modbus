@@ -21,9 +21,9 @@
 
 #include "include/console.h"
 #include "include/decl.h"
-#include "include/in_class.h"
+#include "include/inotify/in_class.h"
 #include "include/logger.h"
 #include "include/macros.h"
-#include "include/plc_class.h"
-#include "include/shmem.h"
+#include "include/plc/plc_class.h"
+#include "include/shmem/shmem.h"
 #include "include/timer.h"
