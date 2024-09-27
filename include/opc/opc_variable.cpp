@@ -7,33 +7,6 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
-OpcServer_c::OpcServer_c() {}
-
-OpcServer_c::~OpcServer_c() { UA_Server_delete(uaServer); }
-
-
-void OpcServer_c::init(UA_UInt16 portNumber)
-{
-  uaServer = UA_Server_new();
-
-  UA_ServerConfig* uaServerConfig = UA_Server_getConfig(uaServer);
-  UA_ServerConfig_setDefault(uaServerConfig);
-  UA_ServerConfig_setBasics_withPort(uaServerConfig, portNumber);
-}
-
-void OpcServer_c::run()
-{
-  uaRunning = true;
-  // UA_StatusCode retval =
-  UA_Server_run(uaServer, &uaRunning);
-  UA_Server_delete(uaServer);
-}
-
-void OpcServer_c::stop()
-{
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Stopping by external signal.");
-  uaRunning = false;
-}
 
 void OpcServer_c::addVariable(void* var)
 {
