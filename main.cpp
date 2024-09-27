@@ -15,6 +15,7 @@
 std::map<string, RegMap_c> REGmap;
 std::vector<PLC_c> PLCvec;
 PLC_c Slave(1502);
+OpcServer_c OPCs;
 
 // INotify IN(CFG_DIR);
 
@@ -58,6 +59,9 @@ int main(int argc, char** argv)
   }
 
   init_all();
+
+  std::thread opc_thr(opc_init);
+  opc_thr.detach();
 
   for (;;) {
     printf("%s", CLS);

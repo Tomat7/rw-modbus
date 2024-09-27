@@ -69,4 +69,17 @@ void regs_deinit()
   return;
 }
 
+void opc_deinit()
+{
+  OPCs.stop();
+  return;
+}
+
+void opc_init()
+{
+  OPCs.init(48401);
+  OPCs.run();
+  return;
+}
+
 // eof

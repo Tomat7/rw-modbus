@@ -23,6 +23,7 @@ void init_all()
     exit(EXIT_FAILURE);
   wait_console(timeout_sec);
   // ==================================
+
   t.start();
   ret = cfg_slave(CFG_DIR, CFG_FILE, "slave");
   t.spent_auto("============ Cfg Slave finished in: ");
@@ -69,6 +70,7 @@ void reinit()
 void deinit_all()
 {
   regs_deinit();
+  opc_deinit();
   regs_deinit_shm();
   mb_deinit();
 }

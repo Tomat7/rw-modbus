@@ -66,17 +66,6 @@ int cfg_slave(const char* cfg_dir, const char* cfg_file, const char* cfg_mode)
   } else
     LOGC("LOG_LEVEL is: %d.", log_level);
 
-  /*
-    // Get list of PLC for configuration
-    Setting* PLClist;
-    try {
-      PLClist = &cfg.lookup("plc_list_" + string(cfg_mode));
-    } catch (const SettingNotFoundException &nfex) {
-      LOGA("No 'plc_list_%s' configured!", cfg_mode);
-    //    return (EXIT_FAILURE);
-    }
-  */
-
   // Output a list of all PLCs in the inventory.
   try {
     cfg_init_slave(cfg.lookup("slave"));

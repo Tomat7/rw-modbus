@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "include/plc/plc_class.h"
+#include "include/opc/opc_class.h"
 
 using cchar = const char;
 
@@ -21,6 +22,7 @@ extern cchar* mode;
 extern map<string, RegMap_c> REGmap;
 extern vector<PLC_c> PLCvec;
 extern PLC_c Slave;
+extern OpcServer_c OPCs;
 // extern regdata_t* P;
 
 #define MODBUS_MODES "master", "slave", "scada"
@@ -54,6 +56,9 @@ void regs_deinit_shm();
 void regs_deinit();
 bool reg_exist(string);
 // void reg_print(string, const reg_t*);
+
+void opc_init();
+void opc_deinit();
 
 int write_shm(string, uint16_t);
 int write_rm(string rn, uint16_t val);

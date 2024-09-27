@@ -43,7 +43,7 @@ OUTF=$(shell ls -Fog $(OUTFILE))
 
 # === Add libs here ===
 INCLUDES = -I.
-LIBS=libmodbus libconfig++
+LIBS=libmodbus libconfig++ open62541
 LDLIBS= -lrt -lpthread
 LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
