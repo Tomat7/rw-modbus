@@ -54,6 +54,9 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "syncstream": "cpp"
+        "syncstream": "cpp",
+        "cstring": "cpp",
+        "charconv": "cpp",
+        "codecvt": "cpp"
     }
 }

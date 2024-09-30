@@ -57,6 +57,7 @@ void regs_deinit();
 bool reg_exist(string);
 // void reg_print(string, const reg_t*);
 
+void opc_regs_init();
 void opc_init();
 void opc_deinit();
 

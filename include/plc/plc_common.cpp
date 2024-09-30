@@ -58,10 +58,18 @@ void PLC_c::init_regs()   // Master only
 
     if (!is_slave)
       R.fullname = str_dev_name + "." + R.str_name;
-    R.ch_name = R.str_name.c_str();
 
+    R.ch_name = R.str_name.c_str();
     rd.rmode = (R.str_mode == "rw") ? 1 : 0;
-    rd.rtype = (R.str_type == "f") ? 1 : 0;
+
+    if (R.str_type == "u")
+      rd.rtype = 0;
+    else if (R.str_type == "f")
+      rd.rtype = 1;
+    else if (R.str_type == "i")
+      rd.rtype = 2;
+    else
+      LOGA("Error REG init: %s\n", R.str_name.c_str());
 
     if (R.raddr < reg_min)
       reg_min = R.raddr;

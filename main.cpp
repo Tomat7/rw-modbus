@@ -60,6 +60,7 @@ int main(int argc, char** argv)
 
   init_all();
 
+  opc_regs_init();
   std::thread opc_thr(opc_init);
   opc_thr.detach();
 
