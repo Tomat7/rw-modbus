@@ -22,34 +22,20 @@ UA_NodeId OpcServer_c::addFolder(char* fname)
                           oAttr, NULL, NULL);
 
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                    "Created folder:%s ", fname);)
+                    "Created folder: %s ", fname);)
 
   return folderId;
 }
 
-void OpcServer_c::fillNodeId(var_t &v, char* folder)
-{
-  if (folder != nullptr) {
-    uaNodeId.var = UA_NODEID_NULL;
-    uaNodeId.parent = addFolder(folder);
-    uaNodeId.reference = UA_NS0ID(HASCOMPONENT);
-  } else {
-    uaNodeId.var = UA_NODEID_STRING(1, v.name);
-    uaNodeId.parent = UA_NS0ID(OBJECTSFOLDER);
-    uaNodeId.reference = UA_NS0ID(ORGANIZES);
-  }
-}
 
-
-void OpcServer_c::addVariable(var_t &v, char* folder)
+void OpcServer_c::addVariable(var_t &v)
 {
   if (v.ptr_value == nullptr) {
     LOGA("Wrong ptr: %s", v.name);
     return;
   }
 
-  fillNodeId(v, folder);
-  getPtrToVariable(v, true);
+  getPtrToVariable(v);
 
   UA_Byte acl = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
 
@@ -63,13 +49,13 @@ void OpcServer_c::addVariable(var_t &v, char* folder)
 
   // Add the variable node to the information model
   //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
-  UA_QualifiedName varName = UA_QUALIFIEDNAME(1, v.name);
+  UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.name);
 
   //UA_NodeId parentNodeId = UA_NS0ID(OBJECTSFOLDER);
   //UA_NodeId parentReferenceNodeId = UA_NS0ID(ORGANIZES);
 
-  UA_Server_addVariableNode(uaServer, uaNodeId.var, uaNodeId.parent,
-                            uaNodeId.reference, varName,
+  UA_Server_addVariableNode(uaServer, v.node_id.var, v.node_id.parent,
+                            v.node_id.reference, varQName,
                             UA_NS0ID(BASEDATAVARIABLETYPE), attr, NULL, NULL);
 
 }
@@ -110,7 +96,7 @@ void OpcServer_c::setVariable(var_t &v)
 }
 
 
-void OpcServer_c::getVariable(var_t &v, bool isDebug)
+void OpcServer_c::getVariable(var_t &v)
 {
 
   if (v.ptr_value == nullptr) {
@@ -151,7 +137,7 @@ void OpcServer_c::getVariable(var_t &v, bool isDebug)
   }
 
 
-void* OpcServer_c::getPtrToVariable(var_t &v, bool isDebug)
+void* OpcServer_c::getPtrToVariable(var_t &v)
 {
 
   if (v.type == UA_TYPES_INT16) {

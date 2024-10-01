@@ -28,6 +28,9 @@ struct nodeid_t {
 struct var_t {
   char* name;
   string fullname;
+  char* folder;
+  string foldername;
+  nodeid_t node_id;
   void* ptr_value;    // ptr to "correct" value_u
   int rmode;          // 1 - mean RW
   int type;
@@ -54,31 +57,36 @@ public:
   void init(UA_UInt16 _port = 0);
   void run();
   void stop();
-  void addVar(string s, int16_t i16, int mode, char* f = nullptr);
-  void addVar(string s, int32_t i32, int mode, char* f = nullptr);
-  void addVar(string s, int64_t i64, int mode, char* f = nullptr);
-  void addVar(string s, uint16_t ui16, int mode, char* f = nullptr);
-  void addVar(string s, uint32_t ui32, int mode, char* f = nullptr);
-  void addVar(string s, uint64_t ui64, int mode, char* f = nullptr);
-  void addVar(string s, float fl, int mode, char* f = nullptr);
+  void addVar(string s, int16_t i16, int mode, string f = nullptr);
+  void addVar(string s, int32_t i32, int mode, string f = nullptr);
+  void addVar(string s, int64_t i64, int mode, string f = nullptr);
+  void addVar(string s, uint16_t ui16, int mode, string f = nullptr);
+  void addVar(string s, uint32_t ui32, int mode, string f = nullptr);
+  void addVar(string s, uint64_t ui64, int mode, string f = nullptr);
+  void addVar(string s, float fl, int mode, string f = nullptr);
 
-
-  void addVariable(var_t &var, char* folder = nullptr);
+  void setVar(string s, int16_t i16);
 
   void setVariable(var_t &var);
-  void getVariable(var_t &var, bool isDebug = false);
-  map<string, var_t> vars;  // All regs here.
+  void getVariable(var_t &var);
+
 
 private:
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
   mutex* uaRunning_mux = nullptr;
   volatile UA_Boolean uaRunning = true;
-  void* getPtrToVariable(var_t &var, bool isDebug = false);
-  void initVar(string s, int t, int m);
+
+  void* getPtrToVariable(var_t &var);
+  void addVar_Names(string s, int t, int m, string f);
+
   UA_NodeId addFolder(char* fname);
-  void fillNodeId(var_t &v, char* folder = nullptr);
-  nodeid_t uaNodeId;
+  void addVar_NodeId(var_t &v);
+  void addVariable(var_t &var);
+
+  map<string, var_t> vars;  // All regs here.
+  // nodeid_t uaNodeId;
+
 
 };
 

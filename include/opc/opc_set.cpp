@@ -12,22 +12,10 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
-void OpcServer_c::initVar(string s, int t, int m)
+void OpcServer_c::setVar(string s, int16_t i16)
 {
-  var_t v;
-  v.type = t;
-  v.rmode = m;
-  v.fullname = s;
-  v.name = const_cast<char*>(s.c_str());
-  vars[s] = v;
-}
-
-void OpcServer_c::addVar(string s, int16_t i16, int rmode, char* folder)
-{
-  initVar(s, UA_TYPES_INT16, rmode);
   vars[s].value.i16 = i16;
-  vars[s].ptr_value = &vars[s].value.i16;
-  addVariable(vars[s], folder);
+  setVariable(vars[s]);
 }
 
 /*
@@ -36,23 +24,25 @@ void OpcServer_c::addVar(string s, int16_t i16, int rmode, char* folder)
   initVar(s, UA_TYPES_INT32, i32, rmode);
   }
 */
-
-void OpcServer_c::addVar(string s, int64_t i64, int rmode, char* folder)
-{
+/*
+  void OpcServer_c::setVar(string s, int64_t i64, int rmode, char* folder)
+  {
   initVar(s, UA_TYPES_INT64, rmode);
   vars[s].value.i64 = i64;
   vars[s].ptr_value = &vars[s].value.i64;
   addVariable(vars[s], folder);
-}
+  }
+*/
 
-
-void OpcServer_c::addVar(string s, uint16_t ui16, int rmode, char* folder)
-{
+/*
+  void OpcServer_c::setVar(string s, uint16_t ui16, int rmode, char* folder)
+  {
   initVar(s, UA_TYPES_UINT16, rmode);
   vars[s].value.ui16 = ui16;
   vars[s].ptr_value = &vars[s].value.ui16;
   addVariable(vars[s], folder);
-}
+  }
+*/
 
 /*
   void OpcServer_c::addVar(string s, uint32_t ui32, int _rmode)
@@ -72,10 +62,12 @@ void OpcServer_c::addVar(string s, uint16_t ui16, int rmode, char* folder)
   }
 */
 
-void OpcServer_c::addVar(string s, float fl, int rmode, char* folder)
-{
+/*
+  void OpcServer_c::addVar(string s, float fl, int rmode, char* folder)
+  {
   initVar(s, UA_TYPES_FLOAT, rmode);
   vars[s].value.fl = fl;
   vars[s].ptr_value = &vars[s].value.fl;
   addVariable(vars[s], folder);
-}
+  }
+*/

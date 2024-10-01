@@ -20,7 +20,7 @@ void opc_regs_init()
 {
   printf("\n===== OPC_regs_update =====\n");
 
-  char* folder = const_cast<char*>("PLC");
+  string folder = "PLC";
 
   for (auto &[n, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
