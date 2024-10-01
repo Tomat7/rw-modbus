@@ -15,7 +15,7 @@
 std::map<string, RegMap_c> REGmap;
 std::vector<PLC_c> PLCvec;
 PLC_c Slave(1502);
-OpcServer_c OPCs;
+OpcServer_c OPCs(4840);
 
 // INotify IN(CFG_DIR);
 

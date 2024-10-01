@@ -9,13 +9,41 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
+UA_NodeId OpcServer_c::addFolder(char* fname)
+{
+  UA_NodeId folderId = UA_NODEID_STRING(1, fname); /* get the nodeid assigned by the server */
+  UA_ObjectAttributes oAttr = UA_ObjectAttributes_default;
+  oAttr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", fname);
+  UA_Server_addObjectNode(uaServer, folderId, UA_NS0ID(OBJECTSFOLDER),
+                          UA_NS0ID(ORGANIZES), UA_QUALIFIEDNAME(1, fname),
+                          UA_NS0ID(BASEOBJECTTYPE),
+                          oAttr, NULL, NULL);
 
-void OpcServer_c::addVariable(var_t &v)
+  return folderId;
+}
+
+void OpcServer_c::fillNodeId(var_t &v, char* folder)
+{
+  if (folder != nullptr) {
+    uaNodeId.var = UA_NODEID_NULL;
+    uaNodeId.parent = addFolder(folder);
+    uaNodeId.reference = UA_NS0ID(HASCOMPONENT);
+  } else {
+    uaNodeId.var = UA_NODEID_STRING(1, v.name);
+    uaNodeId.parent = UA_NS0ID(OBJECTSFOLDER);
+    uaNodeId.reference = UA_NS0ID(ORGANIZES);
+  }
+}
+
+
+void OpcServer_c::addVariable(var_t &v, char* folder)
 {
   if (v.ptr_value == nullptr) {
     LOGA("Wrong ptr: %s", v.name);
     return;
   }
+
+  fillNodeId(v, folder);
   getPtrToVariable(v, true);
 
   UA_Byte acl = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
@@ -29,14 +57,14 @@ void OpcServer_c::addVariable(var_t &v)
   attr.accessLevel = acl;
 
   // Add the variable node to the information model
-  UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
+  //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
   UA_QualifiedName varName = UA_QUALIFIEDNAME(1, v.name);
 
-  UA_NodeId parentNodeId = UA_NS0ID(OBJECTSFOLDER);
-  UA_NodeId parentReferenceNodeId = UA_NS0ID(ORGANIZES);
+  //UA_NodeId parentNodeId = UA_NS0ID(OBJECTSFOLDER);
+  //UA_NodeId parentReferenceNodeId = UA_NS0ID(ORGANIZES);
 
-  UA_Server_addVariableNode(uaServer, varNodeId, parentNodeId,
-                            parentReferenceNodeId, varName,
+  UA_Server_addVariableNode(uaServer, uaNodeId.var, uaNodeId.parent,
+                            uaNodeId.reference, varName,
                             UA_NS0ID(BASEDATAVARIABLETYPE), attr, NULL, NULL);
 
 }

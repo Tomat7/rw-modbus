@@ -19,6 +19,12 @@ void addCurrentTimeExternalDataSource(UA_Server* server);
 
 using namespace std;
 
+struct nodeid_t {
+  UA_NodeId var;
+  UA_NodeId parent;
+  UA_NodeId reference;
+};
+
 struct var_t {
   char* name;
   string fullname;
@@ -42,30 +48,38 @@ struct var_t {
 class OpcServer_c
 {
 public:
-  OpcServer_c();
+  OpcServer_c(UA_UInt16 _port = 4840);
   ~OpcServer_c();
 
-  void init(UA_UInt16 portNumber = 4840);
+  void init(UA_UInt16 _port = 0);
   void run();
-  void addVar(string s, int16_t i16, int _rmode);
-  void addVar(string s, int32_t i32, int _rmode);
-  void addVar(string s, int64_t i64, int _rmode);
-  void addVar(string s, uint16_t ui16, int _rmode);
-  void addVar(string s, uint32_t ui32, int _rmode);
-  void addVar(string s, uint64_t ui64, int _rmode);
-  void addVar(string s, float fl, int _rmode);
-
   void stop();
-  void addVariable(var_t &var);
+  void addVar(string s, int16_t i16, int mode, char* f = nullptr);
+  void addVar(string s, int32_t i32, int mode, char* f = nullptr);
+  void addVar(string s, int64_t i64, int mode, char* f = nullptr);
+  void addVar(string s, uint16_t ui16, int mode, char* f = nullptr);
+  void addVar(string s, uint32_t ui32, int mode, char* f = nullptr);
+  void addVar(string s, uint64_t ui64, int mode, char* f = nullptr);
+  void addVar(string s, float fl, int mode, char* f = nullptr);
+
+
+  void addVariable(var_t &var, char* folder = nullptr);
+
   void setVariable(var_t &var);
   void getVariable(var_t &var, bool isDebug = false);
   map<string, var_t> vars;  // All regs here.
 
 private:
+  UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
   mutex* uaRunning_mux = nullptr;
   volatile UA_Boolean uaRunning = true;
   void* getPtrToVariable(var_t &var, bool isDebug = false);
   void initVar(string s, int t, int m);
+  UA_NodeId addFolder(char* fname);
+  void fillNodeId(var_t &v, char* folder = nullptr);
+  nodeid_t uaNodeId;
 
 };
+
+
