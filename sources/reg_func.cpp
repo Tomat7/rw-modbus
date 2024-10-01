@@ -106,7 +106,7 @@ void reg_print(string rn, const regdata_t* rd)
   if (rd->rerrors > 0)
     C = C_RED;
 
-  if (rd->rtype)
+  if (rd->rtype == 1)
     printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)rd->rvalue * 0.01);
   else
     printf("%s%-14s %7d", C, rn.c_str(), rd->rvalue);
