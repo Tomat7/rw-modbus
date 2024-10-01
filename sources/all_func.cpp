@@ -47,6 +47,11 @@ void init_all()
   wait_console(timeout_sec);
   //  t.sleep_ms(TMOUT);
 
+  t.start();
+  opc_regs_init();
+  t.spent_auto("============ OPC init finished in: ");
+  wait_console(timeout_sec);
+
   timeout_sec = TIMEOUT_SEC;
 
   return;

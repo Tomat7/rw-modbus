@@ -57,15 +57,15 @@ public:
 
   void stop();
   void addVariable(var_t &var);
-  void setVariable(void* var);
-  void getVariable(void* var, bool isDebug = false);
+  void setVariable(var_t &var);
+  void getVariable(var_t &var, bool isDebug = false);
   map<string, var_t> vars;  // All regs here.
 
 private:
   UA_Server* uaServer = nullptr;
-//  mutex* uaRunning_mux = nullptr;
+  mutex* uaRunning_mux = nullptr;
   volatile UA_Boolean uaRunning = true;
-  void* getPtrToVariable(var_t &var, char* &vName, int &vType, bool isDebug = false);
+  void* getPtrToVariable(var_t &var, bool isDebug = false);
   void initVar(string s, int t, int m);
 
 };

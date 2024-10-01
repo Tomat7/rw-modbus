@@ -1,86 +1,59 @@
 
+#include "opc_class.h"
+
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
-#include "opc_class.h"
+#include "include/logger.h"
 
 #define DEBUG(a) if (isDebug) {a}
 
 
 void OpcServer_c::addVariable(var_t &v)
 {
-  char* vName = v.name;
-  int vType = v.type;
-  void* val = v.ptr_value;
+  if (v.ptr_value == nullptr) {
+    LOGA("Wrong ptr: %s", v.name);
+    return;
+  }
+  getPtrToVariable(v, true);
+
   UA_Byte acl = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
 
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-              "%x (val1), %s %i", val, vName, *(static_cast<int16_t*>(val)));
-
-  /* void* val = */
-  //val = getPtrToVariable(v, vName, vType, true);
-  if (val == nullptr)
-    return;
-
   UA_VariableAttributes attr = UA_VariableAttributes_default;
+  UA_Variant_setScalar(&attr.value, v.ptr_value, &UA_TYPES[v.type]);
 
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-              "%x (val2), %s %i", val, vName, *(static_cast<int16_t*>(val)));
-
-  UA_Variant_setScalar(&attr.value, val, &UA_TYPES[vType]);
-
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-              "%x (val3), %s %i", val, v.name, *(static_cast<int16_t*>(val)));
-
-  attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", vName);
-  attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", vName);
-  attr.dataType = UA_TYPES[vType].typeId;
+  attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", v.name);
+  attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", v.name);
+  attr.dataType = UA_TYPES[v.type].typeId;
   attr.accessLevel = acl;
 
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-              "%x (val4)", val);
-
   // Add the variable node to the information model
-  UA_NodeId varNodeId = UA_NODEID_STRING(1, vName);
-  UA_QualifiedName varName = UA_QUALIFIEDNAME(1, vName);
-
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-              "%x (val5)", val);
+  UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
+  UA_QualifiedName varName = UA_QUALIFIEDNAME(1, v.name);
 
   UA_NodeId parentNodeId = UA_NS0ID(OBJECTSFOLDER);
   UA_NodeId parentReferenceNodeId = UA_NS0ID(ORGANIZES);
-
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-              "%x (val6)", val);
 
   UA_Server_addVariableNode(uaServer, varNodeId, parentNodeId,
                             parentReferenceNodeId, varName,
                             UA_NS0ID(BASEDATAVARIABLETYPE), attr, NULL, NULL);
 
-  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-              "%x (val7)", val);
-
-  // allocations on the heap need to be freed
-  //UA_VariableAttributes_clear(&attr);
-  //UA_NodeId_clear(&varNodeId);
-  //UA_QualifiedName_clear(&varName);
 }
 
-void OpcServer_c::setVariable(void* var)
+void OpcServer_c::setVariable(var_t &v)
 {
-  char* vName = nullptr;
-  int vType = 0;
+  if (v.ptr_value == nullptr) {
+    LOGA("Wrong ptr: %s", v.name);
+    return;
+  }
 
-  void* val = nullptr;
-  //(var, vName, vType);
-
-  UA_NodeId varNodeId = UA_NODEID_STRING(1, vName);
+  UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
 
   UA_Variant myVariant;
   UA_Variant_init(&myVariant);
 
-  UA_Variant_setScalar(&myVariant, val, &UA_TYPES[vType]);
+  UA_Variant_setScalar(&myVariant, v.ptr_value, &UA_TYPES[v.type]);
   UA_Server_writeValue(uaServer, varNodeId, myVariant);
 
   /* Set the status code of the value to an error code. The function
@@ -104,85 +77,75 @@ void OpcServer_c::setVariable(void* var)
 }
 
 
-void OpcServer_c::getVariable(void* var, bool isDebug)
+void OpcServer_c::getVariable(var_t &v, bool isDebug)
 {
-  var_t* v = (var_t*)var;
-  char* vName = nullptr;
-  int vType = 0;
 
-  void* val = nullptr;
-  //(var, vName, vType);
-  if (val == nullptr)
+  if (v.ptr_value == nullptr) {
+    LOGA("Wrong ptr: %s", v.name);
     return;
+  }
 
-  UA_NodeId varNodeId = UA_NODEID_STRING(1, vName);
+  UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
   UA_Variant myVariant;
   UA_Variant_init(&myVariant);
   UA_Server_readValue(uaServer, varNodeId, &myVariant);
 
-  if (vType == UA_TYPES_INT16) {
-    v->value.i16 = *(static_cast<UA_Int16*>(myVariant.data));
+  if (v.type == UA_TYPES_INT16) {
+    v.value.i16 = *(static_cast<UA_Int16*>(myVariant.data));
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (ui16) = %i", vName, *(static_cast<int16_t*>(val)));)
-  } else if (vType == UA_TYPES_UINT16) {
-    v->value.ui16 = *(static_cast<UA_UInt16*>(myVariant.data));
+                      "%s (ui16) = %i", v.name, *(static_cast<int16_t*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_UINT16) {
+    v.value.ui16 = *(static_cast<UA_UInt16*>(myVariant.data));
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (ui16) = %i", vName, *(static_cast<uint16_t*>(val)));)
-  } else if (vType == UA_TYPES_INT32) {
-    v->value.i32 = *(static_cast<int32_t*>(myVariant.data));
+                      "%s (ui16) = %i", v.name, *(static_cast<uint16_t*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_INT32) {
+    v.value.i32 = *(static_cast<int32_t*>(myVariant.data));
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (i32) = %i", vName, *(static_cast<int32_t*>(val)));)
-  } else if (vType == UA_TYPES_FLOAT) {
-    v->value.fl = *(static_cast<UA_Float*>(myVariant.data));
+                      "%s (i32) = %i", v.name, *(static_cast<int32_t*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_FLOAT) {
+    v.value.fl = *(static_cast<UA_Float*>(myVariant.data));
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (float) = %.3f", vName, *(static_cast<float*>(val)));)
-  } else if (vType == UA_TYPES_DATETIME) {
-    v->value.dt = *(static_cast<UA_DateTime*>(myVariant.data));
+                      "%s (float) = %.3f", v.name, *(static_cast<float*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_DATETIME) {
+    v.value.dt = *(static_cast<UA_DateTime*>(myVariant.data));
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (DateTime) = %i", vName, *(static_cast<int64_t*>(val)));)
+                      "%s (DateTime) = %i", v.name, *(static_cast<int64_t*>(v.ptr_value)));)
   } else
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (WRONG TYPE)", vName);)
+                      "%s (WRONG TYPE)", v.name);)
 
 
   }
 
 
-void* OpcServer_c::getPtrToVariable(var_t &var, char* &vName, int &vType, bool isDebug)
+void* OpcServer_c::getPtrToVariable(var_t &v, bool isDebug)
 {
-  void* val = nullptr;
-  var_t* v = &var;
 
-  vName = v->name;
-  vType = v->type;
-
-  if (vType == UA_TYPES_INT16) {
-    val = (UA_Int16*)&(v->value.i16);
+  if (v.type == UA_TYPES_INT16) {
+    v.ptr_value = (UA_Int16*)&(v.value.i16);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (i16) = %i", vName, *(static_cast<int16_t*>(val)));)
-  } else if (vType == UA_TYPES_UINT16) {
-    val = (UA_UInt16*)&(v->value.ui16);
+                      "%s (i16) = %i", v.name, *(static_cast<int16_t*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_UINT16) {
+    v.ptr_value = (UA_UInt16*)&(v.value.ui16);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (ui16) = %i", vName, *(static_cast<uint16_t*>(val)));)
-  } else if (vType == UA_TYPES_INT32) {
-    val = (UA_Int32*)&(v->value.i32);
+                      "%s (ui16) = %i", v.name, *(static_cast<uint16_t*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_INT32) {
+    v.ptr_value = (UA_Int32*)&(v.value.i32);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (i32) = %i", vName, *(static_cast<int32_t*>(val)));)
-  } else if (vType == UA_TYPES_FLOAT) {
-    val = (UA_Float*)&(v->value.fl);
+                      "%s (i32) = %i", v.name, *(static_cast<int32_t*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_FLOAT) {
+    v.ptr_value = (UA_Float*)&(v.value.fl);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (float) = %.3f", vName, *(static_cast<float*>(val)));)
-  } else if (vType == UA_TYPES_DATETIME) {
-    val = (UA_DateTime*)&(v->value.dt);
+                      "%s (float) = %.3f", v.name, *(static_cast<float*>(v.ptr_value)));)
+  } else if (v.type == UA_TYPES_DATETIME) {
+    v.ptr_value = (UA_DateTime*)&(v.value.dt);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (DateTime) = %i", vName, *(static_cast<int64_t*>(val)));)
+                      "%s (DateTime) = %i", v.name, *(static_cast<int64_t*>(v.ptr_value)));)
   } else {
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (WRONG TYPE)", vName);)
+                      "%s (WRONG TYPE)", v.name);)
   }
 
-  return val;
+  return v.ptr_value;
 }
-
-
 
