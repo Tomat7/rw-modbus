@@ -171,7 +171,7 @@ void opc_deinit()
 
 void opc_init()
 {
-  OPCs.init(48401);
+  OPCs.init(54001);
   OPCs.run();
   return;
 }
