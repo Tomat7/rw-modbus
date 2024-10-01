@@ -9,6 +9,8 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
+bool isDebug = true;
+
 UA_NodeId OpcServer_c::addFolder(char* fname)
 {
   UA_NodeId folderId = UA_NODEID_STRING(1, fname); /* get the nodeid assigned by the server */
@@ -18,6 +20,9 @@ UA_NodeId OpcServer_c::addFolder(char* fname)
                           UA_NS0ID(ORGANIZES), UA_QUALIFIEDNAME(1, fname),
                           UA_NS0ID(BASEOBJECTTYPE),
                           oAttr, NULL, NULL);
+
+  DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                    "Created folder:%s ", fname);)
 
   return folderId;
 }

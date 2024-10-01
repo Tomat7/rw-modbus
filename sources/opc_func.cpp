@@ -20,6 +20,8 @@ void opc_regs_init()
 {
   printf("\n===== OPC_regs_update =====\n");
 
+  char* folder = const_cast<char*>("PLC");
+
   for (auto &[n, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c
@@ -27,13 +29,13 @@ void opc_regs_init()
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
-      OPCs.addVar(n, fl, rm.ptr_data_plc->rmode);
+      OPCs.addVar(n, fl, rm.ptr_data_plc->rmode, folder);
     } else if (rm.ptr_reg->str_type == "i") {
       int16_t i16 = (int16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, i16, rm.ptr_data_plc->rmode);
+      OPCs.addVar(n, i16, rm.ptr_data_plc->rmode, folder);
     } else if (rm.ptr_reg->str_type == "u") {
       uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
+      OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode, folder);
     }
   }
 }
@@ -171,7 +173,7 @@ void opc_deinit()
 
 void opc_init()
 {
-  OPCs.init(54001);
+  OPCs.init(4840);
   OPCs.run();
   return;
 }
