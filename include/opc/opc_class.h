@@ -27,9 +27,10 @@ struct nodeid_t {
 
 struct var_t {
   char* name;
-  string fullname;
+  string str_name;
   char* folder;
-  string foldername;
+  string str_folder;
+  string fullname;
   nodeid_t node_id;
   void* ptr_value;    // ptr to "correct" value_u
   int rmode;          // 1 - mean RW
@@ -57,13 +58,13 @@ public:
   void init(UA_UInt16 _port = 0);
   void run();
   void stop();
-  void addVar(string s, int16_t i16, int mode, string f = "");
-  void addVar(string s, int32_t i32, int mode, string f = "");
-  void addVar(string s, int64_t i64, int mode, string f = "");
-  void addVar(string s, uint16_t ui16, int mode, string f = "");
-  void addVar(string s, uint32_t ui32, int mode, string f = "");
-  void addVar(string s, uint64_t ui64, int mode, string f = "");
-  void addVar(string s, float fl, int mode, string f = "");
+  int addVar(string s, int16_t i16, int mode);
+  int addVar(string s, int32_t i32, int mode);
+  int addVar(string s, int64_t i64, int mode);
+  int addVar(string s, uint16_t ui16, int mode);
+  int addVar(string s, uint32_t ui32, int mode);
+  int addVar(string s, uint64_t ui64, int mode);
+  int addVar(string s, float fl, int mode);
 
   void setVar(string s, int16_t i16);
 
@@ -76,9 +77,11 @@ private:
   UA_Server* uaServer = nullptr;
   mutex* uaRunning_mux = nullptr;
   volatile UA_Boolean uaRunning = true;
+  int rc = 0;
 
   void* getPtrToVariable(var_t &var);
-  void addVar_Names(string s, int t, int m, string f);
+  string getFolderName(string &n);
+  int addVar_Names(string s, int t, int m);
 
   UA_NodeId addFolder(char* fname);
   void addVar_NodeId(var_t &v);
