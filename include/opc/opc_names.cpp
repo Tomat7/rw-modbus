@@ -65,6 +65,7 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
   vars[v.fullname] = v;
   var_t &v_ = vars[v.fullname];
   v_.name = const_cast<char*>(v_.str_name.c_str());
+  v_.qf_name = const_cast<char*>(v_.fullname.c_str());
   v_.folder = nullptr;
 
   // LOGD("Added folder: %s, reg: %s", str_folder.c_str(), str_name.c_str());
@@ -75,7 +76,8 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
   }
 
   //LOGD("Ready name: %s, folder: %s", vars[v.fullname].name, vars[v.fullname].folder);
-  LOGD("Fullname: %s, name: %s, folder: %s", vars[v.fullname].fullname.c_str(), vars[v.fullname].name, vars[v.fullname].folder);
+  LOGD("Fullname: %s, name: %s, folder: %s", vars[v.fullname].fullname.c_str(),
+       vars[v.fullname].name, vars[v.fullname].folder);
 
   return 1;
 }

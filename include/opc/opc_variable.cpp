@@ -49,7 +49,7 @@ void OpcServer_c::addVariable(var_t &v)
 
   // Add the variable node to the information model
   //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
-  UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.name);
+  UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.qf_name);
 
   //UA_NodeId parentNodeId = UA_NS0ID(OBJECTSFOLDER);
   //UA_NodeId parentReferenceNodeId = UA_NS0ID(ORGANIZES);

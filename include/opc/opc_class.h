@@ -30,7 +30,9 @@ struct var_t {
   string str_name;
   char* folder;
   string str_folder;
+  char* qf_name;
   string fullname;
+
   nodeid_t node_id;
   void* ptr_value;    // ptr to "correct" value_u
   int rmode;          // 1 - mean RW

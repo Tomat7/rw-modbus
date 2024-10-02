@@ -14,7 +14,7 @@
 
 void OpcServer_c::addVar_NodeId(var_t &v)
 {
-  v.node_id.var = UA_NODEID_STRING(1, v.name);
+  v.node_id.var = UA_NODEID_STRING(1, v.qf_name);
 
   if (v.folder != nullptr) {
     v.node_id.parent = addFolder(v.folder);
