@@ -37,7 +37,11 @@ void OpcServer_c::addVar_Names(string str_name, int t, int m, string str_folder)
 
   vars[str_name] = v;
   vars[str_name].name = const_cast<char*>(vars[str_name].fullname.c_str());
-  vars[str_name].folder = const_cast<char*>(vars[str_name].foldername.c_str());
+
+  if (str_folder != "")
+    vars[str_name].folder = const_cast<char*>(vars[str_name].foldername.c_str());
+  else
+    vars[str_name].folder = nullptr;
 }
 
 void OpcServer_c::addVar(string s, int16_t i16, int rmode, string folder)

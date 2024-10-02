@@ -57,13 +57,13 @@ public:
   void init(UA_UInt16 _port = 0);
   void run();
   void stop();
-  void addVar(string s, int16_t i16, int mode, string f = nullptr);
-  void addVar(string s, int32_t i32, int mode, string f = nullptr);
-  void addVar(string s, int64_t i64, int mode, string f = nullptr);
-  void addVar(string s, uint16_t ui16, int mode, string f = nullptr);
-  void addVar(string s, uint32_t ui32, int mode, string f = nullptr);
-  void addVar(string s, uint64_t ui64, int mode, string f = nullptr);
-  void addVar(string s, float fl, int mode, string f = nullptr);
+  void addVar(string s, int16_t i16, int mode, string f = "");
+  void addVar(string s, int32_t i32, int mode, string f = "");
+  void addVar(string s, int64_t i64, int mode, string f = "");
+  void addVar(string s, uint16_t ui16, int mode, string f = "");
+  void addVar(string s, uint32_t ui32, int mode, string f = "");
+  void addVar(string s, uint64_t ui64, int mode, string f = "");
+  void addVar(string s, float fl, int mode, string f = "");
 
   void setVar(string s, int16_t i16);
 
