@@ -61,20 +61,29 @@ public:
   void run();
   void stop();
   int addVar(string s, int16_t i16, int mode);
-  int addVar(string s, int32_t i32, int mode);
+//  int addVar(string s, int32_t i32, int mode);
   int addVar(string s, int64_t i64, int mode);
   int addVar(string s, uint16_t ui16, int mode);
-  int addVar(string s, uint32_t ui32, int mode);
-  int addVar(string s, uint64_t ui64, int mode);
+//  int addVar(string s, uint32_t ui32, int mode);
+//  int addVar(string s, uint64_t ui64, int mode);
   int addVar(string s, float fl, int mode);
 
   void setVar(string s, int16_t i16);
+  void setVar(string s, uint16_t ui16);
+  void setVar(string s, int64_t i64);
+  void setVar(string s, float fl);
+
+  int16_t getVar(string s);
+  uint16_t getVar(string s);
+  int64_t getVar(string s);
+  float getVar(string s);
 
   void setVariable(var_t &var);
-  void getVariable(var_t &var);
+  void getVariable(var_t &var, UA_Variant* vrnt);
 
 
 private:
+  bool isDebug = true;
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
   mutex* uaRunning_mux = nullptr;
@@ -82,7 +91,7 @@ private:
   int rc = 0;
 
   void* getPtrToVariable(var_t &var);
-  string getFolderName(string &n);
+  string getFolder_Name(string &n);
   int addVar_Names(string s, int t, int m);
 
   UA_NodeId addFolder(char* fname);

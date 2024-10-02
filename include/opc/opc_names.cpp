@@ -12,7 +12,7 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
-string OpcServer_c::getFolderName(string &name)
+string OpcServer_c::getFolder_Name(string &name)
 {
   string folder = "/";
 
@@ -39,14 +39,12 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
     return 0;
   }
 
-  string s_folder = getFolderName(str_name);
+  string s_folder = getFolder_Name(str_name);
 
   if (s_folder.find("//") != std::string::npos) {
     LOGA("Ignore wrong folder name: %s", s_folder.c_str());
     return 0;
   }
-
-  //LOGD("Try to add folder: %s, reg: %s", s_folder.c_str(), str_name.c_str());
 
   var_t v;
   v.type = t;
@@ -83,33 +81,4 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
 
   return 1;
 }
-
-/*
-  void OpcServer_c::addVar_Names(string str_name, int t, int m, string str_folder)
-  {
-  var_t v;
-  v.type = t;
-  v.rmode = m;
-
-  v.fullname = str_name;
-  v.foldername = str_folder;
-
-  vars[str_name] = v;
-  vars[str_name].name = const_cast<char*>(vars[str_name].fullname.c_str());
-
-  if (str_folder != "")
-    vars[str_name].folder = const_cast<char*>(vars[str_name].foldername.c_str());
-  else
-    vars[str_name].folder = nullptr;
-  }
-
-  void OpcServer_c::addVar(string s, int16_t i16, int rmode, string folder)
-  {
-  addVar_Names(s, UA_TYPES_INT16, rmode, folder);
-  addVar_NodeId(vars[s]);
-  vars[s].value.i16 = i16;
-  vars[s].ptr_value = &vars[s].value.i16;
-  addVariable(vars[s]);
-  }
-*/
 

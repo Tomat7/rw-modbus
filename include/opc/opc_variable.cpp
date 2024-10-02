@@ -9,34 +9,6 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
-bool isDebug = true;
-
-UA_NodeId OpcServer_c::addFolder(char* fname)
-{
-  string full_name = string(fname);
-  if (vars.count(full_name)) {
-    LOGD("Folder: %s already exist.", fname);
-    return vars[full_name].node_id.var;
-  }
-
-  UA_NodeId folderId = UA_NODEID_STRING(1, fname); /* get the nodeid assigned by the server */
-  UA_ObjectAttributes oAttr = UA_ObjectAttributes_default;
-  oAttr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", fname);
-  UA_Server_addObjectNode(uaServer, folderId, UA_NS0ID(OBJECTSFOLDER),
-                          UA_NS0ID(ORGANIZES), UA_QUALIFIEDNAME(1, fname),
-                          UA_NS0ID(BASEOBJECTTYPE),
-                          oAttr, NULL, NULL);
-
-  var_t v;
-  v.fullname = full_name;
-  v.node_id.var = folderId;
-  vars[full_name] = v;
-
-  DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                    "Created folder: %s ", fname);)
-
-  return folderId;
-}
 
 
 void OpcServer_c::addVariable(var_t &v)
@@ -78,13 +50,13 @@ void OpcServer_c::setVariable(var_t &v)
     return;
   }
 
-  UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
+  //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.qf_name);
 
   UA_Variant myVariant;
   UA_Variant_init(&myVariant);
 
   UA_Variant_setScalar(&myVariant, v.ptr_value, &UA_TYPES[v.type]);
-  UA_Server_writeValue(uaServer, varNodeId, myVariant);
+  UA_Server_writeValue(uaServer, v.node_id.var, myVariant);
 
   /* Set the status code of the value to an error code. The function
      UA_Server_write provides access to the raw service. The above
@@ -92,7 +64,7 @@ void OpcServer_c::setVariable(var_t &v)
      attribute with the write service. */
   UA_WriteValue wv;
   UA_WriteValue_init(&wv);
-  wv.nodeId = varNodeId;
+  wv.nodeId = v.node_id.var;
   wv.attributeId = UA_ATTRIBUTEID_VALUE;
   wv.value.status = UA_STATUSCODE_BADNOTCONNECTED;
   wv.value.hasStatus = true;
@@ -107,7 +79,7 @@ void OpcServer_c::setVariable(var_t &v)
 }
 
 
-void OpcServer_c::getVariable(var_t &v)
+void OpcServer_c::getVariable(var_t &v, UA_Variant* vrnt)
 {
 
   if (v.ptr_value == nullptr) {
@@ -115,37 +87,38 @@ void OpcServer_c::getVariable(var_t &v)
     return;
   }
 
-  UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
-  UA_Variant myVariant;
-  UA_Variant_init(&myVariant);
-  UA_Server_readValue(uaServer, varNodeId, &myVariant);
+  //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
+  //UA_Variant myVariant;
+  UA_Variant_init(vrnt);
+  UA_Server_readValue(uaServer, v.node_id.var, vrnt);
 
-  if (v.type == UA_TYPES_INT16) {
-    v.value.i16 = *(static_cast<UA_Int16*>(myVariant.data));
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (ui16) = %i", v.name, *(static_cast<int16_t*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_UINT16) {
-    v.value.ui16 = *(static_cast<UA_UInt16*>(myVariant.data));
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (ui16) = %i", v.name, *(static_cast<uint16_t*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_INT32) {
-    v.value.i32 = *(static_cast<int32_t*>(myVariant.data));
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (i32) = %i", v.name, *(static_cast<int32_t*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_FLOAT) {
-    v.value.fl = *(static_cast<UA_Float*>(myVariant.data));
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (float) = %.3f", v.name, *(static_cast<float*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_DATETIME) {
-    v.value.dt = *(static_cast<UA_DateTime*>(myVariant.data));
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (DateTime) = %i", v.name, *(static_cast<int64_t*>(v.ptr_value)));)
-  } else
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (WRONG TYPE)", v.name);)
+  /*
+    if (v.type == UA_TYPES_INT16) {
+      v.value.i16 = *(static_cast<UA_Int16*>(myVariant.data));
+      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "%s (ui16) = %i", v.name, *(static_cast<int16_t*>(v.ptr_value)));)
+    } else if (v.type == UA_TYPES_UINT16) {
+      v.value.ui16 = *(static_cast<UA_UInt16*>(myVariant.data));
+      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "%s (ui16) = %i", v.name, *(static_cast<uint16_t*>(v.ptr_value)));)
+    } else if (v.type == UA_TYPES_INT32) {
+      v.value.i32 = *(static_cast<int32_t*>(myVariant.data));
+      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "%s (i32) = %i", v.name, *(static_cast<int32_t*>(v.ptr_value)));)
+    } else if (v.type == UA_TYPES_FLOAT) {
+      v.value.fl = *(static_cast<UA_Float*>(myVariant.data));
+      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "%s (float) = %.3f", v.name, *(static_cast<float*>(v.ptr_value)));)
+    } else if (v.type == UA_TYPES_DATETIME) {
+      v.value.dt = *(static_cast<UA_DateTime*>(myVariant.data));
+      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "%s (DateTime) = %i", v.name, *(static_cast<int64_t*>(v.ptr_value)));)
+    } else
+      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "%s (WRONG TYPE)", v.name);)
+  */
 
-
-  }
+}
 
 
 void* OpcServer_c::getPtrToVariable(var_t &v)
