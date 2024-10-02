@@ -62,20 +62,22 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
 
   v.str_folder = s_folder;
 
+  if (vars.count(v.fullname)) {
+    LOGA("Ignore existing variable: %s", v.fullname.c_str());
+    return 0;
+  }
+
   vars[v.fullname] = v;
   var_t &v_ = vars[v.fullname];
   v_.name = const_cast<char*>(v_.str_name.c_str());
   v_.qf_name = const_cast<char*>(v_.fullname.c_str());
+
   v_.folder = nullptr;
-
-  // LOGD("Added folder: %s, reg: %s", str_folder.c_str(), str_name.c_str());
-
   if (s_folder != "/") {
     if (!v_.str_folder.empty())
       v_.folder = const_cast<char*>(v_.str_folder.c_str());
   }
 
-  //LOGD("Ready name: %s, folder: %s", vars[v.fullname].name, vars[v.fullname].folder);
   LOGD("Fullname: %s, name: %s, folder: %s", vars[v.fullname].fullname.c_str(),
        vars[v.fullname].name, vars[v.fullname].folder);
 

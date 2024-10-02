@@ -13,6 +13,12 @@ bool isDebug = true;
 
 UA_NodeId OpcServer_c::addFolder(char* fname)
 {
+  string full_name = string(fname);
+  if (vars.count(full_name)) {
+    LOGD("Folder: %s already exist.", fname);
+    return vars[full_name].node_id.var;
+  }
+
   UA_NodeId folderId = UA_NODEID_STRING(1, fname); /* get the nodeid assigned by the server */
   UA_ObjectAttributes oAttr = UA_ObjectAttributes_default;
   oAttr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", fname);
@@ -20,6 +26,11 @@ UA_NodeId OpcServer_c::addFolder(char* fname)
                           UA_NS0ID(ORGANIZES), UA_QUALIFIEDNAME(1, fname),
                           UA_NS0ID(BASEOBJECTTYPE),
                           oAttr, NULL, NULL);
+
+  var_t v;
+  v.fullname = full_name;
+  v.node_id.var = folderId;
+  vars[full_name] = v;
 
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                     "Created folder: %s ", fname);)
