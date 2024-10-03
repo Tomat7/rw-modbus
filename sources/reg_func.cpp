@@ -14,7 +14,7 @@
 
 // void regs_init();
 void reg_print(string, const regdata_t*);
-void reg_print_shm(RegMap_c*);
+//void reg_print_shm(RegMap_c*);
 
 void regs_update()
 {
@@ -63,8 +63,26 @@ void regs_update()
   return;
 }
 
-void regs_update_shm()
+void reg_print(string rn, const regdata_t* rd)
 {
+  const char* C = NRM;
+  if (rd->rerrors > 0)
+    C = C_RED;
+
+  if (rd->rtype == 0)
+    printf("%s%-14s %7d", C, rn.c_str(), (uint16_t)rd->rvalue);
+  else if (rd->rtype == 1)
+    printf("%s%-14s %7d", C, rn.c_str(), (int16_t)rd->rvalue);
+  else if (rd->rtype == 2)
+    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)rd->rvalue * 0.01);
+
+
+  return;
+}
+
+/*
+  void regs_update_shm()
+  {
   printf("\n===== regs_update_shm =====\n");
   bool is_eol = false;
 
@@ -99,24 +117,13 @@ void regs_update_shm()
     printf("\n");
 
   return;
-}
+  }
+*/
 
-void reg_print(string rn, const regdata_t* rd)
-{
-  const char* C = NRM;
-  if (rd->rerrors > 0)
-    C = C_RED;
 
-  if (rd->rtype == 1)
-    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)rd->rvalue * 0.01);
-  else
-    printf("%s%-14s %7d", C, rn.c_str(), rd->rvalue);
-
-  return;
-}
-
-void reg_print_shm(RegMap_c* rm)
-{
+/*
+  void reg_print_shm(RegMap_c* rm)
+  {
   int rerrors = 1;
   int rtype = 0;
   uint16_t rvalue = 0;
@@ -138,6 +145,7 @@ void reg_print_shm(RegMap_c* rm)
     printf("%s%-14s %7d", C, rm->rn, rvalue);
 
   return;
-}
+  }
+*/
 
 // eof

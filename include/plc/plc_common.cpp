@@ -64,9 +64,9 @@ void PLC_c::init_regs()   // Master only
 
     if (R.str_type == "u")
       rd.rtype = 0;
-    else if (R.str_type == "f")
-      rd.rtype = 1;
     else if (R.str_type == "i")
+      rd.rtype = 1;
+    else if (R.str_type == "f")
       rd.rtype = 2;
     else
       LOGA("Error REG init: %s\n", R.str_name.c_str());

@@ -97,6 +97,10 @@ void parse_char(int ch)
     timeout_sec = 1;
     LOGC("Char 'f' pressed. Timeout set to: %d sec.\n", timeout_sec);
     wait_console(timeout_sec);
+  } else if ((char)ch == 'm') {
+    timeout_sec = 2;
+    LOGC("Char 'm' pressed. Timeout set to: %d sec.\n", timeout_sec);
+    wait_console(timeout_sec);
   } else if ((char)ch == 's') {
     timeout_sec = 3;
     LOGC("Char 's' pressed. Timeout set to: %d sec.\n", timeout_sec);

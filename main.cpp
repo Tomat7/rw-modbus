@@ -80,9 +80,9 @@ int main(int argc, char** argv)
     //    LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-    Slave.handle_slave(timeout_sec * 1000000);
+    //Slave.handle_slave(timeout_sec * 1000000);
 
-    int ch = read_console(0, 1000000);
+    int ch = read_console(0, timeout_sec * 1000000);
     if (ch != -1)
       parse_char(ch);
     else
@@ -91,7 +91,6 @@ int main(int argc, char** argv)
     fflush(stdout);
 
     //    wait_console(TIMEOUT_SEC);
-
     //    t.start(x);
     //    t.sleep_ms(TMOUT);
     //    t.spent();
