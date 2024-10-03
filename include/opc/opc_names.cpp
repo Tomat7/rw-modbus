@@ -34,7 +34,7 @@ string OpcServer_c::getFolder_Name(string &name)
 
 int OpcServer_c::addVar_Names(string str_name, int t, int m)
 {
-  if (str_name.back() == '/') {
+  if (str_name.back() == '/') {  // it's a FOLDER!!
     LOGA("Ignore wrong register name: %s", str_name.c_str());
     return 0;
   }

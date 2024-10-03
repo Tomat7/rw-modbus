@@ -18,7 +18,7 @@ void OpcServer_c::addVar_NodeId(var_t &v)
   v.node_id.var = UA_NODEID_STRING(1, v.ua_name);
 
   if (v.folder != nullptr) {
-    v.node_id.parent = addFolder(v.folder);
+    v.node_id.parent = getFolder_NodeId(v.folder);
     v.node_id.reference = UA_NS0ID(HASCOMPONENT);
   } else {
     v.node_id.parent = UA_NS0ID(OBJECTSFOLDER);
@@ -26,7 +26,7 @@ void OpcServer_c::addVar_NodeId(var_t &v)
   }
 }
 
-UA_NodeId OpcServer_c::addFolder(char* fname)
+UA_NodeId OpcServer_c::getFolder_NodeId(char* fname)
 {
   string full_name = string(fname);
   if (vars.count(full_name)) {
@@ -90,8 +90,8 @@ int OpcServer_c::addVar(string s, int64_t i64, int rmode)
     return 0;
 
   addVar_NodeId(vars[s]);
-  vars[s].value.i64 = i64;
-  vars[s].ptr_value = &vars[s].value.i64;
+  //vars[s].value.i64 = i64;
+  vars[s].ptr_value = &i64;
   addVariable(vars[s]);
   return 1;
 }
@@ -104,8 +104,8 @@ int OpcServer_c::addVar(string s, float fl, int rmode)
     return 0;
 
   addVar_NodeId(vars[s]);
-  vars[s].value.fl = fl;
-  vars[s].ptr_value = &vars[s].value.fl;
+  //vars[s].value.fl = fl;
+  vars[s].ptr_value = &fl;
   addVariable(vars[s]);
   return 1;
 }

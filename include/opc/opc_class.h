@@ -39,16 +39,16 @@ struct var_t {
   int type;
   // UA_TYPES_INT16, UA_TYPES_UINT16, UA_TYPES_INT32, UA_TYPES_UINT32,
   // UA_TYPES_INT64, UA_TYPES_UINT64, UA_TYPES_FLOAT, UA_TYPES_DATETIME
-  union value_u {
-    int16_t i16;
-    int32_t i32;
-    int64_t i64;
-    uint16_t ui16;
-    uint32_t ui32;
-    uint64_t ui64;
-    int64_t dt;
-    float fl;
-  } value;
+  /*   union value_u {
+      int16_t i16;
+      int32_t i32;
+      int64_t i64;
+      uint16_t ui16;
+      uint32_t ui32;
+      uint64_t ui64;
+      int64_t dt;
+      float fl;
+    } value; */
 };
 
 class OpcServer_c
@@ -94,7 +94,7 @@ private:
   string getFolder_Name(string &n);
   int addVar_Names(string s, int t, int m);
 
-  UA_NodeId addFolder(char* fname);
+  UA_NodeId getFolder_NodeId(char* fname);
   void addVar_NodeId(var_t &v);
   void addVariable(var_t &var);
 
