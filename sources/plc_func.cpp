@@ -45,7 +45,7 @@ void plc_print_details(int i)
 {
   printf("\n===== plc_print_details =====\n");
   printf("%-8s %-4d %-16s %4d %7d\n", PLCvec[i].dev_name, PLCvec[i].reg_qty,
-         PLCvec[i].ip_addr, PLCvec[i].mb.interval_ms, PLCvec[i].mb.timeout_us);
+         PLCvec[i].ip_addr, PLCvec[i].mb.polling_ms, PLCvec[i].mb.timeout_us);
   /*
     cout << setw(7) << left << PLCset[i].str_dev_name << "  " << setw(3) << left
          << PLCset[i].reg_qty << "  " << setw(15) << left << PLCset[i].ip_addr

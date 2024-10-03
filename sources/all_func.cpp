@@ -93,6 +93,14 @@ void parse_char(int ch)
     LOGC("Char 'r' pressed. Full reconfiguration.\n");
     wait_console(timeout_sec);
     reinit();
+  } else if ((char)ch == 'f') {
+    timeout_sec = 1;
+    LOGC("Char 'f' pressed. Timeout set to: %d sec.\n", timeout_sec);
+    wait_console(timeout_sec);
+  } else if ((char)ch == 's') {
+    timeout_sec = 3;
+    LOGC("Char 's' pressed. Timeout set to: %d sec.\n", timeout_sec);
+    wait_console(timeout_sec);
   } else if (isdigit((char)ch)) {
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;
