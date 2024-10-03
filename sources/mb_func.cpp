@@ -41,21 +41,19 @@ int mb_update()
   res.resize((int)nb_plcs);
   prev_ts.resize(nb_plcs);
 
-  //  mbupdate_mux.lock();
-  //  printf("mb_update locked\n");
-
   for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
-  printf("mb_update threads started\n");
+
+  std::this_thread::yield();
+  std::this_thread::sleep_for(10ms);
+  printf("mb_update threads STARTED and ready to JOIN.\n");
+  std::this_thread::yield();
+  std::this_thread::sleep_for(10ms);
 
   for (auto &th : thr) {
-    printf("mb_update READY to JOIN\n");
+    printf(".");
     th.join();
   }
-
-  //  printf("mb_update READY for UN-lock\n");
-  //  mbupdate_mux.unlock();
-  //  printf("mb_update UN-locked\n");
 
   printf("\n");
   for (i = 0; i < nb_plcs; i++)
@@ -96,23 +94,11 @@ int mb_write()
 
 void mb_deinit()
 {
-  printf("mb_deinit READY to clear\n");
-  //  mbupdate_mux.lock();
-  /*
-    int i = 0;
-    while (!mbupdate_mux.try_lock() && (i < 3)) {
-      std::this_thread::yield();
-      sleep(1);
-      i++;
-    }
-  */
-
-  //  printf("mb_deinit locked\n");
+//  printf("mb_deinit READY to clear\n");
   PLCvec.clear();
   Slave.mb_deinit();
-  printf("mb_deinit READY for UN-lock\n");
-  //  mbupdate_mux.unlock();
-  printf("mb_deinit UN-locked\n");
+//  printf("mb_deinit READY for UN-lock\n");
+//  printf("mb_deinit UN-locked\n");
   return;
 }
 

@@ -18,14 +18,13 @@ void reg_print_shm(RegMap_c*);
 
 void opc_regs_init()
 {
-  printf("\n===== OPC_regs_update =====\n");
+  printf("\n===== OPC_regs_init =====\n");
 
   string folder = "/";
 
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
-    // n - name, rm - RegMap_c
-    // rm.set_shm_val();
+    // n - name, rm - RegMap_c rm.set_shm_val();
 
     string n = "/" + folder + "/" + name;
 
@@ -45,8 +44,7 @@ void opc_regs_init()
 
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
-    // n - name, rm - RegMap_c
-    // rm.set_shm_val();
+    // n - name, rm - RegMap_c, rm.set_shm_val();
     string n = "/" + folder + "/" + name;
 
     if (rm.ptr_reg->str_type == "f") {
@@ -65,8 +63,7 @@ void opc_regs_init()
 
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
-    // n - name, rm - RegMap_c
-    // rm.set_shm_val();
+    // n - name, rm - RegMap_c, rm.set_shm_val();
     string n = "/" + folder + "/" + name;
 
     if (rm.ptr_reg->str_type == "f") {
@@ -85,8 +82,7 @@ void opc_regs_init()
 
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
-    // n - name, rm - RegMap_c
-    // rm.set_shm_val();
+    // n - name, rm - RegMap_c, rm.set_shm_val();
     string n = "/" + folder + "/" + name;
 
     if (rm.ptr_reg->str_type == "f") {
@@ -103,9 +99,32 @@ void opc_regs_init()
 
 }
 
-void opc_update()
+uint16_t opc_update_uint16(string name, string str_type, uint16_t val)
 {
-  printf("\n===== regs_update =====\n");
+  string folder = "PLC";
+  string n = "/" + folder + "/" + name;
+  uint16_t res = 0;
+
+  if (str_type == "f") {
+    float fl = OPCs.getVar(n, fl);
+    res = (uint16_t)(fl * 100);
+    OPCs.setVar(n, val * (float)0.01);
+  } else if (str_type == "i") {
+    int16_t i16 = OPCs.getVar(n, i16);
+    res = (uint16_t)i16;
+    OPCs.setVar(n, (int16_t)val);
+  } else if (str_type == "u") {
+    uint16_t ui16 = OPCs.getVar(n, ui16);
+    res = (uint16_t)ui16;
+    OPCs.setVar(n, (uint16_t)val);
+  }
+
+  return res;
+}
+/*
+  void opc_update(string n, uint16_t val, )
+  {
+  printf("\n===== OPC_regs_update =====\n");
   bool is_eol = false;
 
   for (auto &[n, rm] : REGmap) {
@@ -147,7 +166,8 @@ void opc_update()
     printf("\n");
 
   return;
-}
+  }
+*/
 
 /* void regs_update_shm()
   {

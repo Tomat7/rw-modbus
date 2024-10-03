@@ -14,13 +14,15 @@
 
 void OpcServer_c::setVar(string s, int16_t i16)
 {
-  vars[s].value.i16 = i16;
+  //vars[s].value.i16 = i16;
+  vars[s].ptr_value = &i16;
   setVariable(vars[s]);
 }
 
 void OpcServer_c::setVar(string s, uint16_t ui16)
 {
-  vars[s].value.ui16 = ui16;
+  //vars[s].value.ui16 = ui16;
+  vars[s].ptr_value = &ui16;
   setVariable(vars[s]);
 }
 

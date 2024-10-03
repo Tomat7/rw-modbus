@@ -30,7 +30,7 @@ struct var_t {
   string str_name;
   char* folder;
   string str_folder;
-  char* qf_name;
+  char* ua_name;
   string fullname;
 
   nodeid_t node_id;
@@ -73,10 +73,10 @@ public:
   void setVar(string s, int64_t i64);
   void setVar(string s, float fl);
 
-  int16_t getVar(string s);
-  uint16_t getVar(string s);
-  int64_t getVar(string s);
-  float getVar(string s);
+  int16_t getVar(string s, int16_t &i16);
+  uint16_t getVar(string s, uint16_t &ui16);
+  int64_t getVar(string s, int64_t &i64);
+  float getVar(string s, float &fl);
 
   void setVariable(var_t &var);
   void getVariable(var_t &var, UA_Variant* vrnt);

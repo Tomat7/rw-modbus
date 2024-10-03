@@ -68,7 +68,7 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
   vars[v.fullname] = v;
   var_t &v_ = vars[v.fullname];
   v_.name = const_cast<char*>(v_.str_name.c_str());
-  v_.qf_name = const_cast<char*>(v_.fullname.c_str());
+  v_.ua_name = const_cast<char*>(v_.fullname.c_str());
 
   v_.folder = nullptr;
   if (s_folder != "/") {

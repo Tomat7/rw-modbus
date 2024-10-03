@@ -32,7 +32,7 @@ void OpcServer_c::addVariable(var_t &v)
 
   // Add the variable node to the information model
   //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
-  UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.qf_name);
+  UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.ua_name);
 
   //UA_NodeId parentNodeId = UA_NS0ID(OBJECTSFOLDER);
   //UA_NodeId parentReferenceNodeId = UA_NS0ID(ORGANIZES);
@@ -125,23 +125,23 @@ void* OpcServer_c::getPtrToVariable(var_t &v)
 {
 
   if (v.type == UA_TYPES_INT16) {
-    v.ptr_value = (UA_Int16*)&(v.value.i16);
+    //v.ptr_value = (UA_Int16*)&(v.value.i16);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                       "%s (i16) = %i", v.name, *(static_cast<int16_t*>(v.ptr_value)));)
   } else if (v.type == UA_TYPES_UINT16) {
-    v.ptr_value = (UA_UInt16*)&(v.value.ui16);
+    //v.ptr_value = (UA_UInt16*)&(v.value.ui16);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                       "%s (ui16) = %i", v.name, *(static_cast<uint16_t*>(v.ptr_value)));)
   } else if (v.type == UA_TYPES_INT32) {
-    v.ptr_value = (UA_Int32*)&(v.value.i32);
+    //v.ptr_value = (UA_Int32*)&(v.value.i32);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                       "%s (i32) = %i", v.name, *(static_cast<int32_t*>(v.ptr_value)));)
   } else if (v.type == UA_TYPES_FLOAT) {
-    v.ptr_value = (UA_Float*)&(v.value.fl);
+    //v.ptr_value = (UA_Float*)&(v.value.fl);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                       "%s (float) = %.3f", v.name, *(static_cast<float*>(v.ptr_value)));)
   } else if (v.type == UA_TYPES_DATETIME) {
-    v.ptr_value = (UA_DateTime*)&(v.value.dt);
+    //v.ptr_value = (UA_DateTime*)&(v.value.dt);
     DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                       "%s (DateTime) = %i", v.name, *(static_cast<int64_t*>(v.ptr_value)));)
   } else {
