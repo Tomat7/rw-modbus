@@ -95,6 +95,8 @@ private:
   int addVar_Names(string s, int t, int m);
 
   UA_NodeId getFolder_NodeId(char* fname);
+  UA_NodeId addFolders(string full_name, UA_NodeId parentNodeId);
+
   void addVar_NodeId(var_t &v);
   void addVariable(var_t &var);
 

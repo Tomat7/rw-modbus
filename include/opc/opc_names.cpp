@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <mutex>
+#include <string>
 
 #include "include/logger.h"
 
@@ -15,27 +16,35 @@
 string OpcServer_c::getFolder_Name(string &name)
 {
   string folder = "/";
+  string path = name;
 
 // "KUB.Temp1" - only name => Do not modufy name, return "/" as folder.
   if (name.find("/") == std::string::npos)
-    return folder;
+    return "/";
 
-// "PLC/BUF.Press" - no "/" at begin => add "/" => ("/PLC/BUF.Press")
-  if (name.front() != '/')
-    name.insert(0, folder);
+// "PLC/BUF.Press" - if no "/" at begin => add "/" => ("/PLC/BUF.Press")
+  if (path.front() != '/')
+    path.insert(0, "/");
 
-  auto last_slash = name.rfind("/");
-  folder = name.substr(0, last_slash);  // folder =  "/PLC" or "/SCADA/PLC"
-  name.erase(0, last_slash + 1);        // "BUF.Press"
+// Is this a FOLDER?
+  if (name.back() == '/') {
+    name = "";
+    return path;
+  }
 
-  return folder;
+  auto last_slash = path.rfind("/");
+  name = path.substr(last_slash + 1);   // "BUF.Press"
+  path.erase(last_slash + 1);           // folder =  "/PLC" or "/SCADA/PLC/"
+
+  return path;
 }
 
 
 int OpcServer_c::addVar_Names(string str_name, int t, int m)
 {
-  if (str_name.back() == '/') {  // it's a FOLDER!!
-    LOGA("Ignore wrong register name: %s", str_name.c_str());
+
+  if (str_name.find("//") != std::string::npos) {
+    LOGA("Ignore wrong name/path: %s", str_name.c_str());
     return 0;
   }
 
@@ -50,15 +59,8 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
   v.type = t;
   v.rmode = m;
   v.str_name = str_name;
-
-  if (s_folder == "/")
-    v.fullname = s_folder + str_name;
-  else {
-    v.fullname = s_folder + "/" + str_name;
-    s_folder.erase(0, 1);
-  }
-
   v.str_folder = s_folder;
+  v.fullname = s_folder + str_name;
 
   if (vars.count(v.fullname)) {
     LOGA("Ignore existing variable: %s", v.fullname.c_str());
@@ -68,13 +70,8 @@ int OpcServer_c::addVar_Names(string str_name, int t, int m)
   vars[v.fullname] = v;
   var_t &v_ = vars[v.fullname];
   v_.name = const_cast<char*>(v_.str_name.c_str());
+  v_.folder = const_cast<char*>(v_.str_folder.c_str());
   v_.ua_name = const_cast<char*>(v_.fullname.c_str());
-
-  v_.folder = nullptr;
-  if (s_folder != "/") {
-    if (!v_.str_folder.empty())
-      v_.folder = const_cast<char*>(v_.str_folder.c_str());
-  }
 
   LOGD("Fullname: %s, name: %s, folder: %s", vars[v.fullname].fullname.c_str(),
        vars[v.fullname].name, vars[v.fullname].folder);
