@@ -101,21 +101,25 @@ void opc_regs_init()
 
 uint16_t opc_update_uint16(string name, string str_type, uint16_t val)
 {
+  printf("\n===== OPC_update_uint16 =====\n");
+
   string folder = "PLC";
   string n = "/" + folder + "/" + name;
   uint16_t res = 0;
 
+  printf("\nTry: %s\n", n.c_str());
+
   if (str_type == "f") {
-    float fl = OPCs.getVar(n, fl);
-    res = (uint16_t)(fl * 100);
+    //float fl = OPCs.getVar(n, fl);
+    //res = (uint16_t)(fl * 100);
     OPCs.setVar(n, (int16_t)val * (float)0.01);
   } else if (str_type == "i") {
-    int16_t i16 = OPCs.getVar(n, i16);
-    res = (uint16_t)i16;
+    //int16_t i16 = OPCs.getVar(n, i16);
+    //res = (uint16_t)i16;
     OPCs.setVar(n, (int16_t)val);
   } else if (str_type == "u") {
-    uint16_t ui16 = OPCs.getVar(n, ui16);
-    res = (uint16_t)ui16;
+    //uint16_t ui16 = OPCs.getVar(n, ui16);
+    //res = (uint16_t)ui16;
     OPCs.setVar(n, (uint16_t)val);
   }
 
