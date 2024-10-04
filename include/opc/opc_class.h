@@ -26,13 +26,14 @@ struct nodeid_t {
 };
 
 struct var_t {
-  char* name;
+  string raw_name;
+  char* ua_name = nullptr;
   string str_name;
-  char* folder;
-  string str_folder;
-  char* ua_name;
-  string fullname;
-
+  char* name = nullptr;
+  string str_path;
+  char* path  = nullptr;
+  string str_full;
+  char* path_name = nullptr;
   nodeid_t node_id;
   void* ptr_value;    // ptr to "correct" value_u
   int rmode;          // 1 - mean RW
@@ -73,7 +74,7 @@ public:
   void setVar(string s, int64_t i64);
   void setVar(string s, float fl);
 
-  int16_t getVar(string s, int16_t &i16);
+  int16_t getVar(string s, int16_t i16);
   uint16_t getVar(string s, uint16_t &ui16);
   int64_t getVar(string s, int64_t &i64);
   float getVar(string s, float &fl);
@@ -91,10 +92,10 @@ private:
   int rc = 0;
 
   void* getPtrToVariable(var_t &var);
-  string getFolder_Name(string &n);
-  int addVar_Names(string s, int t, int m);
+  string getPath_Name(string &n);
+  int addVar_Names(string raw_name, int t, int m);
 
-  UA_NodeId getFolder_NodeId(char* fname);
+  UA_NodeId getFolder_NodeId(string str_path);
   UA_NodeId addFolders(string full_name, UA_NodeId parentNodeId);
 
   void addVar_NodeId(var_t &v);

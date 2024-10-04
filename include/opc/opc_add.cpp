@@ -16,13 +16,24 @@
 
 int OpcServer_c::addVar(string s, int16_t i16, int rmode)
 {
+  printf("\naddVar0: %s\n", s.c_str());
+
   rc = addVar_Names(s, UA_TYPES_INT16, rmode);
   if (rc == 0)
     return 0;
 
+  printf("\naddVar1: %s\n", s.c_str());
+
+
   addVar_NodeId(vars[s]);
+  printf("\naddVar2: %s\n", s.c_str());
+
   vars[s].ptr_value = &i16;
+  printf("\naddVar3: %s\n", s.c_str());
+
   addVariable(vars[s]);
+  printf("\naddVar4: %s\n", s.c_str());
+
   return 1;
 }
 

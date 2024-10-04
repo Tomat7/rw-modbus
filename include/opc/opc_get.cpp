@@ -12,21 +12,32 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
-int16_t OpcServer_c::getVar(string s, int16_t &i16)
+int16_t OpcServer_c::getVar(string s, int16_t i16)
 {
+  if (!vars.count(s)) {
+    LOGA("Ignore non-existing variable: %s", s.c_str());
+    return 0;
+  } else
+    LOGA("Variable exist: %s", s.c_str());
+
   UA_Variant Vrnt;
   printf("\ngetVar1: %s\n", s.c_str());
   getVariable(vars[s], &Vrnt);
-  vars[s].value.i16 = *(static_cast<UA_Int16*>(Vrnt.data));
   printf("\ngetVar2: %s\n", s.c_str());
-
-  int16_t ii16 = *(static_cast<UA_Int16*>(Vrnt.data));
+  //vars[s].value.i16 = *(dynamic_cast<UA_Int16*>(Vrnt.data));
+  //vars[s].ptr_value = dynamic_cast<UA_Int16*>(Vrnt.data);
+  vars[s].ptr_value = Vrnt.data;
   printf("\ngetVar3: %s\n", s.c_str());
 
-  i16 = *(static_cast<UA_Int16*>(Vrnt.data));
+  int16_t ii16 = *((int16_t*)vars[s].ptr_value);
   printf("\ngetVar4: %s\n", s.c_str());
 
-  return i16;
+  i16 = *(static_cast<UA_Int16*>(Vrnt.data));
+  //i16 = *(vars[s].ptr_value);
+
+  printf("\ngetVar5: %s\n", s.c_str());
+
+  return ii16;
 }
 
 uint16_t OpcServer_c::getVar(string s, uint16_t &ui16)

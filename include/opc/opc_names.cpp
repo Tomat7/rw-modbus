@@ -13,9 +13,9 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
-string OpcServer_c::getFolder_Name(string &name)
+string OpcServer_c::getPath_Name(string &name)
 {
-  string folder = "/";
+  //string folder = "/";
   string path = name;
 
 // "KUB.Temp1" - only name => Do not modufy name, return "/" as folder.
@@ -40,41 +40,41 @@ string OpcServer_c::getFolder_Name(string &name)
 }
 
 
-int OpcServer_c::addVar_Names(string str_name, int t, int m)
+int OpcServer_c::addVar_Names(string raw_name, int t, int m)
 {
 
-  if (str_name.find("//") != std::string::npos) {
-    LOGA("Ignore wrong name/path: %s", str_name.c_str());
+  if (vars.count(raw_name)) {
+    LOGA("Ignore existing variable: %s", raw_name.c_str());
     return 0;
   }
 
-  string s_folder = getFolder_Name(str_name);
-
-  if (s_folder.find("//") != std::string::npos) {
-    LOGA("Ignore wrong folder name: %s", s_folder.c_str());
+  if (raw_name.find("//") != std::string::npos) {
+    LOGA("Ignore wrong name/path: %s", raw_name.c_str());
     return 0;
   }
+
+  string str_name = raw_name;
+  string str_path = getPath_Name(str_name);
 
   var_t v;
   v.type = t;
   v.rmode = m;
+  v.raw_name = raw_name;  // KEY for map and
   v.str_name = str_name;
-  v.str_folder = s_folder;
-  v.fullname = s_folder + str_name;
+  v.str_path = str_path;
+  v.str_full = str_path + str_name;
 
-  if (vars.count(v.fullname)) {
-    LOGA("Ignore existing variable: %s", v.fullname.c_str());
-    return 0;
-  }
+  vars[v.raw_name] = v;
+  vars[v.raw_name].ua_name = const_cast<char*>(vars[v.raw_name].raw_name.c_str());
+  vars[v.raw_name].name = const_cast<char*>(vars[v.raw_name].str_name.c_str());
+  vars[v.raw_name].path = const_cast<char*>(vars[v.raw_name].str_path.c_str());
+  vars[v.raw_name].path_name = const_cast<char*>(vars[v.raw_name].str_full.c_str());
 
-  vars[v.fullname] = v;
-  var_t &v_ = vars[v.fullname];
-  v_.name = const_cast<char*>(v_.str_name.c_str());
-  v_.folder = const_cast<char*>(v_.str_folder.c_str());
-  v_.ua_name = const_cast<char*>(v_.fullname.c_str());
+//  LOGD("STR Fullname: %s, name: %s, path: %s", vars[v.str_full].str_full.c_str(),
+//       vars[v.str_full].str_name.c_str(), vars[v.str_full].str_path.c_str());
 
-  LOGD("Fullname: %s, name: %s, folder: %s", vars[v.fullname].fullname.c_str(),
-       vars[v.fullname].name, vars[v.fullname].folder);
+  LOGD("CH* Fullname: %s, name: %s, path: %s", vars[v.str_full].path_name,
+       vars[v.str_full].name, vars[v.str_full].path);
 
   return 1;
 }
