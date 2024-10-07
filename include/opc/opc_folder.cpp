@@ -56,7 +56,7 @@ UA_NodeId OpcServer_c::addFolders(string str_path, UA_NodeId parentNodeId)
   UA_NodeId folderId = UA_NODEID_STRING(1, folder_path); /* get the nodeid assigned by the server */
   UA_ObjectAttributes oAttr = UA_ObjectAttributes_default;
   oAttr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", display_name);
-  UA_StatusCode rc = UA_Server_addObjectNode(uaServer, folderId, parentNodeId,
+  UA_StatusCode sc = UA_Server_addObjectNode(uaServer, folderId, parentNodeId,
                      UA_NS0ID(ORGANIZES), UA_QUALIFIEDNAME(1, /* display_name */ folder_path),
                      UA_NS0ID(BASEOBJECTTYPE),
                      oAttr, NULL, &folderId);
@@ -68,7 +68,7 @@ UA_NodeId OpcServer_c::addFolders(string str_path, UA_NodeId parentNodeId)
   vars[str_path] = v;
 
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                    "Created folder: %s, name: %s - %s", folder_path, display_name, UA_StatusCode_name(rc));)
+                    "Created folder: %s, name: %s - %s", folder_path, display_name, UA_StatusCode_name(sc));)
 
   return folderId;
 }

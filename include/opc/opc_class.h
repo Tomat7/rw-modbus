@@ -10,13 +10,14 @@
 #include <string>
 #include <mutex>
 
-void addVariable(UA_Server* server, void* var);
-void setVariable(UA_Server* server, void* var);
-void getVariable(UA_Server* server, void* var, bool isDebug = false);
-
-void addCurrentTimeDataSourceVariable(UA_Server* server);
-void addCurrentTimeExternalDataSource(UA_Server* server);
-
+#include "include/logger.h"
+/*
+  void addVariable(UA_Server* server, void* var);
+  void setVariable(UA_Server* server, void* var);
+  void getVariable(UA_Server* server, void* var, bool isDebug = false);
+  void addCurrentTimeDataSourceVariable(UA_Server* server);
+  void addCurrentTimeExternalDataSource(UA_Server* server);
+*/
 using namespace std;
 
 struct nodeid_t {
@@ -61,23 +62,55 @@ public:
   void init(UA_UInt16 _port = 0);
   void run();
   void stop();
-  int addVar(string s, int16_t i16, int mode);
-//  int addVar(string s, int32_t i32, int mode);
-  int addVar(string s, int64_t i64, int mode);
-  int addVar(string s, uint16_t ui16, int mode);
-//  int addVar(string s, uint32_t ui32, int mode);
-//  int addVar(string s, uint64_t ui64, int mode);
-  int addVar(string s, float fl, int mode);
+//  template<typename T> int addVar(string, T, int);
 
-  void setVar(string s, int16_t i16);
-  void setVar(string s, uint16_t ui16);
-  void setVar(string s, int64_t i64);
-  void setVar(string s, float fl);
+  template<typename T> int addVar(string s, T val, int rmode)
+  {
+    rc = addVar_Names(s, UA_TYPES_FLOAT, rmode);
+    if (rc == 0)
+      return 0;
+    addVar_NodeId(vars[s]);
+    vars[s].ptr_value = &val;
+    addVariable(vars[s]);
+    return 1;
+  }
+  /*   int addVar(string s, int16_t i16, int mode);
+    //  int addVar(string s, int32_t i32, int mode);
+    int addVar(string s, int64_t i64, int mode);
+    int addVar(string s, uint16_t ui16, int mode);
+    //  int addVar(string s, uint32_t ui32, int mode);
+    //  int addVar(string s, uint64_t ui64, int mode);
+    int addVar(string s, float fl, int mode); */
 
-  int16_t getVar(string s, int16_t i16);
-  uint16_t getVar(string s, uint16_t &ui16);
-  int64_t getVar(string s, int64_t &i64);
-  float getVar(string s, float &fl);
+//  template<typename T> void setVar(string, T);
+  template<typename T> void setVar(string s, T Value)
+  {
+    if (!vars.count(s))
+      LOGA("Ignore non-existing variable: %s", s.c_str());
+    vars[s].ptr_value = &Value;
+    setVariable(vars[s]);
+  }
+  //void setVar(string s, int16_t i16);
+  //void setVar(string s, uint16_t ui16);
+  //void setVar(string s, int64_t i64);
+  //void setVar(string s, float fl);
+
+  template<typename T> T getVar(string s, T &Value)
+  {
+    if (!vars.count(s)) {
+      LOGA("Ignore non-existing variable: %s", s.c_str());
+      return Value;
+    }
+    UA_Variant Vrnt;
+    getVariable(vars[s], &Vrnt);
+    Value = *(static_cast<T*>(Vrnt.data));
+    return Value;
+  }
+
+  /*   int16_t getVar(string s, int16_t i16);
+    uint16_t getVar(string s, uint16_t &ui16);
+    int64_t getVar(string s, int64_t &i64);
+    float getVar(string s, float &fl); */
 
   void setVariable(var_t &var);
   void getVariable(var_t &var, UA_Variant* vrnt);

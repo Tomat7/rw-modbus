@@ -12,31 +12,42 @@
 
 #define DEBUG(a) if (isDebug) {a}
 
-void OpcServer_c::setVar(string s, int16_t i16)
-{
+//template<typename T> T add(T a, T b)
+/*
+  template<typename T> void OpcServer_c::setVar(string s, T setValue)
+  {
+  vars[s].ptr_value = &setValue;
+  setVariable(vars[s]);
+  }
+*/
+/* void OpcServer_c::setVar(string s, int16_t i16)
+  {
   //vars[s].value.i16 = i16;
   vars[s].ptr_value = &i16;
   setVariable(vars[s]);
-}
+  }
 
-void OpcServer_c::setVar(string s, uint16_t ui16)
-{
+  void OpcServer_c::setVar(string s, uint16_t ui16)
+  {
   //vars[s].value.ui16 = ui16;
   vars[s].ptr_value = &ui16;
   setVariable(vars[s]);
-}
+  }
 
-void OpcServer_c::setVar(string s, int64_t i64)
-{
+  void OpcServer_c::setVar(string s, int64_t i64)
+  {
   //vars[s].value.i64 =
   vars[s].ptr_value = &i64;
   setVariable(vars[s]);
-}
+  }
 
 
-void OpcServer_c::setVar(string s, float fl)
-{
+  void OpcServer_c::setVar(string s, float fl)
+  {
   //vars[s].value.fl =
   vars[s].ptr_value = &fl;
   setVariable(vars[s]);
-}
+  }
+*/
+
+// eof
