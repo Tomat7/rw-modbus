@@ -17,34 +17,19 @@ int16_t OpcServer_c::getVar(string s, int16_t i16)
   if (!vars.count(s)) {
     LOGA("Ignore non-existing variable: %s", s.c_str());
     return 0;
-  } else
-    LOGA("Variable exist: %s", s.c_str());
+  } /* else
+    LOGA("Variable exist: %s", s.c_str()); */
 
   UA_Variant Vrnt;
-  printf("\ngetVar1: %s\n", s.c_str());
   getVariable(vars[s], &Vrnt);
-  printf("\ngetVar2: %s\n", s.c_str());
-  //vars[s].value.i16 = *(dynamic_cast<UA_Int16*>(Vrnt.data));
-  //vars[s].ptr_value = dynamic_cast<UA_Int16*>(Vrnt.data);
-  vars[s].ptr_value = Vrnt.data;
-  printf("\ngetVar3: %s\n", s.c_str());
-
-  int16_t ii16 = *((int16_t*)vars[s].ptr_value);
-  printf("\ngetVar4: %s\n", s.c_str());
-
   i16 = *(static_cast<UA_Int16*>(Vrnt.data));
-  //i16 = *(vars[s].ptr_value);
-
-  printf("\ngetVar5: %s\n", s.c_str());
-
-  return ii16;
+  return i16;
 }
 
 uint16_t OpcServer_c::getVar(string s, uint16_t &ui16)
 {
   UA_Variant Vrnt;
   getVariable(vars[s], &Vrnt);
-  //vars[s].value.ui16 = *(static_cast<UA_UInt16*>(Vrnt.data));
   ui16 = *(static_cast<UA_UInt16*>(Vrnt.data));
   return ui16;
 }
@@ -53,7 +38,6 @@ int64_t OpcServer_c::getVar(string s, int64_t &i64)
 {
   UA_Variant Vrnt;
   getVariable(vars[s], &Vrnt);
-  //vars[s].value.i64 = *(static_cast<UA_Int64*>(Vrnt.data));
   i64 = *(static_cast<UA_Int64*>(Vrnt.data));
   return i64;
 }
@@ -63,7 +47,8 @@ float OpcServer_c::getVar(string s, float &fl)
 {
   UA_Variant Vrnt;
   getVariable(vars[s], &Vrnt);
-  //vars[s].value.fl = *(static_cast<UA_Float*>(Vrnt.data));
   fl = *(static_cast<UA_Float*>(Vrnt.data));
   return fl;
 }
+
+// eof

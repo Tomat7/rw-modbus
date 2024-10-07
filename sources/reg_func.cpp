@@ -65,7 +65,7 @@ void regs_update()
 
 void reg_print(string rn, const regdata_t* rd)
 {
-  printf("\n===== regs_print =====\n");
+  // printf("\n===== regs_print =====\n");
   const char* C = NRM;
   if (rd->rerrors > 0)
     C = C_RED;
