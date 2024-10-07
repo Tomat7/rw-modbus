@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 #include <string>
+#include <typeinfo>
 
 #include "include/logger.h"
 
@@ -31,6 +32,7 @@ void OpcServer_c::addVar_NodeId(var_t &v)
     v.node_id.reference = UA_NS0ID(HASCOMPONENT);
   }
 }
+
 
 UA_NodeId OpcServer_c::getFolder_NodeId(string str_path)
 {
@@ -62,6 +64,7 @@ UA_NodeId OpcServer_c::getFolder_NodeId(string str_path)
   return addFolders(str_path, UA_NS0ID(OBJECTSFOLDER) /* top-level Folder ID */);
 }
 
+
 UA_NodeId OpcServer_c::addFolders(string str_path, UA_NodeId parentNodeId)
 {
 
@@ -92,6 +95,7 @@ UA_NodeId OpcServer_c::addFolders(string str_path, UA_NodeId parentNodeId)
 
   return folderId;
 }
+
 
 int OpcServer_c::countSlash(string Path)
 {

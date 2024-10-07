@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 #include <string>
+#include <typeinfo>
 
 #include "include/logger.h"
 
@@ -70,11 +71,11 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   vars[v.raw_name].path = const_cast<char*>(vars[v.raw_name].str_path.c_str());
   vars[v.raw_name].path_name = const_cast<char*>(vars[v.raw_name].str_full.c_str());
 
-//  LOGD("STR Fullname: %s, name: %s, path: %s", vars[v.str_full].str_full.c_str(),
-//       vars[v.str_full].str_name.c_str(), vars[v.str_full].str_path.c_str());
+  LOGD("STR %s, %s, %s", vars[v.raw_name].str_full.c_str(),
+       vars[v.raw_name].str_path.c_str(), vars[v.raw_name].str_name.c_str());
 
-  LOGD("CH* Fullname: %s, name: %s, path: %s", vars[v.str_full].path_name,
-       vars[v.str_full].name, vars[v.str_full].path);
+  LOGD("CH* %s, %s, %s", vars[v.raw_name].path_name,
+       vars[v.raw_name].path, vars[v.raw_name].name);
 
   return 1;
 }

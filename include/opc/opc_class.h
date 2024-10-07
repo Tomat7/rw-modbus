@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 #include <mutex>
+#include <typeinfo>
+#include <typeindex>
 
 #include "include/logger.h"
 
@@ -32,6 +34,7 @@ struct var_t {
   nodeid_t node_id;
   void* ptr_value;    // ptr to "correct" value_u
   int rmode;          // 1 - mean RW
+  int type_id;
   int type;
   // UA_TYPES_INT16, UA_TYPES_UINT16, UA_TYPES_INT32, UA_TYPES_UINT32,
   // UA_TYPES_INT64, UA_TYPES_UINT64, UA_TYPES_FLOAT, UA_TYPES_DATETIME
@@ -59,9 +62,11 @@ public:
 
   template<typename T> int addVar(string s, T Value, int rmode)
   {
-    rc = addVar_Names(s, UA_TYPES_FLOAT, rmode);
+    //rc = addVar_Names(s, UA_TYPES_FLOAT, rmode);
+    rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
     if (rc == 0)
       return 0;
+    LOGA("TypeId: %s", typeid(Value).name());
     addVar_NodeId(vars[s]);
     vars[s].ptr_value = &Value;
     addVariable(vars[s]);
@@ -112,6 +117,7 @@ private:
 
 
   map<string, var_t> vars;  // All regs here.
+  map<type_index, int> types;
   // nodeid_t uaNodeId;
 
 

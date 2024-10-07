@@ -7,6 +7,9 @@
 
 #include <thread>
 #include <mutex>
+#include <map>
+#include <typeinfo>
+#include <typeindex>
 
 #include "include/logger.h"
 
@@ -17,6 +20,13 @@ OpcServer_c::OpcServer_c(UA_UInt16 _port)
   uaPort = _port;
   uaServer = UA_Server_new();
   uaRunning_mux = new mutex;
+  types[type_index(typeid(int16_t))] = UA_TYPES_INT16;
+  types[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
+  types[type_index(typeid(int32_t))] = UA_TYPES_INT32;
+  types[type_index(typeid(uint32_t))] = UA_TYPES_UINT32;
+  types[type_index(typeid(int64_t))] = UA_TYPES_INT64;
+  types[type_index(typeid(uint64_t))] = UA_TYPES_UINT64;
+  types[type_index(typeid(float))] = UA_TYPES_FLOAT;
 }
 
 OpcServer_c::~OpcServer_c()
