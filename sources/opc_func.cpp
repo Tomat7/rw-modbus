@@ -114,7 +114,7 @@ uint16_t opc_update_uint16(string name, string str_type, uint16_t val)
   printf("\nTry: %s\n", n.c_str());
 
   if (str_type == "f") {
-    //float fl = OPCs.getVar(n, fl);
+    float fl = OPCs.getVar(n, fl);
     //res = (uint16_t)(fl * 100);
     OPCs.setVar(n, (int16_t)val * (float)0.01);
   } else if (str_type == "i") {
@@ -122,7 +122,7 @@ uint16_t opc_update_uint16(string name, string str_type, uint16_t val)
     res = (uint16_t)i16;
     OPCs.setVar(n, (int16_t)val);
   } else if (str_type == "u") {
-    //uint16_t ui16 = OPCs.getVar(n, ui16);
+    uint16_t ui16 = OPCs.getVar(n, ui16);
     //res = (uint16_t)ui16;
     OPCs.setVar(n, (uint16_t)val);
   }
