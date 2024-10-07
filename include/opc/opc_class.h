@@ -11,13 +11,7 @@
 #include <mutex>
 
 #include "include/logger.h"
-/*
-  void addVariable(UA_Server* server, void* var);
-  void setVariable(UA_Server* server, void* var);
-  void getVariable(UA_Server* server, void* var, bool isDebug = false);
-  void addCurrentTimeDataSourceVariable(UA_Server* server);
-  void addCurrentTimeExternalDataSource(UA_Server* server);
-*/
+
 using namespace std;
 
 struct nodeid_t {
@@ -41,7 +35,7 @@ struct var_t {
   int type;
   // UA_TYPES_INT16, UA_TYPES_UINT16, UA_TYPES_INT32, UA_TYPES_UINT32,
   // UA_TYPES_INT64, UA_TYPES_UINT64, UA_TYPES_FLOAT, UA_TYPES_DATETIME
-  union value_u {
+  /* union value_u {
     int16_t i16;
     int32_t i32;
     int64_t i64;
@@ -50,7 +44,7 @@ struct var_t {
     uint64_t ui64;
     int64_t dt;
     float fl;
-  } value;
+    } value; */
 };
 
 class OpcServer_c
@@ -62,27 +56,18 @@ public:
   void init(UA_UInt16 _port = 0);
   void run();
   void stop();
-//  template<typename T> int addVar(string, T, int);
 
-  template<typename T> int addVar(string s, T val, int rmode)
+  template<typename T> int addVar(string s, T Value, int rmode)
   {
     rc = addVar_Names(s, UA_TYPES_FLOAT, rmode);
     if (rc == 0)
       return 0;
     addVar_NodeId(vars[s]);
-    vars[s].ptr_value = &val;
+    vars[s].ptr_value = &Value;
     addVariable(vars[s]);
     return 1;
   }
-  /*   int addVar(string s, int16_t i16, int mode);
-    //  int addVar(string s, int32_t i32, int mode);
-    int addVar(string s, int64_t i64, int mode);
-    int addVar(string s, uint16_t ui16, int mode);
-    //  int addVar(string s, uint32_t ui32, int mode);
-    //  int addVar(string s, uint64_t ui64, int mode);
-    int addVar(string s, float fl, int mode); */
 
-//  template<typename T> void setVar(string, T);
   template<typename T> void setVar(string s, T Value)
   {
     if (!vars.count(s))
@@ -90,10 +75,6 @@ public:
     vars[s].ptr_value = &Value;
     setVariable(vars[s]);
   }
-  //void setVar(string s, int16_t i16);
-  //void setVar(string s, uint16_t ui16);
-  //void setVar(string s, int64_t i64);
-  //void setVar(string s, float fl);
 
   template<typename T> T getVar(string s, T &Value)
   {
@@ -107,15 +88,6 @@ public:
     return Value;
   }
 
-  /*   int16_t getVar(string s, int16_t i16);
-    uint16_t getVar(string s, uint16_t &ui16);
-    int64_t getVar(string s, int64_t &i64);
-    float getVar(string s, float &fl); */
-
-  void setVariable(var_t &var);
-  void getVariable(var_t &var, UA_Variant* vrnt);
-
-
 private:
   bool isDebug = true;
   UA_UInt16 uaPort = 4840;
@@ -124,15 +96,20 @@ private:
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
 
-  void* getPtrToVariable(var_t &var);
-  string getPath_Name(string &n);
-  int addVar_Names(string raw_name, int t, int m);
-
   UA_NodeId getFolder_NodeId(string str_path);
   UA_NodeId addFolders(string full_name, UA_NodeId parentNodeId);
+  string getPath_Name(string &n);
 
+  int addVar_Names(string raw_name, int t, int m);
   void addVar_NodeId(var_t &v);
+
   void addVariable(var_t &var);
+  void setVariable(var_t &var);
+  void getVariable(var_t &var, UA_Variant* vrnt);
+
+  void* getPtrToVariable(var_t &var);
+  int countSlash(string Path);
+
 
   map<string, var_t> vars;  // All regs here.
   // nodeid_t uaNodeId;

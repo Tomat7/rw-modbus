@@ -38,6 +38,20 @@ void opc_regs_init()
       uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
       OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
     }
+
+    n = folder + name + "/" + name;
+
+    if (rm.ptr_reg->str_type == "f") {
+      float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
+      OPCs.addVar(n, fl, rm.ptr_data_plc->rmode);
+    } else if (rm.ptr_reg->str_type == "i") {
+      int16_t i16 = (int16_t)(rm.ptr_data_plc->rvalue);
+      OPCs.addVar(n, i16, rm.ptr_data_plc->rmode);
+    } else if (rm.ptr_reg->str_type == "u") {
+      uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
+      OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
+    }
+
   }
 
 }
