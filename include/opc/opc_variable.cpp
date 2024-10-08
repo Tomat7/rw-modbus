@@ -18,10 +18,7 @@ void OpcServer_c::addVariable(var_t &v)
     return;
   }
 
-  getPtrToVariable(v);
-
   UA_Byte acl = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
-
   UA_VariableAttributes attr = UA_VariableAttributes_default;
   UA_Variant_setScalar(&attr.value, v.ptr_value, &UA_TYPES[v.type]);
 
@@ -30,19 +27,15 @@ void OpcServer_c::addVariable(var_t &v)
   attr.dataType = UA_TYPES[v.type].typeId;
   attr.accessLevel = acl;
 
-  // Add the variable node to the information model
-  //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
   UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.ua_name);
-
-  //UA_NodeId parentNodeId = UA_NS0ID(OBJECTSFOLDER);
-  //UA_NodeId parentReferenceNodeId = UA_NS0ID(ORGANIZES);
 
   UA_Server_addVariableNode(uaServer, v.node_id.var, v.node_id.parent,
                             v.node_id.reference, varQName,
                             UA_NS0ID(BASEDATAVARIABLETYPE), attr, NULL, NULL);
-
+  string d = strVarDetails(v);
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                    "New variable: %s path: %s - %s", v.name, v.ua_name, UA_StatusCode_name(rc));)
+                    "NewVar: %s %s, path: %s - %s", v.name, d.c_str(), v.ua_name,
+                    UA_StatusCode_name(rc));)
 }
 
 void OpcServer_c::setVariable(var_t &v)
@@ -83,74 +76,31 @@ void OpcServer_c::setVariable(var_t &v)
 
 void OpcServer_c::getVariable(var_t &v, UA_Variant* vrnt_)
 {
-
-  if (v.ptr_value == nullptr) {
-    LOGA("Wrong ptr: %s", v.name);
-    return;
-  }
-
-  //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.name);
-  //UA_Variant myVariant;
   UA_Variant_init(vrnt_);
   UA_Server_readValue(uaServer, v.node_id.var, vrnt_);
-
-  /*
-    if (v.type == UA_TYPES_INT16) {
-      v.value.i16 = *(static_cast<UA_Int16*>(myVariant.data));
-      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                        "%s (ui16) = %i", v.name, *(static_cast<int16_t*>(v.ptr_value)));)
-    } else if (v.type == UA_TYPES_UINT16) {
-      v.value.ui16 = *(static_cast<UA_UInt16*>(myVariant.data));
-      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                        "%s (ui16) = %i", v.name, *(static_cast<uint16_t*>(v.ptr_value)));)
-    } else if (v.type == UA_TYPES_INT32) {
-      v.value.i32 = *(static_cast<int32_t*>(myVariant.data));
-      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                        "%s (i32) = %i", v.name, *(static_cast<int32_t*>(v.ptr_value)));)
-    } else if (v.type == UA_TYPES_FLOAT) {
-      v.value.fl = *(static_cast<UA_Float*>(myVariant.data));
-      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                        "%s (float) = %.3f", v.name, *(static_cast<float*>(v.ptr_value)));)
-    } else if (v.type == UA_TYPES_DATETIME) {
-      v.value.dt = *(static_cast<UA_DateTime*>(myVariant.data));
-      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                        "%s (DateTime) = %i", v.name, *(static_cast<int64_t*>(v.ptr_value)));)
-    } else
-      DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                        "%s (WRONG TYPE)", v.name);)
-  */
-
 }
 
 
-void* OpcServer_c::getPtrToVariable(var_t &v)
+string OpcServer_c::strVarDetails(var_t &v)
 {
+  string ret;
+  if (v.type == UA_TYPES_INT16)
+    ret = "(i16) = " + to_string(*(static_cast<int16_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_INT32)
+    ret = "(i32) = " + to_string(*(static_cast<int32_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_INT64)
+    ret = "(i64) = " + to_string(*(static_cast<int64_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_UINT16)
+    ret = "(ui16) = " + to_string(*(static_cast<uint16_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_UINT32)
+    ret = "(ui32) = " + to_string(*(static_cast<uint32_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_UINT64)
+    ret = "(ui64) = " + to_string(*(static_cast<uint64_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_FLOAT)
+    ret = "(float) = " + to_string(*(static_cast<float*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_DATETIME)
+    ret = "(DateTime)";
 
-  if (v.type == UA_TYPES_INT16) {
-    //v.ptr_value = (UA_Int16*)&(v.value.i16);
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (i16) = %i", v.name, *(static_cast<int16_t*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_UINT16) {
-    //v.ptr_value = (UA_UInt16*)&(v.value.ui16);
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (ui16) = %i", v.name, *(static_cast<uint16_t*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_INT32) {
-    //v.ptr_value = (UA_Int32*)&(v.value.i32);
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (i32) = %i", v.name, *(static_cast<int32_t*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_FLOAT) {
-    //v.ptr_value = (UA_Float*)&(v.value.fl);
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (float) = %.3f", v.name, *(static_cast<float*>(v.ptr_value)));)
-  } else if (v.type == UA_TYPES_DATETIME) {
-    //v.ptr_value = (UA_DateTime*)&(v.value.dt);
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (DateTime) = %i", v.name, *(static_cast<int64_t*>(v.ptr_value)));)
-  } else {
-    DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                      "%s (WRONG TYPE)", v.name);)
-  }
-
-  return v.ptr_value;
+  return ret;
 }
 

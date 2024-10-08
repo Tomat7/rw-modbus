@@ -22,11 +22,14 @@ void opc_regs_init()
 {
   printf("\n===== OPC_regs_init =====\n");
 
+  string n;
+
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
 
-    string n = folder + name;
+    folder = "/PLC/";
+    n = folder + name;
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;

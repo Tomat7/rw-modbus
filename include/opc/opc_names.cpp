@@ -70,13 +70,12 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   vars[v.raw_name].name = const_cast<char*>(vars[v.raw_name].str_name.c_str());
   vars[v.raw_name].path = const_cast<char*>(vars[v.raw_name].str_path.c_str());
   vars[v.raw_name].path_name = const_cast<char*>(vars[v.raw_name].str_full.c_str());
-
-  LOGD("STR %s, %s, %s", vars[v.raw_name].str_full.c_str(),
-       vars[v.raw_name].str_path.c_str(), vars[v.raw_name].str_name.c_str());
-
-  LOGD("CH* %s, %s, %s", vars[v.raw_name].path_name,
-       vars[v.raw_name].path, vars[v.raw_name].name);
-
+  /*
+    LOGD("STR %s, %s, %s", vars[v.raw_name].str_full.c_str(),
+         vars[v.raw_name].str_path.c_str(), vars[v.raw_name].str_name.c_str());
+    LOGD("CH* %s, %s, %s", vars[v.raw_name].path_name,
+         vars[v.raw_name].path, vars[v.raw_name].name);
+  */
   return 1;
 }
 

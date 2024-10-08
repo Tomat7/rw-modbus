@@ -62,11 +62,10 @@ public:
 
   template<typename T> int addVar(string s, T Value, int rmode)
   {
-    //rc = addVar_Names(s, UA_TYPES_FLOAT, rmode);
     rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
     if (rc == 0)
       return 0;
-    //LOGA("TypeId: %s", typeid(Value).name());
+
     addVar_NodeId(vars[s]);
     vars[s].ptr_value = &Value;
     addVariable(vars[s]);
@@ -112,15 +111,13 @@ private:
   void setVariable(var_t &var);
   void getVariable(var_t &var, UA_Variant* vrnt);
 
-  void* getPtrToVariable(var_t &var);
-  int countSlash(string Path);
-  string getPathByLevel(string Path, int level);
 
+  int countSlash(string Path);
+  string strVarDetails(var_t &var);
+  string getPathByLevel(string Path, int level);
 
   map<string, var_t> vars;  // All regs here.
   map<type_index, int> types;
-  // nodeid_t uaNodeId;
-
 
 };
 
