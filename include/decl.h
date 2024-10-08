@@ -19,7 +19,7 @@ using std::string;
 
 extern int timeout_sec;
 extern cchar* mode;
-extern map<string, RegMap_c> REGmap;
+extern map<string, Reg_c> REGmap;
 extern vector<PLC_c> PLCvec;
 extern PLC_c Slave;
 extern OpcServer_c OPCs;

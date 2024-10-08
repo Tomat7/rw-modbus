@@ -42,9 +42,13 @@ void opc_regs_init()
       OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
     }
 
-    folder = "/Scada/PLC/";
+    //folder = "/Scada/PLC/";
 
-    n = folder + name;
+    string parent = name;
+    size_t z = parent.find(".");
+    parent.erase(z);
+
+    n = folder + parent + "/" + name;
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;

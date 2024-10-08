@@ -26,14 +26,15 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-RegMap_c::~RegMap_c() { LOGD("DEstruct! %x %s", this, this->rn); }
+Reg_c::~Reg_c() { LOGD("DEstruct! %x %s", this, this->rn); }
 
-RegMap_c::RegMap_c() { LOGD("Construct! %x", this); }
+Reg_c::Reg_c() { LOGD("Construct! %x", this); }
 
-RegMap_c::RegMap_c(const char* _rn) { RegMap_c((string)_rn); }
+/*
+  Reg_c::Reg_c(const char* _rn) { Reg_c((string)_rn); }
 
-RegMap_c::RegMap_c(string _rn)
-{
+  Reg_c::Reg_c(string _rn)
+  {
   rn = get_new_char(_rn.c_str());
   LOGD("try to open %s", rn);
 
@@ -41,14 +42,15 @@ RegMap_c::RegMap_c(string _rn)
     LOGD("Open %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
   else
     LOGE("Error open %s", rn);
-}
+  }
+*/
 
-RegMap_c::RegMap_c(reg_t* _reg)
+Reg_c::Reg_c(reg_t* _reg)
 {
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
   rn = ptr_reg->fullname.c_str();
-  LOGD("try to create %s", rn);
+  //LOGD("try to create %s", rn);
 
   fd = create_shm_fd(rn);
   if (fd != -1) {
@@ -60,7 +62,7 @@ RegMap_c::RegMap_c(reg_t* _reg)
   }
 }
 
-RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
+Reg_c::Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
 {
   fd = _fd;
   ptr_data_shm = _shm;
@@ -71,7 +73,7 @@ RegMap_c::RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
   //  LOGI("+ New RegMap created.");
 }
 
-bool RegMap_c::is_shm()
+bool Reg_c::is_shm()
 {
   bool ret = false;
 
@@ -95,7 +97,7 @@ bool RegMap_c::is_shm()
   return ret;
 }
 
-void RegMap_c::sync(uint16_t _val)
+void Reg_c::sync(uint16_t _val)
 {
   value = _val;
   if (ptr_data_shm != nullptr) {
@@ -114,27 +116,27 @@ void RegMap_c::sync(uint16_t _val)
   return;
 }
 
-void RegMap_c::sync()
+void Reg_c::sync()
 {
   sync(get_plc_val());
   return;
 }
 
-uint16_t RegMap_c::get_plc_val()
+uint16_t Reg_c::get_plc_val()
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rvalue;
   return 0;
 }
 
-uint16_t RegMap_c::get_shm_val()
+uint16_t Reg_c::get_shm_val()
 {
   if (is_shm())
     return ptr_data_shm->rvalue;
   return 0;
 }
 
-uint16_t RegMap_c::get_local()
+uint16_t Reg_c::get_local()
 {
   if (is_shm()) {
     regdata_t mem;
@@ -144,7 +146,7 @@ uint16_t RegMap_c::get_local()
   return 0;
 }
 
-void RegMap_c::set_plc_val(uint16_t _val)
+void Reg_c::set_plc_val(uint16_t _val)
 {
   if (ptr_data_plc != nullptr)
     if (ptr_data_plc->rvalue != _val) {
@@ -153,13 +155,13 @@ void RegMap_c::set_plc_val(uint16_t _val)
     }
 }
 
-void RegMap_c::set_shm_val(uint16_t _val)
+void Reg_c::set_shm_val(uint16_t _val)
 {
   if (is_shm())
     ptr_data_shm->rvalue = _val;
 }
 
-void RegMap_c::set_local(uint16_t _val)
+void Reg_c::set_local(uint16_t _val)
 {
   LOGD("%d %s %x.", _val, rn, this);
   if (is_shm()) {
@@ -169,14 +171,14 @@ void RegMap_c::set_local(uint16_t _val)
   }
 }
 
-int RegMap_c::get_mode()
+int Reg_c::get_mode()
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rmode;
   return -1;
 }
 
-int RegMap_c::get_type()
+int Reg_c::get_type()
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rtype;

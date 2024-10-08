@@ -12,7 +12,7 @@
 // using namespace std;
 // using namespace libconfig;
 
-std::map<string, RegMap_c> REGmap;
+std::map<string, Reg_c> REGmap;
 std::vector<PLC_c> PLCvec;
 PLC_c Slave(1502);
 OpcServer_c OPCs(4840);

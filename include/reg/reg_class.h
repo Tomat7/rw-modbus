@@ -42,15 +42,15 @@ struct reg_t {
   const char* ch_name = nullptr;
 };
 
-class RegMap_c
+class Reg_c
 {
 public:
-  RegMap_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
-  RegMap_c(reg_t* _reg);      // for PLC master
-  RegMap_c(const char* _rn);  // for Slave. PLC regs not initialized!
-  RegMap_c(string _rn);       // for Slave. PLC regs not initialized!
-  RegMap_c();
-  ~RegMap_c();
+  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
+  Reg_c(reg_t* _reg);      // for PLC master
+  Reg_c(const char* _rn);  // for Slave. PLC regs not initialized!
+  Reg_c(string _rn);       // for Slave. PLC regs not initialized!
+  Reg_c();
+  ~Reg_c();
 
   uint16_t get_plc_val();
   uint16_t get_shm_val();
@@ -71,5 +71,5 @@ public:
   uint16_t value = 0;                 // just for FUN! (to print with PLC & SHM)
   regdata_t* ptr_data_shm = nullptr;  // ptr to SHARED MEMORY (local) data
   regdata_t* ptr_data_plc = nullptr;  // ptr to SHARED MEMORY (PLC/MB) data
-  reg_t* ptr_reg = nullptr;           // ptr to PLC data
+  reg_t* ptr_reg = nullptr;           // ptr to PLC reg
 };
