@@ -66,7 +66,7 @@ public:
     rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
     if (rc == 0)
       return 0;
-    LOGA("TypeId: %s", typeid(Value).name());
+    //LOGA("TypeId: %s", typeid(Value).name());
     addVar_NodeId(vars[s]);
     vars[s].ptr_value = &Value;
     addVariable(vars[s]);
@@ -75,21 +75,21 @@ public:
 
   template<typename T> void setVar(string s, T Value)
   {
-    if (!vars.count(s))
+    if (vars.count(s)) {
+      vars[s].ptr_value = &Value;
+      setVariable(vars[s]);
+    } else
       LOGA("Ignore non-existing variable: %s", s.c_str());
-    vars[s].ptr_value = &Value;
-    setVariable(vars[s]);
   }
 
   template<typename T> T getVar(string s, T &Value)
   {
-    if (!vars.count(s)) {
+    if (vars.count(s)) {
+      UA_Variant Vrnt;
+      getVariable(vars[s], &Vrnt);
+      Value = *(static_cast<T*>(Vrnt.data));
+    } else
       LOGA("Ignore non-existing variable: %s", s.c_str());
-      return Value;
-    }
-    UA_Variant Vrnt;
-    getVariable(vars[s], &Vrnt);
-    Value = *(static_cast<T*>(Vrnt.data));
     return Value;
   }
 
@@ -114,6 +114,7 @@ private:
 
   void* getPtrToVariable(var_t &var);
   int countSlash(string Path);
+  string getPathByLevel(string Path, int level);
 
 
   map<string, var_t> vars;  // All regs here.
