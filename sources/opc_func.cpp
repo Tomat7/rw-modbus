@@ -28,7 +28,6 @@ void opc_regs_init()
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
 
-    folder = "/PLC/";
     n = folder + name;
 
     if (rm.ptr_reg->str_type == "f") {
@@ -61,36 +60,6 @@ void opc_regs_init()
       OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
     }
 
-    folder = "/Scada/PLC/esp32/";
-
-    n = folder + name;
-
-    if (rm.ptr_reg->str_type == "f") {
-      float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
-      OPCs.addVar(n, fl, rm.ptr_data_plc->rmode);
-    } else if (rm.ptr_reg->str_type == "i") {
-      int16_t i16 = (int16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, i16, rm.ptr_data_plc->rmode);
-    } else if (rm.ptr_reg->str_type == "u") {
-      uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
-    }
-
-    folder = "/Scada/PLC/esp32/Kub/";
-
-    n = folder + name;
-
-    if (rm.ptr_reg->str_type == "f") {
-      float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
-      OPCs.addVar(n, fl, rm.ptr_data_plc->rmode);
-    } else if (rm.ptr_reg->str_type == "i") {
-      int16_t i16 = (int16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, i16, rm.ptr_data_plc->rmode);
-    } else if (rm.ptr_reg->str_type == "u") {
-      uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
-    }
-
   }
 
 }
@@ -100,8 +69,11 @@ uint16_t opc_update_uint16(string name, string str_type, uint16_t val)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
   // printf("\nTry: %s\n", n.c_str());
+  string parent = name;
+  size_t z = parent.find(".");
+  parent.erase(z);
 
-  string n = folder + name;
+  string n = folder + parent + "/" + name;
   uint16_t res = 0;
 
   if (str_type == "f") {
