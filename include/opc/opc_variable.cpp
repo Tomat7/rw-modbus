@@ -89,14 +89,17 @@ void OpcServer_c::writeVariable(var_t &v)
   // Use a more detailed write function than UA_Server_writeValue
   UA_WriteValue wv;
   UA_WriteValue_init(&wv);
-  wv.nodeId = v.node_id.var; //myIntegerNodeId;
+  wv.nodeId = v.node_id.var;
   wv.attributeId = UA_ATTRIBUTEID_VALUE;
   //wv.value.status = UA_STATUSCODE_GOOD;
+  //wv.value.status = UA_STATUSCODE_BADCOMMUNICATIONERROR;
   wv.value.hasStatus = false;
   wv.value.value = Attr.value;
-  wv.value.hasValue = true;
+  wv.value.hasValue = false;
 
   UA_DateTime currentTime = UA_DateTime_now();
+  wv.value.hasServerTimestamp = true;
+  wv.value.serverTimestamp = currentTime;
   wv.value.hasSourceTimestamp = true;
   wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
 
