@@ -76,7 +76,8 @@ public:
   {
     if (vars.count(s)) {
       vars[s].ptr_value = &Value;
-      setVariable(vars[s]);
+      //setVariable(vars[s]);
+      writeVariable(vars[s]);
     } else
       LOGA("Ignore non-existing variable: %s", s.c_str());
   }
@@ -109,6 +110,7 @@ private:
 
   void addVariable(var_t &var);
   void setVariable(var_t &var);
+  void writeVariable(var_t &var);
   void getVariable(var_t &var, UA_Variant* vrnt);
 
 

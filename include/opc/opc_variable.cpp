@@ -66,10 +66,41 @@ void OpcServer_c::setVariable(var_t &v)
   UA_Server_write(uaServer, &wv);
 
   /* Reset the variable to a good statuscode with a value */
-  wv.value.hasStatus = false;
+  wv.value.status = UA_STATUSCODE_GOOD; //UA_STATUSCODE_BADNOTCONNECTED;
+  //wv.value.status = UA_STATUSCODE_BADCOMMUNICATIONERROR;
+  wv.value.hasStatus = true;
   wv.value.value = myVariant;
   wv.value.hasValue = true;
+  //wv.value.serverTimestamp = true;
   UA_Server_write(uaServer, &wv);
+
+}
+
+
+void OpcServer_c::writeVariable(var_t &v)
+{
+  //UA_NodeId myIntegerNodeId = UA_NODEID_STRING(1, "fake.source_timestamp");
+
+  /* Write a different integer value */
+  UA_VariableAttributes Attr;
+  UA_Variant_init(&Attr.value);
+  UA_Variant_setScalar(&Attr.value, v.ptr_value, &UA_TYPES[v.type]);
+
+  // Use a more detailed write function than UA_Server_writeValue
+  UA_WriteValue wv;
+  UA_WriteValue_init(&wv);
+  wv.nodeId = v.node_id.var; //myIntegerNodeId;
+  wv.attributeId = UA_ATTRIBUTEID_VALUE;
+  //wv.value.status = UA_STATUSCODE_GOOD;
+  wv.value.hasStatus = false;
+  wv.value.value = Attr.value;
+  wv.value.hasValue = true;
+
+  UA_DateTime currentTime = UA_DateTime_now();
+  wv.value.hasSourceTimestamp = true;
+  wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
+
+  UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
 
 }
 
