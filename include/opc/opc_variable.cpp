@@ -91,11 +91,11 @@ void OpcServer_c::writeVariable(var_t &v)
   UA_WriteValue_init(&wv);
   wv.nodeId = v.node_id.var;
   wv.attributeId = UA_ATTRIBUTEID_VALUE;
-  //wv.value.status = UA_STATUSCODE_GOOD;
-  //wv.value.status = UA_STATUSCODE_BADCOMMUNICATIONERROR;
-  wv.value.hasStatus = false;
+  wv.value.status = UA_STATUSCODE_GOOD;
+  //wv.value.status = UA_STATUSCODE_BADNODEIDUNKNOWN; //UA_STATUSCODE_BAD;
+  wv.value.hasStatus = true;
   wv.value.value = Attr.value;
-  wv.value.hasValue = false;
+  wv.value.hasValue = true;
 
   UA_DateTime currentTime = UA_DateTime_now();
   wv.value.hasServerTimestamp = true;
@@ -104,6 +104,14 @@ void OpcServer_c::writeVariable(var_t &v)
   wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
 
   UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
+
+  /* Write a string */
+  UA_String myString = UA_STRING("test");
+  UA_Variant myVar;
+  UA_Variant_init(&myVar);
+  UA_Variant_setScalar(&myVar, &myString, &UA_TYPES[UA_TYPES_STRING]);
+  UA_StatusCode retval = UA_Server_writeValue(uaServer, v.node_id.var, myVar);
+  printf("Writing a string returned statuscode %s\n", UA_StatusCode_name(retval));
 
 }
 
