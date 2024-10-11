@@ -87,7 +87,10 @@ public:
     if (vars.count(s)) {
       UA_Variant Vrnt;
       getVariable(vars[s], &Vrnt);
-      Value = *(static_cast<T*>(Vrnt.data));
+      printf("\n1-%s: %s\n", __func__, vars[s].name);
+      if (Vrnt.data != nullptr)
+        Value = *(static_cast<T*>(Vrnt.data));
+      printf("\n2-%s: %s\n", __func__, vars[s].name);
     } else
       LOGA("Ignore non-existing variable: %s", s.c_str());
     return Value;

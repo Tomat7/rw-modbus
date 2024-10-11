@@ -86,32 +86,55 @@ void OpcServer_c::writeVariable(var_t &v)
   UA_Variant_init(&Attr.value);
   UA_Variant_setScalar(&Attr.value, v.ptr_value, &UA_TYPES[v.type]);
 
+
   // Use a more detailed write function than UA_Server_writeValue
   UA_WriteValue wv;
   UA_WriteValue_init(&wv);
-  wv.nodeId = v.node_id.var;
-  wv.attributeId = UA_ATTRIBUTEID_VALUE;
-  wv.value.status = UA_STATUSCODE_GOOD;
-  //wv.value.status = UA_STATUSCODE_BADNODEIDUNKNOWN; //UA_STATUSCODE_BAD;
-  wv.value.hasStatus = true;
-  wv.value.value = Attr.value;
-  wv.value.hasValue = true;
+  {
+    wv.nodeId = v.node_id.var;
+    wv.attributeId = UA_ATTRIBUTEID_VALUE;
 
-  UA_DateTime currentTime = UA_DateTime_now();
-  wv.value.hasServerTimestamp = true;
-  wv.value.serverTimestamp = currentTime;
-  wv.value.hasSourceTimestamp = true;
-  wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
+    wv.value.status = UA_STATUSCODE_GOOD;
+    wv.value.hasStatus = true;
 
-  UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
+    //wv.value.status = UA_STATUSCODE_BADNODEIDUNKNOWN; //UA_STATUSCODE_BAD;
+    //wv.value.status = UA_STATUSCODE_UNCERTAIN;
 
-  /* Write a string */
-  UA_String myString = UA_STRING("test");
-  UA_Variant myVar;
-  UA_Variant_init(&myVar);
-  UA_Variant_setScalar(&myVar, &myString, &UA_TYPES[UA_TYPES_STRING]);
-  UA_StatusCode retval = UA_Server_writeValue(uaServer, v.node_id.var, myVar);
-  printf("Writing a string returned statuscode %s\n", UA_StatusCode_name(retval));
+    wv.value.value = Attr.value;
+    wv.value.hasValue = true;
+
+    UA_DateTime currentTime = UA_DateTime_now();
+    wv.value.hasServerTimestamp = true;
+    wv.value.serverTimestamp = currentTime;
+    wv.value.hasSourceTimestamp = true;
+    wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
+    printf("\n11-%s: try-OK %s\n", __func__, v.name);
+
+    UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
+  }
+
+  {
+    wv.nodeId = v.node_id.var;
+    wv.attributeId = UA_ATTRIBUTEID_VALUE;
+
+    wv.value.hasStatus = true;
+    //wv.value.status = UA_STATUSCODE_GOOD;
+    //wv.value.status = UA_STATUSCODE_BADNODEIDUNKNOWN; //UA_STATUSCODE_BAD;
+    wv.value.status = UA_STATUSCODE_BAD;
+
+    wv.value.value = Attr.value;
+    wv.value.hasValue = true;
+
+    UA_DateTime currentTime = UA_DateTime_now();
+    wv.value.hasServerTimestamp = true;
+    wv.value.serverTimestamp = currentTime;
+    wv.value.hasSourceTimestamp = true;
+    wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
+    printf("\n22-%s: try-BAD %s\n", __func__, v.name);
+
+    UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
+  }
+
 
 }
 
@@ -119,7 +142,9 @@ void OpcServer_c::writeVariable(var_t &v)
 void OpcServer_c::getVariable(var_t &v, UA_Variant* vrnt_)
 {
   UA_Variant_init(vrnt_);
+  printf("\nTry111-%s: %s\n", __func__, v.name);
   UA_Server_readValue(uaServer, v.node_id.var, vrnt_);
+  printf("\nGot222-%s: %s\n", __func__, v.name);
 }
 
 

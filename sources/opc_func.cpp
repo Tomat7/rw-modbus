@@ -68,7 +68,7 @@ void opc_regs_init()
 uint16_t opc_update_uint16(string name, string str_type, uint16_t val)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
-  // printf("\nTry: %s\n", n.c_str());
+  printf("\n0-%s: %s\n", __func__, name.c_str());
   string parent = name;
   size_t z = parent.find(".");
   parent.erase(z);
@@ -81,8 +81,11 @@ uint16_t opc_update_uint16(string name, string str_type, uint16_t val)
     res = (uint16_t)(fl * 100);
     OPCs.setVar(n, (int16_t)val * (float)0.01);
   } else if (str_type == "i") {
+    printf("\n1-%s: %s\n", __func__, name.c_str());
     int16_t i16 = OPCs.getVar(n, i16);
+    printf("\n2-%s: %s\n", __func__, name.c_str());
     res = (uint16_t)i16;
+    printf("\n3-%s: %s\n", __func__, name.c_str());
     OPCs.setVar(n, (int16_t)val);
   } else if (str_type == "u") {
     uint16_t ui16 = OPCs.getVar(n, ui16);
