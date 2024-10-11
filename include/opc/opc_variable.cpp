@@ -77,7 +77,7 @@ void OpcServer_c::setVariable(var_t &v)
 }
 
 
-void OpcServer_c::writeVariable(var_t &v)
+void OpcServer_c::writeVariable(var_t &v, bool ValueIsOK)
 {
   //UA_NodeId myIntegerNodeId = UA_NODEID_STRING(1, "fake.source_timestamp");
 
@@ -86,32 +86,32 @@ void OpcServer_c::writeVariable(var_t &v)
   UA_Variant_init(&Attr.value);
   UA_Variant_setScalar(&Attr.value, v.ptr_value, &UA_TYPES[v.type]);
 
-
   // Use a more detailed write function than UA_Server_writeValue
   UA_WriteValue wv;
   UA_WriteValue_init(&wv);
-  {
-    wv.nodeId = v.node_id.var;
-    wv.attributeId = UA_ATTRIBUTEID_VALUE;
+  //wv.value.status = UA_STATUSCODE_BADNODEIDUNKNOWN; //UA_STATUSCODE_BAD;
+  //wv.value.status = UA_STATUSCODE_UNCERTAIN;
 
+  if (ValueIsOK)
     wv.value.status = UA_STATUSCODE_GOOD;
-    wv.value.hasStatus = true;
+  else
+    wv.value.status = UA_STATUSCODE_BAD;
 
-    //wv.value.status = UA_STATUSCODE_BADNODEIDUNKNOWN; //UA_STATUSCODE_BAD;
-    //wv.value.status = UA_STATUSCODE_UNCERTAIN;
+  wv.value.hasStatus = true;
+  wv.nodeId = v.node_id.var;
+  wv.attributeId = UA_ATTRIBUTEID_VALUE;
+  wv.value.value = Attr.value;
+  wv.value.hasValue = true;
 
-    wv.value.value = Attr.value;
-    wv.value.hasValue = true;
+  UA_DateTime currentTime = UA_DateTime_now();
+  wv.value.hasServerTimestamp = true;
+  wv.value.serverTimestamp = currentTime;
+  wv.value.hasSourceTimestamp = true;
+  wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
+  UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
 
-    UA_DateTime currentTime = UA_DateTime_now();
-    wv.value.hasServerTimestamp = true;
-    wv.value.serverTimestamp = currentTime;
-    wv.value.hasSourceTimestamp = true;
-    wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
-    UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
-  }
 
-  {
+  /* {
     wv.nodeId = v.node_id.var;
     wv.attributeId = UA_ATTRIBUTEID_VALUE;
 
@@ -130,8 +130,8 @@ void OpcServer_c::writeVariable(var_t &v)
     wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
 
     UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
-  }
-
+    }
+  */
 
 }
 

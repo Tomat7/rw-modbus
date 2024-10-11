@@ -36,6 +36,7 @@ struct var_t {
   int rmode;          // 1 - mean RW
   int type_id;
   int type;
+  UA_StatusCode ua_status;
   // UA_TYPES_INT16, UA_TYPES_UINT16, UA_TYPES_INT32, UA_TYPES_UINT32,
   // UA_TYPES_INT64, UA_TYPES_UINT64, UA_TYPES_FLOAT, UA_TYPES_DATETIME
   /* union value_u {
@@ -61,7 +62,7 @@ public:
   void stop();
 
   template<typename T> int addVar(string s, T Value, int rmode);
-  template<typename T> void setVar(string s, T Value);
+  template<typename T> void setVar(string s, T Value, bool isOK);
   template<typename T> T getVar(string s, T &Value);
 // Definition at the bottom of THIS file
 
@@ -82,7 +83,7 @@ private:
 
   void addVariable(var_t &var);
   void setVariable(var_t &var);
-  void writeVariable(var_t &var);
+  void writeVariable(var_t &var, bool isOK);
   void getVariable(var_t &var, UA_Variant* vrnt);
 
 
@@ -111,12 +112,12 @@ int OpcServer_c::addVar(std::string s, T Value, int rmode)
 }
 
 template<typename T>
-void OpcServer_c::setVar(std::string s, T Value)
+void OpcServer_c::setVar(std::string s, T Value, bool isOK)
 {
   if (vars.count(s)) {
     vars[s].ptr_value = &Value;
     //setVariable(vars[s]);
-    writeVariable(vars[s]);
+    writeVariable(vars[s], isOK);
   } else
     LOGA("Ignore non-existing variable: %s", s.c_str());
 }
