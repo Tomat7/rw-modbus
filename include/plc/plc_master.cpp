@@ -191,6 +191,7 @@ int PLC_c::update_master()   // Master only.
     interval_ms = mb.polling_ms * 3;
 
   if (millis() - mb.timestamp_try_ms > interval_ms) {
+    //rc = 0;
     rc = write_master();
     if (rc == -1)
       return rc;

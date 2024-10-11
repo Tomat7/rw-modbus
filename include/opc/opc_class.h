@@ -60,41 +60,10 @@ public:
   void run();
   void stop();
 
-  template<typename T> int addVar(string s, T Value, int rmode)
-  {
-    rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
-    if (rc == 0)
-      return 0;
-
-    addVar_NodeId(vars[s]);
-    vars[s].ptr_value = &Value;
-    addVariable(vars[s]);
-    return 1;
-  }
-
-  template<typename T> void setVar(string s, T Value)
-  {
-    if (vars.count(s)) {
-      vars[s].ptr_value = &Value;
-      //setVariable(vars[s]);
-      writeVariable(vars[s]);
-    } else
-      LOGA("Ignore non-existing variable: %s", s.c_str());
-  }
-
-  template<typename T> T getVar(string s, T &Value)
-  {
-    if (vars.count(s)) {
-      UA_Variant Vrnt;
-      getVariable(vars[s], &Vrnt);
-      printf("\n1-%s: %s\n", __func__, vars[s].name);
-      if (Vrnt.data != nullptr)
-        Value = *(static_cast<T*>(Vrnt.data));
-      printf("\n2-%s: %s\n", __func__, vars[s].name);
-    } else
-      LOGA("Ignore non-existing variable: %s", s.c_str());
-    return Value;
-  }
+  template<typename T> int addVar(string s, T Value, int rmode);
+  template<typename T> void setVar(string s, T Value);
+  template<typename T> T getVar(string s, T &Value);
+// Definition at the bottom of THIS file
 
 private:
   bool isDebug = true;
@@ -126,4 +95,43 @@ private:
 
 };
 
+// Definition of TEMPLATEs
 
+template<typename T>
+int OpcServer_c::addVar(std::string s, T Value, int rmode)
+{
+  rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
+  if (rc == 0)
+    return 0;
+
+  addVar_NodeId(vars[s]);
+  vars[s].ptr_value = &Value;
+  addVariable(vars[s]);
+  return 1;
+}
+
+template<typename T>
+void OpcServer_c::setVar(std::string s, T Value)
+{
+  if (vars.count(s)) {
+    vars[s].ptr_value = &Value;
+    //setVariable(vars[s]);
+    writeVariable(vars[s]);
+  } else
+    LOGA("Ignore non-existing variable: %s", s.c_str());
+}
+
+template<typename T>
+T OpcServer_c::getVar(std::string s, T &Value)
+{
+  if (vars.count(s)) {
+    UA_Variant Vrnt;
+    getVariable(vars[s], &Vrnt);
+    if (Vrnt.data != nullptr)
+      Value = *(static_cast<T*>(Vrnt.data));
+  } else
+    LOGA("Ignore non-existing variable: %s", s.c_str());
+  return Value;
+}
+
+// eof

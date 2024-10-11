@@ -108,8 +108,6 @@ void OpcServer_c::writeVariable(var_t &v)
     wv.value.serverTimestamp = currentTime;
     wv.value.hasSourceTimestamp = true;
     wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
-    printf("\n11-%s: try-OK %s\n", __func__, v.name);
-
     UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
   }
 
@@ -130,7 +128,6 @@ void OpcServer_c::writeVariable(var_t &v)
     wv.value.serverTimestamp = currentTime;
     wv.value.hasSourceTimestamp = true;
     wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
-    printf("\n22-%s: try-BAD %s\n", __func__, v.name);
 
     UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
   }
@@ -142,9 +139,7 @@ void OpcServer_c::writeVariable(var_t &v)
 void OpcServer_c::getVariable(var_t &v, UA_Variant* vrnt_)
 {
   UA_Variant_init(vrnt_);
-  printf("\nTry111-%s: %s\n", __func__, v.name);
   UA_Server_readValue(uaServer, v.node_id.var, vrnt_);
-  printf("\nGot222-%s: %s\n", __func__, v.name);
 }
 
 
