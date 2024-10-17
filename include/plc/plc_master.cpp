@@ -46,7 +46,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
   mb.polling_ms = _ms;
   mb.timeout_us = _us;
 
-  LOGI("+ New PLC created: %s %s", ip_addr, dev_name);
+  LOGN("+ New PLC created: %s:%i %s", ip_addr, tcp_port, dev_name);
 }
 
 // Destructor in plc_common.cpp
@@ -184,14 +184,14 @@ int PLC_c::write_reg(reg_t &R)   // Master only. Write (raw) reg directly to PLC
 
 int PLC_c::update_master()   // Master only.
 {
-  rc = 0;
+  //rc = 0;
   uint64_t interval_ms = mb.polling_ms;
 
   if (mb.errors > 2)
     interval_ms = mb.polling_ms * 3;
 
   if (millis() - mb.timestamp_try_ms > interval_ms) {
-    //rc = 0;
+    rc = 0;
     rc = write_master();
     if (rc == -1)
       return rc;

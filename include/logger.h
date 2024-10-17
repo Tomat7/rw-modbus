@@ -17,8 +17,8 @@
 #include "include/macros.h"
 #include "config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 
-#define MESSAGE_MAX_LEN 100
-#define LOG_LEVEL_DEFAULT 7
+#define MESSAGE_MAX_LEN 200
+#define LOG_LEVEL_DEFAULT 4
 
 #ifdef SYSLOG_NAME
 #undef SYSLOG_NAME

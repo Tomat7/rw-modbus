@@ -24,7 +24,7 @@ using cchar = const char;
 int cfg_slave(const char* cfg_dir, const char* cfg_file, const char* cfg_mode)
 {
   // Read the file. If there is an error, report it and exit.
-  printf("\n======= cfg_read_mbset =======\n");
+  printf("\n======= cfg_read_Slave =======\n");
 
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
@@ -111,7 +111,7 @@ void cfg_init_slave_regs(const Setting &cfgREG, PLC_c* pn)
       continue;
     }
 
-    LOGE("-- %s %d %s", regnow.str_name.c_str(), regnow.raddr,
+    LOGI("Slave: %s %d %s", regnow.str_name.c_str(), regnow.raddr,
          regnow.fullname.c_str());
 
     if (regnow.fullname == "-") {

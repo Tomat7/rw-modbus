@@ -40,7 +40,7 @@ int main(int argc, char** argv)
   std::set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-  log_level = 7;
+  //log_level = 3;
 
   if (argc > 1) {
     if (Mode.count(string(argv[1])))

@@ -27,7 +27,8 @@ using cchar = const char;
 int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
 {
   // Read the file. If there is an error, report it and exit.
-  printf("\n======= cfg_read_mbset =======\n");
+  printf("\n======= cfg_read_Master =======\n");
+
 
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
@@ -38,7 +39,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
 
   try {
     cfg.readFile(cfile.c_str());
-    printf("=======================\n");
+    //printf("=======================\n");
     LOGW("I/O reading file OK: %s", cfile.c_str());
   } catch (const FileIOException &fioex) {
     LOGA("I/O error while reading file: %s\n", cfile.c_str());
@@ -59,17 +60,17 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   }
 
   // Set LogLevel.
-  if (log_level == 0) {
-    try {
-      int _log = cfg.lookup("loglevel");
+  try {
+    int _log = cfg.lookup("loglevel");
+    if (log_level != _log) {
       log_level = _log;
       LOGC("Set LOG_LEVEL to: %d.", log_level);
-    } catch (const SettingNotFoundException &nfex) {
-      log_level = LOG_LEVEL_DEFAULT;
-      LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
-    }
-  } else
-    LOGC("LOG_LEVEL is: %d.", log_level);
+    } else
+      LOGC("LOG_LEVEL is: %d.", log_level);
+  } catch (const SettingNotFoundException &nfex) {
+    log_level = LOG_LEVEL_DEFAULT;
+    LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
+  }
 
   // Get list of PLC for configuration
   Setting* PLClist;
@@ -141,7 +142,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
     PLCvec.back().init_regs();  // Necessary to copy str to char* and others
     nb_plc_ready++;
 
-    LOGN("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
+    LOGW("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
          (int)PLCvec.back().regs.size());
     // ===== End PLC filling  =====
   }
