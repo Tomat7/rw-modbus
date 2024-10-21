@@ -137,12 +137,13 @@ int PLC_c::read_allregs()   // Master only. Read (raw) directly from PLC.
 int PLC_c::write_master()   // Master only. Write all regs directly to PLC.
 {
   //  LOCK_GUARD(network_mux);
-
+  int rc_write = 0;
   for (auto &[a, R] : regs) {
     auto &rd = R.data;
     if (rd.rmode && rd.rupdate) {
       rc = 0;
       att = 0;
+
       while (att < attempts && rc <= 0) {
         lock_now();
         lock_mux->lock();
@@ -155,9 +156,20 @@ int PLC_c::write_master()   // Master only. Write all regs directly to PLC.
         unlock_now();
         lock_mux->unlock();
       }
+
+      if (rc == -1) {
+        rc_write--;
+        LOGN("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
+             modbus_strerror(errno));
+      }
+
     }
   }
-  return rc;
+
+  if (rc_write < 0)
+    LOGE("%s %s write regs errors: %i", ip_addr, dev_name, rc_write * -1);
+
+  return rc_write;
 }
 
 int PLC_c::write_reg(reg_t &R)   // Master only. Write (raw) reg directly to PLC.
@@ -168,9 +180,9 @@ int PLC_c::write_reg(reg_t &R)   // Master only. Write (raw) reg directly to PLC
   if (rc == -1) {
     mb.errors++;
     mb.errors_wr++;
-    if (att >= attempts)
-      LOGE("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
-           modbus_strerror(errno));
+    /*     if (att >= attempts)
+          LOGE("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
+               modbus_strerror(errno)); */
   } else {
     mb.errors = 0;
     rd.rupdate = 0;
@@ -184,7 +196,7 @@ int PLC_c::write_reg(reg_t &R)   // Master only. Write (raw) reg directly to PLC
 
 int PLC_c::update_master()   // Master only.
 {
-  //rc = 0;
+  int ret = 0;
   uint64_t interval_ms = mb.polling_ms;
 
   if (mb.errors > 2)
@@ -193,11 +205,14 @@ int PLC_c::update_master()   // Master only.
   if (millis() - mb.timestamp_try_ms > interval_ms) {
     rc = 0;
     rc = write_master();
-    if (rc == -1)
-      return rc;
+    /*     if (rc < 0) {
+          LOGE("%s %s write regs errors: %i", ip_addr, dev_name, rc * -1);
+          return rc;
+        } */
     rc = read_master();
+    ret = rc;
   }
-  return rc;
+  return ret;
 }
 
 int PLC_c::set_timeout()

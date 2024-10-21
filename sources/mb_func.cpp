@@ -27,7 +27,7 @@ void mb_update_master(int x)
 void mb_print_summary(int x)
 {
   PLC_c &D = PLCvec[x];
-  printf("%-7s_dT: %4ld ret: %2d err: %3d conn: %3d rd: %3d wr: %3d rc: %2d\n",
+  printf("%-7s_dT: %5ld ret: %2d err: %4d conn: %4d rd: %4d wr: %4d rc: %2d\n",
          D.dev_name, D.mb.timestamp_try_ms - prev_ts[x], res[x], D.mb.errors,
          D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
 }
@@ -44,11 +44,11 @@ int mb_update()
   for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
 
-  std::this_thread::yield();
+  //std::this_thread::yield();
   std::this_thread::sleep_for(10ms);
   printf("mb_update threads STARTED and ready to JOIN.\n");
   std::this_thread::yield();
-  std::this_thread::sleep_for(10ms);
+  //std::this_thread::sleep_for(10ms);
 
   for (auto &th : thr) {
     printf(".");

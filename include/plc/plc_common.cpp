@@ -16,16 +16,6 @@
 #include "include/logger.h"
 #include "plc_class.h"
 
-// ANSI color codes
-
-/*
-  #define KNRM "\x1B[0m"
-  #define KRED "\x1B[91m"
-  #define KGRN "\x1B[32m"
-  #define KYEL "\x1B[33m"
-  #define KBLU "\x1B[94m"
-*/
-
 // mutex PLC_c::logger_mux;
 
 PLC_c::~PLC_c()
@@ -42,9 +32,6 @@ PLC_c::~PLC_c()
 
 int PLC_c::get_rc() { return rc; }
 
-// inline //__attribute__((always_inline))
-// inline void PLC_c::init_lock() { lockflag = new
-// atomic_flag(ATOMIC_FLAG_INIT); }
 
 void PLC_c::init_regs()   // Master only
 {
@@ -86,7 +73,6 @@ void PLC_c::init_regs()   // Master only
 void PLC_c::mb_deinit()
 {
   //  LOCK_GUARD(network_mux);
-
   if (server_socket != -1) {
     close(server_socket);
     server_socket = -1;
@@ -102,7 +88,7 @@ void PLC_c::mb_deinit()
     modbus_free(ctx);
     ctx = nullptr;
   }
-  //  LOGI("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  LOGD("- MB closed, unmapped and free: %s %s.", ip_addr, dev_name);
 
   return;
 }
@@ -117,7 +103,7 @@ int PLC_c::mb_ctx()
     rc = -1;
     LOGE("- %s:%d %s CTX allocate error.", ip_addr, tcp_port, dev_name);
   } else
-    LOGN("+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
+    LOGI("+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
   return rc;
 }
