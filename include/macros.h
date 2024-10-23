@@ -62,6 +62,14 @@
 #ifndef C_BLUB
 #define C_BLUB "\x1B[94m"
 #endif
+#ifndef C_GRY
+#define C_GRY "\x1B[90m"
+#endif
+#ifndef C_WHIB
+#define C_WHIB "\x1B[97m"
+#endif
+
+#define qwrerwerwert C_GRY
 
 #ifdef USE_SYSLOG
 #define LOGERR(...)                                                  \

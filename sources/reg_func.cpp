@@ -66,17 +66,21 @@ void regs_update()
 void reg_print(string rn, const regdata_t* rd)
 {
   // printf("\n===== regs_print =====\n");
-  const char* C = NRM;
-  if (rd->rerrors > 0)
-    C = C_RED;
+  const char* C = C_WHIB; //NRM;
+  const char* B = NRM;
+  if (rd->rerrors > 0) {
+    C = C_GRY; //C = C_RED;
+    B = "\x1B[5m";
+  }
 
   if (rd->rtype == 0)
-    printf("%s%-14s %7d", C, rn.c_str(), (uint16_t)rd->rvalue);
+    printf("%s%-12s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
   else if (rd->rtype == 1)
-    printf("%s%-14s %7d", C, rn.c_str(), (int16_t)rd->rvalue);
+    printf("%s%-12s %s%7d", C, rn.c_str(), B, (int16_t)rd->rvalue);
   else if (rd->rtype == 2)
-    printf("%s%-14s %7.2f", C, rn.c_str(), (int16_t)rd->rvalue * 0.01);
+    printf("%s%-12s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
 
+  printf(NRM);
 
   return;
 }

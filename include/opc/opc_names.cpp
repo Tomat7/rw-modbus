@@ -60,7 +60,7 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   var_t v;
   v.type = t;
   v.rmode = m;
-  v.raw_name = raw_name;  // KEY for map and
+  v.raw_name = raw_name;  // KEY for map and OPC FQName
   v.str_name = str_name;
   v.str_path = str_path;
   v.str_full = str_path + str_name;
