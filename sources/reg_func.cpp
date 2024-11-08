@@ -26,8 +26,9 @@ void regs_update()
 
     uint16_t plc_val = rm.get_plc_val();  // Value from PLC
     uint16_t old_val = rm.value;          // Value in memory (in REGmap)
+    uint16_t opc_val = opc_update_uint16(n, rm.ptr_reg, plc_val);
     //uint16_t shm_val = rm.get_local();    // Value in SHM
-    uint16_t shm_val = opc_update_uint16(n, rm.ptr_reg, plc_val);
+    uint16_t shm_val = opc_val;
 
     if (rm.get_mode()) {  // If the Reg RW - get&check value from SHM.
 
@@ -41,6 +42,7 @@ void regs_update()
         printf("<%5d", shm_val);
       } else
         printf("      ");
+
     } else
       printf("       ");  // Reg is not RW
 
