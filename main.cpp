@@ -76,8 +76,8 @@ int main(int argc, char** argv)
     const char* x = nullptr;
     t.start(x);
     mb_update();
-    LOGD("regdata_t size: %d", sizeof(regdata_t));
-    //    LOGD("P array size: %d", sizeof(P));
+    // LOGD("regdata_t size: %d", sizeof(regdata_t));
+    // LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     //Slave.handle_slave(timeout_sec * 1000000);

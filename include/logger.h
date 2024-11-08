@@ -17,7 +17,7 @@
 #include "include/macros.h"
 #include "config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 
-#define MESSAGE_MAX_LEN 200
+#define MESSAGE_MAX_LEN 254
 #define LOG_LEVEL_DEFAULT 4
 
 #ifdef SYSLOG_NAME
@@ -65,6 +65,9 @@ extern int log_level;  // 0 - no messages at all, 9 - all on screen
 void logger(const char* logname, int prio, const char* _func, const char* _fmt,
             ...);
 void logdebug(const char* logname, int prio, const char* format, ...);
+
+void logger_set_queue(bool to_queue);
+void logger_flush();
 
 char* get_new_char(const char*);
 

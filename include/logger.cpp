@@ -14,17 +14,25 @@
 #include <unistd.h>
 
 #include <mutex>
+#include <queue>
+
+int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 
 static mutex logger_mux;            // already defined in .h
-int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
+static bool print_to_queue = false;
+static queue<string> Print_queue;
 
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)
 {
-  //  logger_mux.lock();
   LOCK_GUARD(logger_mux);
+  openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
 
   // https://www.gnu.org/software/libc/manual/html_node/Creating-a-Pipe.html
+  // FILE* fout = stdout;
+  int pipefd[2];
+  pipe(pipefd);                     // make a pipe
+  FILE* fout = fdopen(pipefd[1], "w");    // pipe to stream
 
   const char* format = _fmt;
   const char* fname = _logname;
@@ -35,14 +43,6 @@ void logger(const char* _logname, int _prio, const char* _func,
   bool no_syslog = (_prio > 4 && log_level < 9);
   bool no_print = (_prio > log_level);
   string fmt = (string)_func + "(): " + (string)_fmt;
-
-  int pipefd[2];
-  pipe(pipefd);                     // make a pipe
-
-  // FILE* fout = stdout;
-  FILE* fout = fdopen(pipefd[1], "w");    // pipe to stream
-  openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
-
 
   if (!no_print) {
     if (_prio == LOG_ALERT)
@@ -91,17 +91,34 @@ void logger(const char* _logname, int _prio, const char* _func,
   fclose(fout);
   close(pipefd[1]);
 
-  fout = fdopen (pipefd[0], "r");
+  fout = fdopen(pipefd[0], "r");
   char buffer[MESSAGE_MAX_LEN+1] = {0};
   char* bufc = fgets(buffer, MESSAGE_MAX_LEN, fout);
 
   if (bufc != nullptr)
-    printf("%s", bufc);
+    if (print_to_queue)
+      Print_queue.emplace(string(bufc));
+    else
+      printf("%s", bufc);
   else
     printf("bufc overload");
-  fclose (fout);
 
-  //  logger_mux.unlock();
+  fclose (fout);
+  close(pipefd[0]);
+
+}
+
+void logger_set_queue(bool to_queue)
+{
+  print_to_queue = to_queue;
+}
+
+void logger_flush()
+{
+  while (!Print_queue.empty()) {
+    printf("%s", Print_queue.front().c_str());
+    Print_queue.pop();
+  }
 }
 
 void logdebug(const char* logname, int prio, const char* format, ...)

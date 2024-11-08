@@ -41,6 +41,8 @@ int mb_update()
   res.resize((int)nb_plcs);
   prev_ts.resize(nb_plcs);
 
+  logger_set_queue(true);
+
   for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
 
@@ -56,6 +58,10 @@ int mb_update()
   }
 
   printf("\n");
+  std::this_thread::sleep_for(10ms);
+  logger_set_queue(false);
+  logger_flush();
+
   for (i = 0; i < nb_plcs; i++)
     mb_print_summary((int)i);
 
