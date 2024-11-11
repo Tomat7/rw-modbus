@@ -79,3 +79,4 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   return 1;
 }
 
+// eof

@@ -89,8 +89,6 @@ void OpcServer_c::writeVariable(var_t &v, bool ValueIsOK)
   // Use a more detailed write function than UA_Server_writeValue
   UA_WriteValue wv;
   UA_WriteValue_init(&wv);
-  //wv.value.status = UA_STATUSCODE_BADNODEIDUNKNOWN; //UA_STATUSCODE_BAD;
-  //wv.value.status = UA_STATUSCODE_UNCERTAIN;
 
   if (ValueIsOK)
     wv.value.status = UA_STATUSCODE_GOOD;

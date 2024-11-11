@@ -8,6 +8,7 @@
 #include "config.h"
 #include "libs.h"
 
+#define TIMER_START_MSG nullptr
 // using namespace std;
 // using namespace libconfig;
 
@@ -16,7 +17,7 @@ void init_all()
   Timer t;
   int ret = 0;
 
-  t.start();
+  t.start(TIMER_START_MSG);
   ret = cfg_master(CFG_DIR, CFG_FILE, mode);
   t.spent_auto("============ Cfg Master finished in: ");
   if (ret == EXIT_FAILURE)
@@ -24,7 +25,7 @@ void init_all()
   wait_console(timeout_sec);
   // ==================================
 
-  t.start();
+  t.start(TIMER_START_MSG);
   ret = cfg_slave(CFG_DIR, CFG_FILE, "slave");
   t.spent_auto("=== Cfg Slave finished in: ");
   if (ret == EXIT_FAILURE)
@@ -33,26 +34,27 @@ void init_all()
   // ==================================
 
   if (log_level > 5) {
-    t.start();
+    t.start(TIMER_START_MSG);
     plc_show2();
     wait_console(timeout_sec);
     t.spent_auto("=== PLC2 show finished in: ");
   }
 
   if (log_level > 3) {
-    t.start();
+    t.start(TIMER_START_MSG);
     plc_show1();
     t.spent_auto("=== PLC1 show finished in: ");
     wait_console(timeout_sec);
   }
 
-  t.start();
+  t.start(TIMER_START_MSG);
   regs_create_from_masters();
   t.spent_auto("=== REG init finished in: ");
   wait_console(timeout_sec);
   //  t.sleep_ms(TMOUT);
 
-  t.start();
+  t.start(TIMER_START_MSG);
+  opc_init();
   opc_regs_init();
   t.spent_auto("=== OPC init finished in: ");
   wait_console(timeout_sec);

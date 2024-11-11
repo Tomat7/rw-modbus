@@ -28,6 +28,7 @@ void opc_regs_init()
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
 
+
     n = folder + name;
 
     if (rm.ptr_reg->str_type == "f") {
@@ -98,14 +99,16 @@ uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val)
 void opc_deinit()
 {
   OPCs.stop();
-  return;
 }
 
 void opc_init()
 {
   OPCs.init(4840);
+}
+
+void opc_run()
+{
   OPCs.run();
-  return;
 }
 
 // eof

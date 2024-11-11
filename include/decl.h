@@ -59,6 +59,7 @@ bool reg_exist(string);
 
 void opc_regs_init();
 uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);
+void opc_run();
 void opc_init();
 void opc_deinit();
 

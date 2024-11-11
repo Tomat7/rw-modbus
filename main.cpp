@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 
   init_all();
 
-  std::thread opc_thr(opc_init);
+  std::thread opc_thr(opc_run);
   opc_thr.detach();
   wait_console(timeout_sec);
 

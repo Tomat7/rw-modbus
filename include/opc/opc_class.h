@@ -37,18 +37,6 @@ struct var_t {
   int type_id;
   int type;
   UA_StatusCode ua_status;
-  // UA_TYPES_INT16, UA_TYPES_UINT16, UA_TYPES_INT32, UA_TYPES_UINT32,
-  // UA_TYPES_INT64, UA_TYPES_UINT64, UA_TYPES_FLOAT, UA_TYPES_DATETIME
-  /* union value_u {
-    int16_t i16;
-    int32_t i32;
-    int64_t i64;
-    uint16_t ui16;
-    uint32_t ui32;
-    uint64_t ui64;
-    int64_t dt;
-    float fl;
-    } value; */
 };
 
 class OpcServer_c
@@ -57,10 +45,11 @@ public:
   OpcServer_c(UA_UInt16 _port = 4840);
   ~OpcServer_c();
 
-  void init(UA_UInt16 _port = 0);
+  void init(UA_UInt16 _port = 0); // Necessary init() before run()
   void run();
   void stop();
 
+  void delVar(string s);
   template<typename T> int addVar(string s, T Value, int rmode);
   template<typename T> void setVar(string s, T Value, bool isOK);
   template<typename T> T getVar(string s, T &Value);
@@ -70,7 +59,7 @@ private:
   bool isDebug = true;
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
-  mutex* uaRunning_mux = nullptr;
+  mutex* uaMutex = nullptr;
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
 
@@ -92,7 +81,7 @@ private:
   string getPathByLevel(string Path, int level);
 
   map<string, var_t> vars;  // All regs here.
-  map<type_index, int> types;
+  map<type_index, int> types; // Types coding is in constructor
 
 };
 

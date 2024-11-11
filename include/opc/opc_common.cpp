@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 #include <map>
+#include <set>
 #include <typeinfo>
 #include <typeindex>
 
@@ -17,9 +18,9 @@
 
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
+  //uaServer = UA_Server_new();
   uaPort = _port;
-  uaServer = UA_Server_new();
-  uaRunning_mux = new mutex;
+//  uaRunning_mux = new mutex;
   types[type_index(typeid(int16_t))] = UA_TYPES_INT16;
   types[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
   types[type_index(typeid(int32_t))] = UA_TYPES_INT32;
@@ -31,42 +32,65 @@ OpcServer_c::OpcServer_c(UA_UInt16 _port)
 
 OpcServer_c::~OpcServer_c()
 {
-
-  LOGD("Destructor: set uaRunning = false.");
-  uaRunning = false;
-  uaRunning_mux->lock();
-  LOGD("Destructor: trying to delete...");
-  UA_Server_delete(uaServer);
-  uaRunning_mux->unlock();
-  delete uaRunning_mux;
-  LOGD("Destructor: deleted.");
+  if (uaMutex != nullptr)
+    stop();
+  LOGW("uaDestructor: done.");
 }
 
 
 void OpcServer_c::init(UA_UInt16 _port)
 {
-  // uaServer = UA_Server_new();
   if (_port != 0)
     uaPort = _port;
+
+  uaMutex = new mutex;
+  uaServer = UA_Server_new();
+
   UA_ServerConfig* uaServerConfig = UA_Server_getConfig(uaServer);
   UA_ServerConfig_setDefault(uaServerConfig);
   UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
+  LOGW("Init: server ready to start on port:%d", uaPort);
 }
 
 void OpcServer_c::run()
 {
-  LOGD("Run: try to lock mutex.");
-  uaRunning_mux->lock();
+  LOGW("Run: try to lock mutex.");
+  uaMutex->lock();
   uaRunning = true;
   UA_Server_run(uaServer, &uaRunning);
-  LOGD("Run: got &uaRunning = false");
-  uaRunning_mux->unlock();
-  LOGD("Run: deleted.");
+  LOGW("Run: got &uaRunning = false and stopped now.");
+  uaMutex->unlock();
 }
 
 void OpcServer_c::stop()
 {
+  LOGW("Stop: set &uaRunning = false.");
   uaRunning = false;
-  LOGD("Stop: set &uaRunning = false.");
+  uaMutex->lock();
+
+  set<string> vs;
+  for (auto &[s, v] : vars)
+    vs.insert(s);
+  for (auto &s : vs)
+    delVar(s);
+  LOGW("Stop: map cleared.");
+
+  UA_Server_delete(uaServer);
+  uaServer = nullptr;
+  LOGW("Stop: server deleted.");
+
+  uaMutex->unlock();
+  delete uaMutex;
+  uaMutex = nullptr;
+  LOGW("Stop: MUX free.");
+
 }
 
+void OpcServer_c::delVar(string s)
+{
+  UA_Server_deleteNode(uaServer, vars[s].node_id.var, true);
+  vars.erase(s);
+  LOGI("Deleted Var/Node: %s", s.c_str());
+}
+
+// eof
