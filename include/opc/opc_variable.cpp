@@ -77,11 +77,9 @@ void OpcServer_c::setVariable(var_t &v)
 }
 
 
-void OpcServer_c::writeVariable(var_t &v, bool ValueIsOK)
+void OpcServer_c::writeVariable(var_t &v)
 {
-  //UA_NodeId myIntegerNodeId = UA_NODEID_STRING(1, "fake.source_timestamp");
-
-  /* Write a different integer value */
+  /* Write a different value */
   UA_VariableAttributes Attr;
   UA_Variant_init(&Attr.value);
   UA_Variant_setScalar(&Attr.value, v.ptr_value, &UA_TYPES[v.type]);
@@ -90,29 +88,25 @@ void OpcServer_c::writeVariable(var_t &v, bool ValueIsOK)
   UA_WriteValue wv;
   UA_WriteValue_init(&wv);
 
-//  if (ValueIsOK)
-  wv.value.status = UA_STATUSCODE_GOOD;
-//  else
-//    wv.value.status = UA_STATUSCODE_BADNOTCONNECTED; //UA_STATUSCODE_BAD;
-
+  wv.value.status = v.ua_status;  // OK or BAD
   wv.value.hasStatus = true;
   wv.nodeId = v.node_id.var;
   wv.attributeId = UA_ATTRIBUTEID_VALUE;
   wv.value.value = Attr.value;
   wv.value.hasValue = true;
 
-  UA_DateTime currentTime = UA_DateTime_now();
+  // UA_DateTime currentTime = UA_DateTime_now();
   wv.value.hasServerTimestamp = true;
-  wv.value.serverTimestamp = currentTime;
+  wv.value.serverTimestamp = UA_DateTime_now();
   wv.value.hasSourceTimestamp = true;
-  wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
+  wv.value.sourceTimestamp = v.ua_timestamp;
   UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
 
-  if (!ValueIsOK) {
-    wv.value.status = UA_STATUSCODE_BADNOTCONNECTED; //UA_STATUSCODE_BAD;
-    UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
-  }
-
+  /*   if (!ValueIsOK) {
+      wv.value.status = UA_STATUSCODE_BADNOTCONNECTED; //UA_STATUSCODE_BAD;
+      UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
+    }
+  */
   /* {
     wv.nodeId = v.node_id.var;
     wv.attributeId = UA_ATTRIBUTEID_VALUE;

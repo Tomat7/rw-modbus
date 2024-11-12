@@ -34,9 +34,9 @@ struct var_t {
   nodeid_t node_id;
   void* ptr_value;    // ptr to "correct" value_u
   int rmode;          // 1 - mean RW
-  int type_id;
   int type;
   UA_StatusCode ua_status;
+  UA_DateTime ua_timestamp;
 };
 
 class OpcServer_c
@@ -73,7 +73,7 @@ private:
 
   void addVariable(var_t &var);
   void setVariable(var_t &var);
-  void writeVariable(var_t &var, bool isOK);
+  void writeVariable(var_t &var);
   void getVariable(var_t &var, UA_Variant* vrnt);
 
 
@@ -106,8 +106,14 @@ void OpcServer_c::setVar(std::string s, T Value, bool isOK)
 {
   if (vars.count(s)) {
     vars[s].ptr_value = &Value;
-    //setVariable(vars[s]);
-    writeVariable(vars[s], isOK);
+
+    if (isOK) {
+      vars[s].ua_status = UA_STATUSCODE_GOOD;
+      vars[s].ua_timestamp = UA_DateTime_now();
+    } else
+      vars[s].ua_status = UA_STATUSCODE_BADNOTCONNECTED;
+
+    writeVariable(vars[s]);
   } else
     LOGA("Ignore non-existing variable: %s", s.c_str());
 }
