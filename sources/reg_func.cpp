@@ -37,14 +37,20 @@ void regs_update()
       else
         printf(" ");
 
-      if (shm_val != old_val) {  // If new value got from SHM (SCADA?)
+      if (shm_val != old_val) {  // If new value got from SHM (SCADA/OPC)
         rm.set_plc_val(shm_val);
-        printf("<%5d", shm_val);
-      } else
-        printf("      ");
+        printf("<");
+        //printf("<%5d", shm_val);
+      } else {
+        printf(" ");
+        //printf("      ");
+      }
 
     } else
-      printf("       ");  // Reg is not RW
+      printf("  ");  // Reg is not RW
+    //printf("       ");  // Reg is not RW
+
+    printf("%5d", opc_val);
 
     D(printf("~%2d ", rm.fd);)  // Show filedescriptor
 
@@ -72,7 +78,7 @@ void reg_print(string rn, const regdata_t* rd)
   const char* B = NRM;
   if (rd->rerrors > 0) {
     C = C_GRY; //C = C_RED;
-    B = "\x1B[5m";
+    B = "\x1B[5m";  // Dark grey blym-blym
   }
 
   if (rd->rtype == 0)

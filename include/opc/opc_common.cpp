@@ -18,9 +18,7 @@
 
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
-  //uaServer = UA_Server_new();
   uaPort = _port;
-//  uaRunning_mux = new mutex;
   types[type_index(typeid(int16_t))] = UA_TYPES_INT16;
   types[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
   types[type_index(typeid(int32_t))] = UA_TYPES_INT32;
@@ -93,4 +91,12 @@ void OpcServer_c::delVar(string s)
   LOGI("Deleted Var/Node: %s", s.c_str());
 }
 
+int OpcServer_c::getType(string s)
+{
+  if (vars.count(s))
+    return vars[s].type;
+  else
+    LOGA("Ignore non-existing variable: %s", s.c_str());
+  return -1;
+}
 // eof

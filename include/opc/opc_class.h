@@ -50,6 +50,7 @@ public:
   void stop();
 
   void delVar(string s);
+  int getType(string s);
   template<typename T> int addVar(string s, T Value, int rmode);
   template<typename T> void setVar(string s, T Value, bool isOK);
   template<typename T> T getVar(string s, T &Value);

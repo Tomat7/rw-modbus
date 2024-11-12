@@ -16,6 +16,22 @@
 // void reg_print(string, const regdata_t*);
 // void reg_print_shm(RegMap_c*);
 
+template<typename T>
+uint16_t opc_update_var(string s, T Value_set, bool isOK)
+{
+  T Value_get;
+  OPCs.getVar(s, Value_get);
+
+  if (OPCs.getType(s) == UA_TYPES_FLOAT) {
+    Value_get = (uint16_t)(Value_get * 100);
+    Value_set = Value_set * (T)0.01;
+  }
+
+  OPCs.setVar(s, Value_set, isOK);
+
+  return (uint16_t)Value_get;
+}
+
 string folder = "/PLC/";
 
 void opc_regs_init()
@@ -66,7 +82,7 @@ void opc_regs_init()
 }
 
 
-uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val)
+uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val_set)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
   string str_type = ptr_r->str_type;
@@ -76,23 +92,30 @@ uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val)
   parent.erase(z);
 
   string n = folder + parent + "/" + name;
-  uint16_t res = 0;
+  uint16_t val_get = 0;
 
-  if (str_type == "f") {
-    float fl = OPCs.getVar(n, fl);
-    res = (uint16_t)(fl * 100);
-    OPCs.setVar(n, (int16_t)val * (float)0.01, reg_is_OK);
-  } else if (str_type == "i") {
-    int16_t i16 = OPCs.getVar(n, i16);
-    res = (uint16_t)i16;
-    OPCs.setVar(n, (int16_t)val, reg_is_OK);
-  } else if (str_type == "u") {
-    uint16_t ui16 = OPCs.getVar(n, ui16);
-    res = (uint16_t)ui16;
-    OPCs.setVar(n, (uint16_t)val, reg_is_OK);
-  }
+  if (str_type == "f")
+    val_get = opc_update_var(n, (float)val_set, reg_is_OK);
+  else if (str_type == "i")
+    val_get = opc_update_var(n, (int16_t)val_set, reg_is_OK);
+  else if (str_type == "u")
+    val_get = opc_update_var(n, (uint16_t)val_set, reg_is_OK);
 
-  return res;
+  /*   if (str_type == "f") {
+      float fl = OPCs.getVar(n, fl);
+      val_get = (uint16_t)(fl * 100);
+      OPCs.setVar(n, (int16_t)val_set * (float)0.01, reg_is_OK);
+    } else if (str_type == "i") {
+      int16_t i16 = OPCs.getVar(n, i16);
+      val_get = (uint16_t)i16;
+      OPCs.setVar(n, (int16_t)val_set, reg_is_OK);
+    } else if (str_type == "u") {
+      uint16_t ui16 = OPCs.getVar(n, ui16);
+      val_get = (uint16_t)ui16;
+      OPCs.setVar(n, (uint16_t)val_set, reg_is_OK);
+    } */
+
+  return val_get;
 }
 
 

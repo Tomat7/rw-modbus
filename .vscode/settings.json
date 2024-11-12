@@ -57,6 +57,7 @@
         "syncstream": "cpp",
         "cstring": "cpp",
         "charconv": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "typeindex": "cpp"
     }
 }
