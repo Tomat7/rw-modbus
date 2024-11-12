@@ -90,10 +90,10 @@ void OpcServer_c::writeVariable(var_t &v, bool ValueIsOK)
   UA_WriteValue wv;
   UA_WriteValue_init(&wv);
 
-  if (ValueIsOK)
-    wv.value.status = UA_STATUSCODE_GOOD;
-  else
-    wv.value.status = UA_STATUSCODE_BAD;
+//  if (ValueIsOK)
+  wv.value.status = UA_STATUSCODE_GOOD;
+//  else
+//    wv.value.status = UA_STATUSCODE_BADNOTCONNECTED; //UA_STATUSCODE_BAD;
 
   wv.value.hasStatus = true;
   wv.nodeId = v.node_id.var;
@@ -108,6 +108,10 @@ void OpcServer_c::writeVariable(var_t &v, bool ValueIsOK)
   wv.value.sourceTimestamp = currentTime - 1800 * UA_DATETIME_SEC;
   UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
 
+  if (!ValueIsOK) {
+    wv.value.status = UA_STATUSCODE_BADNOTCONNECTED; //UA_STATUSCODE_BAD;
+    UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
+  }
 
   /* {
     wv.nodeId = v.node_id.var;
