@@ -64,10 +64,16 @@ int main(int argc, char** argv)
   opc_thr.detach();
   wait_console(timeout_sec);
 
+  uint16_t i = 0;
+
   for (;;) {
     printf("%s", CLS);
     printf("%s", HOME);
     fflush(stdout);
+
+    i++;
+    string s = "/PLC/Kub/Kub.millis";
+    OPCs.setVar(s, i);
 
     t.start();
     regs_update();

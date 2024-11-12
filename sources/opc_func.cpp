@@ -20,7 +20,7 @@ template<typename T>
 uint16_t opc_update_var(string s, T Value_set, bool isOK)
 {
   T Value_get;
-  OPCs.getVar(s, Value_get);
+  Value_get = OPCs.getVar(s, Value_get);
 
   if (OPCs.getType(s) == UA_TYPES_FLOAT) {
     Value_get = (uint16_t)(Value_get * 100);
