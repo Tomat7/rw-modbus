@@ -105,7 +105,7 @@ template<typename T>
 void OpcServer_c::setVar(std::string s, T Value, bool isOK)
 {
   if (vars.count(s)) {
-    vars[s].ptr_value = &Value;
+    vars[s].ptr_value = static_cast<T*>(&Value);
 
     if (isOK) {
       vars[s].ua_status = UA_STATUSCODE_GOOD;
@@ -123,9 +123,12 @@ T OpcServer_c::getVar(std::string s, T &Value)
 {
   if (vars.count(s)) {
     UA_Variant Vrnt;
-    getVariable(vars[s], &Vrnt);
+    UA_Variant_init(&Vrnt);
+    UA_Server_readValue(uaServer, vars[s].node_id.var, &Vrnt);
+//    getVariable(vars[s], &Vrnt);
     if (Vrnt.data != nullptr)
       Value = *(static_cast<T*>(Vrnt.data));
+    UA_Variant_clear(&Vrnt);
   } else
     LOGA("Ignore non-existing variable: %s", s.c_str());
   return Value;

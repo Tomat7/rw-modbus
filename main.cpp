@@ -72,8 +72,19 @@ int main(int argc, char** argv)
     fflush(stdout);
 
     i++;
-    string s = "/PLC/Kub/Kub.millis";
+    string s;
+
+    s = "/PLC/Kub/Kub.millis";
     OPCs.setVar(s, i);
+
+    s = "/PLC/Kub/Kub.Temp1";
+    OPCs.setVar(s, (float)i);
+
+    s = "/PLC/Kub/Kub.Temp2";
+    OPCs.setVar(s, (float)-99.0);
+
+    s = "/PLC/Kub/Kub.Temp3";
+    OPCs.setVar(s, (float)0.0);
 
     t.start();
     regs_update();
