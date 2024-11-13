@@ -32,6 +32,7 @@ void OpcServer_c::addVariable(var_t &v)
   UA_Server_addVariableNode(uaServer, v.node_id.var, v.node_id.parent,
                             v.node_id.reference, varQName,
                             UA_NS0ID(BASEDATAVARIABLETYPE), attr, NULL, NULL);
+
   string d = strVarDetails(v);
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                     "NewVar: %s %s, path: %s - %s", v.name, d.c_str(), v.ua_name,

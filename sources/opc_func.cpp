@@ -44,27 +44,26 @@ void opc_regs_init()
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
 
+    /*
+        n = folder + name; // like /PLC/Kub.Temp1
 
-    n = folder + name;
+        if (rm.ptr_reg->str_type == "f") {
+          float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
+          OPCs.addVar(n, fl, rm.ptr_data_plc->rmode);
+        } else if (rm.ptr_reg->str_type == "i") {
+          int16_t i16 = (int16_t)(rm.ptr_data_plc->rvalue);
+          OPCs.addVar(n, i16, rm.ptr_data_plc->rmode);
+        } else if (rm.ptr_reg->str_type == "u") {
+          uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
+          OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
+        }
 
-    if (rm.ptr_reg->str_type == "f") {
-      float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
-      OPCs.addVar(n, fl, rm.ptr_data_plc->rmode);
-    } else if (rm.ptr_reg->str_type == "i") {
-      int16_t i16 = (int16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, i16, rm.ptr_data_plc->rmode);
-    } else if (rm.ptr_reg->str_type == "u") {
-      uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
-      OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
-    }
-
-    //folder = "/Scada/PLC/";
-
+    */
     string parent = name;
     size_t z = parent.find(".");
     parent.erase(z);
 
-    n = folder + parent + "/" + name;
+    n = folder + parent + "/" + name; // like /PLC/Kub/Kub.Temp1
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;

@@ -50,7 +50,7 @@ void regs_update()
       printf("  ");  // Reg is not RW
     //printf("       ");  // Reg is not RW
 
-    printf("%5d", opc_val);
+    printf("%5d %5d", opc_val, old_val);
 
     D(printf("~%2d ", rm.fd);)  // Show filedescriptor
 
