@@ -43,7 +43,7 @@ void plc_show1()
 
 void plc_print_details(int i)
 {
-  //printf("\n===== plc_print_details =====\n");
+  // printf("\n===== plc_print_details =====\n");
   LOGN("%-8s %-4d %-16s %4d %7d\n", PLCvec[i].dev_name, PLCvec[i].reg_qty,
        PLCvec[i].ip_addr, PLCvec[i].mb.polling_ms, PLCvec[i].mb.timeout_us);
   /*

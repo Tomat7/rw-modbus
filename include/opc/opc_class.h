@@ -2,15 +2,14 @@
 
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
-
 #include <string.h>
 
 #include <iostream>
 #include <map>
-#include <string>
 #include <mutex>
-#include <typeinfo>
+#include <string>
 #include <typeindex>
+#include <typeinfo>
 
 #include "include/logger.h"
 
@@ -28,12 +27,12 @@ struct var_t {
   string str_name;
   char* name = nullptr;
   string str_path;
-  char* path  = nullptr;
+  char* path = nullptr;
   string str_full;
   char* path_name = nullptr;
   nodeid_t node_id;
-  void* ptr_value;    // ptr to "correct" value_u
-  int rmode;          // 1 - mean RW
+  void* ptr_value;  // ptr to "correct" value_u
+  int rmode;        // 1 - mean RW
   int type;
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
@@ -45,16 +44,23 @@ public:
   OpcServer_c(UA_UInt16 _port = 4840);
   ~OpcServer_c();
 
-  void init(UA_UInt16 _port = 0); // Necessary init() before run()
+  void init(UA_UInt16 _port = 0);  // Necessary init() before run()
   void run();
   void stop();
 
   void delVar(string s);
   int getType(string s);
-  template<typename T> int addVar(string s, T Value, int rmode);
-  template<typename T> void setVar(string s, T Value, bool isOK = true);
-  template<typename T> T getVar(string s, T &Value);
-// Definition at the bottom of THIS file
+  int getStatus(string s);  // 0 - is OK, any other (1 or -1) is BAD
+
+  template <typename T>
+  int addVar(string s, T Value, int rmode);
+  template <typename T>
+  T getVar(string s, T &Value);
+  template <typename T>
+  void setVar(string s, T Value_set, bool isOK = true);
+  template <typename T>
+  T updateVar(string s, T Value_set, bool isOK);
+  // Definition at the bottom of THIS file
 
 private:
   bool isDebug = true;
@@ -76,19 +82,17 @@ private:
   void writeVariable(var_t &var);
   void getVariable(var_t &var, UA_Variant* vrnt);
 
-
   int countSlash(string Path);
   string strVarDetails(var_t &var);
   string getPathByLevel(string Path, int level);
 
-  map<string, var_t> vars;  // All regs here.
-  map<type_index, int> types; // Types coding is in constructor
-
+  map<string, var_t> vars;     // All regs here.
+  map<type_index, int> types;  // Types coding is in constructor
 };
 
 // Definition of TEMPLATEs
 
-template<typename T>
+template <typename T>
 int OpcServer_c::addVar(std::string s, T Value, int rmode)
 {
   rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
@@ -101,11 +105,11 @@ int OpcServer_c::addVar(std::string s, T Value, int rmode)
   return 1;
 }
 
-template<typename T>
-void OpcServer_c::setVar(std::string s, T Value, bool isOK)
+template <typename T>
+void OpcServer_c::setVar(std::string s, T Value_set, bool isOK)
 {
   if (vars.count(s)) {
-    vars[s].ptr_value = static_cast<T*>(&Value);
+    vars[s].ptr_value = static_cast<T*>(&Value_set);
 
     if (isOK) {
       vars[s].ua_status = UA_STATUSCODE_GOOD;
@@ -115,23 +119,31 @@ void OpcServer_c::setVar(std::string s, T Value, bool isOK)
 
     writeVariable(vars[s]);
   } else
-    LOGA("Ignore non-existing variable: %s", s.c_str());
+    LOGA("Set: Ignore non-existing variable: %s", s.c_str());
 }
 
-template<typename T>
-T OpcServer_c::getVar(std::string s, T &Value)
+template <typename T>
+T OpcServer_c::getVar(std::string s, T &Value_get)
 {
   if (vars.count(s)) {
     UA_Variant Vrnt;
     UA_Variant_init(&Vrnt);
     UA_Server_readValue(uaServer, vars[s].node_id.var, &Vrnt);
-//    getVariable(vars[s], &Vrnt);
     if (Vrnt.data != nullptr)
-      Value = *(static_cast<T*>(Vrnt.data));
+      Value_get = *(static_cast<T*>(Vrnt.data));
     UA_Variant_clear(&Vrnt);
   } else
-    LOGA("Ignore non-existing variable: %s", s.c_str());
-  return Value;
+    LOGA("Get: Ignore non-existing variable: %s", s.c_str());
+  return Value_get;
+}
+
+template <typename T>
+T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
+{
+  T Value_get = Value_set;
+  getVar(s, Value_get);
+  setVar(s, Value_set, isOK);
+  return Value_get;
 }
 
 // eof

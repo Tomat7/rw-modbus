@@ -1,15 +1,15 @@
 
-#include "opc_class.h"
-
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
 #include "include/logger.h"
+#include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) {a}
-
-
+#define DEBUG(a) \
+  if (isDebug) { \
+    a            \
+  }
 
 void OpcServer_c::addVariable(var_t &v)
 {
@@ -35,8 +35,8 @@ void OpcServer_c::addVariable(var_t &v)
 
   string d = strVarDetails(v);
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                    "NewVar: %s %s, path: %s - %s", v.name, d.c_str(), v.ua_name,
-                    UA_StatusCode_name(rc));)
+                    "NewVar: %s %s, path: %s - %s", v.name, d.c_str(),
+                    v.ua_name, UA_StatusCode_name(rc));)
 }
 
 void OpcServer_c::setVariable(var_t &v)
@@ -46,7 +46,7 @@ void OpcServer_c::setVariable(var_t &v)
     return;
   }
 
-  //UA_NodeId varNodeId = UA_NODEID_STRING(1, v.qf_name);
+  // UA_NodeId varNodeId = UA_NODEID_STRING(1, v.qf_name);
 
   UA_Variant myVariant;
   UA_Variant_init(&myVariant);
@@ -67,16 +67,14 @@ void OpcServer_c::setVariable(var_t &v)
   UA_Server_write(uaServer, &wv);
 
   /* Reset the variable to a good statuscode with a value */
-  wv.value.status = UA_STATUSCODE_GOOD; //UA_STATUSCODE_BADNOTCONNECTED;
-  //wv.value.status = UA_STATUSCODE_BADCOMMUNICATIONERROR;
+  wv.value.status = UA_STATUSCODE_GOOD;  // UA_STATUSCODE_BADNOTCONNECTED;
+  // wv.value.status = UA_STATUSCODE_BADCOMMUNICATIONERROR;
   wv.value.hasStatus = true;
   wv.value.value = myVariant;
   wv.value.hasValue = true;
-  //wv.value.serverTimestamp = true;
+  // wv.value.serverTimestamp = true;
   UA_Server_write(uaServer, &wv);
-
 }
-
 
 void OpcServer_c::writeVariable(var_t &v)
 {
@@ -129,16 +127,13 @@ void OpcServer_c::writeVariable(var_t &v)
     UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
     }
   */
-
 }
-
 
 void OpcServer_c::getVariable(var_t &v, UA_Variant* vrnt_)
 {
   UA_Variant_init(vrnt_);
   UA_Server_readValue(uaServer, v.node_id.var, vrnt_);
 }
-
 
 string OpcServer_c::strVarDetails(var_t &v)
 {
@@ -162,4 +157,3 @@ string OpcServer_c::strVarDetails(var_t &v)
 
   return ret;
 }
-

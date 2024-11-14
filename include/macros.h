@@ -22,8 +22,9 @@
 #endif
 
 #ifndef __SHORT_FILENAME__
-#define __SHORT_FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
-        __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
+#define __SHORT_FILENAME__                                                 \
+  (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 \
+                                    : __FILE__)
 #endif
 
 // ANSI Escape Sequences
@@ -72,7 +73,7 @@
 #define qwrerwerwert C_GRY
 
 #ifdef USE_SYSLOG
-#define LOGERR(...)                                                  \
+#define LOGERR(...)                                                   \
   (printf("\x1B[91m\n"), fprintf(stderr, __VA_ARGS__), printf(C_NRM), \
    syslog(LOG_ERR, __VA_ARGS__))
 #define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO, __VA_ARGS__))

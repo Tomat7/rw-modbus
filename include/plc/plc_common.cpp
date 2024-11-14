@@ -32,8 +32,7 @@ PLC_c::~PLC_c()
 
 int PLC_c::get_rc() { return rc; }
 
-
-void PLC_c::init_regs()   // Master only
+void PLC_c::init_regs()  // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
@@ -108,7 +107,7 @@ int PLC_c::mb_ctx()
   return rc;
 }
 
-int PLC_c::set_reg(int raddr, uint16_t rval)   // Set reg locally != write PLC.
+int PLC_c::set_reg(int raddr, uint16_t rval)  // Set reg locally != write PLC.
 {
   rc = -1;
   if (raddr <= reg_max) {
@@ -140,7 +139,7 @@ int PLC_c::set_reg(string rname, uint16_t rval)
   return rc;
 }
 
-uint16_t PLC_c::get_reg(int raddr)   // Set reg's local value != read PLC.
+uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;
@@ -151,7 +150,7 @@ uint16_t PLC_c::get_reg(int raddr)   // Set reg's local value != read PLC.
   return rval;
 }
 
-uint16_t PLC_c::get_reg(string rname)   // Set reg's local value != read PLC.
+uint16_t PLC_c::get_reg(string rname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;

@@ -18,7 +18,7 @@
 #include "include/logger.h"
 #include "plc_class.h"
 
-PLC_c::PLC_c(string _ip, string _name)   // Master only
+PLC_c::PLC_c(string _ip, string _name)  // Master only
 {
   lock_init();
   lock_mux = new mutex;
@@ -51,7 +51,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
 
 // Destructor in plc_common.cpp
 
-int PLC_c::mb_connect()   // Master only
+int PLC_c::mb_connect()  // Master only
 {
   if ((mb.errors > 0) || (ctx == nullptr)) {
     rc = mb_ctx();
@@ -72,7 +72,7 @@ int PLC_c::mb_connect()   // Master only
   return rc;
 }
 
-int PLC_c::read_master()   // Master only. Read directly from PLC.
+int PLC_c::read_master()  // Master only. Read directly from PLC.
 {
   //  LOCK_GUARD(network_mux);
   rc = 0;
@@ -105,7 +105,7 @@ int PLC_c::read_master()   // Master only. Read directly from PLC.
   return rc;
 }
 
-int PLC_c::read_allregs()   // Master only. Read (raw) directly from PLC.
+int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
 {
   int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
@@ -134,7 +134,7 @@ int PLC_c::read_allregs()   // Master only. Read (raw) directly from PLC.
   return rc;
 }
 
-int PLC_c::write_master()   // Master only. Write all regs directly to PLC.
+int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
 {
   //  LOCK_GUARD(network_mux);
   int rc_write = 0;
@@ -162,7 +162,6 @@ int PLC_c::write_master()   // Master only. Write all regs directly to PLC.
         LOGN("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
              modbus_strerror(errno));
       }
-
     }
   }
 
@@ -172,7 +171,7 @@ int PLC_c::write_master()   // Master only. Write all regs directly to PLC.
   return rc_write;
 }
 
-int PLC_c::write_reg(reg_t &R)   // Master only. Write (raw) reg directly to PLC.
+int PLC_c::write_reg(reg_t &R)  // Master only. Write (raw) reg directly to PLC.
 {
   auto &rd = R.data;
   rc = modbus_write_register(ctx, R.raddr, rd.rvalue);
@@ -194,7 +193,7 @@ int PLC_c::write_reg(reg_t &R)   // Master only. Write (raw) reg directly to PLC
   return rc;
 }
 
-int PLC_c::update_master()   // Master only.
+int PLC_c::update_master()  // Master only.
 {
   int ret = 0;
   uint64_t interval_ms = mb.polling_ms;

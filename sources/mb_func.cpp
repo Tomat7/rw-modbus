@@ -46,11 +46,11 @@ int mb_update()
   for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
 
-  //std::this_thread::yield();
+  // std::this_thread::yield();
   std::this_thread::sleep_for(10ms);
   printf("mb_update threads STARTED and ready to JOIN.\n");
   std::this_thread::yield();
-  //std::this_thread::sleep_for(10ms);
+  // std::this_thread::sleep_for(10ms);
 
   for (auto &th : thr) {
     printf(".");
@@ -100,11 +100,11 @@ int mb_write()
 
 void mb_deinit()
 {
-//  printf("mb_deinit READY to clear\n");
+  //  printf("mb_deinit READY to clear\n");
   PLCvec.clear();
   Slave.mb_deinit();
-//  printf("mb_deinit READY for UN-lock\n");
-//  printf("mb_deinit UN-locked\n");
+  //  printf("mb_deinit READY for UN-lock\n");
+  //  printf("mb_deinit UN-locked\n");
   return;
 }
 

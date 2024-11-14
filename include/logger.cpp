@@ -18,7 +18,7 @@
 
 int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 
-static mutex logger_mux;            // already defined in .h
+static mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
 static queue<string> Print_queue;
 
@@ -31,8 +31,8 @@ void logger(const char* _logname, int _prio, const char* _func,
   // https://www.gnu.org/software/libc/manual/html_node/Creating-a-Pipe.html
   // FILE* fout = stdout;
   int pipefd[2];
-  pipe(pipefd);                     // make a pipe
-  FILE* fout = fdopen(pipefd[1], "w");    // pipe to stream
+  pipe(pipefd);                         // make a pipe
+  FILE* fout = fdopen(pipefd[1], "w");  // pipe to stream
 
   const char* format = _fmt;
   const char* fname = _logname;
@@ -92,7 +92,7 @@ void logger(const char* _logname, int _prio, const char* _func,
   close(pipefd[1]);
 
   fout = fdopen(pipefd[0], "r");
-  char buffer[MESSAGE_MAX_LEN+1] = {0};
+  char buffer[MESSAGE_MAX_LEN + 1] = {0};
   char* bufc = fgets(buffer, MESSAGE_MAX_LEN, fout);
 
   if (bufc != nullptr)
@@ -103,15 +103,11 @@ void logger(const char* _logname, int _prio, const char* _func,
   else
     printf("bufc overload");
 
-  fclose (fout);
+  fclose(fout);
   close(pipefd[0]);
-
 }
 
-void logger_set_queue(bool to_queue)
-{
-  print_to_queue = to_queue;
-}
+void logger_set_queue(bool to_queue) { print_to_queue = to_queue; }
 
 void logger_flush()
 {

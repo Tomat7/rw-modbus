@@ -50,7 +50,7 @@ Reg_c::Reg_c(reg_t* _reg)
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
   rn = ptr_reg->fullname.c_str();
-  //LOGD("try to create %s", rn);
+  // LOGD("try to create %s", rn);
 
   fd = create_shm_fd(rn);
   if (fd != -1) {

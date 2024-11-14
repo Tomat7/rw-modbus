@@ -29,7 +29,6 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   // Read the file. If there is an error, report it and exit.
   printf("\n======= cfg_read_Master =======\n");
 
-
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
   LOGC("Mode: '%s'.", cfg_mode);
@@ -39,7 +38,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
 
   try {
     cfg.readFile(cfile.c_str());
-    //printf("=======================\n");
+    // printf("=======================\n");
     LOGW("I/O reading file OK: %s", cfile.c_str());
   } catch (const FileIOException &fioex) {
     LOGA("I/O error while reading file: %s\n", cfile.c_str());

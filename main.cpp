@@ -40,7 +40,7 @@ int main(int argc, char** argv)
   std::set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-  //log_level = 3;
+  // log_level = 3;
 
   if (argc > 1) {
     if (Mode.count(string(argv[1])))
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
     // LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
-    //Slave.handle_slave(timeout_sec * 1000000);
+    // Slave.handle_slave(timeout_sec * 1000000);
 
     int ch = read_console(0, timeout_sec * 1000000);
     if (ch != -1)

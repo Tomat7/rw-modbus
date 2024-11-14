@@ -22,7 +22,7 @@ void regs_create_from_masters()
       // RegMap_c rm(&R);
       // REGmap[R.fullname] = rm;
       REGmap[R.fullname] = {&R};
-      //REGmap.emplace(R.fullname, R);
+      // REGmap.emplace(R.fullname, R);
     }
   return;
 }

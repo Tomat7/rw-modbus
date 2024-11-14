@@ -12,25 +12,25 @@
 
 #define MB_READ
 
+#define CAST(_XTYPE) static_cast<_XTYPE>
+
 // void regs_init();
 // void reg_print(string, const regdata_t*);
 // void reg_print_shm(RegMap_c*);
-
-template<typename T>
-uint16_t opc_update_var(string s, T Value_set, bool isOK)
-{
-  T Value_get;
+/*
+  template<typename T>
+  uint16_t opc_update_var(string s, T Value_set, bool isOK)
+  {
+  T Value_get = Value_set;
   Value_get = OPCs.getVar(s, Value_get);
-
   if (OPCs.getType(s) == UA_TYPES_FLOAT) {
     Value_get = (uint16_t)(Value_get * 100);
     Value_set = Value_set * (T)0.01;
   }
-
   OPCs.setVar(s, Value_set, isOK);
-
   return (uint16_t)Value_get;
-}
+  }
+*/
 
 string folder = "/PLC/";
 
@@ -40,7 +40,7 @@ void opc_regs_init()
 
   string n;
 
-  for (auto &[name, rm] : REGmap) {
+  for (auto& [name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
 
@@ -63,7 +63,7 @@ void opc_regs_init()
     size_t z = parent.find(".");
     parent.erase(z);
 
-    n = folder + parent + "/" + name; // like /PLC/Kub/Kub.Temp1
+    n = folder + parent + "/" + name;  // like /PLC/Kub/Kub.Temp1
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
@@ -75,17 +75,14 @@ void opc_regs_init()
       uint16_t ui16 = (uint16_t)(rm.ptr_data_plc->rvalue);
       OPCs.addVar(n, ui16, rm.ptr_data_plc->rmode);
     }
-
   }
-
 }
-
 
 uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val_set)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
   string str_type = ptr_r->str_type;
-  bool reg_is_OK = ((ptr_r->data).rerrors == 0);
+  bool isOK = ((ptr_r->data).rerrors == 0);
   string parent = name;
   size_t z = parent.find(".");
   parent.erase(z);
@@ -94,11 +91,11 @@ uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val_set)
   uint16_t val_get = 0;
 
   if (str_type == "f")
-    val_get = opc_update_var(n, (float)val_set, reg_is_OK);
+    val_get = CAST(uint16_t)(100*OPCs.updateVar(n, (float)val_set/100, isOK));
   else if (str_type == "i")
-    val_get = opc_update_var(n, (int16_t)val_set, reg_is_OK);
+    val_get = CAST(uint16_t)(OPCs.updateVar(n, (int16_t)val_set, isOK));
   else if (str_type == "u")
-    val_get = opc_update_var(n, (uint16_t)val_set, reg_is_OK);
+    val_get = CAST(uint16_t)(OPCs.updateVar(n, (uint16_t)val_set, isOK));
 
   /*   if (str_type == "f") {
       float fl = OPCs.getVar(n, fl);
@@ -117,20 +114,10 @@ uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val_set)
   return val_get;
 }
 
+void opc_deinit() { OPCs.stop(); }
 
-void opc_deinit()
-{
-  OPCs.stop();
-}
+void opc_init() { OPCs.init(4840); }
 
-void opc_init()
-{
-  OPCs.init(4840);
-}
-
-void opc_run()
-{
-  OPCs.run();
-}
+void opc_run() { OPCs.run(); }
 
 // eof

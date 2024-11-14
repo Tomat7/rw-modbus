@@ -5,8 +5,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "include/plc/plc_class.h"
 #include "include/opc/opc_class.h"
+#include "include/plc/plc_class.h"
 
 using cchar = const char;
 

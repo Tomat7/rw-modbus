@@ -1,20 +1,22 @@
 
-#include "opc_class.h"
-
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
-#include <thread>
-#include <mutex>
 #include <map>
+#include <mutex>
 #include <set>
-#include <typeinfo>
+#include <thread>
 #include <typeindex>
+#include <typeinfo>
 
 #include "include/logger.h"
+#include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) {a}
+#define DEBUG(a) \
+  if (isDebug) { \
+    a            \
+  }
 
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
@@ -34,7 +36,6 @@ OpcServer_c::~OpcServer_c()
     stop();
   LOGW("uaDestructor: done.");
 }
-
 
 void OpcServer_c::init(UA_UInt16 _port)
 {
@@ -81,7 +82,6 @@ void OpcServer_c::stop()
   delete uaMutex;
   uaMutex = nullptr;
   LOGW("Stop: MUX free.");
-
 }
 
 void OpcServer_c::delVar(string s)
@@ -96,7 +96,17 @@ int OpcServer_c::getType(string s)
   if (vars.count(s))
     return vars[s].type;
   else
-    LOGA("Ignore non-existing variable: %s", s.c_str());
+    LOGA("Type: Ignore non-existing variable: %s", s.c_str());
   return -1;
 }
+
+int OpcServer_c::getStatus(string s)
+{
+  if (vars.count(s))
+    return vars[s].ua_status;  // 0 - is OK, any other (1 or -1) is BAD
+  else
+    LOGA("Status: Ignore non-existing variable: %s", s.c_str());
+  return -1;
+}
+
 // eof

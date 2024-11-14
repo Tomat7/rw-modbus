@@ -14,20 +14,20 @@
 
 // void regs_init();
 void reg_print(string, const regdata_t*);
-//void reg_print_shm(RegMap_c*);
+// void reg_print_shm(RegMap_c*);
 
 void regs_update()
 {
   printf("\n===== regs_update =====\n");
   bool is_eol = false;
 
-  for (auto &[n, rm] : REGmap) {
+  for (auto& [n, rm] : REGmap) {
     reg_print(n, rm.ptr_data_plc);
 
     uint16_t plc_val = rm.get_plc_val();  // Value from PLC
     uint16_t old_val = rm.value;          // Value in memory (in REGmap)
     uint16_t opc_val = opc_update_uint16(n, rm.ptr_reg, plc_val);
-    //uint16_t shm_val = rm.get_local();    // Value in SHM
+    // uint16_t shm_val = rm.get_local();    // Value in SHM
     uint16_t shm_val = opc_val;
 
     if (rm.get_mode()) {  // If the Reg RW - get&check value from SHM.
@@ -40,15 +40,15 @@ void regs_update()
       if (shm_val != old_val) {  // If new value got from SHM (SCADA/OPC)
         rm.set_plc_val(shm_val);
         printf("<");
-        //printf("<%5d", shm_val);
+        // printf("<%5d", shm_val);
       } else {
         printf(" ");
-        //printf("      ");
+        // printf("      ");
       }
 
     } else
       printf("  ");  // Reg is not RW
-    //printf("       ");  // Reg is not RW
+    // printf("       ");  // Reg is not RW
 
     printf("%5d %5d", opc_val, old_val);
 
@@ -74,10 +74,10 @@ void regs_update()
 void reg_print(string rn, const regdata_t* rd)
 {
   // printf("\n===== regs_print =====\n");
-  const char* C = C_WHIB; //NRM;
+  const char* C = C_WHIB;  // NRM;
   const char* B = NRM;
   if (rd->rerrors > 0) {
-    C = C_GRY; //C = C_RED;
+    C = C_GRY;      // C = C_RED;
     B = "\x1B[5m";  // Dark grey blym-blym
   }
 
@@ -132,7 +132,6 @@ void reg_print(string rn, const regdata_t* rd)
   return;
   }
 */
-
 
 /*
   void reg_print_shm(RegMap_c* rm)
