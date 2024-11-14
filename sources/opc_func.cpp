@@ -78,11 +78,13 @@ void opc_regs_init()
   }
 }
 
-uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val_set)
+uint16_t opc_update_uint16(string name, regdata_t* rd)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
-  string str_type = ptr_r->str_type;
-  bool isOK = ((ptr_r->data).rerrors == 0);
+  uint16_t val_set = rd->rvalue;
+  bool isOK = (rd->rerrors == 0);
+  int rtype = rd->rtype;
+
   string parent = name;
   size_t z = parent.find(".");
   parent.erase(z);
@@ -90,11 +92,11 @@ uint16_t opc_update_uint16(string name, reg_t* ptr_r, uint16_t val_set)
   string n = folder + parent + "/" + name;
   uint16_t val_get = 0;
 
-  if (str_type == "f")
+  if (rtype == 2)
     val_get = CAST(uint16_t)(100*OPCs.updateVar(n, (float)val_set/100, isOK));
-  else if (str_type == "i")
+  else if (rtype == 1)
     val_get = CAST(uint16_t)(OPCs.updateVar(n, (int16_t)val_set, isOK));
-  else if (str_type == "u")
+  else if (rtype == 0)
     val_get = CAST(uint16_t)(OPCs.updateVar(n, (uint16_t)val_set, isOK));
 
   /*   if (str_type == "f") {

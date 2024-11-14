@@ -70,22 +70,22 @@ int main(int argc, char** argv)
     printf("%s", CLS);
     printf("%s", HOME);
     fflush(stdout);
+    /*
+        i++;
+        string s;
 
-    i++;
-    string s;
+        s = "/PLC/Kub/Kub.millis";
+        OPCs.setVar(s, i);
 
-    s = "/PLC/Kub/Kub.millis";
-    OPCs.setVar(s, i);
+        s = "/PLC/Kub/Kub.Temp1";
+        OPCs.setVar(s, (float)i);
 
-    s = "/PLC/Kub/Kub.Temp1";
-    OPCs.setVar(s, (float)i);
+        s = "/PLC/Kub/Kub.Temp2";
+        OPCs.setVar(s, (float)-99.0);
 
-    s = "/PLC/Kub/Kub.Temp2";
-    OPCs.setVar(s, (float)-99.0);
-
-    s = "/PLC/Kub/Kub.Temp3";
-    OPCs.setVar(s, (float)0.0);
-
+        s = "/PLC/Kub/Kub.Temp3";
+        OPCs.setVar(s, (float)0.0);
+    */
     t.start();
     regs_update();
     t.spent_auto("============ REG print finished in: ");
@@ -112,8 +112,6 @@ int main(int argc, char** argv)
     //    t.sleep_ms(TMOUT);
     //    t.spent();
   }
-
-  //   getr();
 
   return (EXIT_SUCCESS);
 }
