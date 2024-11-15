@@ -23,6 +23,18 @@ const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
 
+/* decltype(auto) f(int x)
+  {
+    float z = (float)x * (float)1.23;
+    return z;
+  }
+
+  decltype(auto) f(int x)
+  {
+    int z = x++;
+    return z;
+  }
+*/
 static void close_sigint(int dummy)
 {
   LOGC("Exit by Ctrl-C. Bye.\n");
@@ -64,7 +76,7 @@ int main(int argc, char** argv)
   opc_thr.detach();
   wait_console(timeout_sec);
 
-  uint16_t i = 0;
+  // uint16_t i = 0;
 
   for (;;) {
     printf("%s", CLS);
@@ -86,6 +98,18 @@ int main(int argc, char** argv)
         s = "/PLC/Kub/Kub.Temp3";
         OPCs.setVar(s, (float)0.0);
     */
+
+    string s;
+    s = "/PLC/Kub/Kub.millis";
+    printf("Millis: %d,", OPCs.getValue(s).ui16);
+
+    s = "/PLC/Kub/Kub.Temp1";
+    printf("T1: %7.2f,", OPCs.getValue(s).fl);
+    s = "/PLC/Kub/Kub.Temp2";
+    printf("T2: %7.2f,", OPCs.getValue(s).fl);
+    s = "/PLC/Kub/Kub.Temp3";
+    printf("T3: %7.2f,", OPCs.getValue(s).fl);
+
     t.start();
     regs_update();
     t.spent_auto("============ REG print finished in: ");

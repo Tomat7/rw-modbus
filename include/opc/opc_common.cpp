@@ -109,4 +109,8 @@ int OpcServer_c::getStatus(string s)
   return -1;
 }
 
+value_u OpcServer_c::getValue(string s)
+{
+  return vars[s].value;
+}
 // eof

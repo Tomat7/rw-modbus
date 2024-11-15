@@ -39,7 +39,7 @@ void OpcServer_c::addVariable(var_t &v)
                     v.ua_name, UA_StatusCode_name(rc));)
 }
 
-void OpcServer_c::setVariable(var_t &v)
+void OpcServer_c::readVariable(var_t &v)
 {
   if (v.ptr_value == nullptr) {
     LOGA("Wrong ptr: %s", v.name);
@@ -129,11 +129,13 @@ void OpcServer_c::writeVariable(var_t &v)
   */
 }
 
-void OpcServer_c::getVariable(var_t &v, UA_Variant* vrnt_)
-{
+/*
+  void OpcServer_c::getVariable(var_t &v, UA_Variant* vrnt_)
+  {
   UA_Variant_init(vrnt_);
   UA_Server_readValue(uaServer, v.node_id.var, vrnt_);
-}
+  }
+*/
 
 string OpcServer_c::strVarDetails(var_t &v)
 {

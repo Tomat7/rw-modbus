@@ -62,6 +62,6 @@ void opc_run();
 void opc_init();
 void opc_deinit();
 uint16_t opc_update_uint16(string name, regdata_t* rd);
-//uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);
+// uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);
 int write_shm(string, uint16_t);
 int write_rm(string rn, uint16_t val);

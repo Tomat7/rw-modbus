@@ -93,7 +93,8 @@ uint16_t opc_update_uint16(string name, regdata_t* rd)
   uint16_t val_get = 0;
 
   if (rtype == 2)
-    val_get = CAST(uint16_t)(100*OPCs.updateVar(n, (float)val_set/100, isOK));
+    val_get =
+      CAST(uint16_t)(100 * OPCs.updateVar(n, (float)val_set / 100, isOK));
   else if (rtype == 1)
     val_get = CAST(uint16_t)(OPCs.updateVar(n, (int16_t)val_set, isOK));
   else if (rtype == 0)

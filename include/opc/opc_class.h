@@ -15,6 +15,17 @@
 
 using namespace std;
 
+union value_u {
+  int16_t i16;
+  int32_t i32;
+  int64_t i64;
+  uint16_t ui16;
+  uint32_t ui32;
+  uint64_t ui64;
+  int64_t dt;
+  float fl;
+};
+
 struct nodeid_t {
   UA_NodeId var;
   UA_NodeId parent;
@@ -36,6 +47,7 @@ struct var_t {
   int type;
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
+  value_u value;
 };
 
 class OpcServer_c
@@ -51,6 +63,8 @@ public:
   void delVar(string s);
   int getType(string s);
   int getStatus(string s);  // 0 - is OK, any other (1 or -1) is BAD
+
+  value_u getValue(string s);
 
   template <typename T>
   int addVar(string s, T Value, int rmode);
@@ -78,9 +92,9 @@ private:
   void addVar_NodeId(var_t &v);
 
   void addVariable(var_t &var);
-  void setVariable(var_t &var);
+  void readVariable(var_t &var);
   void writeVariable(var_t &var);
-  void getVariable(var_t &var, UA_Variant* vrnt);
+//  void getVariable(var_t &var, UA_Variant* vrnt);
 
   int countSlash(string Path);
   string strVarDetails(var_t &var);
@@ -110,6 +124,7 @@ void OpcServer_c::setVar(std::string s, T Value_set, bool isOK)
 {
   if (vars.count(s)) {
     vars[s].ptr_value = static_cast<T*>(&Value_set);
+    vars[s].value = *static_cast<value_u*>(vars[s].ptr_value);
 
     if (isOK) {
       vars[s].ua_status = UA_STATUSCODE_GOOD;
@@ -131,7 +146,11 @@ T OpcServer_c::getVar(std::string s, T &Value_get)
     UA_Server_readValue(uaServer, vars[s].node_id.var, &Vrnt);
     if (Vrnt.data != nullptr)
       Value_get = *(static_cast<T*>(Vrnt.data));
+    //else
+    //  Vrnt.data = &Value_get;
     UA_Variant_clear(&Vrnt);
+    vars[s].ptr_value = static_cast<T*>(&Value_get);
+    vars[s].value = *static_cast<value_u*>(vars[s].ptr_value);
   } else
     LOGA("Get: Ignore non-existing variable: %s", s.c_str());
   return Value_get;
