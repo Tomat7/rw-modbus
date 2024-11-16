@@ -1,4 +1,4 @@
-// plc_class.cpp ----------------------------
+// reg_class.cpp ----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 //
 // timer & millis() (c)

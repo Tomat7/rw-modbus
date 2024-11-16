@@ -24,6 +24,7 @@
 #include "include/inotify/in_class.h"
 #include "include/logger.h"
 #include "include/macros.h"
+#include "include/scheduler/scheduler.h"
 #include "include/opc/opc_class.h"
 #include "include/plc/plc_class.h"
 #include "include/shmem/shmem.h"

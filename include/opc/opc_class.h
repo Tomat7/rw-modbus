@@ -63,17 +63,12 @@ public:
   void delVar(string s);
   int getType(string s);
   int getStatus(string s);  // 0 - is OK, any other (1 or -1) is BAD
+  value_u getValue(string s); // returns union
 
-  value_u getValue(string s);
-
-  template <typename T>
-  int addVar(string s, T Value, int rmode);
-  template <typename T>
-  T getVar(string s, T &Value);
-  template <typename T>
-  void setVar(string s, T Value_set, bool isOK = true);
-  template <typename T>
-  T updateVar(string s, T Value_set, bool isOK);
+  template <typename T> int addVar(string s, T Value, int rmode);
+  template <typename T> T getVar(string s, T &Value);
+  template <typename T> void setVar(string s, T Value_set, bool isOK = true);
+  template <typename T> T updateVar(string s, T Value_set, bool isOK);
   // Definition at the bottom of THIS file
 
 private:

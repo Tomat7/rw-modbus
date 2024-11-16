@@ -1,6 +1,6 @@
 #pragma once
 
-// plc_class.h ----------------------------------
+// reg_class.h ----------------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 //
 // Other (c)

@@ -5,6 +5,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <variant>
 
 #include "./config.h"
 #include "./libs.h"
@@ -12,10 +13,11 @@
 // using namespace std;
 // using namespace libconfig;
 
-std::map<string, Reg_c> REGmap;
-std::vector<PLC_c> PLCvec;
+map<string, Reg_c> REGmap;
+vector<PLC_c> PLCvec;
 PLC_c Slave(1502);
 OpcServer_c OPCs(4840);
+Schedule_c Task;
 
 // INotify IN(CFG_DIR);
 
@@ -23,18 +25,37 @@ const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
 
-/* decltype(auto) f(int x)
-  {
-    float z = (float)x * (float)1.23;
-    return z;
-  }
+template <typename T>
+T ReadOpcChannel(string s);
+template <>
+uint16_t ReadOpcChannel(string s) { return OPCs.getValue(s).ui16; }
+template <>
+int16_t ReadOpcChannel(string s) { return OPCs.getValue(s).i16; }
+template <>
+uint32_t ReadOpcChannel(string s) { return OPCs.getValue(s).ui32; }
+template <>
+int32_t ReadOpcChannel(string s) { return OPCs.getValue(s).i32; }
+template <>
+uint64_t ReadOpcChannel(string s) { return OPCs.getValue(s).ui64; }
+template <>
+int64_t ReadOpcChannel(string s) { return OPCs.getValue(s).i64; }
+template <>
+float ReadOpcChannel(string s) { return OPCs.getValue(s).fl; }
 
-  decltype(auto) f(int x)
-  {
-    int z = x++;
-    return z;
-  }
-*/
+struct ReadValue {
+  string _s;
+  ReadValue(string ss) : _s(ss) {}
+  template <typename T>
+  operator T() { return ReadOpcChannel<T>(_s); }
+};
+
+
+int test_()
+{
+  LOGC("Test task. Done.\n");
+  return 1;
+}
+
 static void close_sigint(int dummy)
 {
   LOGC("Exit by Ctrl-C. Bye.\n");
@@ -49,7 +70,7 @@ static void close_sigint(int dummy)
 int main(int argc, char** argv)
 {
   Timer t;
-  std::set<string> Mode{MODBUS_MODES};
+  set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   // log_level = 3;
@@ -72,11 +93,13 @@ int main(int argc, char** argv)
 
   init_all();
 
+  Task.add_task(test_, 500);
+  Task.run();
+
   std::thread opc_thr(opc_run);
   opc_thr.detach();
   wait_console(timeout_sec);
 
-  // uint16_t i = 0;
 
   for (;;) {
     printf("%s", CLS);
@@ -85,30 +108,29 @@ int main(int argc, char** argv)
     /*
         i++;
         string s;
-
         s = "/PLC/Kub/Kub.millis";
         OPCs.setVar(s, i);
-
         s = "/PLC/Kub/Kub.Temp1";
         OPCs.setVar(s, (float)i);
-
-        s = "/PLC/Kub/Kub.Temp2";
-        OPCs.setVar(s, (float)-99.0);
-
-        s = "/PLC/Kub/Kub.Temp3";
-        OPCs.setVar(s, (float)0.0);
     */
-
     string s;
     s = "/PLC/Kub/Kub.millis";
-    printf("Millis: %d,", OPCs.getValue(s).ui16);
+    printf("Millis: %d, ", OPCs.getValue(s).ui16);
 
     s = "/PLC/Kub/Kub.Temp1";
-    printf("T1: %7.2f,", OPCs.getValue(s).fl);
+    printf("T1: %5.2f, ", OPCs.getValue(s).fl);
+
     s = "/PLC/Kub/Kub.Temp2";
-    printf("T2: %7.2f,", OPCs.getValue(s).fl);
+    printf("T2: %5.2f, ", ReadOpcChannel<float>(s));
+
     s = "/PLC/Kub/Kub.Temp3";
-    printf("T3: %7.2f,", OPCs.getValue(s).fl);
+    float myfl = ReadValue(s);
+    printf("T3: %5.2f, ", myfl);
+
+    s = "/PLC/Buf/Buf.Temp3";
+    printf("T4: %d, ", (int16_t)ReadValue(s));
+
+    printf("\n");
 
     t.start();
     regs_update();

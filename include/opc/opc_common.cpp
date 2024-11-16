@@ -111,6 +111,12 @@ int OpcServer_c::getStatus(string s)
 
 value_u OpcServer_c::getValue(string s)
 {
-  return vars[s].value;
+  if (vars.count(s))
+    return vars[s].value;
+  else
+    LOGA("Value: Ignore non-existing variable: %s", s.c_str());
+  value_u v;
+  v.i16 = -999;
+  return v;
 }
 // eof
