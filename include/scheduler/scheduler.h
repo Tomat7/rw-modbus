@@ -28,7 +28,7 @@ using namespace std;
 class Task_c
 {
 public:
-  Task_c(function<int()> _func, uint64_t _ms, /* string _name, */ mutex* _mux);
+  Task_c(function<int()> _func, uint64_t _ms, string _name); //, mutex* _mux);
   /*   Thread_c(const Thread_c&) = delete;
     Thread_c(Thread_c&&) = default; */
   ~Task_c();
@@ -40,7 +40,7 @@ public:
   uint64_t counter_errors = 0;   // counter of errors (run while not finished previous)
   volatile bool taskRunning = false;
   mutex* task_mux = nullptr;
-//  string task_name; // = "Noname";
+  string task_name; // = "Noname";
 //  thread *thr = nullptr;
 };
 

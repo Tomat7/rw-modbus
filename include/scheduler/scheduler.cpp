@@ -38,29 +38,24 @@ uint64_t millis()
   return t;
 }
 
-
-/* Task_c::Task_c(function<int()> _func, uint64_t _ms, string _name, mutex* _mux) :
-              func(_func), interval_ms(_ms), task_name(_name), task_mux(_mux) {
-  LOGA("Construct Tasks_c! %x", this);
-  }
-*/
-Task_c::Task_c(function<int()> _func, uint64_t _ms, /* string _name, */ mutex* _mux) :
-  func(_func), interval_ms(_ms), /* task_name(_name), */ task_mux(_mux)
+Task_c::Task_c(function<int()> _func, uint64_t _ms, string _name) :
+  func(_func), interval_ms(_ms), task_name(_name)
 {
-  LOGA("Construct Tasks_c! %x", this);
+  task_mux = new mutex;
+  LOGD("Construct Tasks_c! %x", this);
 }
 
 Task_c::~Task_c()
 {
   delete task_mux;
-  //LOGA("DEstruct Tasks_c: %s! %x", this->task_name.c_str(), this);
+  LOGD("DEstruct Tasks_c: %s. %x", this->task_name.c_str(), this);
 }
 
-Schedule_c::Schedule_c() { LOGA("Construct Schedule_c! %x", this); }
+Schedule_c::Schedule_c() { LOGD("Construct Schedule_c! %x", this); }
 Schedule_c::~Schedule_c()
 {
   stop();
-  LOGA("DEstruct Schedule_c! %x", this);
+  LOGD("DEstruct Schedule_c! %x", this);
 }
 
 
@@ -68,10 +63,9 @@ Schedule_c::~Schedule_c()
 int Schedule_c::add_task(function<int()> _func, uint64_t _ms, string _name)
 {
   scheduler_mux.lock();
-  //task_mux = new mutex;
-  tasks.emplace_back(_func, _ms, /* _name, */ new mutex);
+  tasks.emplace_back(_func, _ms, _name); //, new mutex);
   scheduler_mux.unlock();
-  //LOGA("Pushback task: %s\n", _name.c_str());
+  LOGN("PushBack/Added task: %s\n", _name.c_str());
   return 1;
 }
 
@@ -80,7 +74,7 @@ void Schedule_c::run()
   isRunning = true;
   thread run_cycle(_run_cycle);
   run_cycle.detach();
-  LOGA("Main Run: Detached\n");
+  LOGN("MainRun: Detached\n");
 }
 
 void Schedule_c::_run_cycle()
@@ -95,17 +89,19 @@ void Schedule_c::_run_cycle()
       Task_c &t = tasks[i];
       if ((millis() - t.millis_last_run) > t.interval_ms) {
         if (!t.taskRunning && isRunning) {
-          t.millis_last_run = millis();
-          t.counter_errors = 0;
-          thread thr(_run_task, i); //t.func, &t.taskRunning);
+          //  t.millis_last_run = millis();
+          //  t.counter_errors = 0;
+          //  t.counter_run++;
+          thread thr(_run_task, i);
           thr.detach();
-        } else
+        } else {
           t.counter_errors++;
+          t.counter_run = 0;
+        }
       }
     }
     scheduler_mux.unlock();
     this_thread::yield();
-    //LOGA("run-cycle: %d\n", nb_tasks);
   }
 }
 
@@ -123,16 +119,13 @@ void Schedule_c::_run_task(uint64_t i)
   tasks[i].task_mux->lock();
   tasks[i].taskRunning = true;
   tasks[i].func();
+  tasks[i].millis_last_run = millis();
+  tasks[i].counter_errors = 0;
+  tasks[i].counter_run++;
   tasks[i].taskRunning = false;
-  //LOGA("run-task-done: %s\n", tasks[i].task_name.c_str());
+  LOGD("run-task-done: %s\n", tasks[i].task_name.c_str());
   tasks[i].task_mux->unlock();
 }
 
-/* uint64_t Schedule_c::millis()
-  {
-  #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
-  uint64_t t;
-  t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
-  return t;
-  } */
+
 //eof

@@ -27,7 +27,7 @@ PLC_c::~PLC_c()
   mb_deinit();
   //  unlock_now();
   delete lock_mux;
-  LOGN("- PLC closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  LOGN("- PLC destructor: closed, unmapped and free: %s %s.", ip_addr, dev_name);
 }
 
 int PLC_c::get_rc() { return rc; }
@@ -87,7 +87,7 @@ void PLC_c::mb_deinit()
     modbus_free(ctx);
     ctx = nullptr;
   }
-  LOGD("- MB closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  LOGD("- MB deinit: closed, unmapped and free: %s %s.", ip_addr, dev_name);
 
   return;
 }

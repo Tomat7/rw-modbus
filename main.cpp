@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 
   init_all();
 
-  Task.add_task(test_, 500);
+  Task.add_task(test_, 500, "Test job");
   Task.run();
 
   std::thread opc_thr(opc_run);
