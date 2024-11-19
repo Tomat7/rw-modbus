@@ -24,6 +24,7 @@ union value_u {
   uint64_t ui64;
   int64_t dt;
   float fl;
+  double dbl;
 };
 
 struct nodeid_t {
@@ -33,7 +34,7 @@ struct nodeid_t {
 };
 
 struct var_t {
-  string raw_name;
+  string key_name;
   char* ua_name = nullptr;
   string str_name;
   char* name = nullptr;
@@ -48,6 +49,7 @@ struct var_t {
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
   value_u value;
+  value_u wrong;
 };
 
 class OpcServer_c
@@ -60,6 +62,8 @@ public:
   void run();
   void stop();
 
+  bool isVar(string s);
+  string lookupVar(string s);
   void delVar(string s);
   int getType(string s);
   int getStatus(string s);  // 0 - is OK, any other (1 or -1) is BAD
@@ -69,6 +73,8 @@ public:
   template <typename T> T getVar(string s, T &Value);
   template <typename T> void setVar(string s, T Value_set, bool isOK = true);
   template <typename T> T updateVar(string s, T Value_set, bool isOK);
+  template <typename T> void setDefaultValue(string s, T Value_set);
+  template <typename T> T ReadOpcChannel(string s);
   // Definition at the bottom of THIS file
 
 private:
@@ -160,4 +166,9 @@ T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
   return Value_get;
 }
 
+template <typename T>
+void OpcServer_c::setDefaultValue(string s, T Value_set)
+{
+
+}
 // eof

@@ -23,7 +23,8 @@ extern map<string, Reg_c> REGmap;
 extern vector<PLC_c> PLCvec;
 extern PLC_c Slave;
 extern OpcServer_c OPCs;
-// extern regdata_t* P;
+extern string PLC_folder;
+extern string SCADA_folder;
 
 #define MODBUS_MODES "master", "slave", "scada"
 
@@ -65,3 +66,30 @@ uint16_t opc_update_uint16(string name, regdata_t* rd);
 // uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);
 int write_shm(string, uint16_t);
 int write_rm(string rn, uint16_t val);
+
+struct ReadValue {
+  string _s;                // Full path to variable
+  ReadValue(string svar)
+  {
+    _s = OPCs.lookupVar(svar); // Try to find fullpath-name
+  }
+  template <typename T>
+  operator T() { return OPCs.ReadOpcChannel<T>(_s); }
+};
+
+/*     if (OPCs.isVar(svar))        // if fullpath exist = "/PLC/Kub/Kub.Temp1"
+        _s = svar;
+*/
+/*     else if (( != "")) // varname only - "Tkub0"
+        _s = SCADA_folder + sv;
+    else {                  // Only "Buf.Temp3"
+        string _plc = ss.substr(0, ss.find(".")); // = "Buf"
+        _s = PLC_folder + _plc + "/" + ss;        // = "/PLC/Buf/Buf.Temp3"
+*/
+//        string _plc = ss;
+//auto _dot = _plc.find(".");
+//        _plc.erase(ss.find("."));
+//        auto _dot = ss.find(".");
+
+
+// eof

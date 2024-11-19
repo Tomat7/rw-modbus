@@ -116,7 +116,28 @@ value_u OpcServer_c::getValue(string s)
   else
     LOGA("Value: Ignore non-existing variable: %s", s.c_str());
   value_u v;
-  v.i16 = -999;
+  /*   v.ui16 = 65432;
+    v.i16 = -999;
+    v.ui32 = 7654321;
+    v.i32 = -9999;
+  */  v.ui64 = 9876543210;
+//  v.i64 = -99999;
+  /*   v.fl = -98;
+    v.dbl = -987 */;
   return v;
 }
+
+bool OpcServer_c::isVar(string s)
+{
+  return vars.count(s);
+}
+
+string OpcServer_c::lookupVar(string s)
+{
+  for (auto [_s, v] : vars)
+    if (_s.find(s) != std::string::npos)
+      return _s;
+  return s;
+}
+
 // eof

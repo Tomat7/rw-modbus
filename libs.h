@@ -20,7 +20,7 @@
 #include <vector>
 
 #include "include/console.h"
-#include "include/decl.h"
+#include "include/declarations.h"
 #include "include/inotify/in_class.h"
 #include "include/logger.h"
 #include "include/macros.h"

@@ -32,8 +32,6 @@
   }
 */
 
-string folder = "/PLC/";
-
 void opc_regs_init()
 {
   printf("\n===== OPC_regs_init =====\n");
@@ -63,7 +61,7 @@ void opc_regs_init()
     size_t z = parent.find(".");
     parent.erase(z);
 
-    n = folder + parent + "/" + name;  // like /PLC/Kub/Kub.Temp1
+    n = PLC_folder + parent + "/" + name;  // like /PLC/Kub/Kub.Temp1
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
@@ -89,7 +87,7 @@ uint16_t opc_update_uint16(string name, regdata_t* rd)
   size_t z = parent.find(".");
   parent.erase(z);
 
-  string n = folder + parent + "/" + name;
+  string n = PLC_folder + parent + "/" + name;
   uint16_t val_get = 0;
 
   if (rtype == 2)

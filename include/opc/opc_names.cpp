@@ -37,7 +37,7 @@ string OpcServer_c::getPath_Name(string &name)
 
   auto last_slash = path.rfind("/");
   name = path.substr(last_slash + 1);  // "BUF.Press"
-  path.erase(last_slash + 1);          // folder =  "/PLC" or "/SCADA/PLC/"
+  path.erase(last_slash + 1);          // folder = "/PLC" or "/SCADA/PLC/"
 
   return path;
 }
@@ -60,18 +60,18 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   var_t v;
   v.type = t;
   v.rmode = m;
-  v.raw_name = raw_name;  // KEY for map and OPC FQName
+  v.key_name = raw_name;  // KEY for map and OPC FQName
   v.str_name = str_name;
   v.str_path = str_path;
   v.str_full = str_path + str_name;
 
-  vars[v.raw_name] = v;
-  vars[v.raw_name].ua_name =
-    const_cast<char*>(vars[v.raw_name].raw_name.c_str());
-  vars[v.raw_name].name = const_cast<char*>(vars[v.raw_name].str_name.c_str());
-  vars[v.raw_name].path = const_cast<char*>(vars[v.raw_name].str_path.c_str());
-  vars[v.raw_name].path_name =
-    const_cast<char*>(vars[v.raw_name].str_full.c_str());
+  vars[v.key_name] = v;
+  vars[v.key_name].ua_name =
+    const_cast<char*>(vars[v.key_name].key_name.c_str());
+  vars[v.key_name].name = const_cast<char*>(vars[v.key_name].str_name.c_str());
+  vars[v.key_name].path = const_cast<char*>(vars[v.key_name].str_path.c_str());
+  vars[v.key_name].path_name =
+    const_cast<char*>(vars[v.key_name].str_full.c_str());
   /*
     LOGD("STR %s, %s, %s", vars[v.raw_name].str_full.c_str(),
          vars[v.raw_name].str_path.c_str(), vars[v.raw_name].str_name.c_str());

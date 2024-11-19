@@ -18,36 +18,14 @@ vector<PLC_c> PLCvec;
 PLC_c Slave(1502);
 OpcServer_c OPCs(4840);
 Schedule_c Task;
+string PLC_folder = "/PLC/";
+string SCADA_folder = "/SCADA/";
 
 // INotify IN(CFG_DIR);
 
 const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
-
-template <typename T>
-T ReadOpcChannel(string s);
-template <>
-uint16_t ReadOpcChannel(string s) { return OPCs.getValue(s).ui16; }
-template <>
-int16_t ReadOpcChannel(string s) { return OPCs.getValue(s).i16; }
-template <>
-uint32_t ReadOpcChannel(string s) { return OPCs.getValue(s).ui32; }
-template <>
-int32_t ReadOpcChannel(string s) { return OPCs.getValue(s).i32; }
-template <>
-uint64_t ReadOpcChannel(string s) { return OPCs.getValue(s).ui64; }
-template <>
-int64_t ReadOpcChannel(string s) { return OPCs.getValue(s).i64; }
-template <>
-float ReadOpcChannel(string s) { return OPCs.getValue(s).fl; }
-
-struct ReadValue {
-  string _s;
-  ReadValue(string ss) : _s(ss) {}
-  template <typename T>
-  operator T() { return ReadOpcChannel<T>(_s); }
-};
 
 
 int test_()
@@ -121,14 +99,15 @@ int main(int argc, char** argv)
     printf("T1: %5.2f, ", OPCs.getValue(s).fl);
 
     s = "/PLC/Kub/Kub.Temp2";
-    printf("T2: %5.2f, ", ReadOpcChannel<float>(s));
+    printf("T2: %5.2f, ", OPCs.ReadOpcChannel<float>(s));
 
     s = "/PLC/Kub/Kub.Temp3";
     float myfl = ReadValue(s);
     printf("T3: %5.2f, ", myfl);
 
-    s = "/PLC/Buf/Buf.Temp3";
-    printf("T4: %d, ", (int16_t)ReadValue(s));
+    s = "Buf.Temp5";
+    myfl = ReadValue(s);
+    printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
 
     printf("\n");
 
