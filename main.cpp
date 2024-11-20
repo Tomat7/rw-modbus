@@ -93,13 +93,13 @@ int main(int argc, char** argv)
     */
     string s;
     s = "/PLC/Kub/Kub.millis";
-    printf("Millis: %d, ", OPCs.getValue(s).ui16);
+    printf("Millis: %d, ", OPCs.getVarUnion(s).ui16);
 
     s = "/PLC/Kub/Kub.Temp1";
-    printf("T1: %5.2f, ", OPCs.getValue(s).fl);
+    printf("T1: %5.2f, ", OPCs.getVarUnion(s).fl);
 
     s = "/PLC/Kub/Kub.Temp2";
-    printf("T2: %5.2f, ", OPCs.ReadOpcChannel<float>(s));
+    printf("T2: %5.2f, ", OPCs.getValue<float>(s));
 
     s = "/PLC/Kub/Kub.Temp3";
     float myfl = ReadValue(s);

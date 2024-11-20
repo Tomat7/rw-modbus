@@ -74,7 +74,7 @@ struct ReadValue {
     _s = OPCs.lookupVar(svar); // Try to find fullpath-name
   }
   template <typename T>
-  operator T() { return OPCs.ReadOpcChannel<T>(_s); }
+  operator T() { return OPCs.getValue<T>(_s); }
 };
 
 /*     if (OPCs.isVar(svar))        // if fullpath exist = "/PLC/Kub/Kub.Temp1"

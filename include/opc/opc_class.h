@@ -15,7 +15,7 @@
 
 using namespace std;
 
-union value_u {
+union var_union {
   int16_t i16;
   int32_t i32;
   int64_t i64;
@@ -25,6 +25,17 @@ union value_u {
   int64_t dt;
   float fl;
   double dbl;
+};
+
+struct badvalue_t {
+  int16_t i16 = -32000;
+  int32_t i32 = -65000;
+  int64_t i64 = -128000;
+  uint16_t ui16 = 65535;
+  uint32_t ui32 = 128765;
+  uint64_t ui64 = 2565432;
+  float fl = -99.54f;
+  double dbl = -99.98;
 };
 
 struct nodeid_t {
@@ -48,8 +59,10 @@ struct var_t {
   int type;
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
-  value_u value;
-  value_u wrong;
+  var_union value;
+  /*   var_union value_wrong;
+    var_union value_min;
+    var_union value_max; */
 };
 
 class OpcServer_c
@@ -67,15 +80,18 @@ public:
   void delVar(string s);
   int getType(string s);
   int getStatus(string s);  // 0 - is OK, any other (1 or -1) is BAD
-  value_u getValue(string s); // returns union
+  //var_union getValue(string s); // returns union
+  var_union getVarUnion(string s);  // returns value_union
 
   template <typename T> int addVar(string s, T Value, int rmode);
   template <typename T> T getVar(string s, T &Value);
   template <typename T> void setVar(string s, T Value_set, bool isOK = true);
   template <typename T> T updateVar(string s, T Value_set, bool isOK);
-  template <typename T> void setDefaultValue(string s, T Value_set);
-  template <typename T> T ReadOpcChannel(string s);
+  //template <typename T> void setDefaultValue(string s, T Value_set);
+  template <typename T> T getValue(string s);
   // Definition at the bottom of THIS file
+
+  badvalue_t bad_value;
 
 private:
   bool isDebug = true;
@@ -93,8 +109,9 @@ private:
   void addVar_NodeId(var_t &v);
 
   void addVariable(var_t &var);
-  void readVariable(var_t &var);
   void writeVariable(var_t &var);
+  void* getVarData(string s);  // get pointer to UA_Variant.Data
+//  void readVariable(var_t &var);
 //  void getVariable(var_t &var, UA_Variant* vrnt);
 
   int countSlash(string Path);
@@ -125,7 +142,7 @@ void OpcServer_c::setVar(std::string s, T Value_set, bool isOK)
 {
   if (vars.count(s)) {
     vars[s].ptr_value = static_cast<T*>(&Value_set);
-    vars[s].value = *static_cast<value_u*>(vars[s].ptr_value);
+    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
 
     if (isOK) {
       vars[s].ua_status = UA_STATUSCODE_GOOD;
@@ -138,9 +155,10 @@ void OpcServer_c::setVar(std::string s, T Value_set, bool isOK)
     LOGA("Set: Ignore non-existing variable: %s", s.c_str());
 }
 
-template <typename T>
-T OpcServer_c::getVar(std::string s, T &Value_get)
-{
+/*
+  template <typename T>
+  T OpcServer_c::getVar(std::string s, T &Value_get)
+  {
   if (vars.count(s)) {
     UA_Variant Vrnt;
     UA_Variant_init(&Vrnt);
@@ -151,9 +169,21 @@ T OpcServer_c::getVar(std::string s, T &Value_get)
     //  Vrnt.data = &Value_get;
     UA_Variant_clear(&Vrnt);
     vars[s].ptr_value = static_cast<T*>(&Value_get);
-    vars[s].value = *static_cast<value_u*>(vars[s].ptr_value);
+    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
   } else
     LOGA("Get: Ignore non-existing variable: %s", s.c_str());
+  return Value_get;
+  } */
+
+template <typename T>
+T OpcServer_c::getVar(std::string s, T &Value_get)
+{
+  void* VarData = getVarData(s);
+  if (VarData != nullptr) {
+    Value_get = *(static_cast<T*>(VarData));
+    vars[s].ptr_value = static_cast<T*>(&Value_get);
+    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
+  }
   return Value_get;
 }
 
@@ -166,9 +196,9 @@ T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
   return Value_get;
 }
 
-template <typename T>
-void OpcServer_c::setDefaultValue(string s, T Value_set)
-{
+/* template <typename T>
+  void OpcServer_c::setDefaultValue(string s, T Value_set)
+  {
 
-}
+  } */
 // eof

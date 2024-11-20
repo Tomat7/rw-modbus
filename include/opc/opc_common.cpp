@@ -109,23 +109,16 @@ int OpcServer_c::getStatus(string s)
   return -1;
 }
 
-value_u OpcServer_c::getValue(string s)
-{
+/* var_union OpcServer_c::getValue(string s)
+  {
   if (vars.count(s))
     return vars[s].value;
   else
     LOGA("Value: Ignore non-existing variable: %s", s.c_str());
-  value_u v;
-  /*   v.ui16 = 65432;
-    v.i16 = -999;
-    v.ui32 = 7654321;
-    v.i32 = -9999;
-  */  v.ui64 = 9876543210;
-//  v.i64 = -99999;
-  /*   v.fl = -98;
-    v.dbl = -987 */;
+  var_union v;
   return v;
-}
+  }
+*/
 
 bool OpcServer_c::isVar(string s)
 {

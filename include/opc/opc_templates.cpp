@@ -17,25 +17,45 @@
 
 
 template <>
-uint16_t OpcServer_c::ReadOpcChannel(string s) { return getValue(s).ui16; }
-template <>
-int16_t OpcServer_c::ReadOpcChannel(string s) { return getValue(s).i16; }
-template <>
-uint32_t OpcServer_c::ReadOpcChannel(string s) { return getValue(s).ui32; }
-template <>
-int32_t OpcServer_c::ReadOpcChannel(string s) { return getValue(s).i32; }
-template <>
-uint64_t OpcServer_c::ReadOpcChannel(string s) { return getValue(s).ui64; }
-template <>
-int64_t OpcServer_c::ReadOpcChannel(string s) { return getValue(s).i64; }
-template <>
-float OpcServer_c::ReadOpcChannel(string s)
+uint16_t OpcServer_c::getValue(string s)
 {
-  /*   float fl = -999;
-    getVar(s, fl);
-    return fl;
-  */  return getValue(s).fl;
+  uint16_t x = bad_value.ui16;
+  return getVar(s, x);
 }
+
 template <>
-double OpcServer_c::ReadOpcChannel(string s) { return getValue(s).dbl; }
+int16_t OpcServer_c::getValue(string s)
+{
+  int16_t x = bad_value.i16;
+  return getVar(s, x);
+}
+
+template <>
+uint32_t OpcServer_c::getValue(string s) { return getVarUnion(s).ui32; }
+template <>
+int32_t OpcServer_c::getValue(string s) { return getVarUnion(s).i32; }
+template <>
+uint64_t OpcServer_c::getValue(string s) { return getVarUnion(s).ui64; }
+
+template <>
+int64_t OpcServer_c::getValue(string s)
+{
+  int64_t x = bad_value.i64;
+  return getVar(s, x);
+}
+
+template <>
+float OpcServer_c::getValue(string s)
+{
+  float x = bad_value.fl;
+  return getVar(s, x);
+}
+
+template <>
+double OpcServer_c::getValue(string s)
+{
+  double x = bad_value.dbl;
+  return getVar(s, x);
+}
+
 // eof
