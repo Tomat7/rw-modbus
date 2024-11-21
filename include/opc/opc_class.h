@@ -76,6 +76,7 @@ public:
   void stop();
 
   bool isVar(string s);
+  bool isGood(string s);
   string lookupVar(string s);
   void delVar(string s);
   int getType(string s);
@@ -84,7 +85,7 @@ public:
   var_union getVarUnion(string s);  // returns value_union
 
   template <typename T> int addVar(string s, T Value, int rmode);
-  template <typename T> T getVar(string s, T &Value);
+  template <typename T> bool getVar(string s, T &Value);
   template <typename T> void setVar(string s, T Value_set, bool isOK = true);
   template <typename T> T updateVar(string s, T Value_set, bool isOK);
   //template <typename T> void setDefaultValue(string s, T Value_set);
@@ -155,36 +156,19 @@ void OpcServer_c::setVar(std::string s, T Value_set, bool isOK)
     LOGA("Set: Ignore non-existing variable: %s", s.c_str());
 }
 
-/*
-  template <typename T>
-  T OpcServer_c::getVar(std::string s, T &Value_get)
-  {
-  if (vars.count(s)) {
-    UA_Variant Vrnt;
-    UA_Variant_init(&Vrnt);
-    UA_Server_readValue(uaServer, vars[s].node_id.var, &Vrnt);
-    if (Vrnt.data != nullptr)
-      Value_get = *(static_cast<T*>(Vrnt.data));
-    //else
-    //  Vrnt.data = &Value_get;
-    UA_Variant_clear(&Vrnt);
-    vars[s].ptr_value = static_cast<T*>(&Value_get);
-    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
-  } else
-    LOGA("Get: Ignore non-existing variable: %s", s.c_str());
-  return Value_get;
-  } */
 
 template <typename T>
-T OpcServer_c::getVar(std::string s, T &Value_get)
+bool OpcServer_c::getVar(std::string s, T &Value_get)
 {
+  bool ret = false;
   void* VarData = getVarData(s);
   if (VarData != nullptr) {
     Value_get = *(static_cast<T*>(VarData));
     vars[s].ptr_value = static_cast<T*>(&Value_get);
     vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
+    ret = true;
   }
-  return Value_get;
+  return ret;
 }
 
 template <typename T>

@@ -34,6 +34,9 @@ void deinit_all();
 void reinit();
 void parse_char(int ch);
 
+const char* getColor(bool isErrors);
+const char* getBlynk(bool isErrors);
+
 int cfg_master(const char* cfg_dir, const char* cfg_file,
                const char* cfg_mode = "master");
 int cfg_slave(const char* cfg_dir, const char* cfg_file,

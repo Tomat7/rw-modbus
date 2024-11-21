@@ -12,9 +12,8 @@
 
 #define MB_READ
 
-// void regs_init();
 void reg_print(string, const regdata_t*);
-// void reg_print_shm(RegMap_c*);
+
 
 void regs_update()
 {
@@ -75,12 +74,12 @@ void regs_update()
 void reg_print(string rn, const regdata_t* rd)
 {
   // printf("\n===== regs_print =====\n");
-  const char* C = C_WHIB;  // NRM;
-  const char* B = NRM;
-  if (rd->rerrors > 0) {
+  const char* C = getColor(rd->rerrors == 0); //C_WHIB;  // NRM;
+  const char* B = getBlynk(rd->rerrors == 0);
+  /* if (rd->rerrors > 0) {
     C = C_GRY;      // C = C_RED;
     B = "\x1B[5m";  // Dark grey blym-blym
-  }
+    } */
 
   if (rd->rtype == 0)
     printf("%s%-12s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
@@ -92,6 +91,16 @@ void reg_print(string rn, const regdata_t* rd)
   printf(NRM);
 
   return;
+}
+
+const char* getColor(bool noErrors)
+{
+  return noErrors ? C_WHIB : C_GRY;
+}
+
+const char* getBlynk(bool noErrors)
+{
+  return noErrors ? NRM : "\x1B[5m";  // Dark grey blym-bly
 }
 
 /*

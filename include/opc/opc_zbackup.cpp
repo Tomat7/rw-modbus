@@ -84,4 +84,25 @@
   }
 */
 
+/*
+  template <typename T>
+  T OpcServer_c::getVar(std::string s, T &Value_get)
+  {
+  if (vars.count(s)) {
+    UA_Variant Vrnt;
+    UA_Variant_init(&Vrnt);
+    UA_Server_readValue(uaServer, vars[s].node_id.var, &Vrnt);
+    if (Vrnt.data != nullptr)
+      Value_get = *(static_cast<T*>(Vrnt.data));
+    //else
+    //  Vrnt.data = &Value_get;
+    UA_Variant_clear(&Vrnt);
+    vars[s].ptr_value = static_cast<T*>(&Value_get);
+    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
+  } else
+    LOGA("Get: Ignore non-existing variable: %s", s.c_str());
+  return Value_get;
+  } */
+
+
 // eof

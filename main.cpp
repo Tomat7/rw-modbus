@@ -103,11 +103,16 @@ int main(int argc, char** argv)
 
     s = "/PLC/Kub/Kub.Temp3";
     float myfl = ReadValue(s);
-    printf("T3: %5.2f, ", myfl);
+    const char* C = getColor(OPCs.isVar(s));
+    const char* B = getBlynk(OPCs.isGood(s));
+    printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
 
     s = "Buf.Temp5";
     myfl = ReadValue(s);
-    printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
+    C = getColor(OPCs.isVar(s));
+    B = getBlynk(OPCs.isGood(s));
+    printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
+    //printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
 
     printf("\n");
 

@@ -99,7 +99,8 @@ var_union OpcServer_c::getVarUnion(string s)
   if (VarData != nullptr) {
     vu = *static_cast<var_union*>(VarData);
     vars[s].value = vu;
-  }
+  } else if (isVar(s))
+    vu = vars[s].value;  // set old (last good) value
 
   return vu;
 }

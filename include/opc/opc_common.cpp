@@ -120,6 +120,15 @@ int OpcServer_c::getStatus(string s)
   }
 */
 
+bool OpcServer_c::isGood(string s)
+{
+  bool ret = false;
+  if (vars.count(s))
+    if (vars[s].ua_status == UA_STATUSCODE_GOOD)
+      ret = true;
+  return ret;
+}
+
 bool OpcServer_c::isVar(string s)
 {
   return vars.count(s);
