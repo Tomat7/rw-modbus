@@ -56,13 +56,14 @@ public:
 
 private:
 
-  static vector<Task_c> tasks;
-  static vector<thread> threads;
+  vector<Task_c*> tasks;
+  //Task_c tasks[3];
+  //vector<thread> threads;
   volatile static bool isRunning;
   static mutex scheduler_mux;
 
-  static void _run_cycle();
-  static void _run_task(/* function<int()> task, */ uint64_t i); //* isRun);
+  void run_cycle_();
+  void run_task_(/* function<int()> task, */ uint64_t i); //* isRun);
   void clear();
 
 };
