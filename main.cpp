@@ -107,7 +107,7 @@ int main(int argc, char** argv)
     const char* B = getBlynk(OPCs.isGood(s));
     printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
 
-    s = "Buf.Temp5";
+    s = "Kub.Temp5";
     myfl = ReadValue(s);
     C = getColor(OPCs.isVar(s));
     B = getBlynk(OPCs.isGood(s));

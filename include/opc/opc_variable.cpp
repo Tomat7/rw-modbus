@@ -98,7 +98,7 @@ var_union OpcServer_c::getVarUnion(string s)
   void* VarData = getVarData(s);
   if (VarData != nullptr) {
     vu = *static_cast<var_union*>(VarData);
-    vars[s].value = vu;
+    vars[s].value = *static_cast<var_union*>(VarData);
   } else if (isVar(s))
     vu = vars[s].value;  // set old (last good) value
 
@@ -110,11 +110,11 @@ void* OpcServer_c::getVarData(string s)
   void* VarData = nullptr;
 
   if (vars.count(s)) {
-    UA_Variant Vrnt;
-    UA_Variant_init(&Vrnt);
-    UA_Server_readValue(uaServer, vars[s].node_id.var, &Vrnt);
-    VarData = Vrnt.data;
-    UA_Variant_clear(&Vrnt);
+    //UA_Variant Vrnt;
+    UA_Variant_clear(uaVariant);
+    UA_Variant_init(uaVariant);
+    UA_Server_readValue(uaServer, vars[s].node_id.var, uaVariant);
+    VarData = uaVariant->data;
   } else
     LOGA("%s: Ignore non-existing variable: %s", __func__, s.c_str());
 

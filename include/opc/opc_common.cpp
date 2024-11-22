@@ -44,6 +44,7 @@ void OpcServer_c::init(UA_UInt16 _port)
 
   uaMutex = new mutex;
   uaServer = UA_Server_new();
+  uaVariant = UA_Variant_new();
 
   UA_ServerConfig* uaServerConfig = UA_Server_getConfig(uaServer);
   UA_ServerConfig_setDefault(uaServerConfig);
@@ -74,6 +75,8 @@ void OpcServer_c::stop()
     delVar(s);
   LOGW("Stop: map cleared.");
 
+  UA_Variant_clear(uaVariant);
+  UA_Variant_delete(uaVariant);
   UA_Server_delete(uaServer);
   uaServer = nullptr;
   LOGW("Stop: server deleted.");

@@ -98,6 +98,7 @@ private:
   bool isDebug = true;
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
+  UA_Variant* uaVariant = nullptr;
   mutex* uaMutex = nullptr;
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
