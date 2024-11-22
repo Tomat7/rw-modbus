@@ -42,7 +42,7 @@ Task_c::Task_c(function<int()> _func, uint64_t _ms, string _name) :
   func(_func), interval_ms(_ms), task_name(_name)
 {
   task_mux = new mutex;
-  LOGD("Construct Tasks_c! %x", this);
+  LOGD("Construct Tasks_c: %s. %x", task_name.c_str(), this);
 }
 
 Task_c::~Task_c()
@@ -63,9 +63,22 @@ Schedule_c::~Schedule_c()
 int Schedule_c::add_task(function<int()> _func, uint64_t _ms, string _name)
 {
   scheduler_mux.lock();
+
+  uint64_t nb_tasks = tasks.size();
+  for (uint64_t i = 0; i < nb_tasks; i++)
+    tasks[i].task_mux->lock();
+
+  for (uint64_t i = 0; i < nb_tasks; i++)
+    tasks[i].task_mux->unlock();
+
   tasks.emplace_back(_func, _ms, _name); //, new mutex);
+  nb_tasks++;
+  threads.clear();
+  threads.resize(nb_tasks);
+  //tasks.resize(nb_tasks);
+
   scheduler_mux.unlock();
-  LOGN("PushBack/Added task: %s\n", _name.c_str());
+  LOGN("PushBack/Added task: %d - %s\n", nb_tasks, _name.c_str());
   return 1;
 }
 
@@ -83,7 +96,8 @@ void Schedule_c::_run_cycle()
     this_thread::sleep_for(10ms);
     scheduler_mux.lock();
     uint64_t nb_tasks = tasks.size();
-    threads.resize(nb_tasks);
+    //vector<thread> threads(nb_tasks);
+    //threads.resize(nb_tasks);
 
     for (uint64_t i = 0; i < nb_tasks; i++) {
       Task_c &t = tasks[i];
@@ -92,14 +106,17 @@ void Schedule_c::_run_cycle()
           //  t.millis_last_run = millis();
           //  t.counter_errors = 0;
           //  t.counter_run++;
-          thread thr(_run_task, i);
-          thr.detach();
+          LOGD("Task-ready: %s \n", t.task_name.c_str());
+          //thread thr(_run_task, i);
+          threads[i] = thread(_run_task, i);
+          threads[i].detach();
         } else {
           t.counter_errors++;
           t.counter_run = 0;
         }
       }
     }
+    //threads.clear();
     scheduler_mux.unlock();
     this_thread::yield();
   }
@@ -116,6 +133,7 @@ void Schedule_c::clear() { tasks.clear(); }
 
 void Schedule_c::_run_task(uint64_t i)
 {
+  LOGD("Task-run: %s \n", tasks[i].task_name.c_str());
   tasks[i].task_mux->lock();
   tasks[i].taskRunning = true;
   tasks[i].func();
@@ -123,8 +141,8 @@ void Schedule_c::_run_task(uint64_t i)
   tasks[i].counter_errors = 0;
   tasks[i].counter_run++;
   tasks[i].taskRunning = false;
-  LOGD("run-task-done: %s\n", tasks[i].task_name.c_str());
   tasks[i].task_mux->unlock();
+  LOGD("Task-done: %s\n", tasks[i].task_name.c_str());
 }
 
 

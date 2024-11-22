@@ -30,9 +30,24 @@ int rc;
 
 int test_()
 {
-  LOGC("Test task. Done.\n");
+  LOGC("%s: Done.\n", __func__);
   return 1;
 }
+
+int opc_refresh_()
+{
+  //OPCs.refreshValues();
+  LOGC("%s: Done.\n", __func__);
+  return 1;
+}
+
+int begin_()
+{
+  //OPCs.refreshValues();
+  LOGC("%s: Done.\n", __func__);
+  return 1;
+}
+
 
 static void close_sigint(int dummy)
 {
@@ -71,7 +86,10 @@ int main(int argc, char** argv)
 
   init_all();
 
-  Task.add_task(test_, 500, "Test job");
+  Task.add_task(begin_, 1300, "Begin_");
+  Task.add_task(opc_refresh_, 700, "Refresh_");
+  Task.add_task(test_, 2500, "Test_");
+
   Task.run();
 
   std::thread opc_thr(opc_run);
@@ -93,23 +111,23 @@ int main(int argc, char** argv)
     */
     string s;
     s = "/PLC/Kub/Kub.millis";
-    printf("Millis: %d, ", OPCs.getVarUnion(s).ui16);
+    printf("Millis: %d, ", OPCs.readRawValue(s).ui16);
 
     s = "/PLC/Kub/Kub.Temp1";
-    printf("T1: %5.2f, ", OPCs.getVarUnion(s).fl);
+    printf("T1: %5.2f, ", OPCs.readRawValue(s).fl);
 
     s = "/PLC/Kub/Kub.Temp2";
-    printf("T2: %5.2f, ", OPCs.getValue<float>(s));
+    printf("T2: %5.2f, ", OPCs.readValue<float>(s));
 
     s = "/PLC/Kub/Kub.Temp3";
     float myfl = ReadValue(s);
-    const char* C = getColor(OPCs.isVar(s));
+    const char* C = getColor(OPCs.isVariable(s));
     const char* B = getBlynk(OPCs.isGood(s));
     printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
 
     s = "Kub.Temp5";
     myfl = ReadValue(s);
-    C = getColor(OPCs.isVar(s));
+    C = getColor(OPCs.isVariable(s));
     B = getBlynk(OPCs.isGood(s));
     printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
     //printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);

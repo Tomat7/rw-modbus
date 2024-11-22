@@ -35,7 +35,7 @@ struct badvalue_t {
   uint32_t ui32 = 128765;
   uint64_t ui64 = 2565432;
   float fl = -99.54f;
-  double dbl = -99.98;
+  double dbl = -999.987;
 };
 
 struct nodeid_t {
@@ -54,8 +54,8 @@ struct var_t {
   string str_full;
   char* path_name = nullptr;
   nodeid_t node_id;
-  void* ptr_value;  // ptr to "correct" value_u
-  int rmode;        // 1 - mean RW
+  void* ptr_value; // ptr to "correct" value_u
+  int rmode;       // 1 - mean RW
   int type;
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
@@ -71,35 +71,35 @@ public:
   OpcServer_c(UA_UInt16 _port = 4840);
   ~OpcServer_c();
 
-  void init(UA_UInt16 _port = 0);  // Necessary init() before run()
+  void init(UA_UInt16 _port = 0); // Necessary init() before run()
   void run();
   void stop();
 
-  bool isVar(string s);
+  bool isVariable(string s);
   bool isGood(string s);
   string lookupVar(string s);
   void delVar(string s);
   int getType(string s);
-  int getStatus(string s);  // 0 - is OK, any other (1 or -1) is BAD
-  //var_union getValue(string s); // returns union
-  var_union getVarUnion(string s);  // returns value_union
+  int getStatus(string s); // 0 - is OK, any other (1 or -1) is BAD
+  // var_union getValue(string s); // returns union
+  var_union readRawValue(string s); // returns value_union
+  int refreshValues();                // getVar for ALL variables, returns - qty of vars
 
-  template <typename T> int addVar(string s, T Value, int rmode);
-  template <typename T> bool getVar(string s, T &Value);
-  template <typename T> void setVar(string s, T Value_set, bool isOK = true);
+  template <typename T> int addVar(string s, T Value, int rmode); // for init
   template <typename T> T updateVar(string s, T Value_set, bool isOK);
-  //template <typename T> void setDefaultValue(string s, T Value_set);
-  template <typename T> T getValue(string s);
-  // Definition at the bottom of THIS file
-
-  badvalue_t bad_value;
+  template <typename T> T getValue(string s); // ask OPC server for current value
+  template <typename T> T readValue(string s); // read value saved on previous getValue
+  // template <typename T> void setDefaultValue(string s, T Value_set);
+  //  Definition at the bottom of THIS file
 
 private:
   bool isDebug = true;
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
   UA_Variant* uaVariant = nullptr;
-  mutex* uaMutex = nullptr;
+  mutex* uaSrvMux = nullptr;
+  mutex* uaGetMux = nullptr;
+  mutex* uaDataMux = nullptr;
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
 
@@ -110,21 +110,27 @@ private:
   int addVar_Names(string raw_name, int t, int m);
   void addVar_NodeId(var_t &v);
 
+  template <typename T>
+  bool getVariableValue(string s, T &Value);
+  template <typename T>
+  void setVariableValue(string s, T Value_set, bool isOK = true);
+
   void addVariable(var_t &var);
   void writeVariable(var_t &var);
-  void* getVarData(string s);  // get pointer to UA_Variant.Data
-//  void readVariable(var_t &var);
-//  void getVariable(var_t &var, UA_Variant* vrnt);
+  void* getVariantData(string s); // get pointer to UA_Variant.Data
+  //  void readVariable(var_t &var);
 
   int countSlash(string Path);
   string strVarDetails(var_t &var);
   string getPathByLevel(string Path, int level);
 
-  map<string, var_t> vars;     // All regs here.
-  map<type_index, int> types;  // Types coding is in constructor
+  badvalue_t bad_value;
+  map<string, var_t> vars;    // All regs here.
+  map<type_index, int> types; // Types coding is in constructor
 };
 
-// Definition of TEMPLATEs
+
+// ======== Definition of TEMPLATEs =========
 
 template <typename T>
 int OpcServer_c::addVar(std::string s, T Value, int rmode)
@@ -140,7 +146,7 @@ int OpcServer_c::addVar(std::string s, T Value, int rmode)
 }
 
 template <typename T>
-void OpcServer_c::setVar(std::string s, T Value_set, bool isOK)
+void OpcServer_c::setVariableValue(std::string s, T Value_set, bool isOK)
 {
   if (vars.count(s)) {
     vars[s].ptr_value = static_cast<T*>(&Value_set);
@@ -157,18 +163,20 @@ void OpcServer_c::setVar(std::string s, T Value_set, bool isOK)
     LOGA("Set: Ignore non-existing variable: %s", s.c_str());
 }
 
-
 template <typename T>
-bool OpcServer_c::getVar(std::string s, T &Value_get)
+bool OpcServer_c::getVariableValue(std::string s, T &Value_get)
 {
+  uaGetMux->lock();
   bool ret = false;
-  void* VarData = getVarData(s);
+  void* VarData = getVariantData(s);
   if (VarData != nullptr) {
     Value_get = *(static_cast<T*>(VarData));
     vars[s].ptr_value = static_cast<T*>(&Value_get);
-    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
+    vars[s].ptr_value = static_cast<T*>(VarData);
+    //    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
     ret = true;
   }
+  uaGetMux->unlock();
   return ret;
 }
 
@@ -176,8 +184,8 @@ template <typename T>
 T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
 {
   T Value_get = Value_set;
-  getVar(s, Value_get);
-  setVar(s, Value_set, isOK);
+  getVariableValue(s, Value_get);
+  setVariableValue(s, Value_set, isOK);
   return Value_get;
 }
 

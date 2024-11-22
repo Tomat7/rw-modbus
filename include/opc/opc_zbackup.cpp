@@ -104,5 +104,24 @@
   return Value_get;
   } */
 
+/* // get pointer to UA_Variant.Data
+  var_union OpcServer_c::getVarUnion(string s)
+  {
+  var_union vu;
+  vu.i64 = 0x8000000000000000;
+  vu.fl = -999.99f;
+  vu.dbl = -9999.999;
+*/
+/*   void* VarData = getVarData(s);
+  if (VarData != nullptr) {
+  vu = *static_cast<var_union*>(VarData);
+  vars[s].value = *static_cast<var_union*>(VarData);
+  } else  */
+/*   if (isVariable(s))
+    vu = vars[s].value;  // set old (last good) value
+
+  return vu; */
+
+
 
 // eof

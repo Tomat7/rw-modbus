@@ -32,7 +32,7 @@ OpcServer_c::OpcServer_c(UA_UInt16 _port)
 
 OpcServer_c::~OpcServer_c()
 {
-  if (uaMutex != nullptr)
+  if (uaSrvMux != nullptr)
     stop();
   LOGW("uaDestructor: done.");
 }
@@ -42,7 +42,9 @@ void OpcServer_c::init(UA_UInt16 _port)
   if (_port != 0)
     uaPort = _port;
 
-  uaMutex = new mutex;
+  uaSrvMux = new mutex;
+  uaGetMux = new mutex;
+  uaDataMux = new mutex;
   uaServer = UA_Server_new();
   uaVariant = UA_Variant_new();
 
@@ -55,18 +57,19 @@ void OpcServer_c::init(UA_UInt16 _port)
 void OpcServer_c::run()
 {
   LOGW("Run: try to lock mutex.");
-  uaMutex->lock();
+  uaSrvMux->lock();
   uaRunning = true;
   UA_Server_run(uaServer, &uaRunning);
   LOGW("Run: got &uaRunning = false and stopped now.");
-  uaMutex->unlock();
+  uaSrvMux->unlock();
 }
 
 void OpcServer_c::stop()
 {
   LOGW("Stop: set &uaRunning = false.");
   uaRunning = false;
-  uaMutex->lock();
+  uaDataMux->lock();
+  uaSrvMux->lock();
 
   set<string> vs;
   for (auto &[s, v] : vars)
@@ -81,9 +84,14 @@ void OpcServer_c::stop()
   uaServer = nullptr;
   LOGW("Stop: server deleted.");
 
-  uaMutex->unlock();
-  delete uaMutex;
-  uaMutex = nullptr;
+  uaSrvMux->unlock();
+  uaDataMux->unlock();
+  delete uaSrvMux;
+  delete uaGetMux;
+  delete uaDataMux;
+  uaSrvMux = nullptr;
+  uaGetMux = nullptr;
+  uaDataMux = nullptr;
   LOGW("Stop: MUX free.");
 }
 
@@ -132,7 +140,7 @@ bool OpcServer_c::isGood(string s)
   return ret;
 }
 
-bool OpcServer_c::isVar(string s)
+bool OpcServer_c::isVariable(string s)
 {
   return vars.count(s);
 }
@@ -143,6 +151,18 @@ string OpcServer_c::lookupVar(string s)
     if (_s.find(s) != std::string::npos)
       return _s;
   return s;
+}
+
+int OpcServer_c::refreshValues()
+{
+  LOGC("%s: onStart.\n", __func__);
+  int i = 0;
+  for (auto [_s, v] : vars) {
+    getVariantData(_s);
+    i++;
+  }
+  LOGC("%s: onFinish.\n", __func__);
+  return i;
 }
 
 // eof

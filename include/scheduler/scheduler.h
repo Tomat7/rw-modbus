@@ -52,7 +52,6 @@ public:
 
   int add_task(function<int()> _func, uint64_t _ms, string _name = "Noname");
   void run();
-
   void stop();
 
 private:

@@ -87,40 +87,39 @@ string OpcServer_c::strVarDetails(var_t &v)
   return ret;
 }
 
-// get pointer to UA_Variant.Data
-var_union OpcServer_c::getVarUnion(string s)
+
+void* OpcServer_c::getVariantData(string s)
+{
+  uaDataMux->lock();
+  void* VarData = nullptr;
+
+  if (vars.count(s)) {
+    UA_Variant_clear(uaVariant);
+    UA_Variant_init(uaVariant);
+    UA_Server_readValue(uaServer, vars[s].node_id.var, uaVariant);
+    if (uaVariant->data != nullptr) {
+      vars[s].value = *static_cast<var_union*>(uaVariant->data);
+      VarData = &vars[s].value;
+    } else
+      VarData = nullptr;
+  } else
+    LOGA("%s: Ignore non-existing variable: %s", __func__, s.c_str());
+
+  uaDataMux->unlock();
+  return VarData;
+}
+
+var_union OpcServer_c::readRawValue(string s)
 {
   var_union vu;
   vu.i64 = 0x8000000000000000;
-  vu.fl = -999.99f;
-  vu.dbl = -9999.999;
+  vu.fl = -999.32f;
+  vu.dbl = -9999.987;
 
-  void* VarData = getVarData(s);
-  if (VarData != nullptr) {
-    vu = *static_cast<var_union*>(VarData);
-    vars[s].value = *static_cast<var_union*>(VarData);
-  } else if (isVar(s))
+  if (isVariable(s))
     vu = vars[s].value;  // set old (last good) value
 
   return vu;
 }
-
-void* OpcServer_c::getVarData(string s)
-{
-  void* VarData = nullptr;
-
-  if (vars.count(s)) {
-    //UA_Variant Vrnt;
-    UA_Variant_clear(uaVariant);
-    UA_Variant_init(uaVariant);
-    UA_Server_readValue(uaServer, vars[s].node_id.var, uaVariant);
-    VarData = uaVariant->data;
-  } else
-    LOGA("%s: Ignore non-existing variable: %s", __func__, s.c_str());
-
-  return VarData;
-}
-
-
 
 // eof
