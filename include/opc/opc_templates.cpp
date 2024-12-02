@@ -21,7 +21,7 @@ uint16_t OpcServer_c::getValue(string s)
 {
   uint16_t x = bad_value.ui16;
   if (!getVariableValue(s, x))  // if OK, return new value (x)
-    if (isVariable(s))     // check for existing
+    if (isVariable(s))          // check for existing
       x = vars[s].value.ui16;   // if var exist - return last good value
   return x;                     // else - the "BAD" value will return
 }
@@ -102,9 +102,9 @@ template <>
 uint16_t OpcServer_c::readValue(string s)
 {
   uint16_t x = bad_value.ui16;
-  if (isVariable(s))     // check for existing
+  if (isVariable(s))          // check for existing
     x = vars[s].value.ui16;   // if var exist - return last good value
-  return x;                     // else - the "BAD" value will return
+  return x;                   // else - the "BAD" value will return
 }
 
 template <>

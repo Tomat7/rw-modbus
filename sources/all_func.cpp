@@ -59,6 +59,7 @@ void init_all()
   t.spent_auto("=== OPC init finished in: ");
   wait_console(timeout_sec);
 
+  Task.init(TASKS_NB_MAX);
   timeout_sec = TIMEOUT_SEC;
 
   return;
@@ -81,6 +82,7 @@ void reinit()
 
 void deinit_all()
 {
+  Task.stop();
   regs_deinit();
   opc_deinit();
   regs_deinit_shm();

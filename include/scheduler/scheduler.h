@@ -47,24 +47,25 @@ public:
 class Schedule_c
 {
 public:
-  Schedule_c();
+  Schedule_c(int nb_);
   ~Schedule_c();
 
-  int add_task(function<int()> _func, uint64_t _ms, string _name = "Noname");
-  void run();
-  void stop();
+  static int add_task(function<int()> _func, uint64_t _ms, string _name = "Noname");
+  static void init(int _nb = 0);
+  static void run();
+  static void stop();
 
 private:
 
-  vector<Task_c*> tasks;
-  //Task_c tasks[3];
+  static vector<Task_c> tasks;
   //vector<thread> threads;
   volatile static bool isRunning;
   static mutex scheduler_mux;
+  /* static  int nb_max; */
 
-  void run_cycle_();
-  void run_task_(/* function<int()> task, */ uint64_t i); //* isRun);
-  void clear();
+  static void run_cycle_();
+  static void run_task_(/* function<int()> task, */ uint64_t i); //* isRun);
+  static void clear();
 
 };
 

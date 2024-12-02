@@ -16,6 +16,8 @@
 #define MB_SLAVE_CONN_MAX 5
 #define MB_SLAVE_PORT 1502
 #define MB_SLAVE_REGS_NB 50
+#define OPC_SERVER_PORT 4840
+#define TASKS_NB_MAX 1
 
 #define USE_SYSLOG
 

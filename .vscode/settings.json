@@ -58,6 +58,13 @@
         "cstring": "cpp",
         "charconv": "cpp",
         "codecvt": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "variant": "cpp"
     }
 }

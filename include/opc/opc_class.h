@@ -81,15 +81,13 @@ public:
   void delVar(string s);
   int getType(string s);
   int getStatus(string s); // 0 - is OK, any other (1 or -1) is BAD
-  // var_union getValue(string s); // returns union
   var_union readRawValue(string s); // returns value_union
   int refreshValues();                // getVar for ALL variables, returns - qty of vars
 
   template <typename T> int addVar(string s, T Value, int rmode); // for init
-  template <typename T> T updateVar(string s, T Value_set, bool isOK);
+  template <typename T> T updateVar(string s, T Value_set, bool isOK);  // get T value and set Value_set
   template <typename T> T getValue(string s); // ask OPC server for current value
   template <typename T> T readValue(string s); // read value saved on previous getValue
-  // template <typename T> void setDefaultValue(string s, T Value_set);
   //  Definition at the bottom of THIS file
 
 private:
@@ -112,6 +110,7 @@ private:
 
   template <typename T>
   bool getVariableValue(string s, T &Value);
+
   template <typename T>
   void setVariableValue(string s, T Value_set, bool isOK = true);
 
@@ -131,6 +130,15 @@ private:
 
 
 // ======== Definition of TEMPLATEs =========
+template <typename T>
+T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
+{
+  T Value_get = Value_set;
+  getVariableValue(s, Value_get);
+  setVariableValue(s, Value_set, isOK);
+  return Value_get;
+}
+
 
 template <typename T>
 int OpcServer_c::addVar(std::string s, T Value, int rmode)
@@ -172,26 +180,14 @@ bool OpcServer_c::getVariableValue(std::string s, T &Value_get)
   if (VarData != nullptr) {
     Value_get = *(static_cast<T*>(VarData));
     vars[s].ptr_value = static_cast<T*>(&Value_get);
-    vars[s].ptr_value = static_cast<T*>(VarData);
-    //    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
+    // vars[s].ptr_value = static_cast<T*>(VarData);
+    // vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
     ret = true;
   }
   uaGetMux->unlock();
   return ret;
 }
 
-template <typename T>
-T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
-{
-  T Value_get = Value_set;
-  getVariableValue(s, Value_get);
-  setVariableValue(s, Value_set, isOK);
-  return Value_get;
-}
 
-/* template <typename T>
-  void OpcServer_c::setDefaultValue(string s, T Value_set)
-  {
 
-  } */
 // eof

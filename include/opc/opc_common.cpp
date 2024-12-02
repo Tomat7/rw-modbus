@@ -155,13 +155,13 @@ string OpcServer_c::lookupVar(string s)
 
 int OpcServer_c::refreshValues()
 {
-  LOGC("%s: onStart.\n", __func__);
+  LOGD("%s: onStart.\n", __func__);
   int i = 0;
   for (auto [_s, v] : vars) {
     getVariantData(_s);
     i++;
   }
-  LOGC("%s: onFinish.\n", __func__);
+  LOGD("%s: onFinish.\n", __func__);
   return i;
 }
 
