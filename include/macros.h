@@ -27,6 +27,8 @@
                                     : __FILE__)
 #endif
 
+#define UNUSED(x) (void)(x)
+
 // ANSI Escape Sequences
 #define ESC "\x1B"
 #define CLS ESC "[2J"

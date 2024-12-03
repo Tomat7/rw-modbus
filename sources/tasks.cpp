@@ -12,11 +12,11 @@
 #include "config.h"
 #include "libs.h"
 
-
-int millis_()
+int task_millis_(void* params)
 {
+  UNUSED(params);
   int i = 0;
-  for (auto& [n, rm] : REGmap) {
+  for (auto &[n, rm] : REGmap) {
     if (n.find("millis") != std::string::npos) {
       WriteValue(n, 0);
       i++;
@@ -26,17 +26,29 @@ int millis_()
   return i;
 }
 
-int opc_refresh_()
+int task_opc_refresh_(void* params)
 {
+  UNUSED(params);
   OPCs.refreshValues();
   LOGC("%s: Done.\n", __func__);
   return 1;
 }
 
-int begin_()
+int task_begin_(void* params)
 {
-  //OPCs.refreshValues();
-  LOGC("%s: Done.\n", __func__);
+  // OPCs.refreshValues();
+  LOGC("%s: %d Done.\n", __func__, *(int*)params);
   return 1;
 }
 
+/* void task_mb_update_(void *idx)
+  {
+  int x = *(int *)idx;
+  PLC_c &D = PLCvec[x];
+  prev_ts[x] = D.mb.timestamp_try_ms;
+  res[x] = D.update_master();
+  std::this_thread::yield();
+  return;
+  }
+*/
+// eof

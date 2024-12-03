@@ -66,10 +66,10 @@ int main(int argc, char** argv)
   init_all();
 
   // Task.init(5);
-  Task.add_task(begin_, 1300, "Begin_");
-  Task.add_task(opc_refresh_, 700, "Refresh_");
-  Task.add_task(millis_, 2500, "Test_");
-
+  Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
+  Task.add_task(task_opc_refresh_, 700, "Refresh_");
+  Task.add_task(task_millis_, 2500, "Test_");
+  mb_update_detach();
   Task.run();
 
   std::thread opc_thr(opc_run);
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 
     const char* x = nullptr;
     t.start(x);
-    mb_update();
+    //mb_update();
     // LOGD("regdata_t size: %d", sizeof(regdata_t));
     // LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");

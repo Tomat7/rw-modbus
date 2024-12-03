@@ -39,8 +39,8 @@ uint64_t millis()
   return t;
 }
 
-Task_c::Task_c(function<int()> _func, uint64_t _ms, string _name) :
-  func(_func), interval_ms(_ms), task_name(_name)
+Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr) :
+  func(_func), interval_ms(_ms), task_name(_name), params(_ptr)
 {
   task_mux = new mutex;
   LOGD("Construct Tasks_c: %s. %x", task_name.c_str(), this);
@@ -49,6 +49,7 @@ Task_c::Task_c(function<int()> _func, uint64_t _ms, string _name) :
 Task_c::~Task_c()
 {
   delete this->task_mux;
+  delete this->params;
   LOGD("DEstruct Tasks_c: %s. %x", this->task_name.c_str(), this);
 }
 
@@ -74,7 +75,7 @@ void Schedule_c::init(int _nb)
 
 }
 
-int Schedule_c::add_task(function<int()> _func, uint64_t _ms, string _name)
+int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr)
 {
   scheduler_mux.lock();
   uint64_t nb_tasks = tasks.size();
@@ -87,9 +88,9 @@ int Schedule_c::add_task(function<int()> _func, uint64_t _ms, string _name)
     for (uint64_t i = 0; i < nb_tasks; i++)
       tasks[i].task_mux->unlock();
 
-    tasks.emplace_back(_func, _ms, _name); //, new mutex);
+    tasks.emplace_back(_func, _ms, _name, _ptr);
     nb_tasks = tasks.size();
-    LOGN("Add new task: %s, total: %d\n", _name.c_str(), nb_tasks);
+    LOGN("New task: %s, ms: %d, total: %d\n", _name.c_str(), _ms, nb_tasks);
   } else
     LOGA("Can't add task! Now: %d, capacity: %d\n", nb_tasks, nb_capct);
 
@@ -161,13 +162,13 @@ void Schedule_c::run_task_(uint64_t i)
   LOGD("Task-run: %s \n", tasks[i].task_name.c_str());
   tasks[i].task_mux->lock();
   tasks[i].taskRunning = true;
-  tasks[i].func();
+  int ret = tasks[i].func(tasks[i].params);
   tasks[i].millis_last_run = millis();
   tasks[i].counter_errors = 0;
   tasks[i].counter_run++;
   tasks[i].taskRunning = false;
   tasks[i].task_mux->unlock();
-  LOGD("Task-done: %s\n", tasks[i].task_name.c_str());
+  LOGD("Task-done: %s %d\n", tasks[i].task_name.c_str(), ret);
 }
 
 

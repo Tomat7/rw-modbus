@@ -13,7 +13,62 @@
 
 static mutex mbupdate_mux;
 static vector<int> res;
+static vector<uint64_t> idx;
 static vector<uint64_t> prev_ts;
+
+int task_mb_update_(void* params)
+{
+  uint64_t x = *(uint64_t*)params;
+  LOGD("%s: %d", __func__, x);
+  PLC_c &D = PLCvec[x];
+  prev_ts[x] = D.mb.timestamp_try_ms;
+  res[x] = D.update_master();
+  std::this_thread::yield();
+  return (int)x;
+}
+
+int mb_update_detach()
+{
+  //  "===== mb_update ====="
+  uint64_t i = 0;
+  uint64_t nb_plcs = PLCvec.size();
+  //vector<thread> thr(nb_plcs);
+  res.resize(nb_plcs);
+  idx.resize(nb_plcs);
+  prev_ts.resize(nb_plcs);
+
+  //logger_set_queue(true);
+
+  for (i = 0; i < nb_plcs; i++) {
+    PLC_c &D = PLCvec[i];
+    idx[i] = i;
+    string name = D.str_title + " " + D.str_dev_name;
+    Task.add_task(task_mb_update_, D.mb.polling_ms, name, &idx[i]);
+  }
+
+  std::this_thread::sleep_for(10ms);
+  printf("mb_update threads STARTED and ready to JOIN.\n");
+  std::this_thread::yield();
+  // std::this_thread::sleep_for(10ms);
+
+  /*   for (auto &th : thr) {
+      printf(".");
+      th.join();
+    }
+
+    printf("\n"); */
+//  std::this_thread::sleep_for(10ms);
+//  logger_set_queue(false);
+//  logger_flush();
+
+  /*   for (i = 0; i < nb_plcs; i++)
+      mb_print_summary((int)i); */
+  /*
+    res.clear();
+    prev_ts.clear(); */
+
+  return 0;
+}
 
 void mb_update_master(int x)
 {
@@ -101,6 +156,9 @@ int mb_write()
 void mb_deinit()
 {
   //  printf("mb_deinit READY to clear\n");
+  res.clear();
+  idx.clear();
+  prev_ts.clear();
   PLCvec.clear();
   Slave.mb_deinit();
   //  printf("mb_deinit READY for UN-lock\n");

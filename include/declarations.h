@@ -51,6 +51,7 @@ void mb_deinit();
 int mb_read();
 int mb_write();
 int mb_update();
+int mb_update_detach();
 int mb_slave_init();
 int mb_slave();
 
@@ -73,9 +74,10 @@ int write_shm(string, uint16_t);
 int write_rm(string rn, uint16_t val);
 
 // ===== Scheduled Tasks =====
-int millis_();
-int opc_refresh_();
-int begin_();
+int task_millis_(void* params);
+int task_opc_refresh_(void* params);
+int task_begin_(void* params);
+int task_mb_update_(void* params);
 
 template <typename T>
 void WriteValue(string s_, T val_, bool isOK = true)

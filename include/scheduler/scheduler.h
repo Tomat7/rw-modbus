@@ -28,20 +28,18 @@ using namespace std;
 class Task_c
 {
 public:
-  Task_c(function<int()> _func, uint64_t _ms, string _name); //, mutex* _mux);
-  /*   Thread_c(const Thread_c&) = delete;
-    Thread_c(Thread_c&&) = default; */
+  Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr);
   ~Task_c();
 
-  function<int()> func;
+  function<int(void*)> func;
   uint64_t interval_ms = 0;
   uint64_t millis_last_run = 0;  // last run millis
   uint64_t counter_run = 0;      // counter of run
   uint64_t counter_errors = 0;   // counter of errors (run while not finished previous)
   volatile bool taskRunning = false;
   mutex* task_mux = nullptr;
-  string task_name; // = "Noname";
-//  thread *thr = nullptr;
+  string task_name;
+  void* params;                  // optional ptr to function's parameter
 };
 
 class Schedule_c
@@ -50,7 +48,8 @@ public:
   Schedule_c(int nb_);
   ~Schedule_c();
 
-  static int add_task(function<int()> _func, uint64_t _ms, string _name = "Noname");
+  static int add_task(function<int(void*)> _func, uint64_t _ms,
+                      string _name = "Noname", void* _ptr = nullptr);
   static void init(int _nb = 0);
   static void run();
   static void stop();
