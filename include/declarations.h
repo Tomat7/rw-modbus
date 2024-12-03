@@ -52,6 +52,7 @@ int mb_read();
 int mb_write();
 int mb_update();
 int mb_update_detach();
+int mb_print_summary();
 int mb_slave_init();
 int mb_slave();
 

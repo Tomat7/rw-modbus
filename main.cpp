@@ -120,6 +120,7 @@ int main(int argc, char** argv)
 
     const char* x = nullptr;
     t.start(x);
+    mb_print_summary();
     //mb_update();
     // LOGD("regdata_t size: %d", sizeof(regdata_t));
     // LOGD("P array size: %d", sizeof(P));

@@ -32,7 +32,6 @@ int mb_update_detach()
   //  "===== mb_update ====="
   uint64_t i = 0;
   uint64_t nb_plcs = PLCvec.size();
-  //vector<thread> thr(nb_plcs);
   res.resize(nb_plcs);
   idx.resize(nb_plcs);
   prev_ts.resize(nb_plcs);
@@ -47,27 +46,24 @@ int mb_update_detach()
   }
 
   std::this_thread::sleep_for(10ms);
-  printf("mb_update threads STARTED and ready to JOIN.\n");
+  printf("mb_update threads STARTED.\n");
   std::this_thread::yield();
-  // std::this_thread::sleep_for(10ms);
-
-  /*   for (auto &th : thr) {
-      printf(".");
-      th.join();
-    }
-
-    printf("\n"); */
-//  std::this_thread::sleep_for(10ms);
-//  logger_set_queue(false);
-//  logger_flush();
-
-  /*   for (i = 0; i < nb_plcs; i++)
-      mb_print_summary((int)i); */
-  /*
-    res.clear();
-    prev_ts.clear(); */
 
   return 0;
+}
+
+int mb_print_summary()
+{
+  uint64_t i = 0;
+  uint64_t nb_plcs = PLCvec.size();
+
+  for (i = 0; i < nb_plcs; i++) {
+    PLC_c &D = PLCvec[i];
+    printf("%-7s_dT: %5ld ret: %2d err: %4d conn: %4d rd: %4d wr: %4d rc: %2d\n",
+           D.dev_name, D.mb.timestamp_try_ms - prev_ts[i], res[i], D.mb.errors,
+           D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
+  }
+  return (int)nb_plcs;
 }
 
 void mb_update_master(int x)
@@ -79,13 +75,6 @@ void mb_update_master(int x)
   return;
 }
 
-void mb_print_summary(int x)
-{
-  PLC_c &D = PLCvec[x];
-  printf("%-7s_dT: %5ld ret: %2d err: %4d conn: %4d rd: %4d wr: %4d rc: %2d\n",
-         D.dev_name, D.mb.timestamp_try_ms - prev_ts[x], res[x], D.mb.errors,
-         D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
-}
 
 int mb_update()
 {
@@ -101,11 +90,9 @@ int mb_update()
   for (i = 0; i < nb_plcs; i++)
     thr[i] = thread(mb_update_master, i);
 
-  // std::this_thread::yield();
   std::this_thread::sleep_for(10ms);
   printf("mb_update threads STARTED and ready to JOIN.\n");
   std::this_thread::yield();
-  // std::this_thread::sleep_for(10ms);
 
   for (auto &th : thr) {
     printf(".");
@@ -117,9 +104,11 @@ int mb_update()
   logger_set_queue(false);
   logger_flush();
 
-  for (i = 0; i < nb_plcs; i++)
-    mb_print_summary((int)i);
+  /*   for (i = 0; i < nb_plcs; i++)
+      mb_print_summary((int)i);
+  */
 
+  mb_print_summary();
   res.clear();
   prev_ts.clear();
 
