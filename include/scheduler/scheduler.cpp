@@ -70,7 +70,7 @@ void Schedule_c::init(int _nb)
     stop();
     tasks.reserve(_nb);
   }
-  LOGD("Init Schedule_c: %d", _nb);
+  LOGD("Init Schedule_c capacity: %d", tasks.capacity());
 
 }
 
@@ -79,22 +79,22 @@ int Schedule_c::add_task(function<int()> _func, uint64_t _ms, string _name)
   scheduler_mux.lock();
   uint64_t nb_tasks = tasks.size();
   uint64_t nb_capct = tasks.capacity();
-  LOGN("Try to add task. now: %d, capacity: %d\n", nb_tasks, nb_capct);
+  int ret = 0;
 
-  for (uint64_t i = 0; i < nb_tasks; i++)
-    tasks[i].task_mux->lock();
-  for (uint64_t i = 0; i < nb_tasks; i++)
-    tasks[i].task_mux->unlock();
+  if (nb_capct > nb_tasks) {
+    for (uint64_t i = 0; i < nb_tasks; i++)
+      tasks[i].task_mux->lock();
+    for (uint64_t i = 0; i < nb_tasks; i++)
+      tasks[i].task_mux->unlock();
 
-  if ((nb_tasks + 1) > nb_capct)
-    tasks.reserve(nb_tasks + 2);
+    tasks.emplace_back(_func, _ms, _name); //, new mutex);
+    nb_tasks = tasks.size();
+    LOGN("Add new task: %s, total: %d\n", _name.c_str(), nb_tasks);
+  } else
+    LOGA("Can't add task! Now: %d, capacity: %d\n", nb_tasks, nb_capct);
 
-  tasks.emplace_back(_func, _ms, _name); //, new mutex);
-
-  nb_tasks = tasks.size();
   scheduler_mux.unlock();
-  LOGN("PushBack/Added task: %d - %s\n", nb_tasks, _name.c_str());
-  return 1;
+  return ret;
 }
 
 void Schedule_c::run()
@@ -151,7 +151,7 @@ void Schedule_c::stop()
 
   tasks.clear();
   scheduler_mux.unlock();
-  LOGN("Stop tasks: %d - %s\n", nb_tasks);
+  LOGN("Stop tasks: %d\n", nb_tasks);
 }
 
 void Schedule_c::clear() { tasks.clear(); }

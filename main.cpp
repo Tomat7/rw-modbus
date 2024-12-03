@@ -18,35 +18,14 @@ vector<PLC_c> PLCvec;
 PLC_c Slave(MB_SLAVE_PORT);
 OpcServer_c OPCs(OPC_SERVER_PORT);
 Schedule_c Task(TASKS_NB_MAX);
-string PLC_folder = "/PLC/";
-string SCADA_folder = "/SCADA/";
+string PLC_folder = PLC_FOLDER;
+string SCADA_folder = SCADA_FOLDER;
 
 // INotify IN(CFG_DIR);
 
 const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
-
-
-int test_()
-{
-  LOGC("%s: Done.\n", __func__);
-  return 1;
-}
-
-int opc_refresh_()
-{
-  OPCs.refreshValues();
-  LOGC("%s: Done.\n", __func__);
-  return 1;
-}
-
-int begin_()
-{
-  //OPCs.refreshValues();
-  LOGC("%s: Done.\n", __func__);
-  return 1;
-}
 
 
 static void close_sigint(int dummy)
@@ -86,10 +65,10 @@ int main(int argc, char** argv)
 
   init_all();
 
-  Task.init(5);
+  // Task.init(5);
   Task.add_task(begin_, 1300, "Begin_");
   Task.add_task(opc_refresh_, 700, "Refresh_");
-  Task.add_task(test_, 2500, "Test_");
+  Task.add_task(millis_, 2500, "Test_");
 
   Task.run();
 

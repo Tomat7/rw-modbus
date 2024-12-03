@@ -39,6 +39,7 @@ void OpcServer_c::addVariable(var_t &v)
 void OpcServer_c::writeVariable(var_t &v)
 {
   /* Write a different value */
+  uaDataMux->lock();
   UA_VariableAttributes Attr;
   UA_Variant_init(&Attr.value);
   UA_Variant_setScalar(&Attr.value, v.ptr_value, &UA_TYPES[v.type]);
@@ -60,7 +61,7 @@ void OpcServer_c::writeVariable(var_t &v)
   wv.value.hasSourceTimestamp = true;
   wv.value.sourceTimestamp = v.ua_timestamp;
   UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
-
+  uaDataMux->unlock();
 }
 
 

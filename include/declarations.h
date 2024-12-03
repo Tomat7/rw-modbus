@@ -72,6 +72,17 @@ uint16_t opc_update_uint16(string name, regdata_t* rd);
 int write_shm(string, uint16_t);
 int write_rm(string rn, uint16_t val);
 
+// ===== Scheduled Tasks =====
+int millis_();
+int opc_refresh_();
+int begin_();
+
+template <typename T>
+void WriteValue(string s_, T val_, bool isOK = true)
+{
+  OPCs.updateVar(OPCs.lookupVar(s_), val_, isOK);
+}
+
 struct ReadValue {
   string _s;                // Full path to variable
   ReadValue(string svar)
@@ -81,6 +92,7 @@ struct ReadValue {
   template <typename T>
   operator T() { return OPCs.readValue<T>(_s); }
 };
+
 
 /*     if (OPCs.isVar(svar))        // if fullpath exist = "/PLC/Kub/Kub.Temp1"
         _s = svar;
