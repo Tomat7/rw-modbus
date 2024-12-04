@@ -27,7 +27,7 @@ int task_mb_update_(void* params)
   return (int)x;
 }
 
-int mb_update_detach()
+int mb_add_tasks()
 {
   //  "===== mb_update ====="
   uint64_t i = 0;
@@ -149,7 +149,7 @@ void mb_deinit()
   idx.clear();
   prev_ts.clear();
   PLCvec.clear();
-  Slave.mb_deinit();
+  //Slave.mb_deinit();
   //  printf("mb_deinit READY for UN-lock\n");
   //  printf("mb_deinit UN-locked\n");
   return;

@@ -94,22 +94,22 @@ private:
   //  mutable std::mutex network_mux;
   // volatile  atomic <bool> lock { false };
   // std::atomic_flag lock = ATOMIC_FLAG_INIT;
-  volatile atomic_flag* lockflag = nullptr;
+  /*   volatile atomic_flag* lockflag = nullptr;
 
-  inline __attribute__((always_inline)) void lock_init()
-  {
-    lockflag = new atomic_flag(ATOMIC_FLAG_INIT);
-  };
+    inline __attribute__((always_inline)) void lock_init()
+    {
+      lockflag = new atomic_flag(ATOMIC_FLAG_INIT);
+    };
 
-  inline __attribute__((always_inline)) void lock_now()
-  {
-    lockflag->test_and_set(std::memory_order_acquire);
-  };
+    inline __attribute__((always_inline)) void lock_now()
+    {
+      lockflag->test_and_set(std::memory_order_acquire);
+    };
 
-  inline __attribute__((always_inline)) void unlock_now()
-  {
-    lockflag->clear(std::memory_order_release);
-  };
+    inline __attribute__((always_inline)) void unlock_now()
+    {
+      lockflag->clear(std::memory_order_release);
+    }; */
   // ============
 
   mutex* lock_mux = nullptr;

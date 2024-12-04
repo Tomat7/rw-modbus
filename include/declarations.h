@@ -51,7 +51,7 @@ void mb_deinit();
 int mb_read();
 int mb_write();
 int mb_update();
-int mb_update_detach();
+int mb_add_tasks();
 int mb_print_summary();
 int mb_slave_init();
 int mb_slave();
@@ -75,6 +75,7 @@ int write_shm(string, uint16_t);
 int write_rm(string rn, uint16_t val);
 
 // ===== Scheduled Tasks =====
+void tasks_init();
 int task_millis_(void* params);
 int task_opc_refresh_(void* params);
 int task_begin_(void* params);

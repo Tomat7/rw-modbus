@@ -26,7 +26,7 @@
 
 PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
 {
-  lock_init();
+  //lock_init();
   lock_mux = new mutex;
   str_ip_addr = "0.0.0.0";  // Slave always listening on ALL addresses!
   tcp_port = _port;
@@ -133,7 +133,7 @@ int PLC_c::handle_slave(int usec)
   tv.tv_sec = 0;
   tv.tv_usec = usec;
 
-  lock_now();
+  //lock_now();
   lock_mux->lock();
 
   rc = check_slave();
@@ -161,7 +161,7 @@ int PLC_c::handle_slave(int usec)
       work_client();
   }
 
-  unlock_now();
+  //unlock_now();
   lock_mux->unlock();
 
   return fdmax;

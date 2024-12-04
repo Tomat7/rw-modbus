@@ -49,7 +49,6 @@ Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _pt
 Task_c::~Task_c()
 {
   delete this->task_mux;
-  delete this->params;
   LOGD("DEstruct Tasks_c: %s. %x", this->task_name.c_str(), this);
 }
 
@@ -103,16 +102,20 @@ void Schedule_c::run()
   isRunning = true;
   thread run_cycle(run_cycle_);
   run_cycle.detach();
-  LOGN("MainRun: Detached\n");
+  LOGN("RunCycle: Detached\n");
 }
 
 void Schedule_c::run_cycle_()
 {
+  uint64_t nb_tasks = tasks.size();
+  vector<thread> threads(nb_tasks);
+  scheduler_mux.lock();
+
   while (isRunning) {
     this_thread::sleep_for(10ms);
-    scheduler_mux.lock();
-    uint64_t nb_tasks = tasks.size();
-    vector<thread> threads(nb_tasks);
+    //  scheduler_mux.lock();
+    //  uint64_t nb_tasks = tasks.size();
+    //  vector<thread> threads(nb_tasks);
     //threads.resize(nb_tasks);
 
     for (uint64_t i = 0; i < nb_tasks; i++) {
@@ -133,9 +136,20 @@ void Schedule_c::run_cycle_()
       }
     }
     //threads.clear();
-    scheduler_mux.unlock();
+    //scheduler_mux.unlock();
     this_thread::yield();
   }
+
+  for (uint64_t i = 0; i < nb_tasks; i++)
+    tasks[i].task_mux->lock();
+
+  scheduler_mux.unlock();
+
+  for (uint64_t i = 0; i < nb_tasks; i++)
+    tasks[i].task_mux->unlock();
+
+  LOGN("RunCycle: Finished\n");
+
 }
 
 void Schedule_c::stop()
@@ -144,11 +158,16 @@ void Schedule_c::stop()
   this_thread::sleep_for(20ms);
   scheduler_mux.lock();
 
+  LOGD("Stop: Try to lock\n");
+
   uint64_t nb_tasks = tasks.size();
   for (uint64_t i = 0; i < nb_tasks; i++)
     tasks[i].task_mux->lock();
   for (uint64_t i = 0; i < nb_tasks; i++)
     tasks[i].task_mux->unlock();
+
+  LOGD("Stop: Try to clear.\n");
+  this_thread::sleep_for(10ms);
 
   tasks.clear();
   scheduler_mux.unlock();

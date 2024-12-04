@@ -15,7 +15,7 @@
 
 map<string, Reg_c> REGmap;
 vector<PLC_c> PLCvec;
-PLC_c Slave(MB_SLAVE_PORT);
+//PLC_c Slave(MB_SLAVE_PORT);
 OpcServer_c OPCs(OPC_SERVER_PORT);
 Schedule_c Task(TASKS_NB_MAX);
 string PLC_folder = PLC_FOLDER;
@@ -65,12 +65,7 @@ int main(int argc, char** argv)
 
   init_all();
 
-  // Task.init(5);
-  Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
-  Task.add_task(task_opc_refresh_, 700, "Refresh_");
-  Task.add_task(task_millis_, 2500, "Test_");
-  mb_update_detach();
-  Task.run();
+
 
   std::thread opc_thr(opc_run);
   opc_thr.detach();

@@ -20,7 +20,7 @@
 
 PLC_c::PLC_c(string _ip, string _name)  // Master only
 {
-  lock_init();
+  //lock_init();
   lock_mux = new mutex;
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
@@ -30,7 +30,7 @@ PLC_c::PLC_c(string _ip, string _name)  // Master only
 PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
              int _port, int _att, int _ms, int _us)
 {
-  lock_init();
+  //lock_init();
   lock_mux = new mutex;
 
   str_dev_name = _devname;
@@ -79,7 +79,7 @@ int PLC_c::read_master()  // Master only. Read directly from PLC.
   att = 0;
 
   while (att < attempts && rc <= 0) {
-    lock_now();
+    //lock_now();
     lock_mux->lock();
     att++;
     rc = mb_connect();
@@ -87,7 +87,7 @@ int PLC_c::read_master()  // Master only. Read directly from PLC.
       rc = read_allregs();
     else
       mb.errors++;
-    unlock_now();
+    //unlock_now();
     lock_mux->unlock();
   }
 
@@ -145,7 +145,7 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
       att = 0;
 
       while (att < attempts && rc <= 0) {
-        lock_now();
+        //lock_now();
         lock_mux->lock();
         att++;
         rc = mb_connect();
@@ -153,7 +153,7 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
           rc = write_reg(R);
         else
           mb.errors++;
-        unlock_now();
+        //unlock_now();
         lock_mux->unlock();
       }
 

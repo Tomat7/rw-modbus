@@ -25,12 +25,12 @@ void init_all()
   wait_console(timeout_sec);
   // ==================================
 
-  t.start(TIMER_START_MSG);
-  ret = cfg_slave(CFG_DIR, CFG_FILE, "slave");
-  t.spent_auto("=== Cfg Slave finished in: ");
-  if (ret == EXIT_FAILURE)
-    exit(EXIT_FAILURE);
-  wait_console(timeout_sec);
+  /*   t.start(TIMER_START_MSG);
+    ret = cfg_slave(CFG_DIR, CFG_FILE, "slave");
+    t.spent_auto("=== Cfg Slave finished in: ");
+    if (ret == EXIT_FAILURE)
+      exit(EXIT_FAILURE);
+    wait_console(timeout_sec); */
   // ==================================
 
   if (log_level > 5) {
@@ -59,7 +59,7 @@ void init_all()
   t.spent_auto("=== OPC init finished in: ");
   wait_console(timeout_sec);
 
-  Task.init(TASKS_NB_MAX);
+  tasks_init();
   timeout_sec = TIMEOUT_SEC;
 
   return;

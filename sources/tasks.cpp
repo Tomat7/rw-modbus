@@ -12,6 +12,16 @@
 #include "config.h"
 #include "libs.h"
 
+void tasks_init()
+{
+  Task.init(TASKS_NB_MAX);
+  Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
+  Task.add_task(task_opc_refresh_, 700, "Refresh_");
+  Task.add_task(task_millis_, 2500, "Test_");
+  mb_add_tasks();
+  Task.run();
+}
+
 int task_millis_(void* params)
 {
   UNUSED(params);
@@ -22,7 +32,7 @@ int task_millis_(void* params)
       i++;
     }
   }
-  LOGC("%s done: %d\n", __func__, i);
+  LOGI("%s done: %d\n", __func__, i);
   return i;
 }
 
@@ -30,14 +40,14 @@ int task_opc_refresh_(void* params)
 {
   UNUSED(params);
   OPCs.refreshValues();
-  LOGC("%s: Done.\n", __func__);
+  LOGI("%s: Done.\n", __func__);
   return 1;
 }
 
 int task_begin_(void* params)
 {
   // OPCs.refreshValues();
-  LOGC("%s: %d Done.\n", __func__, *(int*)params);
+  LOGI("%s: %d Done.\n", __func__, *(int*)params);
   return 1;
 }
 

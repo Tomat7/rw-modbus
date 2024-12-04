@@ -20,9 +20,10 @@
 
 PLC_c::~PLC_c()
 {
-  lock_now();
+  //lock_now();
   while (!(lock_mux->try_lock()) && !is_slave)
     std::this_thread::yield();
+  LOGD("- PLC destructor: try_lock() done: %s %s.", ip_addr, dev_name);
 
   mb_deinit();
   //  unlock_now();
