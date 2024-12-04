@@ -14,41 +14,12 @@
 
 void regs_create_from_masters()
 {
-  printf("\n===== reg_init_from_masters =====\n");
+  printf("\n===== %s =====\n", __func__);
 
   for (auto &D : PLCvec)
     for (auto &[a, R] : D.regs) {
       LOGD("(Master) try to create %s", R.fullname.c_str());
-      // RegMap_c rm(&R);
-      // REGmap[R.fullname] = rm;
       REGmap[R.fullname] = {&R};
-      // REGmap.emplace(R.fullname, R);
-    }
-  return;
-}
-
-void regs_create_from_slave()
-{
-  printf("\n===== reg_init_from_slave =====\n");
-
-  for (auto &[a, R] : Slave.regs) {
-    LOGD("(Slave) try to create %s", R.fullname.c_str());
-    if (!reg_exist(R.fullname))
-      REGmap[R.fullname] = {&R};
-    else
-      LOGW("(Slave) REG %s already exist", R.fullname.c_str());
-  }
-  return;
-}
-
-void regs_init_shm()
-{
-  printf("\n===== reg_init =====\n");
-
-  for (auto &D : PLCvec)
-    for (auto &[a, R] : D.regs) {
-      LOGD("(Slave) try to create %s", R.fullname.c_str());
-      REGmap[R.fullname] = {R.fullname};
     }
   return;
 }
@@ -69,5 +40,35 @@ void regs_deinit()
   REGmap.clear();
   return;
 }
+
+
+/* void regs_create_from_slave()
+  {
+  printf("\n===== reg_init_from_slave =====\n");
+
+  for (auto &[a, R] : Slave.regs) {
+    LOGD("(Slave) try to create %s", R.fullname.c_str());
+    if (!reg_exist(R.fullname))
+      REGmap[R.fullname] = {&R};
+    else
+      LOGW("(Slave) REG %s already exist", R.fullname.c_str());
+  }
+  return;
+  }
+*/
+
+/*
+  void regs_init_shm()
+  {
+  printf("\n===== reg_init =====\n");
+
+  for (auto &D : PLCvec)
+    for (auto &[a, R] : D.regs) {
+      LOGD("(Master) try to create %s", R.fullname.c_str());
+      REGmap[R.fullname] = {R.fullname};
+    }
+  return;
+  }
+*/
 
 // eof

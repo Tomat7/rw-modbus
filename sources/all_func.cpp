@@ -60,23 +60,24 @@ void init_all()
   wait_console(timeout_sec);
 
   tasks_init();
-  timeout_sec = TIMEOUT_SEC;
+//  timeout_sec = TIMEOUT_SEC;
 
   return;
 }
 
 void reinit()
 {
-  if (isdebug())
-    timeout_sec = TIMEOUT_SEC;
-  else
-    timeout_sec = 1;
+  /*   if (isdebug())
+      timeout_sec = TIMEOUT_SEC;
+    else
+      timeout_sec = 1; */
 
   deinit_all();
+  LOGW("+++++++++++++++++++++++++++++++++");
   wait_console(timeout_sec);
   init_all();
 
-  timeout_sec = TIMEOUT_SEC;
+//  timeout_sec = TIMEOUT_SEC;
   return;
 }
 
@@ -107,11 +108,11 @@ void parse_char(int ch)
     LOGC("Char 'f' pressed. Timeout set to: %d sec.\n", timeout_sec);
     wait_console(timeout_sec);
   } else if ((char)ch == 'm') {
-    timeout_sec = 2;
+    timeout_sec = 3;
     LOGC("Char 'm' pressed. Timeout set to: %d sec.\n", timeout_sec);
     wait_console(timeout_sec);
   } else if ((char)ch == 's') {
-    timeout_sec = 3;
+    timeout_sec = 5;
     LOGC("Char 's' pressed. Timeout set to: %d sec.\n", timeout_sec);
     wait_console(timeout_sec);
   } else if (isdigit((char)ch)) {

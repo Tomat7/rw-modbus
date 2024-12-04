@@ -182,6 +182,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
   return;
 }
 
-void cfg_deinit() { PLCvec.clear(); }
-
+/*
+  void cfg_deinit() { PLCvec.clear(); }
+*/
 // eof

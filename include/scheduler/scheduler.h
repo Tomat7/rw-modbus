@@ -32,11 +32,11 @@ public:
   ~Task_c();
 
   function<int(void*)> func;
+  volatile bool taskRunning = false;
+  volatile uint64_t millis_last_run = 0;  // last run millis
   uint64_t interval_ms = 0;
-  uint64_t millis_last_run = 0;  // last run millis
   uint64_t counter_run = 0;      // counter of run
   uint64_t counter_errors = 0;   // counter of errors (run while not finished previous)
-  volatile bool taskRunning = false;
   mutex* task_mux = nullptr;
   string task_name;
   void* params;                  // optional ptr to function's parameter

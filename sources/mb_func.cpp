@@ -19,11 +19,11 @@ static vector<uint64_t> prev_ts;
 int task_mb_update_(void* params)
 {
   uint64_t x = *(uint64_t*)params;
-  LOGD("%s: %d", __func__, x);
   PLC_c &D = PLCvec[x];
   prev_ts[x] = D.mb.timestamp_try_ms;
   res[x] = D.update_master();
   std::this_thread::yield();
+  LOGI("%s: %d Done.", __func__, x);
   return (int)x;
 }
 

@@ -1,7 +1,7 @@
-// cfg_func.cpp --------
+// cfg_slave.cpp --------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
-#define COMPILE_SLAVE
+//#define COMPILE_SLAVE
 #ifdef COMPILE_SLAVE
 
 #include <string>

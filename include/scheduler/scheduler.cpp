@@ -113,30 +113,21 @@ void Schedule_c::run_cycle_()
 
   while (isRunning) {
     this_thread::sleep_for(10ms);
-    //  scheduler_mux.lock();
-    //  uint64_t nb_tasks = tasks.size();
-    //  vector<thread> threads(nb_tasks);
-    //threads.resize(nb_tasks);
 
     for (uint64_t i = 0; i < nb_tasks; i++) {
       Task_c &t = tasks[i];
       if ((millis() - t.millis_last_run) > t.interval_ms) {
-        if (!t.taskRunning && isRunning) {
-          //  t.millis_last_run = millis();
-          //  t.counter_errors = 0;
-          //  t.counter_run++;
-          LOGD("Task-ready: %s \n", t.task_name.c_str());
-          //thread thr(_run_task, i);
+        if ((!t.taskRunning) && isRunning) {
+          //LOGD("Task-ready: %s \n", t.task_name.c_str());
           threads[i] = thread(run_task_, i);
           threads[i].detach();
         } else {
+          LOGC("Task-error: %s still running!\n", t.task_name.c_str());
           t.counter_errors++;
           t.counter_run = 0;
         }
       }
     }
-    //threads.clear();
-    //scheduler_mux.unlock();
     this_thread::yield();
   }
 
@@ -181,8 +172,8 @@ void Schedule_c::run_task_(uint64_t i)
   LOGD("Task-run: %s \n", tasks[i].task_name.c_str());
   tasks[i].task_mux->lock();
   tasks[i].taskRunning = true;
-  int ret = tasks[i].func(tasks[i].params);
   tasks[i].millis_last_run = millis();
+  int ret = tasks[i].func(tasks[i].params);
   tasks[i].counter_errors = 0;
   tasks[i].counter_run++;
   tasks[i].taskRunning = false;

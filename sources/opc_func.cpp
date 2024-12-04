@@ -17,20 +17,6 @@
 // void regs_init();
 // void reg_print(string, const regdata_t*);
 // void reg_print_shm(RegMap_c*);
-/*
-  template<typename T>
-  uint16_t opc_update_var(string s, T Value_set, bool isOK)
-  {
-  T Value_get = Value_set;
-  Value_get = OPCs.getVar(s, Value_get);
-  if (OPCs.getType(s) == UA_TYPES_FLOAT) {
-    Value_get = (uint16_t)(Value_get * 100);
-    Value_set = Value_set * (T)0.01;
-  }
-  OPCs.setVar(s, Value_set, isOK);
-  return (uint16_t)Value_get;
-  }
-*/
 
 void opc_regs_init()
 {
@@ -120,5 +106,21 @@ void opc_deinit() { OPCs.stop(); }
 void opc_init() { OPCs.init(4840); }
 
 void opc_run() { OPCs.run(); }
+
+
+/*
+  template<typename T>
+  uint16_t opc_update_var(string s, T Value_set, bool isOK)
+  {
+  T Value_get = Value_set;
+  Value_get = OPCs.getVar(s, Value_get);
+  if (OPCs.getType(s) == UA_TYPES_FLOAT) {
+    Value_get = (uint16_t)(Value_get * 100);
+    Value_set = Value_set * (T)0.01;
+  }
+  OPCs.setVar(s, Value_set, isOK);
+  return (uint16_t)Value_get;
+  }
+*/
 
 // eof

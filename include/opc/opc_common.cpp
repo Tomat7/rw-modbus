@@ -68,30 +68,46 @@ void OpcServer_c::stop()
 {
   LOGW("Stop: set &uaRunning = false.");
   uaRunning = false;
-  uaDataMux->lock();
-  uaSrvMux->lock();
+  if (uaGetMux != nullptr)
+    uaGetMux->lock();
+  if (uaDataMux != nullptr)
+    uaDataMux->lock();
+  if (uaSrvMux != nullptr)
+    uaSrvMux->lock();
 
   set<string> vs;
   for (auto &[s, v] : vars)
     vs.insert(s);
   for (auto &s : vs)
     delVar(s);
+  vars.clear();
   LOGW("Stop: map cleared.");
 
-  UA_Variant_clear(uaVariant);
-  UA_Variant_delete(uaVariant);
-  UA_Server_delete(uaServer);
+  if (uaVariant != nullptr) {
+    UA_Variant_clear(uaVariant);
+    UA_Variant_delete(uaVariant);
+  }
+
+  if (uaServer != nullptr)
+    UA_Server_delete(uaServer);
+
   uaServer = nullptr;
+  uaVariant = nullptr;
   LOGW("Stop: server deleted.");
 
-  uaSrvMux->unlock();
-  uaDataMux->unlock();
-  delete uaSrvMux;
+  if (uaGetMux != nullptr)
+    uaGetMux->unlock();
+  if (uaDataMux != nullptr)
+    uaDataMux->unlock();
+  if (uaSrvMux != nullptr)
+    uaSrvMux->unlock();
+
   delete uaGetMux;
   delete uaDataMux;
-  uaSrvMux = nullptr;
+  delete uaSrvMux;
   uaGetMux = nullptr;
   uaDataMux = nullptr;
+  uaSrvMux = nullptr;
   LOGW("Stop: MUX free.");
 }
 

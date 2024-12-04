@@ -22,7 +22,7 @@ extern int timeout_sec;
 extern cchar* mode;
 extern map<string, Reg_c> REGmap;
 extern vector<PLC_c> PLCvec;
-extern PLC_c Slave;
+//extern PLC_c Slave;
 extern OpcServer_c OPCs;
 extern Schedule_c Task;
 extern string PLC_folder;
