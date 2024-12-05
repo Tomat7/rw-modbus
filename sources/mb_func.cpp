@@ -36,8 +36,6 @@ int mb_add_tasks()
   idx.resize(nb_plcs);
   prev_ts.resize(nb_plcs);
 
-  //logger_set_queue(true);
-
   for (i = 0; i < nb_plcs; i++) {
     PLC_c &D = PLCvec[i];
     idx[i] = i;

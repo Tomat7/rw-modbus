@@ -14,6 +14,39 @@
 
 void reg_print(string, const regdata_t*);
 
+void regs_refresh()
+{
+  LOGD("\n ===== %s =====\n", __func__);
+
+  for (auto& [n, rm] : REGmap) {
+
+    uint16_t plc_val = rm.get_plc_val();  // Value from PLC
+    uint16_t old_val = rm.value;          // Value in memory (in REGmap)
+    uint16_t opc_val = opc_update_uint16(n, rm.ptr_data_plc);
+    uint16_t shm_val = opc_val;
+
+    if (rm.get_mode()) {  // If the Reg RW - get&check value from SHM.
+
+      if (plc_val != old_val)  // If new value got from PLC
+        printf(">");           // Print sign ">"
+      else
+        printf(" ");
+
+      if (shm_val != old_val) {  // If new value got from SHM (SCADA/OPC)
+        rm.set_plc_val(shm_val);
+        printf("<");
+      } else
+        printf(" ");
+    } else
+      printf("  ");  // Reg is not RW
+
+    rm.value = plc_val;  // Save PLC value to REGmap
+    rm.sync(plc_val);
+  }
+
+  return;
+}
+
 
 void regs_update()
 {
@@ -100,7 +133,7 @@ const char* getColor(bool noErrors)
 
 const char* getBlynk(bool noErrors)
 {
-  return noErrors ? NRM : "\x1B[5m";  // Dark grey blym-bly
+  return noErrors ? NRM : "\x1B[5m";  // Dark grey blym-blym
 }
 
 /*

@@ -92,7 +92,7 @@ int PLC_c::read_master()  // Master only. Read directly from PLC.
   }
 
   mb.status = rc;
-  mb.timestamp_try_ms = millis();
+  // mb.timestamp_try_ms = millis();
   if (rc > 0)
     mb.timestamp_ok_ms = millis();
 
@@ -179,9 +179,6 @@ int PLC_c::write_reg(reg_t &R)  // Master only. Write (raw) reg directly to PLC.
   if (rc == -1) {
     mb.errors++;
     mb.errors_wr++;
-    /*     if (att >= attempts)
-          LOGE("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
-               modbus_strerror(errno)); */
   } else {
     mb.errors = 0;
     rd.rupdate = 0;
@@ -202,12 +199,9 @@ int PLC_c::update_master()  // Master only.
     interval_ms = mb.polling_ms * 3;
 
   if (millis() - mb.timestamp_try_ms > interval_ms) {
+    mb.timestamp_try_ms = millis();
     rc = 0;
     rc = write_master();
-    /*     if (rc < 0) {
-          LOGE("%s %s write regs errors: %i", ip_addr, dev_name, rc * -1);
-          return rc;
-        } */
     rc = read_master();
     ret = rc;
   }
