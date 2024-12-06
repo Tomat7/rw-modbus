@@ -51,7 +51,7 @@ uint16_t opc_update_uint16(string name, regdata_t* rd)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
   uint16_t val_ui16 = rd->rvalue;
-  int16_t val_i16 = rd->rvalue;
+  int16_t val_i16 = (int16_t)rd->rvalue;
   float val_fl = (int16_t)rd->rvalue * (float)0.01;
   bool isOK = (rd->rerrors == 0);
   int rtype = rd->rtype;

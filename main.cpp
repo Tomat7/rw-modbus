@@ -41,6 +41,7 @@ static void close_sigint(int dummy)
 
 int main(int argc, char** argv)
 {
+
   Timer t;
   set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
