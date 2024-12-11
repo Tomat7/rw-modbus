@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <sys/prctl.h>
 
 #include "config.h"
 #include "libs.h"
@@ -82,7 +83,11 @@ void opc_deinit() { OPCs.stop(); }
 
 void opc_init() { OPCs.init(4840); }
 
-void opc_run() { OPCs.run(); }
+void opc_run()
+{
+  prctl(PR_SET_NAME, "OPC server");
+  OPCs.run();
+}
 
 
 /*

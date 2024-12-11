@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <sys/mman.h>
+#include <sys/prctl.h>
 #include <syslog.h>
 #include <unistd.h>
 
@@ -107,9 +108,10 @@ void Schedule_c::run()
 
 void Schedule_c::run_cycle_()
 {
+  scheduler_mux.lock();
+  prctl(PR_SET_NAME, __func__);
   uint64_t nb_tasks = tasks.size();
   vector<thread> threads(nb_tasks);
-  scheduler_mux.lock();
 
   while (isRunning) {
     this_thread::sleep_for(10ms);
@@ -171,6 +173,7 @@ void Schedule_c::run_task_(uint64_t i)
 {
   LOGD("Task-run: %s \n", tasks[i].task_name.c_str());
   tasks[i].task_mux->lock();
+  prctl(PR_SET_NAME, tasks[i].task_name.c_str());
   tasks[i].taskRunning = true;
   tasks[i].millis_last_run = millis();
   int ret = tasks[i].func(tasks[i].params);
