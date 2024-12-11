@@ -25,9 +25,9 @@ using namespace std;
 
 struct regdata_t {
   uint16_t rvalue = 0;
+  uint16_t rerrors = 0;  // number of errors on MB func (init/connect/read)
   int rupdate = 0;  // 1 - need to write/update remote register
   int rstatus = 0;  // -1 mean ERROR, any positive - is OK
-  int rerrors = 0;  // number of errors on MB func (init/connect/read)
   int rmode = 0;    // 1 - mean RW
   int rtype = 0;    // 0 - uint16_t, 1 - int16_t, 2 - float (enum?),
 };

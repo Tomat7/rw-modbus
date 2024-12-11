@@ -34,10 +34,10 @@ struct mbdata_t {
   uint64_t timestamp_ok_ms = 0;   // ms since the Epoch on last GOOD read
   uint32_t polling_ms = 0;        // milliseconds between read request
   uint32_t timeout_us = 0;        // miCRo seconds (!!) Modbus respose timeout
-  uint32_t errors = 0;            // counter of any current ERRORS (reset if OK)
-  uint32_t errors_rd = 0;         // counter of READ errors (summ from start)
-  uint32_t errors_wr = 0;         // counter of WRITE errors (summ from start)
-  uint32_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
+  uint16_t errors = 0;            // counter of any current ERRORS (reset if OK)
+  uint16_t errors_rd = 0;         // counter of READ errors (summ from start)
+  uint16_t errors_wr = 0;         // counter of WRITE errors (summ from start)
+  uint16_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
 };
 
 class PLC_c

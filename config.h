@@ -8,7 +8,9 @@
 #define CFG_FILE "modbus.cfg"
 
 #define PLC_FOLDER "/PLC/"
+#define PLC_ERRORS ".errors"
 #define SCADA_FOLDER "/SCADA/"
+
 
 #ifdef DEBUG_FLAG
 #define TIMEOUT_SEC 1

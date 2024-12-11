@@ -22,7 +22,7 @@ void opc_regs_init()
 {
   printf("\n===== OPC_regs_init =====\n");
 
-  string n;
+  string n, e;
 
   for (auto& [name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
@@ -32,7 +32,10 @@ void opc_regs_init()
     size_t z = parent.find(".");
     parent.erase(z);
 
-    n = PLC_folder + parent + "/" + name;  // like /PLC/Kub/Kub.Temp1
+    n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
+    e = n + PLC_ERRORS;  // Kub.Temp1.errors
+
+    OPCs.addVar(e, (uint16_t)0, 0); // Reg to keep NB of errors
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
@@ -62,6 +65,8 @@ uint16_t opc_update_uint16(string name, regdata_t* rd)
 
   string n = PLC_folder + parent + "/" + name;
   uint16_t val_get = 0;
+
+  OPCs.updateVar(n + PLC_ERRORS, rd->rerrors, true);
 
   if (rtype == 2)
     val_get = CAST(uint16_t)(100 * OPCs.updateVar(n, val_fl, isOK));
