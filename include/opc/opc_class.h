@@ -96,32 +96,28 @@ private:
   UA_Server* uaServer = nullptr;
   UA_Variant* uaVariant = nullptr;
   mutex* uaSrvMux = nullptr;
-  mutex* uaGetMux = nullptr;
+  //mutex* uaGetMux = nullptr;
   mutex* uaDataMux = nullptr;
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
 
   UA_NodeId getFolder_NodeId(string str_path);
   UA_NodeId addFolders(string full_name, UA_NodeId parentNodeId);
+  int countSlash(string Path);
   string getPath_Name(string &n);
-
+  string strVarDetails(var_t &var);
+  string getPathByLevel(string Path, int level);
   int addVar_Names(string raw_name, int t, int m);
   void addVar_NodeId(var_t &v);
+  void addVariable(var_t &var);
 
   template <typename T>
   bool getVariableValue(string s, T &Value);
+  void* getVariantData(string s); // get pointer to UA_Variant.Data
 
   template <typename T>
   void setVariableValue(string s, T Value_set, bool isOK = true);
-
-  void addVariable(var_t &var);
-  void writeVariable(var_t &var);
-  void* getVariantData(string s); // get pointer to UA_Variant.Data
-  //  void readVariable(var_t &var);
-
-  int countSlash(string Path);
-  string strVarDetails(var_t &var);
-  string getPathByLevel(string Path, int level);
+  void writeVariable(var_t &var, bool isOk);
 
   badvalue_t bad_value;
   map<string, var_t> vars;    // All regs here.
@@ -156,35 +152,31 @@ int OpcServer_c::addVar(std::string s, T Value, int rmode)
 template <typename T>
 void OpcServer_c::setVariableValue(std::string s, T Value_set, bool isOK)
 {
+  uaDataMux->lock();
+
   if (vars.count(s)) {
     vars[s].ptr_value = static_cast<T*>(&Value_set);
     vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
-
-    if (isOK) {
-      vars[s].ua_status = UA_STATUSCODE_GOOD;
-      vars[s].ua_timestamp = UA_DateTime_now();
-    } else
-      vars[s].ua_status = UA_STATUSCODE_BADNOTCONNECTED;
-
-    writeVariable(vars[s]);
+    writeVariable(vars[s], isOK);
   } else
     LOGA("Set: Ignore non-existing variable: %s", s.c_str());
+
+  uaDataMux->unlock();
+  return;
 }
 
 template <typename T>
 bool OpcServer_c::getVariableValue(std::string s, T &Value_get)
 {
-  uaGetMux->lock();
+  uaDataMux->lock();
   bool ret = false;
   void* VarData = getVariantData(s);
   if (VarData != nullptr) {
     Value_get = *(static_cast<T*>(VarData));
     vars[s].ptr_value = static_cast<T*>(&Value_get);
-    // vars[s].ptr_value = static_cast<T*>(VarData);
-    // vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
     ret = true;
   }
-  uaGetMux->unlock();
+  uaDataMux->unlock();
   return ret;
 }
 

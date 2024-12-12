@@ -11,10 +11,74 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) \
-  if (isDebug) { \
-    a            \
+#define DEBUG(a) if (isDebug) {a}
+
+
+int OpcServer_c::addVar_Names(string raw_name, int t, int m)
+{
+  if (vars.count(raw_name)) {
+    LOGA("Add: Ignore existing variable: %s", raw_name.c_str());
+    return 0;
   }
+
+  if (raw_name.find("//") != std::string::npos) {
+    LOGA("Add: Ignore wrong name/path: %s", raw_name.c_str());
+    return 0;
+  }
+
+  string str_name = raw_name;
+  string str_path = getPath_Name(str_name);
+
+  var_t v;
+  v.type = t;
+  v.rmode = m;
+  v.key_name = raw_name;  // KEY for map and OPC FQName
+  v.str_name = str_name;
+  v.str_path = str_path;
+  v.str_full = str_path + str_name;
+
+  vars[v.key_name] = v;
+  vars[v.key_name].ua_name =
+    const_cast<char*>(vars[v.key_name].key_name.c_str());
+  vars[v.key_name].name = const_cast<char*>(vars[v.key_name].str_name.c_str());
+  vars[v.key_name].path = const_cast<char*>(vars[v.key_name].str_path.c_str());
+  vars[v.key_name].path_name =
+    const_cast<char*>(vars[v.key_name].str_full.c_str());
+  /*
+    LOGD("STR %s, %s, %s", vars[v.raw_name].str_full.c_str(),
+         vars[v.raw_name].str_path.c_str(), vars[v.raw_name].str_name.c_str());
+    LOGD("CH* %s, %s, %s", vars[v.raw_name].path_name,
+         vars[v.raw_name].path, vars[v.raw_name].name);
+  */
+  return 1;
+}
+
+
+string OpcServer_c::getPath_Name(string &name)
+{
+  string path = name;
+
+  // "KUB.Temp1" - only name => Do not modufy name, return "/" as folder.
+  if (name.find("/") == std::string::npos)
+    return "/";
+
+  // "PLC/BUF.Press" - if no "/" at begin => add "/" => ("/PLC/BUF.Press")
+  if (path.front() != '/')
+    path.insert(0, "/");
+
+  // Is this a FOLDER?
+  if (name.back() == '/') {
+    name = "";
+    return path;
+  }
+
+  auto last_slash = path.rfind("/");
+  name = path.substr(last_slash + 1);  // "BUF.Press"
+  path.erase(last_slash + 1);          // folder = "/PLC" or "/SCADA/PLC/"
+
+  return path;
+}
+
 
 void OpcServer_c::addVar_NodeId(var_t &v)
 {
@@ -28,6 +92,7 @@ void OpcServer_c::addVar_NodeId(var_t &v)
     v.node_id.reference = UA_NS0ID(HASCOMPONENT);
   }
 }
+
 
 UA_NodeId OpcServer_c::getFolder_NodeId(string str_path)
 {
@@ -81,6 +146,7 @@ UA_NodeId OpcServer_c::addFolders(string ua_path, UA_NodeId parentNodeId)
   return folderId;
 }
 
+
 int OpcServer_c::countSlash(string Path)
 {
   size_t index = 0;
@@ -108,5 +174,35 @@ string OpcServer_c::getPathByLevel(string Path, int level)
 
   return Path;
 }
+
+
+void OpcServer_c::addVariable(var_t &v)
+{
+  if (v.ptr_value == nullptr) {
+    LOGA("Wrong ptr: %s", v.name);
+    return;
+  }
+
+  UA_Byte acl = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
+  UA_VariableAttributes attr = UA_VariableAttributes_default;
+  UA_Variant_setScalar(&attr.value, v.ptr_value, &UA_TYPES[v.type]);
+
+  attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", v.name);
+  attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", v.name);
+  attr.dataType = UA_TYPES[v.type].typeId;
+  attr.accessLevel = acl;
+
+  UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.ua_name);
+
+  UA_Server_addVariableNode(uaServer, v.node_id.var, v.node_id.parent,
+                            v.node_id.reference, varQName,
+                            UA_NS0ID(BASEDATAVARIABLETYPE), attr, NULL, NULL);
+
+  string d = strVarDetails(v);
+  DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                    "NewVar: %s %s, path: %s - %s", v.name, d.c_str(),
+                    v.ua_name, UA_StatusCode_name(rc));)
+}
+
 
 // eof

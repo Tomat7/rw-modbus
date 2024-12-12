@@ -43,7 +43,7 @@ void OpcServer_c::init(UA_UInt16 _port)
     uaPort = _port;
 
   uaSrvMux = new mutex;
-  uaGetMux = new mutex;
+  //uaGetMux = new mutex;
   uaDataMux = new mutex;
   uaServer = UA_Server_new();
   uaVariant = UA_Variant_new();
@@ -68,8 +68,8 @@ void OpcServer_c::stop()
 {
   LOGW("Stop: set &uaRunning = false.");
   uaRunning = false;
-  if (uaGetMux != nullptr)
-    uaGetMux->lock();
+  /*   if (uaGetMux != nullptr)
+      uaGetMux->lock(); */
   if (uaDataMux != nullptr)
     uaDataMux->lock();
   if (uaSrvMux != nullptr)
@@ -95,17 +95,17 @@ void OpcServer_c::stop()
   uaVariant = nullptr;
   LOGW("Stop: server deleted.");
 
-  if (uaGetMux != nullptr)
-    uaGetMux->unlock();
+  /* if (uaGetMux != nullptr)
+    uaGetMux->unlock(); */
   if (uaDataMux != nullptr)
     uaDataMux->unlock();
   if (uaSrvMux != nullptr)
     uaSrvMux->unlock();
 
-  delete uaGetMux;
+  //delete uaGetMux;
   delete uaDataMux;
   delete uaSrvMux;
-  uaGetMux = nullptr;
+  //uaGetMux = nullptr;
   uaDataMux = nullptr;
   uaSrvMux = nullptr;
   LOGW("Stop: MUX free.");
@@ -136,17 +136,6 @@ int OpcServer_c::getStatus(string s)
   return -1;
 }
 
-/* var_union OpcServer_c::getValue(string s)
-  {
-  if (vars.count(s))
-    return vars[s].value;
-  else
-    LOGA("Value: Ignore non-existing variable: %s", s.c_str());
-  var_union v;
-  return v;
-  }
-*/
-
 bool OpcServer_c::isGood(string s)
 {
   bool ret = false;
@@ -173,12 +162,39 @@ int OpcServer_c::refreshValues()
 {
   LOGD("%s: onStart.\n", __func__);
   int i = 0;
+  uaDataMux->lock();
   for (auto [_s, v] : vars) {
     getVariantData(_s);
     i++;
   }
+  uaDataMux->unlock();
   LOGD("%s: onFinish.\n", __func__);
   return i;
 }
+
+
+string OpcServer_c::strVarDetails(var_t &v)
+{
+  string ret;
+  if (v.type == UA_TYPES_INT16)
+    ret = "(i16) = " + to_string(*(static_cast<int16_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_INT32)
+    ret = "(i32) = " + to_string(*(static_cast<int32_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_INT64)
+    ret = "(i64) = " + to_string(*(static_cast<int64_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_UINT16)
+    ret = "(ui16) = " + to_string(*(static_cast<uint16_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_UINT32)
+    ret = "(ui32) = " + to_string(*(static_cast<uint32_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_UINT64)
+    ret = "(ui64) = " + to_string(*(static_cast<uint64_t*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_FLOAT)
+    ret = "(float) = " + to_string(*(static_cast<float*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_DATETIME)
+    ret = "(DateTime)";
+
+  return ret;
+}
+
 
 // eof
