@@ -100,16 +100,19 @@ int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
 
 void Schedule_c::run()
 {
-  isRunning = true;
-  thread run_cycle(run_cycle_);
-  run_cycle.detach();
-  LOGN("RunCycle: Detached\n");
+  if (!isRunning) {
+    isRunning = true;
+    thread run_cycle(run_cycle_);
+    run_cycle.detach();
+    LOGN("RunCycle: Detached\n");
+  } else
+    LOGN("RunCycle: already detached\n");
 }
 
 void Schedule_c::run_cycle_()
 {
   scheduler_mux.lock();
-  prctl(PR_SET_NAME, __func__);
+  prctl(PR_SET_NAME, "Schedule_c:run_cycle_");
   uint64_t nb_tasks = tasks.size();
   vector<thread> threads(nb_tasks);
 

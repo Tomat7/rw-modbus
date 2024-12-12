@@ -85,7 +85,7 @@ void opc_init() { OPCs.init(4840); }
 
 void opc_run()
 {
-  prctl(PR_SET_NAME, "OPC server");
+  prctl(PR_SET_NAME, "OPC_server");
   OPCs.run();
 }
 
