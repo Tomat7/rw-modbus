@@ -13,6 +13,7 @@
 #include <syslog.h>
 #include <unistd.h>
 
+#include <cstring>
 #include <mutex>
 #include <queue>
 
@@ -21,9 +22,81 @@ int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 static mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
 static queue<string> Print_queue;
+static const char* ch_color[8] = { NRM, C_REDB, C_YELB, C_REDB, C_GRN, C_BLUB, C_YEL, NRM };
 
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)
+{
+  LOCK_GUARD(logger_mux);
+
+  bool no_syslog = (_prio > 4 && log_level < 9);
+  bool no_print = (_prio > log_level);
+
+  if (no_syslog && no_print)
+    return;
+
+  bool no_filename = !(_prio == 7 || log_level > 7);
+  bool no_funcname = (log_level < 9);
+  const char* format = _fmt;
+  const char* fname = _logname;
+  const char* color = C_NRM;
+  char buffer[MESSAGE_MAX_LEN + 1] = {0};
+  char buff_va[MESSAGE_MAX_LEN + 1] = {0};
+  char buff_fn[MESSAGE_MAX_LEN + 1] = {0};
+
+  string fmt = (string)_func + "(): " + (string)_fmt;
+
+  if (!no_print) {
+    color = ch_color[_prio];
+
+    if (no_filename && no_funcname)
+      fname = "";
+    else if (no_funcname)
+      fname = strrchr(_logname, '/') ? strrchr(_logname, '/') + 1 : _logname;
+    else
+      format = fmt.c_str();
+
+    snprintf(buff_fn, MESSAGE_MAX_LEN, "%s%s%s ", C_BLU, fname, color);
+  }
+
+  va_list arg1;
+  va_start(arg1, _fmt);
+  vsnprintf(buff_va, MESSAGE_MAX_LEN, format, arg1);
+  va_end(arg1);
+
+  if (!no_syslog) {
+    openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
+    syslog(_prio, "%s", buff_va);
+    closelog();
+  }
+
+  if (!no_print) {
+    snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NRM);
+
+    if (buffer != nullptr)
+      if (print_to_queue)
+        Print_queue.emplace(string(buffer));
+      else
+        printf("%s", buffer);
+    else
+      printf("buffer overload");
+  }
+
+  return;
+}
+
+void logger_set_queue(bool to_queue) { print_to_queue = to_queue; }
+
+void logger_flush()
+{
+  while (!Print_queue.empty()) {
+    printf("%s", Print_queue.front().c_str());
+    Print_queue.pop();
+  }
+}
+
+void logger_fout(const char* _logname, int _prio, const char* _func,
+                 const char* _fmt, ...)
 {
   LOCK_GUARD(logger_mux);
   openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
@@ -105,16 +178,6 @@ void logger(const char* _logname, int _prio, const char* _func,
 
   fclose(fout);
   close(pipefd[0]);
-}
-
-void logger_set_queue(bool to_queue) { print_to_queue = to_queue; }
-
-void logger_flush()
-{
-  while (!Print_queue.empty()) {
-    printf("%s", Print_queue.front().c_str());
-    Print_queue.pop();
-  }
 }
 
 void logdebug(const char* logname, int prio, const char* format, ...)

@@ -90,9 +90,9 @@ int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
 
     tasks.emplace_back(_func, _ms, _name, _ptr);
     nb_tasks = tasks.size();
-    LOGN("New task: %s, ms: %d, total: %d\n", _name.c_str(), _ms, nb_tasks);
+    LOGN("New task: %s, ms: %d, total: %d", _name.c_str(), _ms, nb_tasks);
   } else
-    LOGA("Can't add task! Now: %d, capacity: %d\n", nb_tasks, nb_capct);
+    LOGA("Can't add task! Now: %d, capacity: %d", nb_tasks, nb_capct);
 
   scheduler_mux.unlock();
   return ret;
@@ -104,15 +104,15 @@ void Schedule_c::run()
     isRunning = true;
     thread run_cycle(run_cycle_);
     run_cycle.detach();
-    LOGN("RunCycle: Detached\n");
+    LOGN("RunCycle: Detached");
   } else
-    LOGN("RunCycle: already detached\n");
+    LOGA("RunCycle: already detached");
 }
 
 void Schedule_c::run_cycle_()
 {
   scheduler_mux.lock();
-  prctl(PR_SET_NAME, "Schedule_c:run_cycle_");
+  prctl(PR_SET_NAME, "Scheduler:cycle");
   uint64_t nb_tasks = tasks.size();
   vector<thread> threads(nb_tasks);
 
@@ -127,7 +127,7 @@ void Schedule_c::run_cycle_()
           threads[i] = thread(run_task_, i);
           threads[i].detach();
         } else {
-          LOGC("Task-error: %s still running!\n", t.task_name.c_str());
+          LOGC("Task-error: %s still running!", t.task_name.c_str());
           t.counter_errors++;
           t.counter_run = 0;
         }
@@ -145,7 +145,7 @@ void Schedule_c::run_cycle_()
   for (uint64_t i = 0; i < nb_tasks; i++)
     tasks[i].task_mux->unlock();
 
-  LOGN("RunCycle: Finished\n");
+  LOGN("RunCycle: Finished");
 
 }
 
@@ -155,7 +155,7 @@ void Schedule_c::stop()
   this_thread::sleep_for(20ms);
   scheduler_mux.lock();
 
-  LOGD("Stop: Try to lock\n");
+  LOGD("Stop: Try to lockn");
 
   uint64_t nb_tasks = tasks.size();
   for (uint64_t i = 0; i < nb_tasks; i++)
@@ -163,19 +163,19 @@ void Schedule_c::stop()
   for (uint64_t i = 0; i < nb_tasks; i++)
     tasks[i].task_mux->unlock();
 
-  LOGD("Stop: Try to clear.\n");
+  LOGD("Stop: Try to clear.");
   this_thread::sleep_for(10ms);
 
   tasks.clear();
   scheduler_mux.unlock();
-  LOGN("Stop tasks: %d\n", nb_tasks);
+  LOGN("Stop tasks: %d", nb_tasks);
 }
 
 void Schedule_c::clear() { tasks.clear(); }
 
 void Schedule_c::run_task_(uint64_t i)
 {
-  LOGD("Task-run: %s \n", tasks[i].task_name.c_str());
+  LOGD("Task-run: %s", tasks[i].task_name.c_str());
   tasks[i].task_mux->lock();
   prctl(PR_SET_NAME, tasks[i].task_name.c_str());
   tasks[i].taskRunning = true;
@@ -185,7 +185,7 @@ void Schedule_c::run_task_(uint64_t i)
   tasks[i].counter_run++;
   tasks[i].taskRunning = false;
   tasks[i].task_mux->unlock();
-  LOGD("Task-done: %s %d\n", tasks[i].task_name.c_str(), ret);
+  LOGD("Task-done: %s %d", tasks[i].task_name.c_str(), ret);
 }
 
 

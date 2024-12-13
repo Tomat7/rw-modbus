@@ -32,7 +32,7 @@ int task_millis_(void* params)
       i++;
     }
   }
-  LOGI("%s done: %d\n", __func__, i);
+  LOGI("%s done: %d", __func__, i);
   return i;
 }
 
@@ -40,14 +40,14 @@ int task_opc_refresh_(void* params)
 {
   UNUSED(params);
   OPCs.refreshValues();
-  LOGI("%s: Done.\n", __func__);
+  LOGI("%s: Done.", __func__);
   return 1;
 }
 
 int task_begin_(void* params)
 {
   // OPCs.refreshValues();
-  LOGI("%s: %d Done.\n", __func__, *(int*)params);
+  LOGI("%s: %d Done.", __func__, *(int*)params);
   return 1;
 }
 
