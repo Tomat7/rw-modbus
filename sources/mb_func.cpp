@@ -64,18 +64,19 @@ int mb_print_summary()
   return (int)nb_plcs;
 }
 
-void mb_update_master(int x)
-{
+/*
+  void mb_update_master(int x)
+  {
   PLC_c &D = PLCvec[x];
   prev_ts[x] = D.mb.timestamp_try_ms;
   res[x] = D.update_master();
   std::this_thread::yield();
   return;
-}
+  }
 
 
-int mb_update()
-{
+  int mb_update()
+  {
   //  "===== mb_update ====="
   uint64_t i = 0;
   uint64_t nb_plcs = PLCvec.size();
@@ -102,19 +103,18 @@ int mb_update()
   logger_set_queue(false);
   logger_flush();
 
-  /*   for (i = 0; i < nb_plcs; i++)
-      mb_print_summary((int)i);
-  */
+  //   for (i = 0; i < nb_plcs; i++)
+  //    mb_print_summary((int)i);
 
   mb_print_summary();
   res.clear();
   prev_ts.clear();
 
   return 0;
-}
+  }
 
-int mb_read()
-{
+  int mb_read()
+  {
   printf("\n===== mb_read =====\n");
   int ret = 0;
 
@@ -126,10 +126,10 @@ int mb_read()
            D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
   }
   return 0;
-}
+  }
 
-int mb_write()
-{
+  int mb_write()
+  {
   printf("\n===== mb_write =====\n");
 
   for (auto &D : PLCvec) {
@@ -138,7 +138,8 @@ int mb_write()
   }
 
   return 0;
-}
+  }
+*/
 
 void mb_deinit()
 {

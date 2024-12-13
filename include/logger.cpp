@@ -73,13 +73,13 @@ void logger(const char* _logname, int _prio, const char* _func,
   if (!no_print) {
     snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NRM);
 
-    if (buffer != nullptr)
-      if (print_to_queue)
-        Print_queue.emplace(string(buffer));
-      else
-        printf("%s", buffer);
+//    if (buffer != nullptr)
+    if (print_to_queue)
+      Print_queue.emplace(string(buffer));
     else
-      printf("buffer overload");
+      printf("%s", buffer);
+//    else
+//      printf("buffer overload");
   }
 
   return;
@@ -89,6 +89,7 @@ void logger_set_queue(bool to_queue) { print_to_queue = to_queue; }
 
 void logger_flush()
 {
+  LOCK_GUARD(logger_mux);
   while (!Print_queue.empty()) {
     printf("%s", Print_queue.front().c_str());
     Print_queue.pop();
