@@ -41,7 +41,7 @@
 #define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
 #define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)
 #define LOGX(...) logger(FILE_LINE, 8, __func__, __VA_ARGS__)
-#define LOGX(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)
+#define LOGZ(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)
 
 #define LOGIFA(...) logif(rc, FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
 #define LOGIFC(...) logif(rc, FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
@@ -64,8 +64,8 @@ extern int log_level;  // 0 - no messages at all, 9 - all on screen
 
 // void logger(int prio, const char* format, ...);
 // void logger(const char* logname, int prio, const char* format, ...);
-void logger(const char* logname, int prio, const char* _func, const char* _fmt,
-            ...);
+void logger(const char* logname, int prio, const char* _func,
+            const char* _fmt, ...);
 void logdebug(const char* logname, int prio, const char* format, ...);
 
 void logger_set_queue(bool to_queue);
