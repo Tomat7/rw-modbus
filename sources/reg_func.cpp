@@ -24,11 +24,12 @@ static mutex regmap_mux;  // already defined in .h
 
 void reg_print(string, const regdata_t*);
 
-void regs_refresh()
+int task_regs_refresh_(void* params)
 {
-  LOGD("\n ===== %s =====\n", __func__);
+  UNUSED(params);
+  LOGD(" ===== %s =====", __func__);
   regmap_mux.lock();
-  //STRmap.clear();
+  int x = 0;
 
   for (auto& [n, rm] : REGmap) {
 
@@ -50,6 +51,7 @@ void regs_refresh()
     }
 
     if (rm.get_mode() && isNew_Opc) {
+      x++;
       rm.set_plc_val(opc_val);
       rm.value = opc_val;
       if (!STRmap.count(n) || !STRmap[n].upd_opc) {
@@ -61,14 +63,14 @@ void regs_refresh()
 
   regmap_mux.unlock();
 
-  return;
+  return x;
 }
 
 
 void regs_update()
 {
   printf("\n===== regs_update =====\n");
-  regs_refresh();
+  //task_regs_refresh_();
   regmap_mux.lock();
   bool is_eol = false;
   string X;

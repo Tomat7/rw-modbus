@@ -78,6 +78,7 @@ int write_rm(string rn, uint16_t val);
 void tasks_init();
 int task_millis_(void* params);
 int task_opc_refresh_(void* params);
+int task_regs_refresh_(void* params);
 int task_begin_(void* params);
 int task_mb_update_(void* params);
 

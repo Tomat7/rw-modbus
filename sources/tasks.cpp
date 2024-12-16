@@ -16,8 +16,9 @@ void tasks_init()
 {
   Task.init(TASKS_NB_MAX);
   Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
-  Task.add_task(task_opc_refresh_, 700, "Refresh_");
-  Task.add_task(task_millis_, 2500, "Test_");
+  Task.add_task(task_opc_refresh_, 250, "OPC:Refresh_");
+  Task.add_task(task_regs_refresh_, 500, "REGS:Refresh_");
+  Task.add_task(task_millis_, 2500, "Millis_");
   mb_add_tasks();
   Task.run();
 }
@@ -25,23 +26,23 @@ void tasks_init()
 int task_millis_(void* params)
 {
   UNUSED(params);
-  int i = 0;
+  int x = 0;
   for (auto &[n, rm] : REGmap) {
     if (n.find("millis") != std::string::npos) {
       WriteValue(n, 0);
-      i++;
+      x++;
     }
   }
-  LOGI("%s done: %d", __func__, i);
-  return i;
+  LOGI("%s done: %d", __func__, x);
+  return x;
 }
 
 int task_opc_refresh_(void* params)
 {
   UNUSED(params);
-  OPCs.refreshValues();
+  int y = OPCs.refreshValues();
   LOGI("%s: Done.", __func__);
-  return 1;
+  return y;
 }
 
 int task_begin_(void* params)
