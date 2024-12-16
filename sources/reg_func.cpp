@@ -27,7 +27,7 @@ void reg_print(string, const regdata_t*);
 int task_regs_refresh_(void* params)
 {
   UNUSED(params);
-  LOGD(" ===== %s =====", __func__);
+  LOGX(" ===== %s =====", __func__);
   regmap_mux.lock();
   int x = 0;
 
@@ -62,6 +62,7 @@ int task_regs_refresh_(void* params)
   }
 
   regmap_mux.unlock();
+  LOGI("%s done: %d", __func__, x);
 
   return x;
 }

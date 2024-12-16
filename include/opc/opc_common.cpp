@@ -160,7 +160,7 @@ string OpcServer_c::lookupVar(string s)
 
 int OpcServer_c::refreshValues()
 {
-  LOGD("%s: onStart.", __func__);
+  LOGX("%s: onStart.", __func__);
   int x = 0;
   uaDataMux->lock();
   for (auto [_s, v] : vars) {
@@ -168,7 +168,7 @@ int OpcServer_c::refreshValues()
     x++;
   }
   uaDataMux->unlock();
-  LOGD("%s: onFinish.", __func__);
+  LOGX("%s: onFinish.", __func__);
   return x;
 }
 

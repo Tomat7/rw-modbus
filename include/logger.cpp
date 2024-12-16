@@ -29,6 +29,7 @@ void logger(const char* _logname, int _prio, const char* _func,
 {
   LOCK_GUARD(logger_mux);
 
+  _prio = (_prio > 7) ? 7 : _prio;
   bool no_syslog = (_prio > 4 && log_level < 9);
   bool no_print = (_prio > log_level);
 
