@@ -30,10 +30,10 @@
 #define UNUSED(x) (void)(x)
 
 // ANSI Escape Sequences
-#define ESC "\033["
-#define CLS ESC "2J"
-#define HOME ESC "H"
-#define C_BLINK ESC "5m"
+#define ESC_ "\033["
+#define ESC_CLS ESC_ "2J"
+#define ESC_HOME ESC_ "H"
+#define ESC_BLINK ESC_ "5m"
 
 // ANSI color codes
 #define NRM "\033[0m"

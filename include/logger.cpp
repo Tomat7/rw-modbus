@@ -22,7 +22,8 @@ int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
 static mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
 static queue<string> Print_queue;
-static const char* ch_color[8] = { NRM, C_REDB, C_YELB, C_REDB, C_GRN, C_BLUB, C_YEL, NRM };
+//                                        Alert   Crit    Error   Warn   Notice  Info
+static const char* ch_color[8] = { C_STD, C_REDB, C_YELB, C_MAGB, C_GRN, C_BLUB, C_CYN, C_STD };
 
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)

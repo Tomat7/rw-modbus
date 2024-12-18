@@ -73,8 +73,8 @@ int main(int argc, char** argv)
   //logger_set_queue(true);
 
   for (;;) {
-    printf("%s", CLS);
-    printf("%s", HOME);
+    printf("%s", ESC_CLS);
+    printf("%s", ESC_HOME);
     fflush(stdout);
     /*
         i++;

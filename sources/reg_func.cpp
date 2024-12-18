@@ -126,12 +126,12 @@ void reg_print(string rn, const regdata_t* rd)
 
 const char* getColor(bool noErrors)
 {
-  return noErrors ? C_WHIB : C_DARK;
+  return noErrors ? C_BOLD : C_DARK;
 }
 
 const char* getBlynk(bool noErrors)
 {
-  return noErrors ? C_NORM : C_BLINK;  // Dark grey blym-blym
+  return noErrors ? C_NORM : ESC_BLINK;  // Dark grey blym-blym
 }
 
 
