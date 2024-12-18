@@ -85,18 +85,22 @@ void OpcServer_c::addVar_NodeId(var_t &v)
   v.node_id.var = UA_NODEID_STRING(1, v.ua_name);
 
   if (v.str_path == "/") {
-    v.node_id.parent = UA_NS0ID(OBJECTSFOLDER);
-    v.node_id.reference = UA_NS0ID(ORGANIZES);
+    //v.node_id.parent = UA_NS0ID(OBJECTSFOLDER);
+    v.node_id.parent = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
+    //v.node_id.reference = UA_NS0ID(ORGANIZES);
+    v.node_id.reference = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
   } else {
     v.node_id.parent = getFolder_NodeId(v.str_path);
-    v.node_id.reference = UA_NS0ID(HASCOMPONENT);
+    //v.node_id.reference = UA_NS0ID(HASCOMPONENT);
+    v.node_id.reference = UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT);
   }
 }
 
 
 UA_NodeId OpcServer_c::getFolder_NodeId(string str_path)
 {
-  UA_NodeId parentNode = UA_NS0ID(OBJECTSFOLDER);
+  //UA_NodeId parentNode = UA_NS0ID(OBJECTSFOLDER);
+  UA_NodeId parentNode = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
 
   if (vars.count(str_path))
     parentNode = vars[str_path].node_id.var;
@@ -129,10 +133,16 @@ UA_NodeId OpcServer_c::addFolders(string ua_path, UA_NodeId parentNodeId)
                          1, folder_path); /* get the nodeid assigned by the server */
   UA_ObjectAttributes oAttr = UA_ObjectAttributes_default;
   oAttr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", display_name);
-  UA_StatusCode sc = UA_Server_addObjectNode(
-                       uaServer, folderId, parentNodeId, UA_NS0ID(ORGANIZES),
-                       UA_QUALIFIEDNAME(1, folder_path), UA_NS0ID(BASEOBJECTTYPE), oAttr, NULL,
-                       &folderId);
+  /*   UA_StatusCode sc = UA_Server_addObjectNode(
+                         uaServer, folderId, parentNodeId, UA_NS0ID(ORGANIZES),
+                         UA_QUALIFIEDNAME(1, folder_path), UA_NS0ID(BASEOBJECTTYPE), oAttr, NULL,
+                         &folderId); */
+
+  UA_StatusCode sc = UA_Server_addObjectNode( uaServer, folderId, parentNodeId,
+                     UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
+                     UA_QUALIFIEDNAME(1, folder_path),
+                     UA_NODEID_NUMERIC(0, UA_NS0ID_BASEOBJECTTYPE),
+                     oAttr, NULL, &folderId);
 
   var_t v;
   v.str_full = ua_path;
@@ -196,7 +206,8 @@ void OpcServer_c::addVariable(var_t &v)
 
   UA_Server_addVariableNode(uaServer, v.node_id.var, v.node_id.parent,
                             v.node_id.reference, varQName,
-                            UA_NS0ID(BASEDATAVARIABLETYPE), attr, NULL, NULL);
+                            UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
+                            attr, NULL, NULL);
 
   string d = strVarDetails(v);
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
