@@ -44,7 +44,7 @@
 #define C_HIGH "\033[1;37m"
 #define C_HIGH2 "\033[1;97m"
 
-#define C_RED "\033[31m"
+#define C_RED "\033[0;31m"
 #define C_GRN "\033[32m"
 #define C_YEL "\033[33m"
 #define C_BLU "\033[34m"
@@ -54,7 +54,7 @@
 #define C_GRY "\033[38m"
 #define C_BLC "\033[39m"
 
-#define C_REDD "\033[0;91m"
+#define C_REDD "\033[1;31m"
 #define C_GRND "\033[2;32m"
 #define C_YELD "\033[2;33m"
 #define C_BLUD "\033[2;34m"

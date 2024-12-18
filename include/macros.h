@@ -33,6 +33,7 @@
 #define ESC "\033["
 #define CLS ESC "2J"
 #define HOME ESC "H"
+#define C_BLINK ESC "5m"
 
 // ANSI color codes
 #define NRM "\033[0m"
@@ -53,16 +54,6 @@
 #define C_WHI "\033[37m"
 #define C_GRY "\033[38m"
 #define C_BLC "\033[39m"
-
-#define C_REDD "\033[2;31m"
-#define C_GRND "\033[2;32m"
-#define C_YELD "\033[2;33m"
-#define C_BLUD "\033[2;34m"
-#define C_MAGD "\033[2;35m"
-#define C_CYND "\033[2;36m"
-#define C_WHID "\033[2;37m"
-#define C_GRYD "\033[2;38m"
-#define C_BLCD "\033[2;39m"
 
 #define C_REDB "\033[91m"
 #define C_GRNB "\033[92m"

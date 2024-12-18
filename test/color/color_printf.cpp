@@ -36,8 +36,8 @@ int main()
   printf("C_HIGH2 " C_HIGH2 " DARK Norm BOLD High " NRM "\n");
 
   printf("C_RED  " C_RED  " DARK Norm BOLD High " NRM "\n");
-  printf("C_REDB " C_REDB " DARK Norm BOLD High " NRM "\n");
   printf("C_REDD " C_REDD " DARK Norm BOLD High " NRM "\n");
+  printf("C_REDB " C_REDB " DARK Norm BOLD High " NRM "\n");
   printf("C_REDH " C_REDH " DARK Norm BOLD High " NRM "\n");
   
   /*

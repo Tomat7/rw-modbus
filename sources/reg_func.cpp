@@ -131,7 +131,7 @@ const char* getColor(bool noErrors)
 
 const char* getBlynk(bool noErrors)
 {
-  return noErrors ? C_NORM : "\x1B[5m";  // Dark grey blym-blym
+  return noErrors ? C_NORM : C_BLINK;  // Dark grey blym-blym
 }
 
 
