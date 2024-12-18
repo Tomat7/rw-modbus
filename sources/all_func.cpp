@@ -122,9 +122,9 @@ void parse_char(int ch)
     log_level = loglvl;
     wait_console(timeout_sec);
   } else if ((char)ch == ' ')
-    printf("%s %s %s \n", C_GRN, "=============================", C_NRM);
+    printf("%s %s %s \n", C_GRN, "=============================", C_NORM);
   else {
-    printf("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NRM);
+    printf("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NORM);
     wait_console(timeout_sec * 2);
   }
 }

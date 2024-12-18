@@ -119,19 +119,19 @@ void reg_print(string rn, const regdata_t* rd)
   else if (rd->rtype == 2)
     printf("%s%-12s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
 
-  printf(NRM);
+  printf(C_NORM);
 
   return;
 }
 
 const char* getColor(bool noErrors)
 {
-  return noErrors ? C_WHIB : C_GRY;
+  return noErrors ? C_WHIB : C_DARK;
 }
 
 const char* getBlynk(bool noErrors)
 {
-  return noErrors ? NRM : "\x1B[5m";  // Dark grey blym-blym
+  return noErrors ? C_NORM : "\x1B[5m";  // Dark grey blym-blym
 }
 
 

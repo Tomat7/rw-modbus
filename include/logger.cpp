@@ -40,7 +40,7 @@ void logger(const char* _logname, int _prio, const char* _func,
   bool no_funcname = (log_level < 9);
   const char* format = _fmt;
   const char* fname = _logname;
-  const char* color = C_NRM;
+  const char* color = C_NORM;
   char buffer[MESSAGE_MAX_LEN + 1] = {0};
   char buff_va[MESSAGE_MAX_LEN + 1] = {0};
   char buff_fn[MESSAGE_MAX_LEN + 1] = {0};
@@ -72,7 +72,7 @@ void logger(const char* _logname, int _prio, const char* _func,
   }
 
   if (!no_print) {
-    snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NRM);
+    snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NORM);
 
     if (print_to_queue)
       Print_queue.emplace(string(buffer));
@@ -108,7 +108,7 @@ void logger_fout(const char* _logname, int _prio, const char* _func,
 
   const char* format = _fmt;
   const char* fname = _logname;
-  const char* color = C_NRM;
+  const char* color = C_NORM;
 
   bool no_filename = !(_prio == 7 || log_level > 7);
   bool no_funcname = (log_level < 9);
@@ -130,7 +130,7 @@ void logger_fout(const char* _logname, int _prio, const char* _func,
     else if (_prio == LOG_DEBUG)
       color = C_YEL;
     else
-      color = C_NRM;
+      color = C_NORM;
 
     if (no_filename && no_funcname)
       fname = "";
@@ -155,9 +155,9 @@ void logger_fout(const char* _logname, int _prio, const char* _func,
   va_end(arg2);
 
   if (!no_print)
-    fprintf(fout, "%s\n", C_NRM);
+    fprintf(fout, "%s\n", C_NORM);
   else
-    fprintf(fout, "%s", C_NRM);
+    fprintf(fout, "%s", C_NORM);
 
   closelog();
   fclose(fout);
@@ -204,7 +204,7 @@ void logdebug(const char* logname, int prio, const char* format, ...)
   va_end(arg1);
   va_end(arg2);
 
-  fprintf(fout, "%s\n", C_NRM);
+  fprintf(fout, "%s\n", C_NORM);
   closelog();
   //  logger_mux.unlock();
 }

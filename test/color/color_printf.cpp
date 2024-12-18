@@ -21,10 +21,10 @@ int main()
 {
 
 
-  printf("normal NRM-NRM " NRM  " no BOLD " C_GRY " BOLD " NRM "\n");
+/*   printf("normal NRM-NRM " NRM  " no BOLD " C_GRY " BOLD " NRM "\n");
   printf("standard STD   " STD_ " no BOLD " STD_B " BOLD " NRM "\n");
   printf("light-grey GRL " GRL_ " STAND   " GRL_B "bold STAND " NRM "\n");
-  printf("dark-grey GRD  " GRD_ " no BOLD " GRD_B " BOLD " NRM "\n");
+  printf("dark-grey GRD  " GRD_ " no BOLD " GRD_B " BOLD " NRM "\n") */;
 
    printf("WHI GRY BLC  " C_WHI " WHI " C_GRY " GRY " C_BLC " BLC " NRM "\n");
    printf("WHIbGRYbBLCb " C_WHIB" WHIB " C_GRYB" GRYB " C_BLCB" BLCB" NRM "\n");
@@ -35,9 +35,9 @@ int main()
   printf("C_HIGH " C_HIGH " DARK Norm BOLD High " NRM "\n");
   printf("C_HIGH2 " C_HIGH2 " DARK Norm BOLD High " NRM "\n");
 
-  printf("C_RED " C_RED " DARK Norm BOLD High " NRM "\n");
+  printf("C_RED  " C_RED  " DARK Norm BOLD High " NRM "\n");
   printf("C_REDB " C_REDB " DARK Norm BOLD High " NRM "\n");
-  printf("C_REDN " C_REDN " DARK Norm BOLD High " NRM "\n");
+  printf("C_REDD " C_REDD " DARK Norm BOLD High " NRM "\n");
   printf("C_REDH " C_REDH " DARK Norm BOLD High " NRM "\n");
   
   /*
