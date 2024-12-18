@@ -40,6 +40,7 @@
 #define C_DARK "\x1B[90m"
 #define C_BOLD "\x1B[97m"
 #define C_HIGH "\033[1;37m"
+#define C_HIGH2 "\033[1;97m"
 
 #define C_RED "\x1B[31m"
 #define C_GRN "\x1B[32m"
@@ -60,6 +61,9 @@
 #define C_WHIB "\x1B[97m"
 #define C_GRYB "\x1B[98m"
 #define C_BLCB "\x1B[99m"
+
+#define C_REDN "\033[0;91m"
+#define C_REDH "\033[1;91m"
 
 #define STD_ "\033[0;39m"
 #define STD_B "\033[1;39m"
