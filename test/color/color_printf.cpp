@@ -21,10 +21,13 @@ int main()
 {
 
 
-  printf("normal NRM-NRM " NRM  " no BOLD " NRM " BOLD " NRM "\n");
+  printf("normal NRM-NRM " NRM  " no BOLD " C_GRY " BOLD " NRM "\n");
   printf("standard STD   " STD_ " no BOLD " STD_B " BOLD " NRM "\n");
   printf("light-grey GRL " GRL_ " STAND   " GRL_B "bold STAND " NRM "\n");
   printf("dark-grey GRD  " GRD_ " no BOLD " GRD_B " BOLD " NRM "\n");
+
+   printf("WHI GRY BLC  " C_WHI " WHI " C_GRY " GRY " C_BLC " BLC " NRM "\n");
+   printf("WHIbGRYbBLCb " C_WHIB" WHIB " C_GRYB" GRYB " C_BLCB" BLCB" NRM "\n");
   /*
     printf("red-light " RED_L " no BOLD " RED_LB " BOLD " OLDCOLOR "\n");
     printf("red-dark  " RED_D " no BOLD " RED_DB " BOLD " OLDCOLOR "\n");

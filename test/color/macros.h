@@ -45,6 +45,8 @@
 #define C_MAG "\x1B[35m"
 #define C_CYN "\x1B[36m"
 #define C_WHI "\x1B[37m"
+#define C_GRY "\x1B[38m"
+#define C_BLC "\x1B[39m"
 
 #define C_GRY "\x1B[90m"
 #define C_REDB "\x1B[91m"
@@ -54,6 +56,8 @@
 #define C_MAGB "\x1B[95m"
 #define C_CYNB "\x1B[96m"
 #define C_WHIB "\x1B[97m"
+#define C_GRYB "\x1B[98m"
+#define C_BLCB "\x1B[99m"
 
 #define STD_ "\033[0;39m"
 #define STD_B "\033[1;39m"
