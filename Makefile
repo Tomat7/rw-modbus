@@ -14,15 +14,16 @@
 .DEFAULT_GOAL := all
 $(info === The GOALS is: $(MAKECMDGOALS))
 
-# CXX = g++
-# for using with LINK.o
-CC=$(CXX)
-CXX_VER= -std=c++17
-
-# === Directories & files & libraries===
+# === COMMON: Version/standard & Directories & files & libraries ===
+CXX_VER=c++20
 OUTFILE=a.out
 OBJDIR =./tmp/obj
 SUBDIRS= include sources
+
+INCLUDES = -I.
+LIBS=libmodbus libconfig++ open62541
+LDLIBS= -lrt -lpthread
+LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
 ALLDIRS= $(foreach dir,$(SUBDIRS),$(shell find -L $(dir) -maxdepth 1 -type d))
 SRCDIRS=. $(ALLDIRS)
@@ -41,12 +42,20 @@ CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 
 OUTF=$(shell ls -Fog $(OUTFILE))
 
-# === Add libs here ===
-INCLUDES = -I.
-LIBS=libmodbus libconfig++ open62541
-LDLIBS= -lrt -lpthread
-LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
+# === C++ version/standart (trick for Astra Linux) ===
+# CXX = g++ # by default
+CXX_ASTRA=/usr/lib/gcc-astra/bin/g++
+ifeq ("c++20", "$(CXX_VER)")
+ifneq ("$(wildcard $(CXX_ASTRA))","")
+CXX=$(CXX_ASTRA)
+endif
+$(info === C++ std v.20 activated! ===)
+endif
+CC=$(CXX)
+
+
+# === Add libs here === OLD!!
 #LIBCONFIG=$(shell pkg-config --libs libconfig++)
 #LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
 #LIBNCURSES=$(shell pkg-config ncurses --libs)
@@ -58,8 +67,8 @@ LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 #EXECUTABLE=hello
 
 # === C/CPP flags configuretion ===
-CXXFLAGS= -Wall $(CXX_VER)
-LDFLAGS = -Wall $(CXX_VER)
+CXXFLAGS= -Wall -std=$(CXX_VER)
+LDFLAGS = -Wall -std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
 OPTFLAGS= -flto=auto -O2
 
