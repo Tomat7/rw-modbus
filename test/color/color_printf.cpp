@@ -28,6 +28,14 @@ int main()
 
    printf("WHI GRY BLC  " C_WHI " WHI " C_GRY " GRY " C_BLC " BLC " NRM "\n");
    printf("WHIbGRYbBLCb " C_WHIB" WHIB " C_GRYB" GRYB " C_BLCB" BLCB" NRM "\n");
+   
+  printf("C_DARK " C_DARK " DARK Norm BOLD High \n");
+  printf("C_NORM " C_NORM " DARK Norm BOLD High \n");
+  printf("C_BOLD " C_BOLD " DARK Norm BOLD High \n");
+  printf("C_HIGH " C_HIGH " DARK Norm BOLD High \n");
+
+
+
   /*
     printf("red-light " RED_L " no BOLD " RED_LB " BOLD " OLDCOLOR "\n");
     printf("red-dark  " RED_D " no BOLD " RED_DB " BOLD " OLDCOLOR "\n");

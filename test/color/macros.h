@@ -36,8 +36,11 @@
 
 // ANSI color codes
 #define NRM "\x1B[0m"
-//#define STD_ "\x1B[0m"
-#define C_NRM "\x1B[0m"
+#define C_NORM "\x1B[0m"
+#define C_DARK "\x1B[90m"
+#define C_BOLD "\x1B[97m"
+#define C_HIGH "\033[1;37m"
+
 #define C_RED "\x1B[31m"
 #define C_GRN "\x1B[32m"
 #define C_YEL "\x1B[33m"
@@ -48,7 +51,6 @@
 #define C_GRY "\x1B[38m"
 #define C_BLC "\x1B[39m"
 
-#define C_GRY "\x1B[90m"
 #define C_REDB "\x1B[91m"
 #define C_GRNB "\x1B[92m"
 #define C_YELB "\x1B[93m"
