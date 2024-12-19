@@ -79,7 +79,6 @@ int PLC_c::read_master()  // Master only. Read directly from PLC.
   att = 0;
 
   while (att < attempts && rc <= 0) {
-    //lock_now();
     lock_mux->lock();
     att++;
     rc = mb_connect();
@@ -87,7 +86,6 @@ int PLC_c::read_master()  // Master only. Read directly from PLC.
       rc = read_allregs();
     else
       mb.errors++;
-    //unlock_now();
     lock_mux->unlock();
   }
 
@@ -126,7 +124,8 @@ int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
   } else {
     mb.errors = 0;
     for (auto &[a, R] : regs)
-      R.data.rvalue = mbregs[R.raddr - reg_min];
+      if (!R.data.rmode || !R.data.rupdate)       // !! Do not update !!
+        R.data.rvalue = mbregs[R.raddr - reg_min];
   }
 
   delete[] mbregs;
@@ -145,7 +144,6 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
       att = 0;
 
       while (att < attempts && rc <= 0) {
-        //lock_now();
         lock_mux->lock();
         att++;
         rc = mb_connect();
@@ -153,7 +151,6 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
           rc = write_reg(R);
         else
           mb.errors++;
-        //unlock_now();
         lock_mux->unlock();
       }
 
@@ -201,8 +198,16 @@ int PLC_c::update_master()  // Master only.
   if (millis() - mb.timestamp_try_ms > interval_ms) {
     mb.timestamp_try_ms = millis();
     rc = 0;
-    rc = write_master();
+    /*     rc = write_master();
+        rc = read_master(); */
+
     rc = read_master();
+    rc_read = rc;
+
+    if (rc > 0)
+      rc = write_master();
+
+    rc_write = rc;
     ret = rc;
   }
   return ret;
