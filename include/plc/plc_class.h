@@ -54,7 +54,8 @@ public:
   ~PLC_c();
 
   void mb_deinit();
-  int get_rc();
+  int get_read_rc();
+  int get_write_rc();
   uint64_t millis();
 
   // For Master only
