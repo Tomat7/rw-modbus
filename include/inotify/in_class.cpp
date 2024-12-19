@@ -30,7 +30,7 @@ INotify::INotify(const char* fn, uint32_t mask)
 
   fd = inotify_init1(IN_NONBLOCK);
   if (fd == -1) {
-    LOGERR("FD error: %s\n", fname);
+    LOGE("FD error: %s", fname);
     perror("inotify_init1");
     exit(EXIT_FAILURE);
   }
@@ -44,11 +44,11 @@ INotify::INotify(const char* fn, uint32_t mask)
   }
 
   if (wd == -1) {
-    LOGERR("WD error: %s\n", fname);
+    LOGE("WD error: %s", fname);
     perror("inotify_add_watch");
     exit(EXIT_FAILURE);
   } else
-    LOGINFO("New watching %s: %s \n", wobj, fname);
+    LOGI("New watching %s: %s ", wobj, fname);
 
   return;
 }
@@ -62,7 +62,7 @@ int INotify::check()
   if (poll_num == -1) {
     if (errno == EINTR)
       return rc;
-    LOGERR("Error pollig: %s \n", fname);
+    LOGE("Error pollig: %s ", fname);
     perror("poll");
     exit(EXIT_FAILURE);
   }
@@ -89,7 +89,7 @@ int INotify::get_event()
     length = read(fd, buf, sizeof buf);
 
     if (length == -1 && errno != EAGAIN) {
-      LOGERR("Error watching: %s \n", fname);
+      LOGE("Error watching: %s ", fname);
       perror("read");
       exit(EXIT_FAILURE);
     }
@@ -103,16 +103,16 @@ int INotify::get_event()
 
       if (event->mask & evt_mask) {
         rc = 1;
-        LOGINFO("+ %d ", evt_mask);
+        LOGW("+ %d ", evt_mask);
 
         if (is_file)
-          LOGINFO("File changed: %s.\n", fname);
+          LOGN("File changed: %s.", fname);
 
         if (event->len) {
           if (event->mask & IN_ISDIR)  // печатаем тип события
-            LOGINFO("Directory changed: %s \n", event->name);
+            LOGN("Directory changed: %s ", event->name);
           else
-            LOGINFO("File changed: %s \n", event->name);
+            LOGN("File changed: %s ", event->name);
         }
       }
     }
@@ -124,7 +124,7 @@ void INotify::deinit()
 {
   inotify_rm_watch(fd, wd);
   close(fd);
-  LOGINFO("Stop watching: %s\n", fname);
+  LOGN("Stop watching: %s", fname);
   closelog();
   return;
 }

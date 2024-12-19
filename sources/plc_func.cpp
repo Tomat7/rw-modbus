@@ -29,7 +29,7 @@ void plc_show1()
   printf("\n===== plc_show1 =====\n");
 
   int nb_plcs = static_cast<int>(PLCvec.size());
-  LOGW("Total PLCs: %d\n", nb_plcs);
+  LOGI("Total PLCs: %d", nb_plcs);
 
   for (int i = 0; i < nb_plcs; ++i) {  // Cycle for PLCs
     plc_print_details(i);

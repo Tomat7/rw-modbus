@@ -37,8 +37,8 @@ void PLC_c::init_regs()  // Master only
 {
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
-  LOGN("+ PLC init: %s %-7s %-7s %-20s", ip_addr, dev_name, str_title.c_str(),
-       str_desc.c_str());
+  LOGN("+ PLC init: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
+       str_title.c_str(), str_desc.c_str());
 
   for (auto &[a, R] : regs) {
     auto &rd = R.data;

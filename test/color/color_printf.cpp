@@ -17,9 +17,22 @@
 
 // "\033[$A;38;05;$B;48;05;$C""m Фон $C\t\c"
 
+#include <iostream>
+
+//#define DEBUG_DEEP
+
+#ifdef DEBUG_DEEP
+#define _(x) std::cout << #x << std::endl; x
+#else
+#define _(x) x
+#endif
+
 int main()
 {
 
+    _(int i = 0;)
+    _(i = 1;)
+    _(std::cout << i;)
 
 /*   printf("normal NRM-NRM " NRM  " no BOLD " C_GRY " BOLD " NRM "\n");
   printf("standard STD   " STD_ " no BOLD " STD_B " BOLD " NRM "\n");

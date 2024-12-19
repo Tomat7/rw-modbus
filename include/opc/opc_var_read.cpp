@@ -25,7 +25,7 @@ void* OpcServer_c::getVariantData(string s)
     } else
       VarData = nullptr;
   } else
-    LOGA("%s: Ignore non-existing variable: %s", __func__, s.c_str());
+    LOGW("%s: Ignore non-existing variable: %s", __func__, s.c_str());
 
   return VarData;
 }

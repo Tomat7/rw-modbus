@@ -38,8 +38,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
 
   try {
     cfg.readFile(cfile.c_str());
-    // printf("=======================\n");
-    LOGW("I/O reading file OK: %s", cfile.c_str());
+    LOGN("I/O reading file OK: %s", cfile.c_str());
   } catch (const FileIOException &fioex) {
     LOGA("I/O error while reading file: %s\n", cfile.c_str());
     return (EXIT_FAILURE);
@@ -52,7 +51,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   // Get the top name.
   try {
     string name = cfg.lookup("maintitle");
-    LOGW("Config title: %s", name.c_str());
+    LOGN("Config title: %s", name.c_str());
   } catch (const SettingNotFoundException &nfex) {
     LOGA("No '%s' setting in configuration file.\n", "nametitle");
     return (EXIT_FAILURE);
@@ -141,12 +140,12 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
     PLCvec.back().init_regs();  // Necessary to copy str to char* and others
     nb_plc_ready++;
 
-    LOGW("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
+    LOGI("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
          (int)PLCvec.back().regs.size());
     // ===== End PLC filling  =====
   }
 
-  LOGC("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
+  LOGI("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
     LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready,

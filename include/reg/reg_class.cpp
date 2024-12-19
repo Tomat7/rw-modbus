@@ -57,7 +57,7 @@ Reg_c::Reg_c(reg_t* _reg)
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGN("created %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
+      LOGI("created %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
     }
   }
 }

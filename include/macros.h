@@ -21,6 +21,12 @@
 #define D(a)
 #endif
 
+#ifdef DEEP_DEBUG
+#define _(x) std::cout << #x << std::endl; x
+#else
+#define _(x) x
+#endif
+
 #ifndef __SHORT_FILENAME__
 #define __SHORT_FILENAME__                                                 \
   (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 \
@@ -76,12 +82,13 @@
 #define C_BLCH "\033[1;99m"
 
 
-#ifdef USE_SYSLOG
-#define LOGERR(...)                                                   \
+/* #ifdef USE_SYSLOG
+  #define LOGERR(...)                                                   \
   (printf("\033[91m\n"), fprintf(stderr, __VA_ARGS__), printf(C_NORM), \
    syslog(LOG_ERR, __VA_ARGS__))
-#define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO, __VA_ARGS__))
-#else
-#define LOGERR(...) fprintf(stderr, __VA_ARGS__)
-#define LOGINFO(...) printf(__VA_ARGS__)
-#endif
+  #define LOGINFO(...) (printf(__VA_ARGS__), syslog(LOG_INFO, __VA_ARGS__))
+  #else
+  #define LOGERR(...) fprintf(stderr, __VA_ARGS__)
+  #define LOGINFO(...) printf(__VA_ARGS__)
+  #endif
+*/

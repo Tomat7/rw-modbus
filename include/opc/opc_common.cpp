@@ -34,7 +34,7 @@ OpcServer_c::~OpcServer_c()
 {
   if (uaSrvMux != nullptr)
     stop();
-  LOGW("uaDestructor: done.");
+  LOGN("uaDestructor: done.");
 }
 
 void OpcServer_c::init(UA_UInt16 _port)
@@ -51,22 +51,22 @@ void OpcServer_c::init(UA_UInt16 _port)
   UA_ServerConfig* uaServerConfig = UA_Server_getConfig(uaServer);
   UA_ServerConfig_setDefault(uaServerConfig);
   UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
-  LOGW("Init: server ready to start on port:%d", uaPort);
+  LOGN("Init: server ready to start on port:%d", uaPort);
 }
 
 void OpcServer_c::run()
 {
-  LOGW("Run: try to lock mutex.");
+  LOGN("Run: try to lock mutex.");
   uaSrvMux->lock();
   uaRunning = true;
   UA_Server_run(uaServer, &uaRunning);
-  LOGW("Run: got &uaRunning = false and stopped now.");
+  LOGN("Run: got &uaRunning = false and stopped now.");
   uaSrvMux->unlock();
 }
 
 void OpcServer_c::stop()
 {
-  LOGW("Stop: set &uaRunning = false.");
+  LOGN("Stop: set &uaRunning = false.");
   uaRunning = false;
   /*   if (uaGetMux != nullptr)
       uaGetMux->lock(); */
@@ -81,7 +81,7 @@ void OpcServer_c::stop()
   for (auto &s : vs)
     delVar(s);
   vars.clear();
-  LOGW("Stop: map cleared.");
+  LOGN("Stop: map cleared.");
 
   if (uaVariant != nullptr) {
     UA_Variant_clear(uaVariant);
@@ -93,7 +93,7 @@ void OpcServer_c::stop()
 
   uaServer = nullptr;
   uaVariant = nullptr;
-  LOGW("Stop: server deleted.");
+  LOGN("Stop: server deleted.");
 
   /* if (uaGetMux != nullptr)
     uaGetMux->unlock(); */
@@ -108,7 +108,7 @@ void OpcServer_c::stop()
   //uaGetMux = nullptr;
   uaDataMux = nullptr;
   uaSrvMux = nullptr;
-  LOGW("Stop: MUX free.");
+  LOGN("Stop: MUX free.");
 }
 
 void OpcServer_c::delVar(string s)
@@ -123,7 +123,7 @@ int OpcServer_c::getType(string s)
   if (vars.count(s))
     return vars[s].type;
   else
-    LOGA("Type: Ignore non-existing variable: %s", s.c_str());
+    LOGW("Type: Ignore non-existing variable: %s", s.c_str());
   return -1;
 }
 
@@ -132,7 +132,7 @@ int OpcServer_c::getStatus(string s)
   if (vars.count(s))
     return vars[s].ua_status;  // 0 - is OK, any other (1 or -1) is BAD
   else
-    LOGA("Status: Ignore non-existing variable: %s", s.c_str());
+    LOGW("Status: Ignore non-existing variable: %s", s.c_str());
   return -1;
 }
 

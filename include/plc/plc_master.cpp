@@ -24,7 +24,7 @@ PLC_c::PLC_c(string _ip, string _name)  // Master only
   lock_mux = new mutex;
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
-  LOGN("+ New PLC created: %s %s", ip_addr, dev_name);
+  LOGI("+ New PLC created: %s %s", ip_addr, dev_name);
 }
 
 PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
@@ -46,7 +46,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
   mb.polling_ms = _ms;
   mb.timeout_us = _us;
 
-  LOGN("+ New PLC created: %s:%i %s", ip_addr, tcp_port, dev_name);
+  LOGI("+ New PLC created: %s:%i %s", ip_addr, tcp_port, dev_name);
 }
 
 // Destructor in plc_common.cpp
@@ -159,7 +159,7 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
 
       if (rc == -1) {
         rc_write--;
-        LOGN("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
+        LOGW("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
              modbus_strerror(errno));
       }
     }
