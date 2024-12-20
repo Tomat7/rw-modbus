@@ -31,9 +31,9 @@ PLC_c::~PLC_c()
   LOGN("- PLC destructor: closed, unmapped and free: %s %s.", ip_addr, dev_name);
 }
 
-int PLC_c::get_read_rc() { return rc_read; }
+int PLC_c::get_rc_read() { return rc_read; }
 
-int PLC_c::get_write_rc() { return rc_write; }
+int PLC_c::get_rc_write() { return rc_write; }
 
 void PLC_c::init_regs()  // Master only
 {

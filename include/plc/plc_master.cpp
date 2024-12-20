@@ -136,7 +136,7 @@ int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
 int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
 {
   //  LOCK_GUARD(network_mux);
-  int rc_write = 0;
+  rc_write = 0;
   for (auto &[a, R] : regs) {
     auto &rd = R.data;
     if (rd.rmode && rd.rupdate) {
