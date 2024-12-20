@@ -66,13 +66,14 @@ int main(int argc, char** argv)
 
   init_all();
 
-  std::thread opc_thr(opc_run);
-  opc_thr.detach();
+  std::thread opc_thread(opc_run);
+  opc_thread.detach();
   wait_console(timeout_sec);
 
   //logger_set_queue(true);
 
   for (;;) {
+    logger_set_queue(true);
     printf("%s", ESC_CLS);
     printf("%s", ESC_HOME);
     fflush(stdout);
@@ -120,6 +121,8 @@ int main(int argc, char** argv)
     // LOGD("regdata_t size: %d", sizeof(regdata_t));
     // LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
+
+    logger_set_queue(false);
     logger_flush();
 
     // Slave.handle_slave(timeout_sec * 1000000);
@@ -129,8 +132,6 @@ int main(int argc, char** argv)
       parse_char(ch);
     else
       printf("!\n");
-
-    logger_flush();
 
     fflush(stdout);
 

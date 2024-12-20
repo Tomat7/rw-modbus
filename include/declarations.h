@@ -82,11 +82,19 @@ int task_regs_refresh_(void* params);
 int task_begin_(void* params);
 int task_mb_update_(void* params);
 
+/* template <typename T>
+  T UpdateValue(string s_, T val_, bool isOK = true)
+  {
+  return = OPCs.updateVar(OPCs.lookupVar(s_), val_, isOK);
+  }
+*/
+
 template <typename T>
 void WriteValue(string s_, T val_, bool isOK = true)
 {
   OPCs.updateVar(OPCs.lookupVar(s_), val_, isOK);
 }
+
 
 struct ReadValue {
   string _s;                // Full path to variable
