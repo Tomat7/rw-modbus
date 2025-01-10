@@ -95,7 +95,7 @@ int main(int argc, char** argv)
     s = "/PLC/Kub/Kub.Temp2";
     printf("T2: %5.2f, ", OPCs.readValue<float>(s));
 
-    s = "/PLC/Kub/Kub.Temp3";
+    s = "Kub.Temp3";
     float myfl = ReadValue(s);
     const char* C = getColor(OPCs.isVariable(s));
     const char* B = getBlynk(OPCs.isGood(s));

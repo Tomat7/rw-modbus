@@ -43,7 +43,7 @@ int task_regs_refresh_(void* params)
     bool isNew_Plc = (plc_val != old_val);
     bool isNew_Opc = (opc_val != shm_val);
 
-    rm.sync(plc_val);  // Save PLC value to REGmap
+    rm.sync(plc_val);  // Save PLC value to REGmap (SHM & local)
 
     if (isNew_Plc) {
       if (!STRmap.count(n) || !STRmap[n].upd_plc)

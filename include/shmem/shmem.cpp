@@ -20,6 +20,7 @@
 int create_shm_fd(const char* rname)
 {
   int fd = -1;
+
   if (rname != nullptr) {
     fd = shm_open(rname, O_CREAT | O_RDWR, 0777);
     if (fd == -1) {
@@ -27,19 +28,23 @@ int create_shm_fd(const char* rname)
       return SHM_ERR_OPEN;
     }
   }
+
   return fd;
 }
 
 int get_shm_fd(const char* rname)
 {
   int fd = -1;
+
   if (rname != nullptr) {
     fd = shm_open(rname, O_RDWR, 0777);
     if (fd == -1) {
       LOGE("Error open handle for %s", rname);
       return SHM_ERR_OPEN;
     }
-  }
+  } else
+    LOGE("Error name handle for %s", rname);
+
   return fd;
 }
 

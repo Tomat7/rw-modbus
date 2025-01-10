@@ -152,9 +152,18 @@ bool OpcServer_c::isVariable(string s)
 
 string OpcServer_c::lookupVar(string s)
 {
-  for (auto [_s, v] : vars)
-    if (_s.find(s) != std::string::npos)
-      return _s;
+  for (auto [ss, v] : vars) {
+    if (ss == s)
+      break;
+    if (ss.find(s) != std::string::npos) {
+      auto last_slash = ss.rfind("/");        // Find last "/"
+      if (last_slash != std::string::npos) {
+        string _s = ss.substr(last_slash + 1);  // Get str after "/" - BUF.Press"
+        if (_s == s)
+          return ss;
+      }
+    }
+  }
   return s;
 }
 
