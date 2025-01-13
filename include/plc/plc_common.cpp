@@ -20,7 +20,7 @@
 
 PLC_c::~PLC_c()
 {
-  //lock_now();
+  // lock_now();
   while (!(lock_mux->try_lock()) && !is_slave)
     std::this_thread::yield();
   LOGD("- PLC destructor: try_lock() done: %s %s.", ip_addr, dev_name);
@@ -28,7 +28,8 @@ PLC_c::~PLC_c()
   mb_deinit();
   //  unlock_now();
   delete lock_mux;
-  LOGN("- PLC destructor: closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  LOGN("- PLC destructor: closed, unmapped and free: %s %s.", ip_addr,
+       dev_name);
 }
 
 int PLC_c::get_rc_read() { return rc_read; }

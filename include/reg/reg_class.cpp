@@ -32,18 +32,18 @@ Reg_c::Reg_c() { LOGD("Construct! %x", this); }
 
 Reg_c::Reg_c(string _rn) { Reg_c(_rn.c_str()); }
 
-
 Reg_c::Reg_c(const char* _rn)
 {
   rn = get_new_char(_rn);
-  //LOGD("try to open %s", rn);
+  // LOGD("try to open %s", rn);
 
   fd = create_shm_fd(rn);
   if (fd != -1) {
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGI("created- %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
+      LOGI("created- %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm,
+           this);
     }
   }
 
@@ -52,7 +52,6 @@ Reg_c::Reg_c(const char* _rn)
     else
       LOGE("Error open %s", rn); */
 }
-
 
 Reg_c::Reg_c(reg_t* _reg)
 {

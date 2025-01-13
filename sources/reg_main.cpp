@@ -41,7 +41,6 @@ void regs_deinit()
   return;
 }
 
-
 /* void regs_create_from_slave()
   {
   printf("\n===== reg_init_from_slave =====\n");

@@ -6,8 +6,7 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) {a}
-
+#define DEBUG(a) if (isDebug) { a }
 
 void OpcServer_c::writeVariable(var_t &v, bool isOk)
 {
@@ -42,9 +41,5 @@ void OpcServer_c::writeVariable(var_t &v, bool isOk)
 
   return;
 }
-
-
-
-
 
 // eof

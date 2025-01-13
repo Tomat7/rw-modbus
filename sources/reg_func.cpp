@@ -13,14 +13,13 @@
 #define MB_READ
 
 struct regupd_t {
-  bool upd_plc = false;  // need print ">"
-  bool upd_opc = false;  // need print "<"
-  uint16_t opc_value = 0; // value to print
+  bool upd_plc = false;    // need print ">"
+  bool upd_opc = false;    // need print "<"
+  uint16_t opc_value = 0;  // value to print
 };
 
 static map<string, regupd_t> STRmap;
 static mutex regmap_mux;  // already defined in .h
-
 
 void reg_print(string, const regdata_t*);
 
@@ -32,13 +31,12 @@ int task_regs_refresh_(void* params)
   int x = 0;
 
   for (auto& [n, rm] : REGmap) {
-
     uint16_t plc_val = rm.get_plc_val();  // Value from PLC
     uint16_t shm_val = rm.get_shm_val();  // Value from SHM
     uint16_t old_val = rm.value;          // Value in memory (in REGmap)
     uint16_t opc_val = opc_update_uint16(n, rm.ptr_data_plc);
 
-    //printf("%7d %7d %7d %7d ==", plc_val, old_val, shm_val, opc_val);
+    // printf("%7d %7d %7d %7d ==", plc_val, old_val, shm_val, opc_val);
 
     bool isNew_Plc = (plc_val != old_val);
     bool isNew_Opc = (opc_val != shm_val);
@@ -67,11 +65,10 @@ int task_regs_refresh_(void* params)
   return x;
 }
 
-
 void regs_update()
 {
   printf("\n===== regs_update =====\n");
-  //task_regs_refresh_();
+  // task_regs_refresh_();
   regmap_mux.lock();
   bool is_eol = false;
   string X;
@@ -79,8 +76,8 @@ void regs_update()
   for (auto& [n, rm] : REGmap) {
     reg_print(n, rm.ptr_data_plc);
 
-    X = (STRmap[n].upd_plc) ? ">" : " "; // If new value got from PLC
-    X += (STRmap[n].upd_opc) ? "<" : " "; // If new value got from OPC
+    X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
+    X += (STRmap[n].upd_opc) ? "<" : " ";  // If new value got from OPC
     printf("%s", X.c_str());
 
     if (STRmap[n].upd_opc)
@@ -105,11 +102,10 @@ void regs_update()
   return;
 }
 
-
 void reg_print(string rn, const regdata_t* rd)
 {
   // printf("\n===== regs_print =====\n");
-  const char* C = getColor(rd->rerrors == 0); //C_WHIB;  // NRM;
+  const char* C = getColor(rd->rerrors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rd->rerrors == 0);
 
   if (rd->rtype == 0)
@@ -124,15 +120,11 @@ void reg_print(string rn, const regdata_t* rd)
   return;
 }
 
-const char* getColor(bool noErrors)
-{
-  return noErrors ? C_BOLD : C_DARK;
-}
+const char* getColor(bool noErrors) { return noErrors ? C_BOLD : C_DARK; }
 
 const char* getBlynk(bool noErrors)
 {
   return noErrors ? C_NORM : ESC_BLINK;  // Dark grey blym-blym
 }
-
 
 // eof

@@ -71,7 +71,7 @@ public:
   OpcServer_c(UA_UInt16 _port = 4840);
   ~OpcServer_c();
 
-  void init(UA_UInt16 _port = 0); // Necessary init() before run()
+  void init(UA_UInt16 _port = 0);  // Necessary init() before run()
   void run();
   void stop();
 
@@ -80,18 +80,19 @@ public:
   string lookupVar(string s);
   void delVar(string s);
   int getType(string s);
-  int getStatus(string s);          // 0 - is OK, any other (1 or -1) is BAD
-  var_union readRawValue(string s); // returns value_union
-  int refreshValues();              // getVar for ALL variables, returns - qty of vars
+  int getStatus(string s);           // 0 - is OK, any other (1 or -1) is BAD
+  var_union readRawValue(string s);  // returns value_union
+  int refreshValues();  // getVar for ALL variables, returns - qty of vars
 
   template <typename T>
-  int addVar(string s, T Value, int rmode); // for init
+  int addVar(string s, T Value, int rmode);  // for init
   template <typename T>
-  T updateVar(string s, T Value_set, bool isOK); // get T value and set Value_set
+  T updateVar(string s, T Value_set,
+              bool isOK);  // get T value and set Value_set
   template <typename T>
-  T getValue(string s); // ask OPC server for current value
+  T getValue(string s);  // ask OPC server for current value
   template <typename T>
-  T readValue(string s); // read value saved on previous getValue
+  T readValue(string s);  // read value saved on previous getValue
   //  Definition at the bottom of THIS file
 
 private:
@@ -117,15 +118,15 @@ private:
 
   template <typename T>
   bool getVariableValue(string s, T &Value);
-  void* getVariantData(string s); // get pointer to UA_Variant.Data
+  void* getVariantData(string s);  // get pointer to UA_Variant.Data
 
   template <typename T>
   void setVariableValue(string s, T Value_set, bool isOK = true);
   void writeVariable(var_t &var, bool isOk);
 
   badvalue_t bad_value;
-  map<string, var_t> vars;    // All regs here.
-  map<type_index, int> types; // Types coding is in constructor
+  map<string, var_t> vars;     // All regs here.
+  map<type_index, int> types;  // Types coding is in constructor
 };
 
 // ======== Definition of TEMPLATEs =========

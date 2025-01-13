@@ -64,8 +64,8 @@ extern int log_level;  // 0 - no messages at all, 9 - all on screen
 
 // void logger(int prio, const char* format, ...);
 // void logger(const char* logname, int prio, const char* format, ...);
-void logger(const char* logname, int prio, const char* _func,
-            const char* _fmt, ...);
+void logger(const char* logname, int prio, const char* _func, const char* _fmt,
+            ...);
 void logdebug(const char* logname, int prio, const char* format, ...);
 
 void logger_set_queue(bool to_queue);

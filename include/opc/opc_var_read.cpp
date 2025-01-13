@@ -6,7 +6,7 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) {a}
+#define DEBUG(a) if (isDebug) { a }
 
 // void* OpcServer_c::getVariantData(string s);
 // var_union OpcServer_c::readRawValue(string s);
@@ -42,7 +42,5 @@ var_union OpcServer_c::readRawValue(string s)
 
   return vu;
 }
-
-
 
 // eof

@@ -4,8 +4,8 @@
 #include <map>
 #include <set>
 #include <string>
-#include <vector>
 #include <variant>
+#include <vector>
 
 #include "./config.h"
 #include "./libs.h"
@@ -15,7 +15,7 @@
 
 map<string, Reg_c> REGmap;
 vector<PLC_c> PLCvec;
-//PLC_c Slave(MB_SLAVE_PORT);
+// PLC_c Slave(MB_SLAVE_PORT);
 OpcServer_c OPCs(OPC_SERVER_PORT);
 Schedule_c Task(TASKS_NB_MAX);
 string PLC_folder = PLC_FOLDER;
@@ -26,7 +26,6 @@ string SCADA_folder = SCADA_FOLDER;
 const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
-
 
 static void close_sigint(int dummy)
 {
@@ -41,7 +40,6 @@ static void close_sigint(int dummy)
 
 int main(int argc, char** argv)
 {
-
   Timer t;
   set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
@@ -70,7 +68,7 @@ int main(int argc, char** argv)
   opc_thread.detach();
   wait_console(timeout_sec);
 
-  //logger_set_queue(true);
+  // logger_set_queue(true);
 
   for (;;) {
     logger_set_queue(true);
@@ -106,7 +104,7 @@ int main(int argc, char** argv)
     C = getColor(OPCs.isVariable(s));
     B = getBlynk(OPCs.isGood(s));
     printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
-    //printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
+    // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
 
     printf("\n");
 
@@ -117,7 +115,7 @@ int main(int argc, char** argv)
     const char* x = nullptr;
     t.start(x);
     mb_print_summary();
-    //mb_update();
+    // mb_update();
     // LOGD("regdata_t size: %d", sizeof(regdata_t));
     // LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");

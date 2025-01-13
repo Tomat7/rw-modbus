@@ -12,10 +12,10 @@
 #include <unistd.h>
 
 #include <chrono>
+#include <functional>
 #include <map>
 #include <mutex>
 #include <thread>
-#include <functional>
 
 #include "include/logger.h"
 #include "include/plc/plc_class.h"
@@ -29,7 +29,7 @@
 volatile bool Schedule_c::isRunning = false;
 /* int Schedule_c::nb_max = 0; */
 vector<Task_c> Schedule_c::tasks;
-//vector<thread> Schedule_c::threads;
+// vector<thread> Schedule_c::threads;
 mutex Schedule_c::scheduler_mux;
 
 uint64_t millis()
@@ -40,8 +40,9 @@ uint64_t millis()
   return t;
 }
 
-Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr) :
-  func(_func), interval_ms(_ms), task_name(_name), params(_ptr)
+Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name,
+               void* _ptr)
+  : func(_func), interval_ms(_ms), task_name(_name), params(_ptr)
 {
   task_mux = new mutex;
   LOGD("Construct Tasks_c: %s. %x", task_name.c_str(), this);
@@ -72,10 +73,10 @@ void Schedule_c::init(int _nb)
     tasks.reserve(_nb);
   }
   LOGD("Init Schedule_c capacity: %d", tasks.capacity());
-
 }
 
-int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr)
+int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
+                         void* _ptr)
 {
   scheduler_mux.lock();
   uint64_t nb_tasks = tasks.size();
@@ -123,7 +124,7 @@ void Schedule_c::run_cycle_()
       Task_c &t = tasks[i];
       if ((millis() - t.millis_last_run) > t.interval_ms) {
         if ((!t.taskRunning) && isRunning) {
-          //LOGD("Task-ready: %s \n", t.task_name.c_str());
+          // LOGD("Task-ready: %s \n", t.task_name.c_str());
           threads[i] = thread(run_task_, i);
           threads[i].detach();
         } else {
@@ -146,7 +147,6 @@ void Schedule_c::run_cycle_()
     tasks[i].task_mux->unlock();
 
   LOGN("RunCycle: Finished");
-
 }
 
 void Schedule_c::stop()
@@ -188,5 +188,4 @@ void Schedule_c::run_task_(uint64_t i)
   LOGD("Task-done: %s %d", tasks[i].task_name.c_str(), ret);
 }
 
-
-//eof
+// eof

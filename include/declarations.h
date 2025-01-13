@@ -22,7 +22,7 @@ extern int timeout_sec;
 extern cchar* mode;
 extern map<string, Reg_c> REGmap;
 extern vector<PLC_c> PLCvec;
-//extern PLC_c Slave;
+// extern PLC_c Slave;
 extern OpcServer_c OPCs;
 extern Schedule_c Task;
 extern string PLC_folder;
@@ -82,12 +82,6 @@ int task_regs_refresh_(void* params);
 int task_begin_(void* params);
 int task_mb_update_(void* params);
 
-/* template <typename T>
-  T UpdateValue(string s_, T val_, bool isOK = true)
-  {
-  return = OPCs.updateVar(OPCs.lookupVar(s_), val_, isOK);
-  }
-*/
 
 template <typename T>
 void WriteValue(string s_, T val_, bool isOK = true)
@@ -95,17 +89,18 @@ void WriteValue(string s_, T val_, bool isOK = true)
   OPCs.updateVar(OPCs.lookupVar(s_), val_, isOK);
 }
 
-
 struct ReadValue {
-  string _s;                // Full path to variable
+  string _s;  // Full path to variable
   ReadValue(string svar)
   {
-    _s = OPCs.lookupVar(svar); // Try to find fullpath-name
+    _s = OPCs.lookupVar(svar);  // Try to find fullpath-name
   }
   template <typename T>
-  operator T() { return OPCs.readValue<T>(_s); }
+  operator T()
+  {
+    return OPCs.readValue<T>(_s);
+  }
 };
-
 
 /*     if (OPCs.isVar(svar))        // if fullpath exist = "/PLC/Kub/Kub.Temp1"
         _s = svar;
@@ -117,9 +112,8 @@ struct ReadValue {
         _s = PLC_folder + _plc + "/" + ss;        // = "/PLC/Buf/Buf.Temp3"
 */
 //        string _plc = ss;
-//auto _dot = _plc.find(".");
+// auto _dot = _plc.find(".");
 //        _plc.erase(ss.find("."));
 //        auto _dot = ss.find(".");
-
 
 // eof

@@ -81,7 +81,6 @@
 #define C_GRYH "\033[1;98m"
 #define C_BLCH "\033[1;99m"
 
-
 /* #ifdef USE_SYSLOG
   #define LOGERR(...)                                                   \
   (printf("\033[91m\n"), fprintf(stderr, __VA_ARGS__), printf(C_NORM), \

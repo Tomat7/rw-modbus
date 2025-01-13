@@ -38,7 +38,6 @@ struct mbdata_t {
   uint16_t errors_rd = 0;         // counter of READ errors (summ from start)
   uint16_t errors_wr = 0;         // counter of WRITE errors (summ from start)
   uint16_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
-
 };
 
 class PLC_c

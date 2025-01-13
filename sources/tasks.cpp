@@ -3,19 +3,19 @@
 
 /* #include <map>
   #include <set>
-
-  #include <vector>
   #include <variant>
+  #include <vector>
 */
 
 #include <string>
+
 #include "config.h"
 #include "libs.h"
 
 void tasks_init()
 {
   Task.init(TASKS_NB_MAX);
-  //Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
+  // Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
   Task.add_task(task_opc_refresh_, 250, "OPC:Refresh_");
   Task.add_task(task_regs_refresh_, 500, "REGS:Refresh_");
   Task.add_task(task_millis_, 2500, "Millis_");
@@ -27,7 +27,7 @@ int task_millis_(void* params)
 {
   UNUSED(params);
   int x = 0;
-  for (auto &[n, rm] : REGmap) {
+  for (auto& [n, rm] : REGmap) {
     if (n.find("millis") != std::string::npos) {
       LOGD("%s", n.c_str());
       WriteValue(n, 0);

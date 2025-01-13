@@ -57,9 +57,10 @@ int mb_print_summary()
 
   for (i = 0; i < nb_plcs; i++) {
     PLC_c &D = PLCvec[i];
-    printf("%-7s_dT: %5ld ret: %2d err: %4d conn: %4d rd: %4d wr: %4d rc: %2d\n",
-           D.dev_name, D.mb.timestamp_try_ms - prev_ts[i], res[i], D.mb.errors,
-           D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc_read());
+    printf(
+      "%-7s_dT: %5ld ret: %2d err: %4d conn: %4d rd: %4d wr: %4d rc: %2d\n",
+      D.dev_name, D.mb.timestamp_try_ms - prev_ts[i], res[i], D.mb.errors,
+      D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc_read());
   }
   return (int)nb_plcs;
 }
@@ -148,7 +149,7 @@ void mb_deinit()
   idx.clear();
   prev_ts.clear();
   PLCvec.clear();
-  //Slave.mb_deinit();
+  // Slave.mb_deinit();
   //  printf("mb_deinit READY for UN-lock\n");
   //  printf("mb_deinit UN-locked\n");
   return;

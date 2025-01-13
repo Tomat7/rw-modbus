@@ -60,7 +60,7 @@ void init_all()
   wait_console(timeout_sec);
 
   tasks_init();
-//  timeout_sec = TIMEOUT_SEC;
+  //  timeout_sec = TIMEOUT_SEC;
 
   return;
 }
@@ -77,7 +77,7 @@ void reinit()
   wait_console(timeout_sec);
   init_all();
 
-//  timeout_sec = TIMEOUT_SEC;
+  //  timeout_sec = TIMEOUT_SEC;
   return;
 }
 

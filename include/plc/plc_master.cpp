@@ -20,7 +20,7 @@
 
 PLC_c::PLC_c(string _ip, string _name)  // Master only
 {
-  //lock_init();
+  // lock_init();
   lock_mux = new mutex;
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
@@ -30,7 +30,7 @@ PLC_c::PLC_c(string _ip, string _name)  // Master only
 PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
              int _port, int _att, int _ms, int _us)
 {
-  //lock_init();
+  // lock_init();
   lock_mux = new mutex;
 
   str_dev_name = _devname;
@@ -124,7 +124,7 @@ int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
   } else {
     mb.errors = 0;
     for (auto &[a, R] : regs)
-      if (!R.data.rmode || !R.data.rupdate)       // !! Do not update !!
+      if (!R.data.rmode || !R.data.rupdate)  // !! Do not update !!
         R.data.rvalue = mbregs[R.raddr - reg_min];
   }
 

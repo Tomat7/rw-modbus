@@ -2,11 +2,11 @@
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
 #include <string.h>
+#include <sys/prctl.h>
 
 #include <map>
 #include <string>
 #include <vector>
-#include <sys/prctl.h>
 
 #include "config.h"
 #include "libs.h"
@@ -34,9 +34,9 @@ void opc_regs_init()
     parent.erase(z);
 
     n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
-    e = n + PLC_ERRORS;  // Kub.Temp1.errors
+    e = n + PLC_ERRORS;                    // Kub.Temp1.errors
 
-    OPCs.addVar(e, (uint16_t)0, 0); // Reg to keep NB of errors
+    OPCs.addVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
@@ -88,7 +88,6 @@ void opc_run()
   prctl(PR_SET_NAME, "OPC_server");
   OPCs.run();
 }
-
 
 /*
   template<typename T>

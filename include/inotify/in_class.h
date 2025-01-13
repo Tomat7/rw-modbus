@@ -16,8 +16,8 @@
 #include <unistd.h>
 
 #define USE_SYSLOG
-#include "include/macros.h"
 #include "include/logger.h"
+#include "include/macros.h"
 /*
     #ifdef USE_SYSLOG
     #define LOGERR(...) (fprintf(stderr, __VA_ARGS__), syslog(LOG_ERR,

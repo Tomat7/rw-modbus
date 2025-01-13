@@ -11,9 +11,10 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) {a}
-#define CHAR_PTR const_cast<char*>
-#define CHAR_P const_cast<char*>
+#define DEBUG(a) if (isDebug) { a }
+
+#define CHAR_PTR const_cast<char *>
+#define CHAR_P const_cast<char *>
 
 int OpcServer_c::addVar_Names(string raw_name, int t, int m)
 {
@@ -27,8 +28,8 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
     return 0;
   }
 
-  string str_name = raw_name; // /PLC/Kub/Kub.Temp1
-  string str_path = getPath_Name(str_name); // /PLC/Kub/
+  string str_name = raw_name;                // /PLC/Kub/Kub.Temp1
+  string str_path = getPath_Name(str_name);  // /PLC/Kub/
 
   var_t v;
   v.type = t;
@@ -36,7 +37,7 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   v.key_name = raw_name;  // KEY for map and OPC FQName - /PLC/Kub/Kub.Temp1
   v.str_name = str_name;  // Kub.Temp1
   v.str_path = str_path;  // /PLC/Kub/
-  v.str_pathname = str_path + str_name; // /PLC/Kub/Kub.Temp1
+  v.str_pathname = str_path + str_name;  // /PLC/Kub/Kub.Temp1
 
   vars[v.key_name] = v;
   vars[v.key_name].ua_name = CHAR_PTR(vars[v.key_name].key_name.c_str());
@@ -51,7 +52,6 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   */
   return 1;
 }
-
 
 string OpcServer_c::getPath_Name(string &name)
 {
@@ -78,27 +78,25 @@ string OpcServer_c::getPath_Name(string &name)
   return path;
 }
 
-
 void OpcServer_c::addVar_NodeId(var_t &v)
 {
   v.node_id.var = UA_NODEID_STRING(1, v.ua_name);
 
   if (v.str_path == "/") {
-    //v.node_id.parent = UA_NS0ID(OBJECTSFOLDER);
+    // v.node_id.parent = UA_NS0ID(OBJECTSFOLDER);
     v.node_id.parent = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
-    //v.node_id.reference = UA_NS0ID(ORGANIZES);
+    // v.node_id.reference = UA_NS0ID(ORGANIZES);
     v.node_id.reference = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
   } else {
     v.node_id.parent = getFolder_NodeId(v.str_path);
-    //v.node_id.reference = UA_NS0ID(HASCOMPONENT);
+    // v.node_id.reference = UA_NS0ID(HASCOMPONENT);
     v.node_id.reference = UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT);
   }
 }
 
-
 UA_NodeId OpcServer_c::getFolder_NodeId(string str_path)
 {
-  //UA_NodeId parentNode = UA_NS0ID(OBJECTSFOLDER);
+  // UA_NodeId parentNode = UA_NS0ID(OBJECTSFOLDER);
   UA_NodeId parentNode = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
 
   if (vars.count(str_path))
@@ -134,14 +132,14 @@ UA_NodeId OpcServer_c::addFolders(string ua_path, UA_NodeId parentNodeId)
   oAttr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", display_name);
   /*   UA_StatusCode sc = UA_Server_addObjectNode(
                          uaServer, folderId, parentNodeId, UA_NS0ID(ORGANIZES),
-                         UA_QUALIFIEDNAME(1, folder_path), UA_NS0ID(BASEOBJECTTYPE), oAttr, NULL,
-                         &folderId); */
+                         UA_QUALIFIEDNAME(1, folder_path),
+     UA_NS0ID(BASEOBJECTTYPE), oAttr, NULL, &folderId); */
 
-  UA_StatusCode sc = UA_Server_addObjectNode( uaServer, folderId, parentNodeId,
-                     UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
-                     UA_QUALIFIEDNAME(1, folder_path),
-                     UA_NODEID_NUMERIC(0, UA_NS0ID_BASEOBJECTTYPE),
-                     oAttr, NULL, &folderId);
+  UA_StatusCode sc = UA_Server_addObjectNode(
+                       uaServer, folderId, parentNodeId,
+                       UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
+                       UA_QUALIFIEDNAME(1, folder_path),
+                       UA_NODEID_NUMERIC(0, UA_NS0ID_BASEOBJECTTYPE), oAttr, NULL, &folderId);
 
   var_t v;
   v.str_pathname = ua_path;
@@ -154,7 +152,6 @@ UA_NodeId OpcServer_c::addFolders(string ua_path, UA_NodeId parentNodeId)
 
   return folderId;
 }
-
 
 int OpcServer_c::countSlash(string Path)
 {
@@ -184,7 +181,6 @@ string OpcServer_c::getPathByLevel(string Path, int level)
   return Path;
 }
 
-
 void OpcServer_c::addVariable(var_t &v)
 {
   if (v.ptr_value == nullptr) {
@@ -203,16 +199,14 @@ void OpcServer_c::addVariable(var_t &v)
 
   UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.ua_name);
 
-  UA_Server_addVariableNode(uaServer, v.node_id.var, v.node_id.parent,
-                            v.node_id.reference, varQName,
-                            UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
-                            attr, NULL, NULL);
+  UA_Server_addVariableNode(
+    uaServer, v.node_id.var, v.node_id.parent, v.node_id.reference, varQName,
+    UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE), attr, NULL, NULL);
 
   string d = strVarDetails(v);
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                     "NewVar: %s %s, path: %s - %s", v.name, d.c_str(),
                     v.ua_name, UA_StatusCode_name(rc));)
 }
-
 
 // eof

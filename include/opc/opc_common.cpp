@@ -13,10 +13,7 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) \
-  if (isDebug) { \
-    a            \
-  }
+#define DEBUG(a) if (isDebug) { a }
 
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
@@ -43,7 +40,7 @@ void OpcServer_c::init(UA_UInt16 _port)
     uaPort = _port;
 
   uaSrvMux = new mutex;
-  //uaGetMux = new mutex;
+  // uaGetMux = new mutex;
   uaDataMux = new mutex;
   uaServer = UA_Server_new();
   uaVariant = UA_Variant_new();
@@ -102,10 +99,10 @@ void OpcServer_c::stop()
   if (uaSrvMux != nullptr)
     uaSrvMux->unlock();
 
-  //delete uaGetMux;
+  // delete uaGetMux;
   delete uaDataMux;
   delete uaSrvMux;
-  //uaGetMux = nullptr;
+  // uaGetMux = nullptr;
   uaDataMux = nullptr;
   uaSrvMux = nullptr;
   LOGN("Stop: MUX free.");
@@ -145,10 +142,7 @@ bool OpcServer_c::isGood(string s)
   return ret;
 }
 
-bool OpcServer_c::isVariable(string s)
-{
-  return vars.count(s);
-}
+bool OpcServer_c::isVariable(string s) { return vars.count(s); }
 
 string OpcServer_c::lookupVar(string s)
 {
@@ -156,9 +150,10 @@ string OpcServer_c::lookupVar(string s)
     if (ss == s)
       break;
     if (ss.find(s) != std::string::npos) {
-      auto last_slash = ss.rfind("/");        // Find last "/"
+      auto last_slash = ss.rfind("/");  // Find last "/"
       if (last_slash != std::string::npos) {
-        string _s = ss.substr(last_slash + 1);  // Get str after "/" - BUF.Press"
+        string _s =
+          ss.substr(last_slash + 1);  // Get str after "/" - BUF.Press"
         if (_s == s)
           return ss;
       }
@@ -180,7 +175,6 @@ int OpcServer_c::refreshValues()
   LOGX("%s: onFinish.", __func__);
   return x;
 }
-
 
 string OpcServer_c::strVarDetails(var_t &v)
 {
@@ -204,6 +198,5 @@ string OpcServer_c::strVarDetails(var_t &v)
 
   return ret;
 }
-
 
 // eof

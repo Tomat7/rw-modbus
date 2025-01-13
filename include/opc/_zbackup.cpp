@@ -51,7 +51,7 @@
   // wv.value.status = UA_STATUSCODE_BADCOMMUNICATIONERROR;
   wv.value.hasStatus = true;
   wv.value.value = myVariant;
-  wv.value.hasValue = true;
+  wv.value.hasVal                    \ue = true;
   // wv.value.serverTimestamp = true;
   UA_Server_write(uaServer, &wv);
   }
@@ -64,7 +64,7 @@
 */
 /* {
   wv.nodeId = v.node_id.var;
-  wv.attributeId = UA_ATTRIBUTEID_VALUE;
+  wv.attributeId                     \= UA_ATTRIBUTEID_VALUE;
 
   wv.value.hasStatus = true;
   //wv.value.status = UA_STATUSCODE_GOOD;
@@ -121,7 +121,5 @@
     vu = vars[s].value;  // set old (last good) value
 
   return vu; */
-
-
 
 // eof

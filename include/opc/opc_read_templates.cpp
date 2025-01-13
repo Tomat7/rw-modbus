@@ -13,8 +13,7 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) {a}
-
+#define DEBUG(a) if (isDebug) { a }
 
 template <>
 uint16_t OpcServer_c::getValue(string s)
@@ -102,9 +101,9 @@ template <>
 uint16_t OpcServer_c::readValue(string s)
 {
   uint16_t x = bad_value.ui16;
-  if (isVariable(s))          // check for existing
-    x = vars[s].value.ui16;   // if var exist - return last good value
-  return x;                   // else - the "BAD" value will return
+  if (isVariable(s))         // check for existing
+    x = vars[s].value.ui16;  // if var exist - return last good value
+  return x;                  // else - the "BAD" value will return
 }
 
 template <>
@@ -169,6 +168,5 @@ double OpcServer_c::readValue(string s)
     x = vars[s].value.dbl;
   return x;
 }
-
 
 // eof
