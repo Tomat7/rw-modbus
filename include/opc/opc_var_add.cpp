@@ -12,7 +12,8 @@
 #include "opc_class.h"
 
 #define DEBUG(a) if (isDebug) {a}
-
+#define CHAR_PTR const_cast<char*>
+#define CHAR_P const_cast<char*>
 
 int OpcServer_c::addVar_Names(string raw_name, int t, int m)
 {
@@ -26,24 +27,22 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
     return 0;
   }
 
-  string str_name = raw_name;
-  string str_path = getPath_Name(str_name);
+  string str_name = raw_name; // /PLC/Kub/Kub.Temp1
+  string str_path = getPath_Name(str_name); // /PLC/Kub/
 
   var_t v;
   v.type = t;
   v.rmode = m;
-  v.key_name = raw_name;  // KEY for map and OPC FQName
-  v.str_name = str_name;
-  v.str_path = str_path;
-  v.str_full = str_path + str_name;
+  v.key_name = raw_name;  // KEY for map and OPC FQName - /PLC/Kub/Kub.Temp1
+  v.str_name = str_name;  // Kub.Temp1
+  v.str_path = str_path;  // /PLC/Kub/
+  v.str_pathname = str_path + str_name; // /PLC/Kub/Kub.Temp1
 
   vars[v.key_name] = v;
-  vars[v.key_name].ua_name =
-    const_cast<char*>(vars[v.key_name].key_name.c_str());
-  vars[v.key_name].name = const_cast<char*>(vars[v.key_name].str_name.c_str());
-  vars[v.key_name].path = const_cast<char*>(vars[v.key_name].str_path.c_str());
-  vars[v.key_name].path_name =
-    const_cast<char*>(vars[v.key_name].str_full.c_str());
+  vars[v.key_name].ua_name = CHAR_PTR(vars[v.key_name].key_name.c_str());
+  vars[v.key_name].name = CHAR_PTR(vars[v.key_name].str_name.c_str());
+  vars[v.key_name].path = CHAR_PTR(vars[v.key_name].str_path.c_str());
+  vars[v.key_name].path_name = CHAR_PTR(vars[v.key_name].str_pathname.c_str());
   /*
     LOGD("STR %s, %s, %s", vars[v.raw_name].str_full.c_str(),
          vars[v.raw_name].str_path.c_str(), vars[v.raw_name].str_name.c_str());
@@ -145,7 +144,7 @@ UA_NodeId OpcServer_c::addFolders(string ua_path, UA_NodeId parentNodeId)
                      oAttr, NULL, &folderId);
 
   var_t v;
-  v.str_full = ua_path;
+  v.str_pathname = ua_path;
   v.node_id.var = folderId;
   vars[ua_path] = v;
 

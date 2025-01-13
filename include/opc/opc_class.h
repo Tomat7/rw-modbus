@@ -45,18 +45,18 @@ struct nodeid_t {
 };
 
 struct var_t {
-  string key_name;
-  char* ua_name = nullptr;
-  string str_name;
-  char* name = nullptr;
-  string str_path;
-  char* path = nullptr;
-  string str_full;
-  char* path_name = nullptr;
-  nodeid_t node_id;
-  void* ptr_value; // ptr to "correct" value_u
-  int rmode;       // 1 - mean RW
-  int type;
+  string key_name;            // /PLC/Kub/Kub.Temp1
+  char* ua_name = nullptr;    // key_name.c_str()
+  string str_name;            // Kub.Temp1
+  char* name = nullptr;       // str_name.c_str()
+  string str_path;            // /PLC/Kub/
+  char* path = nullptr;       // str_path.c_str()
+  string str_pathname;        // str_path + str_name = /PLC/Kub/Kub.Temp1
+  char* path_name = nullptr;  // str_full.c_str()
+  nodeid_t node_id;           // UA_NodeId (var, parent, reference)
+  void* ptr_value;            // ptr to "correct" value_u
+  int rmode;                  // 1 - mean RW
+  int type;                   // UA_DataTypes
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
   var_union value;
@@ -80,14 +80,18 @@ public:
   string lookupVar(string s);
   void delVar(string s);
   int getType(string s);
-  int getStatus(string s); // 0 - is OK, any other (1 or -1) is BAD
+  int getStatus(string s);          // 0 - is OK, any other (1 or -1) is BAD
   var_union readRawValue(string s); // returns value_union
-  int refreshValues();                // getVar for ALL variables, returns - qty of vars
+  int refreshValues();              // getVar for ALL variables, returns - qty of vars
 
-  template <typename T> int addVar(string s, T Value, int rmode); // for init
-  template <typename T> T updateVar(string s, T Value_set, bool isOK);  // get T value and set Value_set
-  template <typename T> T getValue(string s); // ask OPC server for current value
-  template <typename T> T readValue(string s); // read value saved on previous getValue
+  template <typename T>
+  int addVar(string s, T Value, int rmode); // for init
+  template <typename T>
+  T updateVar(string s, T Value_set, bool isOK); // get T value and set Value_set
+  template <typename T>
+  T getValue(string s); // ask OPC server for current value
+  template <typename T>
+  T readValue(string s); // read value saved on previous getValue
   //  Definition at the bottom of THIS file
 
 private:
@@ -96,7 +100,7 @@ private:
   UA_Server* uaServer = nullptr;
   UA_Variant* uaVariant = nullptr;
   mutex* uaSrvMux = nullptr;
-  //mutex* uaGetMux = nullptr;
+  // mutex* uaGetMux = nullptr;
   mutex* uaDataMux = nullptr;
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
@@ -124,7 +128,6 @@ private:
   map<type_index, int> types; // Types coding is in constructor
 };
 
-
 // ======== Definition of TEMPLATEs =========
 template <typename T>
 T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
@@ -134,7 +137,6 @@ T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
   setVariableValue(s, Value_set, isOK);
   return Value_get;
 }
-
 
 template <typename T>
 int OpcServer_c::addVar(std::string s, T Value, int rmode)
@@ -179,7 +181,5 @@ bool OpcServer_c::getVariableValue(std::string s, T &Value_get)
   uaDataMux->unlock();
   return ret;
 }
-
-
 
 // eof
