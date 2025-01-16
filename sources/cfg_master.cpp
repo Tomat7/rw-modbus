@@ -87,6 +87,12 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
+  try {
+    cfg_init_plcset(cfg.lookup("SCADA"), *PLClist);
+  } catch (const SettingNotFoundException &nfex) {
+    LOGA("Great ERROR! (no 'SCADA' settings?) Exiting.\n");
+    return (EXIT_FAILURE);
+  }
   closelog();
 
   return (EXIT_SUCCESS);

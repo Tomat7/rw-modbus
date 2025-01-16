@@ -30,11 +30,12 @@ Reg_c::~Reg_c() { LOGD("DEstruct! %x %s", this, this->rn); }
 
 Reg_c::Reg_c() { LOGD("Construct! %x", this); }
 
-Reg_c::Reg_c(string _rn) { Reg_c(_rn.c_str()); }
+Reg_c::Reg_c(string _rn, string src_ref) { Reg_c(_rn.c_str(), src_ref); }
 
-Reg_c::Reg_c(const char* _rn)
+Reg_c::Reg_c(const char* _rn, string src_ref)
 {
   rn = get_new_char(_rn);
+  src_reference = src_ref;
   // LOGD("try to open %s", rn);
 
   fd = create_shm_fd(rn);
@@ -42,8 +43,8 @@ Reg_c::Reg_c(const char* _rn)
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGI("created- %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm,
-           this);
+      LOGI("created- %s, REF: %s, FD: %d, SHM: %x, this: %x",
+           rn, src_reference.c_str(), ptr_data_shm, this);
     }
   }
 
@@ -53,11 +54,13 @@ Reg_c::Reg_c(const char* _rn)
       LOGE("Error open %s", rn); */
 }
 
-Reg_c::Reg_c(reg_t* _reg)
+Reg_c::Reg_c(reg_t* _reg) // For Modbus regs only
 {
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
   rn = ptr_reg->fullname.c_str();
+  src_reference = "";
+
   // LOGD("try to create %s", rn);
 
   fd = create_shm_fd(rn);
@@ -70,8 +73,9 @@ Reg_c::Reg_c(reg_t* _reg)
   }
 }
 
-Reg_c::Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
-{
+/*
+  Reg_c::Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
+  {
   fd = _fd;
   ptr_data_shm = _shm;
   ptr_data_plc = _plc;
@@ -79,7 +83,12 @@ Reg_c::Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg)
   rn = ptr_reg->fullname.c_str();
   sync();
   //  LOGI("+ New RegMap created.");
-}
+  }
+*/
+bool Reg_c::is_MB() { return (src_reference == ""); }
+bool Reg_c::is_Scada() { return (src_reference == "-"); }
+bool Reg_c::is_Ref() { return !(is_MB() || is_Scada()); }
+
 
 bool Reg_c::is_shm()
 {
@@ -127,6 +136,26 @@ void Reg_c::sync(uint16_t _val)
 void Reg_c::sync()
 {
   sync(get_plc_val());
+  return;
+}
+
+void Reg_c::sync_regdata(regdata_t* ptr_data)
+{
+  if (ptr_data != nullptr) {
+    value = ptr_data->rvalue;
+
+    if (ptr_data_shm != nullptr) {
+      regdata_t mem;
+      mem.rvalue = value;
+
+      mem.rerrors = ptr_data->rerrors;
+      mem.rstatus = ptr_data->rstatus;
+      mem.rmode = ptr_data->rmode;
+      mem.rtype = ptr_data->rtype;
+
+      memcpy(ptr_data_shm, &mem, sizeof(regdata_t));
+    }
+  }
   return;
 }
 
@@ -179,7 +208,7 @@ void Reg_c::set_local(uint16_t _val)
   }
 }
 
-int Reg_c::get_mode()
+int Reg_c::get_mode() // 1 = "rw"
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rmode;

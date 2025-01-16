@@ -37,8 +37,8 @@ struct reg_t {
   regdata_t data;
   string fullname;  // Master and Slave (reference of): PLC_name.reg_name
   string str_name;  // reg_name
-  string str_mode;
-  string str_type;
+  string str_mode;  // "rw", "r", "w"
+  string str_type;  // "i", "f", "u"
   const char* ch_name = nullptr;
 };
 
@@ -47,27 +47,36 @@ class Reg_c
 public:
   Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
   Reg_c(reg_t* _reg);      // for PLC master
-  Reg_c(const char* _rn);  // for Slave. PLC regs not initialized!
-  Reg_c(string _rn);       // for Slave. PLC regs not initialized!
+  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
+  Reg_c(string _rn, string src_ref);       // for Scada regs.
   Reg_c();
   ~Reg_c();
 
   uint16_t get_plc_val();
   uint16_t get_shm_val();
   uint16_t get_local();
-  const char* rn = nullptr;
 
   void set_plc_val(uint16_t _val);
   void set_shm_val(uint16_t _val);
   void set_local(uint16_t _val);
 
-  void sync(uint16_t _val);
   void sync();
-  int get_mode();
+  void sync(uint16_t _val);
+  void sync_regdata(regdata_t* prt_data);
+
+  int get_mode(); // 1 = "rw"
   int get_type();
   bool is_shm();
+  bool is_MB();
+  bool is_Scada();  // Calculated
+  bool is_Ref();    // Referenced to Modbus
+
+  string src_reference;  // keeps "reference" to MB-reg (Tdef = DEF.Temp3)
+  // "-" mean no reference - Scada calculated reg
+  // "" mean no reference - Modbus reg only
 
   int fd = -1;                        // descriptor of SHARED MEMORY
+  const char* rn = nullptr;           // just for FUN! (copy)
   uint16_t value = 0;                 // just for FUN! (to print with PLC & SHM)
   regdata_t* ptr_data_shm = nullptr;  // ptr to SHARED MEMORY (local) data
   regdata_t* ptr_data_plc = nullptr;  // ptr to SHARED MEMORY (PLC/MB) data
