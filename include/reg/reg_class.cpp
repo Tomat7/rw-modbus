@@ -59,7 +59,7 @@ Reg_c::Reg_c(reg_t* _reg) // For Modbus regs only
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
   rn = ptr_reg->fullname.c_str();
-  src_reference = "";
+  src_reference = ptr_reg->str_source;
 
   // LOGD("try to create %s", rn);
 
