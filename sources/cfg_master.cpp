@@ -71,28 +71,38 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   }
 
   // Get list of PLC for configuration
-  Setting* PLClist;
+  Setting* DEVlist;
+  const char* dev_type = "PLC";
   try {
-    PLClist = &cfg.lookup("plc_list_" + string(cfg_mode));
+    DEVlist = &cfg.lookup("plc_list_" + string(dev_type) /* string(cfg_mode) */);
   } catch (const SettingNotFoundException &nfex) {
-    LOGA("No 'plc_list_%s' configured!", cfg_mode);
+    LOGA("No 'plc_list_%s' configured!", dev_type /* cfg_mode */);
     return (EXIT_FAILURE);
   }
 
   // Fill a list of all PLCs in the inventory.
   try {
-    cfg_init_plcset(cfg.lookup("PLC"), *PLClist);
+    cfg_init_plcset(cfg.lookup(dev_type), *DEVlist);
   } catch (const SettingNotFoundException &nfex) {
-    LOGA("Great ERROR! (no 'PLC' settings?) Exiting.\n");
+    LOGA("Great ERROR! (no '%s' settings?) Exiting.\n", dev_type);
+    return (EXIT_FAILURE);
+  }
+
+  dev_type = "SCADA";
+  try {
+    DEVlist = &cfg.lookup("plc_list_" + string(dev_type));
+  } catch (const SettingNotFoundException &nfex) {
+    LOGA("No 'plc_list_%s' configured!", dev_type);
     return (EXIT_FAILURE);
   }
 
   try {
-    cfg_init_plcset(cfg.lookup("SCADA"), *PLClist);
+    cfg_init_plcset(cfg.lookup(dev_type), *DEVlist);
   } catch (const SettingNotFoundException &nfex) {
-    LOGA("Great ERROR! (no 'SCADA' settings?) Exiting.\n");
+    LOGA("Great ERROR! (no '%s' settings?) Exiting.\n", dev_type);
     return (EXIT_FAILURE);
   }
+
   closelog();
 
   return (EXIT_SUCCESS);
@@ -100,25 +110,32 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
 
 int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
 {
-  bool isCheckName = true;
+  bool isCheckName = false;
   int nb_plc_cfg = cfgPLC.getLength();
   int nb_plc_list = listPLC.getLength();
   int nb_plc_ready = 0;
-  LOGW("Total PLCs in config: %d, in the list: %d.", nb_plc_cfg, nb_plc_list);
-
   set<string> PLClst;
+
+  uint64_t vec_size_new = PLCvec.size() + nb_plc_cfg;
+
+  LOGW("Total PLCs in config: %d, in the list: %d.", nb_plc_cfg, nb_plc_list);
 
   const string &p0 = listPLC[0];
   if ((p0 == "all") || (p0 == "ALL")) {
-    isCheckName = false;
-    PLCvec.reserve(nb_plc_cfg);
+    //PLCvec.reserve(nb_plc_cfg);
+    //vec_size_new = PLCvec.size() + nb_plc_cfg;
     LOGC("List with %d PLCs ignored. Will read '%s' %d PLCs from configfile!",
          nb_plc_list, p0.c_str(), nb_plc_cfg);
   } else {
-    PLCvec.reserve(nb_plc_list);
+    //PLCvec.reserve(nb_plc_list);
+    isCheckName = true;
+    vec_size_new = PLCvec.size() + nb_plc_list;
     for (int i = 0; i < nb_plc_list; ++i)
       PLClst.insert(listPLC[i]);
   }
+
+  if (vec_size_new > PLCvec.capacity())
+    PLCvec.reserve(vec_size_new + 1);
 
   for (int i = 0; i < nb_plc_cfg; ++i) {
     string _devname, _title, _desc, _ip;
@@ -142,6 +159,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
 
     PLCvec.emplace_back(_devname, _ip, _title, _desc, _port, _att, _ms, _us);
     PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
+
     cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
     PLCvec.back().init_regs();  // Necessary to copy str to char* and others
     nb_plc_ready++;
@@ -171,13 +189,35 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
 
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgREG[j].lookupValue("rname", regnow.str_name) &&
-          cfgREG[j].lookupValue("raddr", regnow.raddr) &&
-          cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
-          cfgREG[j].lookupValue("rtype", regnow.str_type))) {
-      LOGE("Error reading config on PLC: %s REG: %d\n",
-           pn->str_dev_name.c_str(), j);
+          cfgREG[j].lookupValue("raddr", regnow.raddr))) {
+      LOGE("Error reading 'rname' on %s: %s REG: %d\n",
+           pn->str_title.c_str(), pn->str_dev_name.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
+    }
+
+    if (cfgREG[j].lookupValue("rsource", regnow.str_source) &&
+        cfgREG[j].lookupValue("rfolder", regnow.str_folder)) { // SCADA reg!
+      LOGI("Reading 'rsource'/'rfolder' on %s: %s/%s REG: %d",
+           regnow.str_name.c_str(), regnow.str_source.c_str(),
+           regnow.str_folder.c_str(), j);
+      if (regnow.str_source == "-") {
+        if (!(cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
+              cfgREG[j].lookupValue("rtype", regnow.str_type))) {
+          LOGE("Error reading details on %s: %s REG: %d\n",
+               regnow.str_name.c_str(), j);
+          exit(EXIT_FAILURE);
+          continue;
+        }
+      }
+    } else {  // Modbus register!!
+      if (!(cfgREG[j].lookupValue("rmode", regnow.str_mode) &&
+            cfgREG[j].lookupValue("rtype", regnow.str_type))) {
+        LOGE("Error reading details on %s, REG: %d\n",
+             regnow.str_name.c_str(), j);
+        exit(EXIT_FAILURE);
+        continue;
+      }
     }
 
     regnow.data.rvalue = 555;  // TODO: remove for production!

@@ -21,10 +21,11 @@
 PLC_c::~PLC_c()
 {
   // lock_now();
+  LOGD("- PLC destructor: try_lock(): %s %s.", ip_addr, dev_name);
   while (!(lock_mux->try_lock()) && !is_slave)
     std::this_thread::yield();
-  LOGD("- PLC destructor: try_lock() done: %s %s.", ip_addr, dev_name);
 
+  LOGD("- PLC destructor: mb_deinit()) done: %s %s.", ip_addr, dev_name);
   mb_deinit();
   //  unlock_now();
   delete lock_mux;
@@ -46,8 +47,22 @@ void PLC_c::init_regs()  // Master only
   for (auto &[a, R] : regs) {
     auto &rd = R.data;
 
-    if (!is_slave)
-      R.fullname = str_dev_name + "." + R.str_name;
+    R.str_title = str_title;
+    R.str_opcname = "/" + R.str_title + "/";
+    if (!is_slave) {
+      if (str_dev_name == MB_NO_DEV_NAME) {
+        if (R.str_folder == MB_NO_FOLDER)
+          R.fullname = R.str_name;
+        else {
+          R.fullname = R.str_folder + "." + R.str_name;
+          R.str_opcname += R.str_folder + "/";
+        }
+      } else {
+        R.fullname = str_dev_name + "." + R.str_name;
+        R.str_opcname += str_dev_name + "/";
+      }
+    }
+    R.str_opcname += R.fullname;
 
     R.ch_name = R.str_name.c_str();
     rd.rmode = (R.str_mode == "rw") ? 1 : 0;
@@ -58,7 +73,7 @@ void PLC_c::init_regs()  // Master only
       rd.rtype = 1;
     else if (R.str_type == "f")
       rd.rtype = 2;
-    else
+    else if (R.str_source == "")
       LOGA("Error REG init: %s\n", R.str_name.c_str());
 
     if (R.raddr < reg_min)
@@ -101,7 +116,11 @@ int PLC_c::mb_ctx()
   rc = 0;
   mb_deinit();
 
-  ctx = modbus_new_tcp(ip_addr, tcp_port);
+  if (tcp_port != 0)
+    ctx = modbus_new_tcp(ip_addr, tcp_port);
+  else
+    return 0;
+
   if (ctx == nullptr) {
     rc = -1;
     LOGE("- %s:%d %s CTX allocate error.", ip_addr, tcp_port, dev_name);

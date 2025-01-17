@@ -89,9 +89,13 @@ int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
     for (uint64_t i = 0; i < nb_tasks; i++)
       tasks[i].task_mux->unlock();
 
-    tasks.emplace_back(_func, _ms, _name, _ptr);
-    nb_tasks = tasks.size();
-    LOGN("New task: %s, ms: %d, total: %d", _name.c_str(), _ms, nb_tasks);
+    if (_ms > 10) {
+      tasks.emplace_back(_func, _ms, _name, _ptr);
+      nb_tasks = tasks.size();
+      LOGN("New task: %s, ms: %d, total: %d", _name.c_str(), _ms, nb_tasks);
+    } else
+      LOGE("Too fast task : %s, ms: %d - IGNORED!", _name.c_str(), _ms);
+
   } else
     LOGA("Can't add task! Now: %d, capacity: %d", nb_tasks, nb_capct);
 

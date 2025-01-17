@@ -86,8 +86,11 @@ void deinit_all()
   Task.stop();
   regs_deinit();
   opc_deinit();
+  LOGD("opc_deinit() - done");
   regs_deinit_shm();
+  LOGD("regs_deinit() - done");
   mb_deinit();
+  LOGD("mb_deinit() - done");
 }
 
 void parse_char(int ch)

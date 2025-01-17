@@ -146,9 +146,14 @@ void mb_deinit()
 {
   //  printf("mb_deinit READY to clear\n");
   res.clear();
+  LOGD("res() - done");
   idx.clear();
+  LOGD("idx() - done");
   prev_ts.clear();
+  LOGD("prev_ts() - done");
+  LOGD("PLCvec.size() - %d", PLCvec.size());
   PLCvec.clear();
+  LOGD("PLCvec.clear() - done");
   // Slave.mb_deinit();
   //  printf("mb_deinit READY for UN-lock\n");
   //  printf("mb_deinit UN-locked\n");

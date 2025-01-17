@@ -18,7 +18,7 @@ vector<PLC_c> PLCvec;
 // PLC_c Slave(MB_SLAVE_PORT);
 OpcServer_c OPCs(OPC_SERVER_PORT);
 Schedule_c Task(TASKS_NB_MAX);
-string PLC_folder = PLC_FOLDER;
+//string PLC_folder = PLC_FOLDER;
 string SCADA_folder = SCADA_FOLDER;
 
 // INotify IN(CFG_DIR);

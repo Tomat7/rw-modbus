@@ -35,10 +35,14 @@ struct regdata_t {
 struct reg_t {
   int raddr = 0;
   regdata_t data;
-  string fullname;  // Master and Slave (reference of): PLC_name.reg_name
-  string str_name;  // reg_name
-  string str_mode;  // "rw", "r", "w"
-  string str_type;  // "i", "f", "u"
+  string fullname = "";     // Master and Slave PLC_name.reg_name
+  string str_opcname = "";  // OPC fullpath: /PLC/PLC_name/PLC_name.reg_name
+  string str_title = "";    // = PLC or SCADA
+  string str_source = "";   // reference to external register
+  string str_folder = "";   // folder (for OPC path - /SCADA/folder/reg_name)
+  string str_name = "-";     // reg_name
+  string str_mode = "*";  // "rw", "r", "w"
+  string str_type = "x";  // "i", "f", "u"
   const char* ch_name = nullptr;
 };
 

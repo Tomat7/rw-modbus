@@ -18,8 +18,16 @@ void regs_create_from_masters()
 
   for (auto &D : PLCvec)
     for (auto &[a, R] : D.regs) {
-      LOGD("(Master) try to create %s", R.fullname.c_str());
+      LOGD("(Master) try to create %s, src: %s",
+           R.fullname.c_str(), R.str_source.c_str());
+      if (R.str_source != "" && R.str_source != "-") {
+        R.str_mode = REGmap[R.str_source].ptr_reg->str_mode;
+        R.str_type = REGmap[R.str_source].ptr_reg->str_type;
+        R.data.rmode = REGmap[R.str_source].ptr_data_plc->rmode;
+        R.data.rtype = REGmap[R.str_source].ptr_data_plc->rtype;
+      }
       REGmap[R.fullname] = {&R};
+      //REGmap[R.fullname].ptr_reg->str_title = D.str_title;
     }
   return;
 }

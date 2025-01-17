@@ -21,20 +21,30 @@
 
 void opc_regs_init()
 {
-  printf("\n===== OPC_regs_init =====\n");
-
-  string n, e;
+  printf("\n===== %s =====\n", __func__);
 
   for (auto& [name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
 
-    string parent = name;
-    size_t z = parent.find(".");
-    parent.erase(z);
+    string n, e;
 
-    n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
-    e = n + PLC_ERRORS;                    // Kub.Temp1.errors
+    /*     string parent = name;
+        string folder = rm.ptr_reg->str_title;
+        size_t z = parent.find(".");
+        parent.erase(z);
+    */
+    //n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
+    /* if (folder != "")
+      n += "/" + folder;    // = /PLC/
+      if (parent != "")
+      n += + "/" + parent;  // = /PLC/Kub
+
+      n += "/" + name;        // = /PLC/Kub/Kub.Temp1
+    */
+
+    n = rm.ptr_reg->str_opcname;
+    e = n + PLC_ERRORS;     // Kub.Temp1.errors
 
     OPCs.addVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
 
@@ -51,20 +61,25 @@ void opc_regs_init()
   }
 }
 
-uint16_t opc_update_uint16(string name, regdata_t* rd)
+//uint16_t opc_update_uint16(string name, regdata_t* rd)
+uint16_t opc_update_uint16(string name, Reg_c* R)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
+  regdata_t* rd = R->ptr_data_plc;
   uint16_t val_ui16 = rd->rvalue;
   int16_t val_i16 = (int16_t)rd->rvalue;
   float val_fl = (int16_t)rd->rvalue * (float)0.01;
   bool isOK = (rd->rerrors == 0);
   int rtype = rd->rtype;
 
-  string parent = name;
-  size_t z = parent.find(".");
-  parent.erase(z);
+  /*   string parent = name;
+    string folder = rm.ptr_reg->str_title;
+    size_t z = parent.find(".");
+    parent.erase(z);
+  */
+  //string n = PLC_folder + parent + "/" + name;
 
-  string n = PLC_folder + parent + "/" + name;
+  string n = name; //(R->ptr_reg)->str_opcname;
   uint16_t val_get = 0;
 
   OPCs.updateVar(n + PLC_ERRORS, rd->rerrors, true);

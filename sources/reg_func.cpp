@@ -35,7 +35,8 @@ int task_regs_refresh_(void* params)
       uint16_t plc_val = rm.get_plc_val();  // Value from PLC
       uint16_t shm_val = rm.get_shm_val();  // Value from SHM
       uint16_t old_val = rm.value;          // Value in memory (in REGmap)
-      uint16_t opc_val = opc_update_uint16(n, rm.ptr_data_plc);
+      // uint16_t opc_val = opc_update_uint16(n, rm.ptr_data_plc);
+      uint16_t opc_val = opc_update_uint16((rm.ptr_reg)->str_opcname, &rm);
 
       // printf("%7d %7d %7d %7d ==", plc_val, old_val, shm_val, opc_val);
 
@@ -64,7 +65,8 @@ int task_regs_refresh_(void* params)
       uint16_t plc_val = rf.get_plc_val();  // Value from PLC
       uint16_t shm_val = rm.get_shm_val();  // Value from SHM
       uint16_t old_val = rm.value;          // Value in memory (in REGmap)
-      uint16_t opc_val = opc_update_uint16(n, rf.ptr_data_plc);
+      //uint16_t opc_val = opc_update_uint16(n, rf.ptr_data_plc);
+      uint16_t opc_val = opc_update_uint16((rm.ptr_reg)->str_opcname, &rf);
 
       bool isNew_Plc = (plc_val != old_val);
       bool isNew_Opc = (opc_val != shm_val);
