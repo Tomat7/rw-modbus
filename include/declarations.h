@@ -66,9 +66,10 @@ bool reg_exist(string);
 // void reg_print(string, const reg_t*);
 
 void opc_regs_init();
-void opc_run();
+void opc_run_thread();
 void opc_init();
 void opc_deinit();
+void opc_start();
 //uint16_t opc_update_uint16(string name, regdata_t* rd);
 uint16_t opc_update_uint16(string name, Reg_c* R);
 // uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);

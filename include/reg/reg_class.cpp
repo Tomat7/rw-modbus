@@ -68,7 +68,8 @@ Reg_c::Reg_c(reg_t* _reg) // For Modbus regs only
     ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
     if (ptr_data_shm != nullptr) {
       sync();
-      LOGI("created %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
+      LOGI("created %s (%s), FD: %d, SHM: %x, this: %x", rn,
+           ptr_reg->str_opcname.c_str(), ptr_data_shm, this);
     }
   }
 }
@@ -87,7 +88,7 @@ Reg_c::Reg_c(reg_t* _reg) // For Modbus regs only
 */
 bool Reg_c::is_MB() { return (src_reference == ""); }
 bool Reg_c::is_Scada() { return (src_reference == "-"); }
-bool Reg_c::is_Ref() { return !(is_MB() || is_Scada()); }
+bool Reg_c::has_Ref() { return !(is_MB() || is_Scada()); }
 
 
 bool Reg_c::is_shm()

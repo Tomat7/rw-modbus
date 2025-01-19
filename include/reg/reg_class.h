@@ -73,7 +73,7 @@ public:
   bool is_shm();
   bool is_MB();
   bool is_Scada();  // Calculated
-  bool is_Ref();    // Referenced to Modbus
+  bool has_Ref();    // Referenced to Modbus
 
   string src_reference;  // keeps "reference" to MB-reg (Tdef = DEF.Temp3)
   // "-" mean no reference - Scada calculated reg

@@ -16,19 +16,30 @@ void regs_create_from_masters()
 {
   printf("\n===== %s =====\n", __func__);
 
-  for (auto &D : PLCvec)
+  for (auto &D : PLCvec) {
     for (auto &[a, R] : D.regs) {
-      LOGD("(Master) try to create %s, src: %s",
-           R.fullname.c_str(), R.str_source.c_str());
-      if (R.str_source != "" && R.str_source != "-") {
-        R.str_mode = REGmap[R.str_source].ptr_reg->str_mode;
-        R.str_type = REGmap[R.str_source].ptr_reg->str_type;
-        R.data.rmode = REGmap[R.str_source].ptr_data_plc->rmode;
-        R.data.rtype = REGmap[R.str_source].ptr_data_plc->rtype;
+      if (R.str_source == "" || R.str_source == "-") {
+        LOGD("(Master) try to create %s, src: %s",
+             R.fullname.c_str(), R.str_source.c_str());
+        REGmap[R.fullname] = {&R};
       }
-      REGmap[R.fullname] = {&R};
-      //REGmap[R.fullname].ptr_reg->str_title = D.str_title;
     }
+  }
+
+  for (auto &D : PLCvec) {
+    for (auto &[a, R] : D.regs) {
+      if (R.str_source != "" && R.str_source != "-") {
+        auto &Rsrc = REGmap[R.str_source];
+        LOGD("(Referenced) try to create %s, src: %s",
+             R.fullname.c_str(), R.str_source.c_str());
+        R.str_mode = Rsrc.ptr_reg->str_mode;
+        R.str_type = Rsrc.ptr_reg->str_type;
+        REGmap[R.fullname] = {&R};
+        REGmap[R.fullname].ptr_data_plc = Rsrc.ptr_data_plc;
+      }
+    }
+  }
+
   return;
 }
 
@@ -48,6 +59,12 @@ void regs_deinit()
   REGmap.clear();
   return;
 }
+
+//REGmap[R.fullname].ptr_reg->str_title = D.str_title;
+/*         R.str_mode = REGmap[R.str_source].ptr_reg->str_mode;
+        R.str_type = REGmap[R.str_source].ptr_reg->str_type;
+        R.data.rmode = REGmap[R.str_source].ptr_data_plc->rmode;
+        R.data.rtype = REGmap[R.str_source].ptr_data_plc->rtype; */
 
 /* void regs_create_from_slave()
   {

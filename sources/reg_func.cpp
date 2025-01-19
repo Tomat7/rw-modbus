@@ -60,7 +60,7 @@ int task_regs_refresh_(void* params)
         }
       }
       // try to fill referenced/virtual register
-    } else if (rm.is_Ref()) {
+    } else if (rm.has_Ref()) {
       auto &rf = REGmap[rm.src_reference];
       uint16_t plc_val = rf.get_plc_val();  // Value from PLC
       uint16_t shm_val = rm.get_shm_val();  // Value from SHM

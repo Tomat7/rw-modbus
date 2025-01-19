@@ -23,7 +23,7 @@ void opc_regs_init()
 {
   printf("\n===== %s =====\n", __func__);
 
-  for (auto& [name, rm] : REGmap) {
+  for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
 
@@ -34,7 +34,7 @@ void opc_regs_init()
         size_t z = parent.find(".");
         parent.erase(z);
     */
-    //n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
+    // n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
     /* if (folder != "")
       n += "/" + folder;    // = /PLC/
       if (parent != "")
@@ -44,9 +44,9 @@ void opc_regs_init()
     */
 
     n = rm.ptr_reg->str_opcname;
-    e = n + PLC_ERRORS;     // Kub.Temp1.errors
+    e = OPC_ERRORS_FOLDER + n + OPC_ERRORS_SUFFIX; // Kub.Temp1.errors
 
-    OPCs.addVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
+    OPCs.addVar(e, (uint16_t)0, 0); // Reg to keep NB of errors
 
     if (rm.ptr_reg->str_type == "f") {
       float fl = (int16_t)(rm.ptr_data_plc->rvalue) * (float)0.01;
@@ -61,7 +61,7 @@ void opc_regs_init()
   }
 }
 
-//uint16_t opc_update_uint16(string name, regdata_t* rd)
+// uint16_t opc_update_uint16(string name, regdata_t* rd)
 uint16_t opc_update_uint16(string name, Reg_c* R)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
@@ -77,12 +77,12 @@ uint16_t opc_update_uint16(string name, Reg_c* R)
     size_t z = parent.find(".");
     parent.erase(z);
   */
-  //string n = PLC_folder + parent + "/" + name;
+  // string n = PLC_folder + parent + "/" + name;
 
   string n = name; //(R->ptr_reg)->str_opcname;
   uint16_t val_get = 0;
 
-  OPCs.updateVar(n + PLC_ERRORS, rd->rerrors, true);
+  OPCs.updateVar(OPC_ERRORS_FOLDER + n + OPC_ERRORS_SUFFIX, rd->rerrors, true);
 
   if (rtype == 2)
     val_get = CAST(uint16_t)(100 * OPCs.updateVar(n, val_fl, isOK));
@@ -98,9 +98,16 @@ void opc_deinit() { OPCs.stop(); }
 
 void opc_init() { OPCs.init(4840); }
 
-void opc_run()
+void opc_start()
 {
-  prctl(PR_SET_NAME, "OPC_server");
+  std::thread opc_thread(opc_run_thread);
+  opc_thread.detach();
+  wait_console(timeout_sec);
+}
+
+void opc_run_thread()
+{
+  prctl(PR_SET_NAME, OPC_THREAD_NAME);
   OPCs.run();
 }
 

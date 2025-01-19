@@ -7,9 +7,12 @@
 #define CFG_DIR "/var/tmp/conf"
 #define CFG_FILE "modbus.cfg"
 
-#define PLC_FOLDER "/PLC/"
-#define PLC_ERRORS ".errors"
-#define SCADA_FOLDER "/SCADA/"
+#define OPC_SERVER_PORT 4840
+//#define OPC_PLC_FOLDER "/PLC/"
+//#define OPC_SCADA_FOLDER "/SCADA/"
+#define OPC_ERRORS_FOLDER "/ERRORS"
+#define OPC_ERRORS_SUFFIX ".error"
+#define OPC_THREAD_NAME "OPC_server"
 
 #ifdef DEBUG_FLAG
 #define TIMEOUT_SEC 1
@@ -20,7 +23,6 @@
 #define MB_SLAVE_CONN_MAX 5
 #define MB_SLAVE_PORT 1502
 #define MB_SLAVE_REGS_NB 50
-#define OPC_SERVER_PORT 4840
 #define TASKS_NB_MAX 500
 
 #define USE_SYSLOG

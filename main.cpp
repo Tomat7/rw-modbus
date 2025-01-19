@@ -19,7 +19,7 @@ vector<PLC_c> PLCvec;
 OpcServer_c OPCs(OPC_SERVER_PORT);
 Schedule_c Task(TASKS_NB_MAX);
 //string PLC_folder = PLC_FOLDER;
-string SCADA_folder = SCADA_FOLDER;
+//string SCADA_folder = OPC_SCADA_FOLDER;
 
 // INotify IN(CFG_DIR);
 
@@ -63,10 +63,6 @@ int main(int argc, char** argv)
   }
 
   init_all();
-
-  std::thread opc_thread(opc_run);
-  opc_thread.detach();
-  wait_console(timeout_sec);
 
   // logger_set_queue(true);
 

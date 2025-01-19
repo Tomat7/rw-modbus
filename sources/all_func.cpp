@@ -60,6 +60,8 @@ void init_all()
   wait_console(timeout_sec);
 
   tasks_init();
+
+  opc_start();
   //  timeout_sec = TIMEOUT_SEC;
 
   return;
