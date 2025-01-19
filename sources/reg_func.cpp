@@ -31,7 +31,7 @@ int task_regs_refresh_(void* params)
   int x = 0;
 
   for (auto& [n, rm] : REGmap) {
-    if (rm.is_MB()) {
+    if (rm.is_MB() || rm.is_Scada()) {
       uint16_t plc_val = rm.get_plc_val();  // Value from PLC
       uint16_t shm_val = rm.get_shm_val();  // Value from SHM
       uint16_t old_val = rm.value;          // Value in memory (in REGmap)
