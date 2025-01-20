@@ -50,7 +50,7 @@ void PLC_c::init_regs()  // Master only
     R.str_title = str_title;
     R.str_opcname = "/" + R.str_title + "/";
     if (!is_slave) {
-      if (str_dev_name == MB_NO_DEV_NAME) {
+      if (str_dev_name == MB_NO_DEV_NAME) { // Scada!
         if (R.str_folder == MB_NO_FOLDER)
           R.fullname = R.str_name;
         else {
@@ -58,6 +58,8 @@ void PLC_c::init_regs()  // Master only
           R.str_opcname += R.str_folder + "/";
         }
       } else {
+        if (!(R.str_folder == MB_NO_FOLDER) && !(R.str_folder == ""))
+          R.str_opcname += R.str_folder + "/";
         R.fullname = str_dev_name + "." + R.str_name;
         R.str_opcname += str_dev_name + "/";
       }

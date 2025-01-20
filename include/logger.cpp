@@ -17,7 +17,8 @@
 #include <mutex>
 #include <queue>
 
-int log_level = LOG_LEVEL_DEFAULT;  // 0 - no messages at all, 9 - all on screen
+int log_level = 0;  // 0 - no messages at all - will get from Config
+// 9 - all messages on screen
 
 static mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
