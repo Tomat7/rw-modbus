@@ -46,7 +46,7 @@ class PLC_c
 {
 public:
   // for Master
-  PLC_c(string _ip = "none", string _name = "Master");
+  //PLC_c(string _ip = "none", string _name = "Master");
   PLC_c(string _devname, string _ip, string _title, string _desc, int _port,
         int _atm, int _ms, int _us);
 
@@ -78,6 +78,7 @@ public:
   uint16_t get_reg(int raddr);
 
   // Common properties
+  bool Enabled = false;
   string str_title;
   string str_desc;
   string str_dev_name;

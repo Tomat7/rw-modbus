@@ -17,15 +17,16 @@
 
 #include "include/logger.h"
 #include "plc_class.h"
-
-PLC_c::PLC_c(string _ip, string _name)  // Master only
-{
+/*
+  PLC_c::PLC_c(string _ip, string _name)  // Master only
+  {
   // lock_init();
   lock_mux = new mutex;
   ip_addr = _ip.c_str();
   dev_name = _name.c_str();
   LOGI("+ New PLC created: %s %s", ip_addr, dev_name);
-}
+  }
+*/
 
 PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
              int _port, int _att, int _ms, int _us)
@@ -46,9 +47,14 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
   mb.polling_ms = _ms;
   mb.timeout_us = _us;
 
+  if (tcp_port == 0 || attempts == 0 || mb.polling_ms == 0)
+    Enabled = false;
+  else
+    Enabled = true;
+
   LOGI("+ New PLC created: %s:%i %s", ip_addr, tcp_port, dev_name);
-  if (tcp_port == 0)
-    LOGA("+ PLC will be ignored: %s:%i %s", ip_addr, tcp_port, dev_name);
+  if (!Enabled)
+    LOGA("- PLC will be ignored: %s:%i %s", ip_addr, tcp_port, dev_name);
 }
 
 // Destructor in plc_common.cpp

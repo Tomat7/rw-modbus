@@ -129,12 +129,13 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
   int nb_plc_ready = 0;
   set<string> PLClst;
 
-  uint64_t vec_size_new = PLCvec.size() + nb_plc_cfg;
+  uint64_t vec_size_new = 0; // PLCvec.size() + nb_plc_cfg;
 
   LOGW("Total PLCs in config: %d, in the list: %d.", nb_plc_cfg, nb_plc_list);
 
   const string &p0 = listPLC[0];
   if ((p0 == "all") || (p0 == "ALL")) {
+    vec_size_new = PLCvec.size() + nb_plc_cfg;
     LOGC("List with %d PLCs ignored. Will read '%s' %d PLCs from configfile!",
          nb_plc_list, p0.c_str(), nb_plc_cfg);
   } else {
