@@ -23,6 +23,14 @@
 
 using namespace std;
 
+union float2uint_u {
+  float fl;
+  uint16_t ui[2];
+};
+
+using fl2ui_u = float2uint_u;
+using fl2_u = float2uint_u;
+
 struct regdata_t {
   uint16_t rvalue = 0;
   uint16_t rerrors = 0;  // number of errors on MB func (init/connect/read)

@@ -84,15 +84,17 @@ public:
   var_union readRawValue(string s);  // returns value_union
   int refreshValues();  // getVar for ALL variables, returns - qty of vars
 
-  template <typename T>
-  int addVar(string s, T Value, int rmode);  // for init
-  template <typename T>
-  T updateVar(string s, T Value_set,
-              bool isOK);  // get T value and set Value_set
-  template <typename T>
-  T getValue(string s);  // ask OPC server for current value
-  template <typename T>
-  T readValue(string s);  // read value saved on previous getValue
+  // for init
+  template <typename T> int addVar(string s, T Value, int rmode);
+
+  // get T value and set Value_set
+  template <typename T> T updateVar(string s, T Value_set, bool isOK);
+
+  // ask OPC server for current value
+  template <typename T> T getValue(string s);
+
+  // read value saved on previous getValue
+  template <typename T> T readValue(string s);
   //  Definition at the bottom of THIS file
 
 private:

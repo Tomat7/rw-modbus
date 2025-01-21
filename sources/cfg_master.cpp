@@ -29,15 +29,17 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   // Read the file. If there is an error, report it and exit.
   printf("\n======= cfg_read_Master =======\n");
 
-  int _log = log_level;
-  log_level = LOG_LEVEL_DEFAULT;
+  int _log = log_level; // log_level = 0 at start (no logging)
+  log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
   LOGC("Mode: '%s'.", cfg_mode);
 
+  // Set Include Directory for CFG files and full pathname
   cfg.setIncludeDir(cfg_dir);
   string cfile = (string)cfg_dir + "/" + (string)cfg_file;
 
+  // Read CFG file by full pathname
   try {
     cfg.readFile(cfile.c_str());
     LOGN("I/O reading file OK: %s", cfile.c_str());
@@ -50,7 +52,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
-  // Get the top name.
+  // Get the top name. (just for fan)
   try {
     string name = cfg.lookup("maintitle");
     LOGN("Config title: %s", name.c_str());
@@ -59,9 +61,8 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
-// Read/Set LogLevel.
+  // Read/Set LogLevel from CFG file.
   log_level = _log;
-
   if (log_level == 0) {
     try {
       log_level = cfg.lookup("loglevel");
@@ -91,6 +92,8 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
+
+  // The same for Scada (it is like a Modbus device)
   dev_type = "SCADA";
   try {
     DEVlist = &cfg.lookup("plc_list_" + string(dev_type));

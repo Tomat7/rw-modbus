@@ -81,8 +81,13 @@ public:
   // Set/Get local values. NO real update to PLC.
   int set_reg(int raddr, uint16_t rval);
   int set_reg(string rname, uint16_t rval);
+  int set_reg(int raddr, float rval);
+  int set_reg(string rname, float rval);
+
   uint16_t get_reg(string rname);
   uint16_t get_reg(int raddr);
+  //float get_reg(string rname);
+  //float get_reg(int raddr);
 
   // Common properties
   bool Enabled = false;
@@ -116,6 +121,8 @@ private:
   int read_allregs();
   int write_reg(reg_t &);
   int set_timeout();
+  void init_type(reg_t &);
+  void init_str(reg_t &);
 
   // For Slave only
   modbus_mapping_t* mbm = nullptr;
