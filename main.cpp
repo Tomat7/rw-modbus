@@ -6,6 +6,8 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include <cmath>
+#include <locale> // tolower
 
 #include "./config.h"
 #include "./libs.h"
@@ -26,6 +28,13 @@ Schedule_c Task(TASKS_NB_MAX);
 const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
+
+string to_lower(string str)
+{
+  for (auto &c : str)
+    c = static_cast<char>(tolower(c));
+  return str;
+}
 
 static void close_sigint(int dummy)
 {
@@ -50,16 +59,16 @@ int main(int argc, char** argv)
     if (Mode.count(string(argv[1])))
       mode = argv[1];
     else
-      LOGC("Argument '%s' ignored.", argv[1]);
+      LOGFORCE("Argument '%s' ignored.", argv[1]);
   }
 
   if (argc > 2) {
     char ch = *argv[2];
     if ((strlen(argv[2]) == 1) && (isdigit((char)ch))) {
       log_level = int((char)ch - '0');
-      LOGC("LOG_LEVEL set to: %d", log_level);
+      LOGFORCE("LOG_LEVEL set to: %d", log_level);
     } else
-      LOGC("Argument '%s' ignored.", argv[2]);
+      LOGFORCE("Argument '%s' ignored.", argv[2]);
   }
 
   init_all();
@@ -101,6 +110,9 @@ int main(int argc, char** argv)
     B = getBlynk(OPCs.isGood(s));
     printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
     // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
+    int16_t t16 = (int16_t)round(myfl * 100);
+    myfl = t16 / 100;
+
 
     printf("\n");
 

@@ -29,6 +29,8 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   // Read the file. If there is an error, report it and exit.
   printf("\n======= cfg_read_Master =======\n");
 
+  int _log = log_level;
+  log_level = LOG_LEVEL_DEFAULT;
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
   LOGC("Mode: '%s'.", cfg_mode);
@@ -56,22 +58,10 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     LOGA("No '%s' setting in configuration file.\n", "nametitle");
     return (EXIT_FAILURE);
   }
-  /*
-    // Set LogLevel.
-    try {
-      int _log = cfg.lookup("loglevel");
-      if (log_level != _log) {
-        log_level = _log;
-        LOGC("Set LOG_LEVEL to: %d.", log_level);
-      } else
-        LOGC("LOG_LEVEL is: %d.", log_level);
-    } catch (const SettingNotFoundException &nfex) {
-      log_level = LOG_LEVEL_DEFAULT;
-      LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
-    }
-  */
 
-  // Set LogLevel.
+// Read/Set LogLevel.
+  log_level = _log;
+
   if (log_level == 0) {
     try {
       log_level = cfg.lookup("loglevel");

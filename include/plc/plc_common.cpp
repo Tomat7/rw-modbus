@@ -58,10 +58,10 @@ void PLC_c::init_regs()  // Master only
           R.str_opcname += R.str_folder + "/";
         }
       } else {
-        if (!(R.str_folder == MB_NO_FOLDER) && !(R.str_folder == ""))
-          R.str_opcname += R.str_folder + "/";
         R.fullname = str_dev_name + "." + R.str_name;
         R.str_opcname += str_dev_name + "/";
+        if (!(R.str_folder == MB_NO_FOLDER || R.str_folder == ""))
+          R.str_opcname += R.str_folder + "/";
       }
     }
     R.str_opcname += R.fullname;

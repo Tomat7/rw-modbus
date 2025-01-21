@@ -33,6 +33,7 @@
 #define FILE_LINE __FILE__ ":" STR(__LINE__)
 #define _FL_ FILE_LINE
 
+#define LOGFORCE(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)
 #define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
 #define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
 #define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)

@@ -42,6 +42,13 @@ struct mbdata_t {
   uint16_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
 };
 
+struct activity_t {
+  bool modbus = false;            // enable Modbus requests
+  bool opc = false;               // enable OPC mapping
+  bool display = false;           // enable printing values on display
+  bool summary = false;           // enable summary printing
+};
+
 class PLC_c
 {
 public:
