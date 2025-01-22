@@ -7,7 +7,6 @@
 #include <variant>
 #include <vector>
 #include <cmath>
-#include <locale> // tolower
 
 #include "./config.h"
 #include "./libs.h"
@@ -29,12 +28,6 @@ const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
 
-string to_lower(string str)
-{
-  for (auto &c : str)
-    c = static_cast<char>(tolower(c));
-  return str;
-}
 
 static void close_sigint(int dummy)
 {

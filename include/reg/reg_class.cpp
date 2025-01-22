@@ -117,7 +117,7 @@ bool Reg_c::is_shm()
 
 void Reg_c::sync(uint16_t _val)
 {
-  value = _val;
+  value.ui16 = _val;
   if (ptr_data_shm != nullptr) {
     regdata_t mem;
     mem.rvalue = _val;
@@ -143,11 +143,14 @@ void Reg_c::sync()
 void Reg_c::sync_regdata(regdata_t* ptr_data)
 {
   if (ptr_data != nullptr) {
-    value = ptr_data->rvalue;
+    value.ui16 = ptr_data->rvalue;
+
+    value_u vu;
+    value = vu;
 
     if (ptr_data_shm != nullptr) {
       regdata_t mem;
-      mem.rvalue = value;
+      mem.rvalue = value.ui16;
 
       mem.rerrors = ptr_data->rerrors;
       mem.rstatus = ptr_data->rstatus;

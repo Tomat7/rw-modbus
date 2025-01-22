@@ -214,6 +214,9 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
           exit(EXIT_FAILURE);
           continue;
         }
+      } else {
+        cfgREG[j].lookupValue("rmode", r.str_mode);
+        cfgREG[j].lookupValue("rtype", r.str_type);
       }
     } else {
       // Check records for Modbus register.
@@ -226,6 +229,9 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
 
       if (!cfgREG[j].lookupValue("rfolder", r.str_folder))
         r.str_folder = ".";
+
+      if (r.str_type == "*")
+        r.str_mode = pn->regs[r.raddr - 1].str_mode;
     }
 
     r.data.rvalue = 555; // TODO: remove for production!

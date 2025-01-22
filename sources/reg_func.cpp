@@ -34,7 +34,7 @@ int task_regs_refresh_(void* params)
     if (rm.is_MB() || rm.is_Scada()) {
       uint16_t plc_val = rm.get_plc_val();  // Value from PLC
       uint16_t shm_val = rm.get_shm_val();  // Value from SHM
-      uint16_t old_val = rm.value;          // Value in memory (in REGmap)
+      uint16_t old_val = rm.value.ui16;          // Value in memory (in REGmap)
       // uint16_t opc_val = opc_update_uint16(n, rm.ptr_data_plc);
       uint16_t opc_val = opc_update_uint16((rm.ptr_reg)->str_opcname, &rm);
 
@@ -53,7 +53,7 @@ int task_regs_refresh_(void* params)
       if (rm.get_mode() && isNew_Opc) {
         x++;
         rm.set_plc_val(opc_val);
-        rm.value = opc_val;
+        rm.value.ui16 = opc_val;
         if (!STRmap.count(n) || !STRmap[n].upd_opc) {
           STRmap[n].upd_opc = true;
           STRmap[n].opc_value = opc_val;
@@ -64,7 +64,7 @@ int task_regs_refresh_(void* params)
       auto &rf = REGmap[rm.src_reference];
       uint16_t plc_val = rf.get_plc_val();  // Value from PLC
       uint16_t shm_val = rm.get_shm_val();  // Value from SHM
-      uint16_t old_val = rm.value;          // Value in memory (in REGmap)
+      uint16_t old_val = rm.value.ui16;          // Value in memory (in REGmap)
       //uint16_t opc_val = opc_update_uint16(n, rf.ptr_data_plc);
       uint16_t opc_val = opc_update_uint16((rm.ptr_reg)->str_opcname, &rf);
 
@@ -81,7 +81,7 @@ int task_regs_refresh_(void* params)
       if (rf.get_mode() && isNew_Opc) {
         x++;
         rf.set_plc_val(opc_val);
-        rf.value = opc_val;
+        rf.value.ui16 = opc_val;
         if (!STRmap.count(n) || !STRmap[n].upd_opc) {
           STRmap[n].upd_opc = true;
           STRmap[n].opc_value = opc_val;
@@ -140,11 +140,11 @@ void reg_print(string rn, const regdata_t* rd)
   const char* C = getColor(rd->rerrors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rd->rerrors == 0);
 
-  if (rd->rtype == 0)
+  if (rd->rtype == TYPE_U16)
     printf("%s%-12s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
-  else if (rd->rtype == 1)
+  else if (rd->rtype == TYPE_I16)
     printf("%s%-12s %s%7d", C, rn.c_str(), B, (int16_t)rd->rvalue);
-  else if (rd->rtype == 2)
+  else if (rd->rtype == TYPE_F100)
     printf("%s%-12s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
 
   printf(C_NORM);

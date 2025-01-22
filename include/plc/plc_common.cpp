@@ -16,6 +16,7 @@
 #include "include/logger.h"
 #include "plc_class.h"
 
+
 // mutex PLC_c::logger_mux;
 
 int PLC_c::get_rc_read() { return rc_read; }
@@ -153,7 +154,6 @@ uint16_t PLC_c::get_reg(string rname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;
-
   for (auto &[a, r] : regs) {
     if (r.str_name == rname) {
       rval = r.data.rvalue;
@@ -161,8 +161,33 @@ uint16_t PLC_c::get_reg(string rname)  // Set reg's local value != read PLC.
       break;
     }
   }
-
   return rval;
+}
+
+int PLC_c::is_float(int raddr)  // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
+{
+  int x = 0;
+  if (regs.count(raddr)) {
+    auto &rt = regs[raddr].data.rtype;
+    if (rt > 20) {
+      x = 1;
+      if (rt > 100)
+        x = 2;
+    }
+  }
+  return x;
+}
+
+int PLC_c::is_float(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
+{
+  int x = 0;
+  for (auto &[a, r] : regs) {
+    if (r.str_name == rname) {
+      x = is_float(a);
+      break;
+    }
+  }
+  return x;
 }
 
 uint64_t PLC_c::millis()
@@ -171,6 +196,13 @@ uint64_t PLC_c::millis()
   uint64_t t;
   t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
   return t;
+}
+
+string PLC_c::to_lower(string str)
+{
+  for (auto &c : str)
+    c = static_cast<char>(tolower(c));
+  return str;
 }
 
 // eof

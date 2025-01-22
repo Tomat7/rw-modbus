@@ -89,6 +89,9 @@ public:
   //float get_reg(string rname);
   //float get_reg(int raddr);
 
+  int is_float(string rname); // 0 - 16-bit reg, 1 - 1st reg of 32-bits reg
+  int is_float(int raddr);    // 2 - 2nd reg of 32-bits register
+
   // Common properties
   bool Enabled = false;
   string str_title;
@@ -134,6 +137,7 @@ private:
   int master_socket;
   int fdmax;
 
+  string to_lower(string str);
   int renew_mapping();  // for Slave only
   int renew_listen();   // for Slave only
   int check_slave();    // for Slave only

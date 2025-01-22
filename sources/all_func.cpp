@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <locale> // tolower
 
 #include "config.h"
 #include "libs.h"
@@ -180,5 +181,13 @@ int write_rm(string rn, uint16_t val)
 }
 
 bool isdebug() { return (log_level > 7); }
+
+string to_lower(string str)
+{
+  for (auto &c : str)
+    c = static_cast<char>(tolower(c));
+  return str;
+}
+
 
 // eof

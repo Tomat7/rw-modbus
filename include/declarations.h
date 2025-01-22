@@ -35,6 +35,7 @@ void init_all();
 void deinit_all();
 void reinit();
 void parse_char(int ch);
+string to_lower(string str);
 
 const char* getColor(bool isErrors);
 const char* getBlynk(bool isErrors);

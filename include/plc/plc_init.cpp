@@ -17,6 +17,18 @@
 #include "plc_class.h"
 
 // mutex PLC_c::logger_mux;
+map<string, int> var_type {
+  {"u", TYPE_U16},       {"i", TYPE_I16},       {"f", TYPE_F100},
+  {"*", 254},            {"-", 255},      /* Referenced registers */
+  {"u16", TYPE_U16},     {"i16", TYPE_I16},     {"f10", TYPE_F10},
+  {"uint16", TYPE_U16},  {"int16", TYPE_I16},   {"f100", TYPE_F100},
+  {"fabcd", 21},  {"fcdab", 22},  {"fbadc", 23},  {"fdcba", 24},
+  {"f_abcd", 21}, {"f_cdab", 22}, {"f_badc", 23}, {"f_dcba", 24},
+  {"float_abcd", 21},  {"float_abcd_1", 21}, {"float_abcd_2", 121},
+  {"float_cdab", 22},  {"float_cdab_1", 22}, {"float_cdab_2", 122},
+  {"float_badc", 23},  {"float_badc_1", 23}, {"float_badc_2", 123},
+  {"float_dcba", 24},  {"float_dcba_1", 24}, {"float_dcba_2", 124}
+};
 
 PLC_c::~PLC_c()
 {
@@ -42,27 +54,34 @@ void PLC_c::init_regs()  // Master only
        str_title.c_str(), str_desc.c_str());
 
   for (auto &[a, R] : regs) {
-    init_str(R);
     init_type(R);
+    init_str(R);
 
     R.data.rmode = (R.str_mode == "rw") ? 1 : 0;
 
     if (R.raddr < reg_min)
       reg_min = R.raddr;
-
     if (R.raddr > reg_max)
       reg_max = R.raddr;
 
     R.data.rvalue = 777;  // TODO: remove for production
+  }
+
+  for (auto &[a, R] : regs) {
+    if (is_float(a) == 1) {
+      R.data.rv_next = &regs[R.raddr + 1].data.rvalue;
+      regs[R.raddr + 1].data.rmode = R.data.rmode;
+      regs[R.raddr + 1].data.rtype = R.data.rtype + 100;
+    }
     LOGI("+ REG init: %-9s %2d %2s [%s]", R.ch_name, R.raddr,
          R.str_mode.c_str(), R.fullname.c_str());
   }
+
 }
 
 
 void PLC_c::init_str(reg_t &R)
 {
-
   R.str_title = str_title;
   R.str_opcname = "/" + R.str_title + "/";
 
@@ -91,15 +110,22 @@ void PLC_c::init_str(reg_t &R)
 
 void PLC_c::init_type(reg_t &R)
 {
-  auto &rd = R.data;
-  if (R.str_type == "u")
-    rd.rtype = 0;
-  else if (R.str_type == "i")
-    rd.rtype = 1;
-  else if (R.str_type == "f")
-    rd.rtype = 2;
-  else if (R.str_source == "")
-    LOGA("Error REG init: %s\n", R.str_name.c_str());
+  string st_ = to_lower(R.str_type);
+  if (var_type.count(st_))
+    R.data.rtype = var_type[st_];
+  else
+    LOGA("Error REG: %s, type: %s\n", R.str_name.c_str(), R.str_type.c_str());
+  /*
+    auto &rd = R.data;
+    if (R.str_type == "u")
+      rd.rtype = 0;
+    else if (R.str_type == "i")
+      rd.rtype = 1;
+    else if (R.str_type == "f")
+      rd.rtype = 2;
+    else if (R.str_source == "")
+      LOGA("Error REG type: %s\n", R.str_name.c_str());
+  */
   return;
 }
 

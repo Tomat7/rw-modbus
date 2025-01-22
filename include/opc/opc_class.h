@@ -25,6 +25,8 @@ union var_union {
   int64_t dt;
   float fl;
   double dbl;
+  uint16_t fl2u[2];
+  uint16_t dbl2u[4];
 };
 
 struct badvalue_t {
