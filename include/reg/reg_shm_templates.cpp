@@ -1,5 +1,5 @@
 
-#include "reg_class.h"
+#include "reg_shm_class.h"
 
 #include <fcntl.h>
 #include <stdarg.h>
@@ -24,7 +24,7 @@
 #define DEBUG(a) if (isDebug) { a }
 
 template <>
-uint16_t Reg_c::set_value(uint16_t _val)
+uint16_t RegShm_c::set_value(uint16_t _val)
 {
   uint16_t _ui16 = value.ui16;
   value.ui16 = _val;
@@ -38,7 +38,7 @@ uint16_t Reg_c::set_value(uint16_t _val)
 }
 
 template <>
-int16_t Reg_c::set_value(int16_t _val)
+int16_t RegShm_c::set_value(int16_t _val)
 {
   int16_t _i16 = value.i16;
   value.i16 = _val;
@@ -51,7 +51,7 @@ int16_t Reg_c::set_value(int16_t _val)
 }
 
 template <>
-float Reg_c::set_value(float _val)
+float RegShm_c::set_value(float _val)
 {
   float _fl = value.fl;
 
@@ -79,7 +79,7 @@ float Reg_c::set_value(float _val)
 
 
 template <typename T>
-T Reg_c::set_value(T _val)
+T RegShm_c::set_value(T _val)
 {
   return T();
 }
@@ -87,7 +87,7 @@ T Reg_c::set_value(T _val)
 // =============================================
 
 template <>
-uint16_t Reg_c::get_value()
+uint16_t RegShm_c::get_value()
 {
   if (ptr_data_plc != nullptr) {
     value.ui16 = ptr_data_plc->rvalue;
@@ -97,7 +97,7 @@ uint16_t Reg_c::get_value()
 }
 
 template <>
-int16_t Reg_c::get_value()
+int16_t RegShm_c::get_value()
 {
   if (ptr_data_plc != nullptr) {
     value.i16 = (int16_t)(ptr_data_plc->rvalue);
@@ -108,7 +108,7 @@ int16_t Reg_c::get_value()
 
 
 template <>
-float Reg_c::get_value()
+float RegShm_c::get_value()
 {
   if (ptr_data_plc != nullptr) {
     if (ptr_data_plc->rtype == TYPE_F100)
@@ -198,19 +198,19 @@ float Reg_c::get_value()
 // ========================================
 
 template <>
-uint16_t Reg_c::read_value()
+uint16_t RegShm_c::read_value()
 {
   return value.ui16; // else - the "BAD" value will return
 }
 
 template <>
-int16_t Reg_c::read_value()
+int16_t RegShm_c::read_value()
 {
   return value.i16;
 }
 
 template <>
-float Reg_c::read_value()
+float RegShm_c::read_value()
 {
   return value.fl;
 }

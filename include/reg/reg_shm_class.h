@@ -34,15 +34,15 @@
 using namespace std;
 
 
-class Reg_c
+class RegShm_c
 {
 public:
-  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
-  Reg_c(reg_t* _reg);      // for PLC master
-  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
-  Reg_c(string _rn, string src_ref);       // for Scada regs.
-  Reg_c();
-  ~Reg_c();
+  RegShm_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
+  RegShm_c(reg_t* _reg);      // for PLC master
+  RegShm_c(const char* _rn, string src_ref);  // for Scada regs.
+  RegShm_c(string _rn, string src_ref);       // for Scada regs.
+  RegShm_c();
+  ~RegShm_c();
 
   uint16_t get_plc_val();
   uint16_t get_shm_val();

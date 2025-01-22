@@ -55,7 +55,7 @@ void opc_regs_init()
 }
 
 // uint16_t opc_update_uint16(string name, regdata_t* rd)
-uint16_t opc_update_uint16(string name, Reg_c* R)
+uint16_t opc_update_uint16(string name, RegShm_c* R)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
   regdata_t* rd = R->ptr_data_plc;

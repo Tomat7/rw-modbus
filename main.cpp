@@ -14,7 +14,7 @@
 // using namespace std;
 // using namespace libconfig;
 
-map<string, Reg_c> REGmap;
+map<string, RegShm_c> REGmap;
 vector<PLC_c> PLCvec;
 // PLC_c Slave(MB_SLAVE_PORT);
 OpcServer_c OPCs(OPC_SERVER_PORT);

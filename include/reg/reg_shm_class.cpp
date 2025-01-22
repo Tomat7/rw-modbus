@@ -5,7 +5,7 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include "reg_class.h"
+#include "reg_shm_class.h"
 
 #include <fcntl.h>
 #include <stdarg.h>
@@ -26,13 +26,13 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-Reg_c::~Reg_c() { LOGD("DEstruct! %x %s", this, this->rn); }
+RegShm_c::~RegShm_c() { LOGD("DEstruct! %x %s", this, this->rn); }
 
-Reg_c::Reg_c() { LOGD("Construct! %x", this); }
+RegShm_c::RegShm_c() { LOGD("Construct! %x", this); }
 
-Reg_c::Reg_c(string _rn, string src_ref) { Reg_c(_rn.c_str(), src_ref); }
+RegShm_c::RegShm_c(string _rn, string src_ref) { RegShm_c(_rn.c_str(), src_ref); }
 
-Reg_c::Reg_c(const char* _rn, string src_ref)
+RegShm_c::RegShm_c(const char* _rn, string src_ref)
 {
   rn = get_new_char(_rn);
   src_reference = src_ref;
@@ -54,7 +54,7 @@ Reg_c::Reg_c(const char* _rn, string src_ref)
       LOGE("Error open %s", rn); */
 }
 
-Reg_c::Reg_c(reg_t* _reg) // For Modbus regs only
+RegShm_c::RegShm_c(reg_t* _reg) // For Modbus regs only
 {
   ptr_reg = _reg;
   ptr_data_plc = &(ptr_reg->data);
@@ -86,12 +86,12 @@ Reg_c::Reg_c(reg_t* _reg) // For Modbus regs only
   //  LOGI("+ New RegMap created.");
   }
 */
-bool Reg_c::is_MB() { return (src_reference == ""); }
-bool Reg_c::is_Scada() { return (src_reference == "-"); }
-bool Reg_c::has_Ref() { return !(is_MB() || is_Scada()); }
+bool RegShm_c::is_MB() { return (src_reference == ""); }
+bool RegShm_c::is_Scada() { return (src_reference == "-"); }
+bool RegShm_c::has_Ref() { return !(is_MB() || is_Scada()); }
 
 
-bool Reg_c::is_shm()
+bool RegShm_c::is_shm()
 {
   bool ret = false;
 
@@ -115,7 +115,7 @@ bool Reg_c::is_shm()
   return ret;
 }
 
-void Reg_c::sync(uint16_t _val)
+void RegShm_c::sync(uint16_t _val)
 {
   value.ui16 = _val;
   if (ptr_data_shm != nullptr) {
@@ -134,13 +134,13 @@ void Reg_c::sync(uint16_t _val)
   return;
 }
 
-void Reg_c::sync()
+void RegShm_c::sync()
 {
   sync(get_plc_val());
   return;
 }
 
-void Reg_c::sync_regdata(regdata_t* ptr_data)
+void RegShm_c::sync_regdata(regdata_t* ptr_data)
 {
   if (ptr_data != nullptr) {
     value.ui16 = ptr_data->rvalue;
@@ -163,21 +163,21 @@ void Reg_c::sync_regdata(regdata_t* ptr_data)
   return;
 }
 
-uint16_t Reg_c::get_plc_val()
+uint16_t RegShm_c::get_plc_val()
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rvalue;
   return 0;
 }
 
-uint16_t Reg_c::get_shm_val()
+uint16_t RegShm_c::get_shm_val()
 {
   if (is_shm())
     return ptr_data_shm->rvalue;
   return 0;
 }
 
-uint16_t Reg_c::get_local()
+uint16_t RegShm_c::get_local()
 {
   if (is_shm()) {
     regdata_t mem;
@@ -187,7 +187,7 @@ uint16_t Reg_c::get_local()
   return 0;
 }
 
-void Reg_c::set_plc_val(uint16_t _val)
+void RegShm_c::set_plc_val(uint16_t _val)
 {
   if (ptr_data_plc != nullptr)
     if (ptr_data_plc->rvalue != _val) {
@@ -196,13 +196,13 @@ void Reg_c::set_plc_val(uint16_t _val)
     }
 }
 
-void Reg_c::set_shm_val(uint16_t _val)
+void RegShm_c::set_shm_val(uint16_t _val)
 {
   if (is_shm())
     ptr_data_shm->rvalue = _val;
 }
 
-void Reg_c::set_local(uint16_t _val)
+void RegShm_c::set_local(uint16_t _val)
 {
   LOGD("%d %s %x.", _val, rn, this);
   if (is_shm()) {
@@ -212,14 +212,14 @@ void Reg_c::set_local(uint16_t _val)
   }
 }
 
-int Reg_c::get_mode() // 1 = "rw"
+int RegShm_c::get_mode() // 1 = "rw"
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rmode;
   return -1;
 }
 
-int Reg_c::get_type()
+int RegShm_c::get_type()
 {
   if (ptr_data_plc != nullptr)
     return ptr_data_plc->rtype;
