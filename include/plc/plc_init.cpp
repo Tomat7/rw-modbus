@@ -67,14 +67,14 @@ void PLC_c::init_regs()  // Master only
     R.data.rvalue = 777;  // TODO: remove for production
   }
 
-  for (auto &[a, R] : regs) {
+  for (auto &[a, r] : regs) {
     if (is_float(a) == 1) {
-      R.data.rv_next = &regs[R.raddr + 1].data.rvalue;
-      regs[R.raddr + 1].data.rmode = R.data.rmode;
-      regs[R.raddr + 1].data.rtype = R.data.rtype + 100;
+      r.r_next = &regs[r.raddr + 1];
+      regs[r.raddr + 1].data.rmode = r.data.rmode;
+      regs[r.raddr + 1].data.rtype = r.data.rtype + 100;
     }
-    LOGI("+ REG init: %-9s %2d %2s [%s]", R.ch_name, R.raddr,
-         R.str_mode.c_str(), R.fullname.c_str());
+    LOGI("+ REG init: %-9s %2d %2s [%s]", r.ch_name, r.raddr,
+         r.str_mode.c_str(), r.fullname.c_str());
   }
 
 }

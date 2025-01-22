@@ -65,11 +65,11 @@ float Reg_c::set_value(float _val)
       else if (ptr_data_plc->rtype == TYPE_FLOAT_ABCD) {
         value.fl = _val;
         ptr_data_plc->rvalue = value.fl2u[1];
-        *(ptr_data_plc->rv_next) = value.fl2u[0];
+        (ptr_reg->r_next)->data.rvalue = value.fl2u[0];
       } else if (ptr_data_plc->rtype == TYPE_FLOAT_CDAB) {
         value.fl = _val;
         ptr_data_plc->rvalue = value.fl2u[0];
-        *(ptr_data_plc->rv_next) = value.fl2u[1];
+        (ptr_reg->r_next)->data.rvalue = value.fl2u[1];
       }
     }
   }
@@ -115,10 +115,10 @@ float Reg_c::get_value()
       value.fl =(int16_t)(ptr_data_plc->rvalue) * (float)0.01;
     else if (ptr_data_plc->rtype == TYPE_FLOAT_ABCD) {
       value.fl2u[1] = ptr_data_plc->rvalue;
-      value.fl2u[0] = *(ptr_data_plc->rv_next);
+      value.fl2u[0] = (ptr_reg->r_next)->data.rvalue;
     } else if (ptr_data_plc->rtype == TYPE_FLOAT_CDAB) {
       value.fl2u[0] = ptr_data_plc->rvalue;
-      value.fl2u[1] = *(ptr_data_plc->rv_next);
+      value.fl2u[1] = (ptr_reg->r_next)->data.rvalue;
     }
   }
   return value.fl;
