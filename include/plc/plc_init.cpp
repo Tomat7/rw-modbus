@@ -22,10 +22,10 @@ map<string, int> var_type {
   {"*", 254},            {"-", 255},      /* Referenced registers */
   {"u16", TYPE_U16},     {"i16", TYPE_I16},     {"f10", TYPE_F10},
   {"uint16", TYPE_U16},  {"int16", TYPE_I16},   {"f100", TYPE_F100},
-  {"fabcd", 21},  {"fcdab", 22},  {"fbadc", 23},  {"fdcba", 24},
-  {"f_abcd", 21}, {"f_cdab", 22}, {"f_badc", 23}, {"f_dcba", 24},
-  {"float_abcd", 21},  {"float_abcd_1", 21}, {"float_abcd_2", 121},
-  {"float_cdab", 22},  {"float_cdab_1", 22}, {"float_cdab_2", 122},
+  {"fabcd", FLOAT_ABCD},  {"fcdab", FLOAT_CDAB},  {"fbadc", 23},  {"fdcba", 24},
+  {"f_abcd", FLOAT_ABCD}, {"f_cdab", FLOAT_CDAB}, {"f_badc", 23}, {"f_dcba", 24},
+  {"float_abcd", FLOAT_ABCD},  {"float_abcd_2", FLOAT_2 + FLOAT_ABCD},
+  {"float_cdab", FLOAT_CDAB},  {"float_cdab_2", FLOAT_2 + FLOAT_CDAB},
   {"float_badc", 23},  {"float_badc_1", 23}, {"float_badc_2", 123},
   {"float_dcba", 24},  {"float_dcba_1", 24}, {"float_dcba_2", 124}
 };
@@ -74,7 +74,7 @@ void PLC_c::init_regs()  // Master only
       regs[r.raddr + 1].data.rmode = r.data.rmode;
       regs[r.raddr + 1].data.rtype = r.data.rtype + 100;
     }
-    LOGI("+ REG init: %-9s %2d %2s %3d [%s]", r.ch_name, r.raddr,
+    LOGN("+ REG init: %-9s %2d %2s %3d [%s]", r.ch_name, r.raddr,
          r.str_mode.c_str(), regs[r.raddr].data.rtype, r.fullname.c_str());
   }
 

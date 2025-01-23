@@ -24,8 +24,15 @@
 #define TYPE_F100 2
 #define TYPE_F10 3
 
+#define FLOAT_2 100
+
 #define TYPE_FLOAT_ABCD 21
+#define FLOAT_ABCD TYPE_FLOAT_ABCD
+#define FLOAT_BE TYPE_FLOAT_ABCD
+
 #define TYPE_FLOAT_CDAB 22
+#define FLOAT_CDAB TYPE_FLOAT_CDAB
+#define FLOAT_LS TYPE_FLOAT_CDAB
 
 using namespace std;
 
