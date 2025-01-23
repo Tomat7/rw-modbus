@@ -67,15 +67,15 @@ struct regdata_t {
 struct reg_t {
   int raddr = 0;
   regdata_t data;
-  reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next part of value
+  reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next reg_t
   string fullname = "";     // PLC_name.reg_name
-  string str_title = "";    // "PLC" or "SCADA" (or ??)
-  string str_folder = "";   // /SCADA/folder/reg_name (optional)
-  string str_opcname = "";  // OPC fullpath: /PLC/PLC_name/PLC_name.reg_name
+  string str_folder = "";   // /PLC/PLC_name/folder/PLC_name.reg_name (opt)
+//  string str_title = "";  // "PLC" or "SCADA" (or ??)
+//  string str_opcname = "";// OPC fullpath: /PLC/PLC_name/PLC_name.reg_name
   string str_source = "";   // reference to external register (optional)
   string str_name = "-";    // reg_name
-  string str_mode = "*";  // "rw", "r", "w"
-  string str_type = "x";  // "i", "f", "u"
+  string str_mode = "*";    // "rw", "r", "w"
+  string str_type = "x";    // "i", "f", "u"
   const char* ch_name = nullptr;
 };
 
