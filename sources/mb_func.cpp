@@ -39,7 +39,7 @@ int mb_add_tasks()
   for (i = 0; i < nb_plcs; i++) {
     PLC_c &D = PLCvec[i];
     idx[i] = i;
-    string name = D.str_title + " " + D.str_dev_name;
+    string name = D.str_folder + " " + D.str_dev_name;
     Task.add_task(task_mb_update_, D.mb.polling_ms, name, &idx[i]);
   }
 

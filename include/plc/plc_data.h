@@ -10,16 +10,14 @@
 #include <modbus/modbus.h>
 #include <string.h>
 
-#include <atomic>
-#include <ctime>
-#include <iostream>
-#include <map>
-#include <mutex>
 #include <string>
-#include <vector>
 
-#define MB_SLAVE_CONN_MAX 5
-//#define USE_SYSLOG
+/* #include <atomic>
+  #include <ctime>
+  #include <iostream>
+  #include <map>
+  #include <mutex>
+  #include <vector> */
 
 #define TYPE_U16 0
 #define TYPE_I16 1
@@ -31,30 +29,17 @@
 
 using namespace std;
 
-union float2uint_u {
-  float fl;
-  uint16_t ui[2];
+struct mbdata_t {
+  int status = 0;                 // rc value of last func (init/connect/read)
+  uint64_t timestamp_try_ms = 0;  // milliseconds since the Epoch on last TRY
+  uint64_t timestamp_ok_ms = 0;   // ms since the Epoch on last GOOD read
+  uint32_t polling_ms = 0;        // milliseconds between read request
+  uint32_t timeout_us = 0;        // miCRo seconds (!!) Modbus respose timeout
+  uint16_t errors = 0;            // counter of any current ERRORS (reset if OK)
+  uint16_t errors_rd = 0;         // counter of READ errors (summ from start)
+  uint16_t errors_wr = 0;         // counter of WRITE errors (summ from start)
+  uint16_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
 };
-
-/*
-  using fl2ui_u = float2uint_u;
-  using fl2_u = float2uint_u;
-*/
-
-union value_u {
-  int16_t i16;
-  int32_t i32;
-  int64_t i64;
-  uint16_t ui16;
-  uint32_t ui32;
-  uint64_t ui64;
-  int64_t dt;
-  float fl;
-  double dbl;
-  uint16_t fl2u[2];
-  uint16_t dbl2u[4];
-};
-
 struct regdata_t {
   uint16_t rvalue = 0;
   uint16_t rerrors = 0;  // number of errors on MB func (init/connect/read)
@@ -69,14 +54,20 @@ struct reg_t {
   regdata_t data;
   reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next reg_t
   string fullname = "";     // PLC_name.reg_name
-  string str_folder = "";   // /PLC/PLC_name/folder/PLC_name.reg_name (opt)
-//  string str_title = "";  // "PLC" or "SCADA" (or ??)
-//  string str_opcname = "";// OPC fullpath: /PLC/PLC_name/PLC_name.reg_name
+  string str_rfolder = "";   // /PLC/PLC_name/folder/PLC_name.reg_name (opt)
   string str_source = "";   // reference to external register (optional)
   string str_name = "-";    // reg_name
   string str_mode = "*";    // "rw", "r", "w"
   string str_type = "x";    // "i", "f", "u"
   const char* ch_name = nullptr;
 };
+
+struct activity_t {
+  bool modbus = false;            // enable Modbus requests
+  bool opc = false;               // enable OPC mapping
+  bool display = false;           // enable printing values on display
+  bool summary = false;           // enable summary printing
+};
+
 
 // eof

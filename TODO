@@ -17,6 +17,8 @@
 16) ++ Colorize logger levels output
 17) ++ Enabled/Active (true/false) state for PLC
 18) reg_t struct review & refactoring
-19) 
+19) add "prefix" for registers
+20)
+
 
 

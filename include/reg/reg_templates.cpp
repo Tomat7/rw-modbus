@@ -1,5 +1,5 @@
 
-#include "reg_shm_class.h"
+#include "reg_class.h"
 
 #include <fcntl.h>
 #include <stdarg.h>
@@ -23,55 +23,57 @@
 
 #define DEBUG(a) if (isDebug) { a }
 
+regdata_t* ptr_data_plc = nullptr;
+
 template <>
-uint16_t RegShm_c::set_value(uint16_t _val)
+uint16_t Reg_c::set_value(uint16_t _val)
 {
   uint16_t _ui16 = value.ui16;
   value.ui16 = _val;
-  if (ptr_data_plc != nullptr) {
-    if (ptr_data_plc->rvalue != _val) {
-      ptr_data_plc->rvalue = _val;
-      ptr_data_plc->rupdate = 1;
-    }
-  }
+  /*   if (ptr_data_plc != nullptr) {
+      if (ptr_data_plc->rvalue != _val) {
+        ptr_data_plc->rvalue = _val;
+        ptr_data_plc->rupdate = 1;
+      }
+    } */
   return _ui16;
 }
 
 template <>
-int16_t RegShm_c::set_value(int16_t _val)
+int16_t Reg_c::set_value(int16_t _val)
 {
   int16_t _i16 = value.i16;
   value.i16 = _val;
-  if (ptr_data_plc != nullptr)
-    if (ptr_data_plc->rvalue != (uint16_t)_val) {
-      ptr_data_plc->rvalue = (uint16_t)_val;
-      ptr_data_plc->rupdate = 1;
-    }
+  /*   if (ptr_data_plc != nullptr)
+      if (ptr_data_plc->rvalue != (uint16_t)_val) {
+        ptr_data_plc->rvalue = (uint16_t)_val;
+        ptr_data_plc->rupdate = 1;
+      } */
   return _i16;
 }
 
 template <>
-float RegShm_c::set_value(float _val)
+float Reg_c::set_value(float _val)
 {
   float _fl = value.fl;
 
   if (fabs(value.fl - _val) > 0.01) {
-    ptr_data_plc->rupdate = 1;
+//    ptr_data_plc->rupdate = 1;
+    /*
+        if (ptr_data_plc != nullptr) {
 
-    if (ptr_data_plc != nullptr) {
-
-      if (ptr_data_plc->rtype == TYPE_F100)
-        ptr_data_plc->rvalue = (uint16_t)(_val * 100);
-      else if (ptr_data_plc->rtype == TYPE_FLOAT_ABCD) {
-        value.fl = _val;
-        ptr_data_plc->rvalue = value.fl2u[1];
-        (ptr_reg->r_next)->data.rvalue = value.fl2u[0];
-      } else if (ptr_data_plc->rtype == TYPE_FLOAT_CDAB) {
-        value.fl = _val;
-        ptr_data_plc->rvalue = value.fl2u[0];
-        (ptr_reg->r_next)->data.rvalue = value.fl2u[1];
-      }
-    }
+          if (ptr_data_plc->rtype == TYPE_F100)
+            ptr_data_plc->rvalue = (uint16_t)(_val * 100);
+          else if (ptr_data_plc->rtype == TYPE_FLOAT_ABCD) {
+            value.fl = _val;
+            ptr_data_plc->rvalue = value.fl2u[1];
+            (ptr_reg->r_next)->data.rvalue = value.fl2u[0];
+          } else if (ptr_data_plc->rtype == TYPE_FLOAT_CDAB) {
+            value.fl = _val;
+            ptr_data_plc->rvalue = value.fl2u[0];
+            (ptr_reg->r_next)->data.rvalue = value.fl2u[1];
+          }
+        } */
   }
 
   return _fl;
@@ -79,7 +81,7 @@ float RegShm_c::set_value(float _val)
 
 
 template <typename T>
-T RegShm_c::set_value(T _val)
+T Reg_c::set_value(T _val)
 {
   return T();
 }
@@ -87,7 +89,7 @@ T RegShm_c::set_value(T _val)
 // =============================================
 
 template <>
-uint16_t RegShm_c::get_value()
+uint16_t Reg_c::get_value()
 {
   if (ptr_data_plc != nullptr) {
     value.ui16 = ptr_data_plc->rvalue;
@@ -97,7 +99,7 @@ uint16_t RegShm_c::get_value()
 }
 
 template <>
-int16_t RegShm_c::get_value()
+int16_t Reg_c::get_value()
 {
   if (ptr_data_plc != nullptr) {
     value.i16 = (int16_t)(ptr_data_plc->rvalue);
@@ -108,7 +110,7 @@ int16_t RegShm_c::get_value()
 
 
 template <>
-float RegShm_c::get_value()
+float Reg_c::get_value()
 {
   if (ptr_data_plc != nullptr) {
     if (ptr_data_plc->rtype == TYPE_F100)
@@ -198,19 +200,19 @@ float RegShm_c::get_value()
 // ========================================
 
 template <>
-uint16_t RegShm_c::read_value()
+uint16_t Reg_c::read_value()
 {
   return value.ui16; // else - the "BAD" value will return
 }
 
 template <>
-int16_t RegShm_c::read_value()
+int16_t Reg_c::read_value()
 {
   return value.i16;
 }
 
 template <>
-float RegShm_c::read_value()
+float Reg_c::read_value()
 {
   return value.fl;
 }

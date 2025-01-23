@@ -84,8 +84,9 @@ int PLC_c::set_reg(int raddr, uint16_t rval)  // Set reg locally != write PLC.
   return rc;
 }
 
-int PLC_c::set_reg(int raddr, float fl)  // Set reg locally != write PLC.
-{
+/*
+  int PLC_c::set_reg(int raddr, float fl)  // Set reg locally != write PLC.
+  {
   float2uint_u fl2u;
   fl2u.fl = fl;
   rc = -1;  // Addr out of range
@@ -108,7 +109,8 @@ int PLC_c::set_reg(int raddr, float fl)  // Set reg locally != write PLC.
     }
   }
   return rc;
-}
+  }
+*/
 
 int PLC_c::set_reg(string rname, uint16_t rval)
 {
@@ -124,8 +126,9 @@ int PLC_c::set_reg(string rname, uint16_t rval)
   return rc;
 }
 
-int PLC_c::set_reg(string rname, float fl)
-{
+/*
+  int PLC_c::set_reg(string rname, float fl)
+  {
   rc = -2;  // rname not found
 
   for (auto &[a, r] : regs) {
@@ -136,7 +139,8 @@ int PLC_c::set_reg(string rname, float fl)
   }
 
   return rc;
-}
+  }
+*/
 
 uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
 {

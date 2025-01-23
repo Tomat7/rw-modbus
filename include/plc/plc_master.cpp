@@ -28,7 +28,7 @@
   }
 */
 
-PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
+PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
              int _port, int _att, int _ms, int _us)
 {
   // lock_init();
@@ -40,7 +40,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _title, string _desc,
   str_ip_addr = _ip;
   ip_addr = str_ip_addr.c_str();
 
-  str_title = _title;
+  str_folder = _folder;
   str_desc = _desc;
   tcp_port = _port;
   attempts = _att;

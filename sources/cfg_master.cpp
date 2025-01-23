@@ -142,11 +142,11 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
     PLCvec.reserve(vec_size_new + 1);
 
   for (int i = 0; i < nb_plc_cfg; ++i) {
-    string _devname, _title, _desc, _ip;
+    string _devname, _folder, _desc, _ip;
     int _port, _att, _ms, _us;
     // ===== Check the record which expect to get for CFG-file.
     if (!(cfgPLC[i].lookupValue("name", _devname) &&
-          cfgPLC[i].lookupValue("title", _title) &&
+          cfgPLC[i].lookupValue("folder", _folder) &&
           cfgPLC[i].lookupValue("desc", _desc) &&
           cfgPLC[i].lookupValue("ip", _ip) &&
           cfgPLC[i].lookupValue("port", _port) &&
@@ -161,7 +161,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       continue; // get out of current iteration if PLC not in list
     }
 
-    PLCvec.emplace_back(_devname, _ip, _title, _desc, _port, _att, _ms, _us);
+    PLCvec.emplace_back(_devname, _ip, _folder, _desc, _port, _att, _ms, _us);
     PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
     cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
@@ -195,16 +195,16 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
     if (!(cfgREG[j].lookupValue("rname", r.str_name) &&
           cfgREG[j].lookupValue("raddr", r.raddr))) {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
-           pn->str_title.c_str(), pn->str_dev_name.c_str(), j);
+           pn->str_folder.c_str(), pn->str_dev_name.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
     }
 
     // Check the record which expected for SCADA reg.
     if (cfgREG[j].lookupValue("rsource", r.str_source) &&
-        cfgREG[j].lookupValue("rfolder", r.str_folder)) {
+        cfgREG[j].lookupValue("rfolder", r.str_rfolder)) {
       LOGI("Reading 'rsource'/'rfolder' on %s: %s/%s REG: %d",
-           r.str_name.c_str(), r.str_source.c_str(), r.str_folder.c_str(), j);
+           r.str_name.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
 
       if (r.str_source == "-") {
         if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
@@ -227,8 +227,8 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
         continue;
       }
 
-      if (!cfgREG[j].lookupValue("rfolder", r.str_folder))
-        r.str_folder = ".";
+      if (!cfgREG[j].lookupValue("rfolder", r.str_rfolder))
+        r.str_rfolder = ".";
 
       if (r.str_type == "*")
         r.str_mode = pn->regs[r.raddr - 1].str_mode;

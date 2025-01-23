@@ -21,7 +21,7 @@ void regs_create_from_masters()
       if (R.str_source == "" || R.str_source == "-") {
         LOGD("(Master) try to create %s, src: %s",
              R.fullname.c_str(), R.str_source.c_str());
-        REGmap[R.fullname] = {&R};
+        REGmap[R.fullname] = {&R, &D};
       }
     }
   }
@@ -32,10 +32,11 @@ void regs_create_from_masters()
         auto &Rsrc = REGmap[R.str_source];
         LOGD("(Referenced) try to create %s, src: %s",
              R.fullname.c_str(), R.str_source.c_str());
+        LOGD("- %s %d", __func__, 0);
         R.str_mode = Rsrc.ptr_reg->str_mode;
         R.str_type = Rsrc.ptr_reg->str_type;
-        REGmap[R.fullname] = {&R};
-        REGmap[R.fullname].ptr_data_plc = Rsrc.ptr_data_plc;
+        LOGD("- %s %d", __func__, 00);
+        REGmap[R.fullname] = {&R, &D};
       }
     }
   }
@@ -45,14 +46,15 @@ void regs_create_from_masters()
 
 bool reg_exist(string _rn) { return REGmap.count(_rn); }
 
-void regs_deinit_shm()
-{
+/* void regs_deinit_shm()
+  {
   for (auto &[n, rm] : REGmap) {
     close_shm(rm.fd, rm.ptr_data_shm, sizeof(regdata_t));
     unlink_shm(n.c_str());
   }
   return;
-}
+  }
+*/
 
 void regs_deinit()
 {

@@ -18,38 +18,50 @@
 #include <string>
 #include <vector>
 
-#include "include/regs.h"
+#include "include/plc/plc_class.h"
 
 #define MB_SLAVE_CONN_MAX 5
 //#define USE_SYSLOG
 
-#define TYPE_U16 0
-#define TYPE_I16 1
-#define TYPE_F100 2
-#define TYPE_F10 3
 
-#define TYPE_FLOAT_ABCD 21
-#define TYPE_FLOAT_CDAB 22
+union float2uint_u {
+  float fl;
+  uint16_t ui[2];
+};
+
+union value_u {
+  int16_t i16;
+  int32_t i32;
+  int64_t i64;
+  uint16_t ui16;
+  uint32_t ui32;
+  uint64_t ui64;
+  int64_t dt;
+  float fl;
+  double dbl;
+  uint16_t fl2u[2];
+  uint16_t dbl2u[4];
+};
 
 using namespace std;
 
 
-class RegShm_c
+class Reg_c
 {
 public:
-  RegShm_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
-  RegShm_c(reg_t* _reg);      // for PLC master
-  RegShm_c(const char* _rn, string src_ref);  // for Scada regs.
-  RegShm_c(string _rn, string src_ref);       // for Scada regs.
-  RegShm_c();
-  ~RegShm_c();
+//  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
+  Reg_c(reg_t* _reg, PLC_c* _dev);      // for PLC master
+  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
+  Reg_c(string _rn, string src_ref);       // for Scada regs.
+  Reg_c();
+  ~Reg_c();
 
-  uint16_t get_plc_val();
-  uint16_t get_shm_val();
+  /*   uint16_t get_plc_val();
+    uint16_t get_shm_val(); */
   uint16_t get_local();
 
   void set_plc_val(uint16_t _val);
-  void set_shm_val(uint16_t _val);
+//  void set_shm_val(uint16_t _val);
   void set_local(uint16_t _val);
 
   void sync();
@@ -77,12 +89,16 @@ public:
   // "-" mean no reference - Scada calculated reg
   // "" mean no reference - Modbus reg only
 
-  int fd = -1;                        // descriptor of SHARED MEMORY
+//  regdata_t* ptr_data_shm = nullptr;  // ptr to SHARED MEMORY (local) data
+//  regdata_t* ptr_data_plc = nullptr;  // ptr to SHARED MEMORY (PLC/MB) data
+//  int fd = -1;                        // descriptor of SHARED MEMORY
   const char* rn = nullptr;           // just for FUN! (copy)
   value_u value;                 // just for FUN! (to print with PLC & SHM)
-  regdata_t* ptr_data_shm = nullptr;  // ptr to SHARED MEMORY (local) data
-  regdata_t* ptr_data_plc = nullptr;  // ptr to SHARED MEMORY (PLC/MB) data
   reg_t* ptr_reg = nullptr;           // ptr to PLC reg
+
+  string str_topfolder = "";  // "PLC" or "SCADA" (or ??)
+  string str_opcname = "";  // OPC fullpath: /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
+
 };
 
 // eof

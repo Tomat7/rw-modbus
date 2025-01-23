@@ -32,11 +32,11 @@ int task_regs_refresh_(void* params)
 
   for (auto& [n, rm] : REGmap) {
     if (rm.is_MB() || rm.is_Scada()) {
-      uint16_t plc_val = rm.get_plc_val();  // Value from PLC
-      uint16_t shm_val = rm.get_shm_val();  // Value from SHM
+      uint16_t plc_val/*  = rm.get_plc_val() */;  // Value from PLC
+      uint16_t shm_val/*  = rm.get_shm_val() */;  // Value from SHM
       uint16_t old_val = rm.value.ui16;          // Value in memory (in REGmap)
       // uint16_t opc_val = opc_update_uint16(n, rm.ptr_data_plc);
-      uint16_t opc_val = opc_update_uint16((rm.ptr_reg)->str_opcname, &rm);
+      uint16_t opc_val/*  = opc_update_uint16((rm.ptr_reg)->str_opcname, &rm) */;
 
       // printf("%7d %7d %7d %7d ==", plc_val, old_val, shm_val, opc_val);
 
@@ -62,16 +62,16 @@ int task_regs_refresh_(void* params)
       // try to fill referenced/virtual register
     } else if (rm.has_Ref()) {
       auto &rf = REGmap[rm.src_reference];
-      uint16_t plc_val = rf.get_plc_val();  // Value from PLC
-      uint16_t shm_val = rm.get_shm_val();  // Value from SHM
+      uint16_t plc_val/*  = rf.get_plc_val() */;  // Value from PLC
+      uint16_t shm_val/*  = rm.get_shm_val() */;  // Value from SHM
       uint16_t old_val = rm.value.ui16;          // Value in memory (in REGmap)
       //uint16_t opc_val = opc_update_uint16(n, rf.ptr_data_plc);
-      uint16_t opc_val = opc_update_uint16((rm.ptr_reg)->str_opcname, &rf);
+      uint16_t opc_val /*=  opc_update_uint16((rm.ptr_reg)->str_opcname, &rf) */;
 
       bool isNew_Plc = (plc_val != old_val);
       bool isNew_Opc = (opc_val != shm_val);
 
-      rm.sync_regdata(rf.ptr_data_plc);  // Save referenced PLC value
+//      rm.sync_regdata(rf.ptr_data_plc);  // Save referenced PLC value
 
       if (isNew_Plc) {
         if (!STRmap.count(n) || !STRmap[n].upd_plc)
@@ -106,7 +106,7 @@ void regs_update()
   string X;
 
   for (auto& [n, rm] : REGmap) {
-    reg_print(n, rm.ptr_data_plc);
+//    reg_print(n, rm.ptr_data_plc);
 
     X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
     X += (STRmap[n].upd_opc) ? "<" : " ";  // If new value got from OPC

@@ -51,58 +51,45 @@ void PLC_c::init_regs()  // Master only
   ip_addr = str_ip_addr.c_str();
   dev_name = str_dev_name.c_str();
   LOGN("+ PLC init: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
-       str_title.c_str(), str_desc.c_str());
+       str_folder.c_str(), str_desc.c_str());
 
-  for (auto &[a, R] : regs) {
-    init_type(R);
-    init_str(R);
+  for (auto &[a, r] : regs) {
+    init_type(r);
+    init_str(r);
 
-    R.data.rmode = (R.str_mode == "rw") ? 1 : 0;
+    r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
 
-    if (R.raddr < reg_min)
-      reg_min = R.raddr;
-    if (R.raddr > reg_max)
-      reg_max = R.raddr;
+    if (r.raddr < reg_min)
+      reg_min = r.raddr;
+    if (r.raddr > reg_max)
+      reg_max = r.raddr;
 
-    R.data.rvalue = 777;  // TODO: remove for production
+    r.data.rvalue = 777;  // TODO: remove for production
   }
 
+//
   for (auto &[a, r] : regs) {
     if (is_float(a) == 1) {
       r.r_next = &regs[r.raddr + 1];
       regs[r.raddr + 1].data.rmode = r.data.rmode;
       regs[r.raddr + 1].data.rtype = r.data.rtype + 100;
     }
-    LOGI("+ REG init: %-9s %2d %2s [%s]", r.ch_name, r.raddr,
-         r.str_mode.c_str(), r.fullname.c_str());
+    LOGI("+ REG init: %-9s %2d %2s %3d [%s]", r.ch_name, r.raddr,
+         r.str_mode.c_str(), regs[r.raddr].data.rtype, r.fullname.c_str());
   }
 
 }
 
 
-void PLC_c::init_str(reg_t &R)
+void PLC_c::init_str(reg_t &r)
 {
-  R.str_title = str_title;
-  R.str_opcname = "/" + R.str_title + "/";
-
   if (!is_slave) {
-    if (str_dev_name == MB_NO_DEV_NAME) { // Scada!
-      if (R.str_folder == MB_NO_FOLDER)
-        R.fullname = R.str_name;
-      else {
-        R.fullname = R.str_folder + "." + R.str_name;
-        R.str_opcname += R.str_folder + "/";
-      }
-    } else {
-      R.fullname = str_dev_name + "." + R.str_name;
-      R.str_opcname += str_dev_name + "/";
-      if (!(R.str_folder == MB_NO_FOLDER || R.str_folder == ""))
-        R.str_opcname += R.str_folder + "/";
-    }
+    if (str_dev_name == MB_NO_DEV_NAME) // Scada!
+      r.fullname = r.str_name;
+    else
+      r.fullname = str_dev_name + "." + r.str_name;
   }
-
-  R.str_opcname += R.fullname;
-  R.ch_name = R.str_name.c_str();
+  r.ch_name = r.str_name.c_str();
 
   return;
 }
@@ -115,6 +102,7 @@ void PLC_c::init_type(reg_t &R)
     R.data.rtype = var_type[st_];
   else
     LOGA("Error REG: %s, type: %s\n", R.str_name.c_str(), R.str_type.c_str());
+
   /*
     auto &rd = R.data;
     if (R.str_type == "u")
@@ -128,5 +116,34 @@ void PLC_c::init_type(reg_t &R)
   */
   return;
 }
+
+/*
+  void PLC_c::init_str(reg_t &R)
+  {
+  //  R.str_title = str_title;
+  //  R.str_opcname = "/" + R.str_title + "/";
+
+  if (!is_slave) {
+    if (str_dev_name == MB_NO_DEV_NAME) { // Scada!
+      if (R.str_rfolder == MB_NO_FOLDER || R.str_rfolder == "")
+        R.fullname = R.str_name;
+  //      else {
+  //        R.fullname = R.str_rfolder + "." + R.str_name;
+  //        R.str_opcname += R.str_folder + "/";
+      }
+    } else {
+      R.fullname = str_dev_name + "." + R.str_name;
+  //      R.str_opcname += str_dev_name + "/";
+  //      if (!(R.str_folder == MB_NO_FOLDER || R.str_folder == ""))
+  //        R.str_opcname += R.str_folder + "/";
+  //    }
+  }
+
+  //  R.str_opcname += R.fullname;
+  R.ch_name = R.str_name.c_str();
+
+  return;
+  }
+*/
 
 // eof

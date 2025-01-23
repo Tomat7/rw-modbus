@@ -19,35 +19,16 @@
 #include <vector>
 
 #include "include/macros.h"
-#include "include/regs.h"
+#include "plc_data.h"
 
 //#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 #define MB_SLAVE_CONN_MAX 5
 #define MB_NO_DEV_NAME "-"
 #define MB_NO_FOLDER "."
 // #define USE_SYSLOG
-//#define LOCK_INIT(m) m = new mutex
+
 
 using namespace std;
-
-struct mbdata_t {
-  int status = 0;                 // rc value of last func (init/connect/read)
-  uint64_t timestamp_try_ms = 0;  // milliseconds since the Epoch on last TRY
-  uint64_t timestamp_ok_ms = 0;   // ms since the Epoch on last GOOD read
-  uint32_t polling_ms = 0;        // milliseconds between read request
-  uint32_t timeout_us = 0;        // miCRo seconds (!!) Modbus respose timeout
-  uint16_t errors = 0;            // counter of any current ERRORS (reset if OK)
-  uint16_t errors_rd = 0;         // counter of READ errors (summ from start)
-  uint16_t errors_wr = 0;         // counter of WRITE errors (summ from start)
-  uint16_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
-};
-
-struct activity_t {
-  bool modbus = false;            // enable Modbus requests
-  bool opc = false;               // enable OPC mapping
-  bool display = false;           // enable printing values on display
-  bool summary = false;           // enable summary printing
-};
 
 class PLC_c
 {
@@ -94,7 +75,7 @@ public:
 
   // Common properties
   bool Enabled = false;
-  string str_title;
+  string str_folder;
   string str_desc;
   string str_dev_name;
   string str_ip_addr;

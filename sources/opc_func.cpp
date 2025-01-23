@@ -24,13 +24,13 @@ void opc_regs_init()
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
     string n, e;
-    n = rm.ptr_reg->str_opcname;
+    n = rm.str_opcname;
     e = OPC_ERRORS_FOLDER + n + OPC_ERRORS_SUFFIX; // Kub.Temp1.errors
 
     OPCs.addVar(e, (uint16_t)0, 0); // Reg to keep NB of errors
 
-    auto &rd = rm.ptr_data_plc;
-    auto &t = rm.ptr_data_plc->rtype;
+    regdata_t* rd = &rm.ptr_reg->data;
+    auto &t = rm.ptr_reg->data.rtype;
 
     if (t == TYPE_FLOAT_ABCD) {
       float fl = (int16_t)(rd->rvalue) * (float)1.0;
@@ -51,14 +51,15 @@ void opc_regs_init()
       uint16_t ui16 = (uint16_t)(rd->rvalue);
       OPCs.addVar(n, ui16, rd->rmode);
     }
+
   }
 }
 
 // uint16_t opc_update_uint16(string name, regdata_t* rd)
-uint16_t opc_update_uint16(string name, RegShm_c* R)
+uint16_t opc_update_uint16(string name, Reg_c* R)
 {
   // printf("\n===== OPC_update_uint16 =====\n");
-  regdata_t* rd = R->ptr_data_plc;
+  regdata_t* rd /* = R->ptr_data_plc */;
   uint16_t val_ui16 = R->get_value<uint16_t>(); // rd->rvalue;
   int16_t val_i16 = (int16_t)rd->rvalue;
   float val_fl = (int16_t)rd->rvalue * (float)0.01;
