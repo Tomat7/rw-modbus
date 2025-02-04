@@ -14,12 +14,16 @@
 
 void tasks_init()
 {
-  Task.init(TASKS_NB_MAX);
+  Task.init(Cfg.tasks_nb);
   // Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
   Task.add_task(task_opc_refresh_, 250, "OPC:Refresh_");
   Task.add_task(task_regs_refresh_, 500, "REGS:Refresh_");
   Task.add_task(task_millis_, 2500, "Millis_");
   mb_add_tasks();
+}
+
+void tasks_start()
+{
   Task.run();
 }
 

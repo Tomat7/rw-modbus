@@ -19,11 +19,11 @@ void init_all()
   int ret = 0;
 
   t.start(TIMER_START_MSG);
-  ret = cfg_master(CFG_DIR, CFG_FILE, mode);
+  ret = cfg_master(CFG_DIR, CFG_FILE, Cfg.mode);
   t.spent_auto("============ Cfg Master finished in: ");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
-  wait_console(timeout_sec);
+  wait_console(Cfg.timeout_sec);
   // ==================================
 
   /*   t.start(TIMER_START_MSG);
@@ -31,13 +31,13 @@ void init_all()
     t.spent_auto("=== Cfg Slave finished in: ");
     if (ret == EXIT_FAILURE)
       exit(EXIT_FAILURE);
-    wait_console(timeout_sec); */
+    wait_console(Cfg.timeout_sec); */
   // ==================================
 
   if (log_level > 5) {
     t.start(TIMER_START_MSG);
     plc_show2();
-    wait_console(timeout_sec);
+    wait_console(Cfg.timeout_sec);
     t.spent_auto("=== PLC2 show finished in: ");
   }
 
@@ -45,25 +45,30 @@ void init_all()
     t.start(TIMER_START_MSG);
     plc_show1();
     t.spent_auto("=== PLC1 show finished in: ");
-    wait_console(timeout_sec);
+    wait_console(Cfg.timeout_sec);
   }
 
   t.start(TIMER_START_MSG);
   regs_create_from_masters();
   t.spent_auto("=== REG init finished in: ");
-  wait_console(timeout_sec);
+  wait_console(Cfg.timeout_sec);
   //  t.sleep_ms(TMOUT);
 
   t.start(TIMER_START_MSG);
   opc_init();
   opc_regs_init();
   t.spent_auto("=== OPC init finished in: ");
-  wait_console(timeout_sec);
+  wait_console(Cfg.timeout_sec);
 
+  t.start(TIMER_START_MSG);
   tasks_init();
+  t.spent_auto("=== TASKS init finished in: ");
+  wait_console(Cfg.timeout_sec);
+
+  tasks_start();
 
   opc_start();
-  //  timeout_sec = TIMEOUT_SEC;
+  //  Cfg.timeout_sec = TIMEOUT_SEC;
 
   return;
 }
@@ -71,16 +76,16 @@ void init_all()
 void reinit()
 {
   /*   if (isdebug())
-      timeout_sec = TIMEOUT_SEC;
+      Cfg.timeout_sec = TIMEOUT_SEC;
     else
-      timeout_sec = 1; */
+      Cfg.timeout_sec = 1; */
 
   deinit_all();
   LOGW("+++++++++++++++++++++++++++++++++");
-  wait_console(timeout_sec);
+  wait_console(Cfg.timeout_sec);
   init_all();
 
-  //  timeout_sec = TIMEOUT_SEC;
+  //  Cfg.timeout_sec = TIMEOUT_SEC;
   return;
 }
 
@@ -102,36 +107,36 @@ void parse_char(int ch)
 
   if (((char)ch == 'e') || ((char)ch == 'q')) {
     LOGC("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
-    wait_console(timeout_sec);
+    wait_console(Cfg.timeout_sec);
     deinit_all();
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'r') {
     LOGC("Char 'r' pressed. Full reconfiguration.\n");
-    wait_console(timeout_sec);
+    wait_console(Cfg.timeout_sec);
     reinit();
   } else if ((char)ch == 'f') {
-    timeout_sec = 1;
-    LOGC("Char 'f' pressed. Timeout set to: %d sec.\n", timeout_sec);
-    wait_console(timeout_sec);
+    Cfg.timeout_sec = 1;
+    LOGC("Char 'f' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
+    wait_console(Cfg.timeout_sec);
   } else if ((char)ch == 'm') {
-    timeout_sec = 3;
-    LOGC("Char 'm' pressed. Timeout set to: %d sec.\n", timeout_sec);
-    wait_console(timeout_sec);
+    Cfg.timeout_sec = 3;
+    LOGC("Char 'm' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
+    wait_console(Cfg.timeout_sec);
   } else if ((char)ch == 's') {
-    timeout_sec = 5;
-    LOGC("Char 's' pressed. Timeout set to: %d sec.\n", timeout_sec);
-    wait_console(timeout_sec);
+    Cfg.timeout_sec = 5;
+    LOGC("Char 's' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
+    wait_console(Cfg.timeout_sec);
   } else if (isdigit((char)ch)) {
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;
     LOGC("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
     log_level = loglvl;
-    wait_console(timeout_sec);
+    wait_console(Cfg.timeout_sec);
   } else if ((char)ch == ' ')
     printf("%s %s %s \n", C_GRN, "=============================", C_NORM);
   else {
     printf("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NORM);
-    wait_console(timeout_sec * 2);
+    wait_console(Cfg.timeout_sec * 2);
   }
 }
 

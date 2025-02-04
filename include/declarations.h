@@ -19,15 +19,40 @@ using std::right;
 using std::setw;
 using std::string;
 
-extern int timeout_sec;
-extern cchar* mode;
+struct opc_t {
+  uint16_t SrvPort = OPC_SERVER_PORT;
+  string SrvName = OPC_THREAD_NAME;
+  string ErrFolder = OPC_ERRORS_FOLDER;
+  string ErrSuffix = OPC_ERRORS_SUFFIX;
+};
+
+struct mb_t {
+  int SlaveMaxConn = MB_SLAVE_CONN_MAX;
+  int SlavePort = MB_SLAVE_PORT;
+  int SlaveMaxRegs = MB_SLAVE_REGS_NB;
+};
+
+struct cfg_t {
+  opc_t opc;
+  mb_t mb;
+  int timeout_sec = TIMEOUT_SEC;
+  int tasks_nb = TASKS_NB_MAX;
+  cchar* mode;
+};
+
+extern cfg_t Cfg;
+
+//extern int Cfg.timeout_sec;
+//extern cchar* mode;
 extern map<string, Reg_c> REGmap;
 extern vector<PLC_c> PLCvec;
 // extern PLC_c Slave;
+
 extern OpcServer_c OPCs;
 extern Schedule_c Task;
-extern string PLC_folder;
-extern string SCADA_folder;
+//extern string PLC_folder;
+//extern string SCADA_folder;
+
 
 #define MODBUS_MODES "master", "slave", "scada"
 
@@ -80,6 +105,7 @@ int write_rm(string rn, uint16_t val);
 
 // ===== Scheduled Tasks =====
 void tasks_init();
+void tasks_start();
 int task_millis_(void* params);
 int task_opc_refresh_(void* params);
 int task_regs_refresh_(void* params);

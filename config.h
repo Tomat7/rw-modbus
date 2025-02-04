@@ -8,8 +8,8 @@
 #define CFG_FILE "modbus.cfg"
 
 #define OPC_SERVER_PORT 4840
-//#define OPC_PLC_FOLDER "/PLC/"
-//#define OPC_SCADA_FOLDER "/SCADA/"
+// #define OPC_PLC_FOLDER "/PLC/"
+// #define OPC_SCADA_FOLDER "/SCADA/"
 #define OPC_ERRORS_FOLDER "/ERRORS"
 #define OPC_ERRORS_SUFFIX ".error"
 #define OPC_THREAD_NAME "OPC_server"
@@ -32,4 +32,4 @@
 #endif
 
 #define LOGGER_DEBUG1
-//#define PRINT_DEBUG2
+// #define PRINT_DEBUG2

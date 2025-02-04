@@ -46,7 +46,7 @@ public:
 class Schedule_c
 {
 public:
-  Schedule_c(int nb_);
+  Schedule_c(int nb_ = 1);
   ~Schedule_c();
 
   static int add_task(function<int(void*)> _func, uint64_t _ms,

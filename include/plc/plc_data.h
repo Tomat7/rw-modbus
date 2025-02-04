@@ -28,11 +28,11 @@
 
 #define TYPE_FLOAT_ABCD 21
 #define FLOAT_ABCD TYPE_FLOAT_ABCD
-#define FLOAT_BE TYPE_FLOAT_ABCD
+#define FLOAT_LITTLE_SWAP TYPE_FLOAT_ABCD
 
 #define TYPE_FLOAT_CDAB 22
 #define FLOAT_CDAB TYPE_FLOAT_CDAB
-#define FLOAT_LS TYPE_FLOAT_CDAB
+#define FLOAT_BIG_ENDIAN TYPE_FLOAT_CDAB
 
 using namespace std;
 
@@ -47,6 +47,7 @@ struct mbdata_t {
   uint16_t errors_wr = 0;         // counter of WRITE errors (summ from start)
   uint16_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
 };
+
 struct regdata_t {
   uint16_t rvalue = 0;
   uint16_t rerrors = 0;  // number of errors on MB func (init/connect/read)

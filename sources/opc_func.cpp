@@ -25,7 +25,7 @@ void opc_regs_init()
     // n - name, rm - RegMap_c rm.set_shm_val();
     string n, e;
     n = rm.str_opcname;
-    e = OPC_ERRORS_FOLDER + n + OPC_ERRORS_SUFFIX; // Kub.Temp1.errors
+    e = Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix; // Kub.Temp1.errors
 
     OPCs.addVar(e, (uint16_t)0, 0); // Reg to keep NB of errors
 
@@ -69,7 +69,7 @@ uint16_t opc_update_uint16(string name, Reg_c* R)
   string n = name; //(R->ptr_reg)->str_opcname;
   uint16_t val_get = 0;
 
-  OPCs.updateVar(OPC_ERRORS_FOLDER + n + OPC_ERRORS_SUFFIX, rd->rerrors, true);
+  OPCs.updateVar(Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix, rd->rerrors, true);
 
   if (rtype == 2)
     val_get = CAST(uint16_t)(100 * OPCs.updateVar(n, val_fl, isOK));
@@ -83,18 +83,18 @@ uint16_t opc_update_uint16(string name, Reg_c* R)
 
 void opc_deinit() { OPCs.stop(); }
 
-void opc_init() { OPCs.init(4840); }
+void opc_init() { OPCs.init(Cfg.opc.SrvPort); }
 
 void opc_start()
 {
   std::thread opc_thread(opc_run_thread);
   opc_thread.detach();
-  wait_console(timeout_sec);
+  wait_console(Cfg.timeout_sec);
 }
 
 void opc_run_thread()
 {
-  prctl(PR_SET_NAME, OPC_THREAD_NAME);
+  prctl(PR_SET_NAME, Cfg.opc.SrvName);
   OPCs.run();
 }
 

@@ -71,8 +71,9 @@ void Schedule_c::init(int _nb)
   if (_nb) {
     stop();
     tasks.reserve(_nb);
-  }
-  LOGD("Init Schedule_c capacity: %d", tasks.capacity());
+    LOGD("Init Schedule_c capacity: %d", tasks.capacity());
+  } else
+    LOGC("Wrong Schedule_c capacity: %d", _nb);
 }
 
 int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
@@ -159,7 +160,7 @@ void Schedule_c::stop()
   this_thread::sleep_for(20ms);
   scheduler_mux.lock();
 
-  LOGD("Stop: Try to lockn");
+  LOGD("Stop: Try to lock.");
 
   uint64_t nb_tasks = tasks.size();
   for (uint64_t i = 0; i < nb_tasks; i++)

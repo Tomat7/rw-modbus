@@ -57,28 +57,28 @@ Reg_c::Reg_c(const char* _rn, string src_ref)
 Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 {
 
-  LOGD("- %s %d", __func__, 1);
+//  LOGD("- %s %d", __func__, 1);
   ptr_reg = _reg;
   rn = ptr_reg->fullname.c_str();
   src_reference = ptr_reg->str_source;
 
-  LOGD("- %s %d", __func__, 2);
+//  LOGD("- %s %d", __func__, 2);
   str_topfolder = _dev->str_folder;
   str_opcname = "/" + str_topfolder + "/";
 
-  LOGD("- %s %d", __func__, 3);
+//  LOGD("- %s %d", __func__, 3);
   string &_dname = _dev->str_dev_name;
   if (_dname != MB_NO_DEV_NAME)
     str_opcname += _dname + "/";
 
-  LOGD("- %s %d", __func__, 4);
+//  LOGD("- %s %d", __func__, 4);
   string &_rfolder = _reg->str_rfolder;
   if ((_rfolder != MB_NO_FOLDER) && (_rfolder != ""))
     str_opcname += _rfolder + "/";
 
   str_opcname += _reg->fullname;
 
-  LOGD("- %s %d - done", __func__, 5);
+//  LOGD("- %s %d - done", __func__, 5);
 }
 
 bool Reg_c::is_MB() { return (src_reference == ""); }
