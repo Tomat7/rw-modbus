@@ -41,6 +41,7 @@ union value_u {
   double dbl;
   uint16_t fl2u[2];
   uint16_t dbl2u[4];
+  uint8_t byte2u[8];
 };
 
 using namespace std;
@@ -92,9 +93,9 @@ public:
 //  regdata_t* ptr_data_shm = nullptr;  // ptr to SHARED MEMORY (local) data
 //  regdata_t* ptr_data_plc = nullptr;  // ptr to SHARED MEMORY (PLC/MB) data
 //  int fd = -1;                        // descriptor of SHARED MEMORY
-  const char* rn = nullptr;           // just for FUN! (copy)
+  const char* rn = nullptr;      // just for FUN! (copy)
   value_u value;                 // just for FUN! (to print with PLC & SHM)
-  reg_t* ptr_reg = nullptr;           // ptr to PLC reg
+  reg_t* ptr_reg = nullptr;      // ptr to PLC reg
 
   string str_topfolder = "";  // "PLC" or "SCADA" (or ??)
   string str_opcname = "";  // OPC fullpath: /PLC/folder/PLC_name/rfolder/PLC_name.reg_name

@@ -78,7 +78,7 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 
   str_opcname += _reg->fullname;
 
-//  LOGD("- %s %d - done", __func__, 5);
+  LOGD("- %s %d - done, sizeof(value): %d", __func__, 5, sizeof(value));
 }
 
 bool Reg_c::is_MB() { return (src_reference == ""); }
