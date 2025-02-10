@@ -30,6 +30,23 @@ Timer t;
 PLC_c Slave(1502, 9);
 uint16_t w;
 
+/*
+union value_u {
+  int16_t i16;
+  int32_t i32;
+  int64_t i64;
+  uint16_t ui16;
+  uint32_t ui32;
+  uint64_t ui64;
+  int64_t dt;
+  float fl;
+  double dbl;
+  uint16_t fl2u[2];
+  uint16_t dbl2u[4];
+  uint8_t byte2u[8];
+}
+*/
+ value_u val;
 
 static void close_sigint(int dummy)
 {
@@ -50,13 +67,19 @@ int main(void)
 //  mb_slave_init();
 
   uint64_t ms = t.millis();
+  uint64_t msStart = t.millis();
+  uint16_t secPassed = 0; 
+  float fl = (float)1.234;
+  double dbl = 123.4567;
 
   for (;;) {
     if (t.millis() > (ms + 2000)) {
       ms = t.millis();
 //      mb_slave_print_reg(0);
 //      mb_slave_print_reg(9);
-      printf("%d   %d    |\n", Slave.read_raw(1), Slave.read_raw(7));
+      fl *= (float)1.001;
+      dbl *= 1.01;
+      printf("millis: %d,  %d   %f  %f  |\n", secPassed, Slave.read_raw(0), fl, dbl);
       fflush(stdout);
     }
     // =======================================================
@@ -64,7 +87,21 @@ int main(void)
     w++;
     //    for (int i = 0; i < 10; i++)
     Slave.write_raw(1, w++);
-    Slave.write_raw(7, w++);
+    
+    secPassed = (uint16_t)((t.millis() - msStart)/1000);
+    Slave.write_raw(0, secPassed);
+
+    //
+    val.fl = fl;
+    Slave.write_raw(2, val.fl2u[1]);
+    Slave.write_raw(3, val.fl2u[0]);
+
+    val.dbl = dbl;
+    Slave.write_raw(4, val.dbl2u[3]);
+    Slave.write_raw(5, val.dbl2u[2]);
+    Slave.write_raw(6, val.dbl2u[1]);
+    Slave.write_raw(7, val.dbl2u[0]);
+
     //mb_mapping->tab_registers[i] = w++;
     // =======================================================
     //    printf(".\n");
