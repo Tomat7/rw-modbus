@@ -196,9 +196,12 @@ int PLC_c::is_float(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
 
 uint64_t PLC_c::millis()
 {
-#define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
-  uint64_t t;
-  t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
+  using namespace std::chrono;
+#define CAST_MILLIS duration_cast<milliseconds>
+  uint64_t t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
+  /* #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
+    uint64_t t;
+    t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count(); */
   return t;
 }
 

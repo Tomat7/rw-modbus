@@ -15,7 +15,7 @@
 $(info === The GOALS is: $(MAKECMDGOALS))
 
 # === COMMON: Version/standard & Directories & files & libraries ===
-CXX_VER=c++20
+CXX_VER=c++17
 OUTFILE=a.out
 OBJDIR =./tmp/obj
 SUBDIRS= include sources

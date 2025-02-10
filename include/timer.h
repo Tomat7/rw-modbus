@@ -30,9 +30,16 @@ private:
   using second_t = duration<double, std::ratio<1>>;
   time_point<steady_clock> begin;
   time_point<steady_clock> end;
+  time_point<steady_clock> now;
+
+  uint64_t start_millis, start_micros;
 
 public:
-  Timer() {}
+  Timer()
+  {
+    start_millis = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
+    start_micros = CAST_MICROS(system_clock::now().time_since_epoch()).count();
+  }
 
   void start(cchar* txt = "Timer started... \n")
   {
@@ -47,6 +54,42 @@ public:
       cout << txt;
     end = steady_clock::now();
   }
+
+// ===== is_passed_* =====
+
+  bool is_passed_sec(double sec)
+  {
+    return passed_sec() > sec;
+  }
+
+  bool is_passed_ms(int64_t ms)
+  {
+    return passed_ms() > ms;
+  }
+
+  bool is_passed_us(int64_t us)
+  {
+    return passed_us() > us;
+  }
+
+// ===== passed_* =====
+
+  double passed_sec() const
+  {
+    return duration_cast<second_t>(steady_clock::now() - begin).count();
+  }
+
+  int64_t passed_ms() const
+  {
+    return duration_cast<milliseconds>(steady_clock::now() - begin).count();
+  }
+
+  int64_t passed_us() const
+  {
+    return duration_cast<microseconds>(steady_clock::now() - begin).count();
+  }
+
+// ===== elapsed_* =====
 
   double elapsed_sec() const
   {
@@ -121,15 +164,26 @@ public:
 
   // ============================
 
-  uint64_t millis()
+  int64_t millis()
+  {
+    return epoch_millis() - start_millis;
+  }
+
+  int64_t micros()
+  {
+    return epoch_micros() - start_micros;
+  }
+
+  int64_t epoch_millis()
   {
     return CAST_MILLIS(system_clock::now().time_since_epoch()).count();
   }
 
-  uint64_t micros()
+  int64_t epoch_micros()
   {
     return CAST_MICROS(system_clock::now().time_since_epoch()).count();
   }
+
 };
 
 // eof

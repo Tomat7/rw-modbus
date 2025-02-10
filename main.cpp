@@ -29,7 +29,6 @@ const char* mode = "master";
 int timeout_sec = TIMEOUT_SEC;
 int rc;
 
-
 static void close_sigint(int dummy)
 {
   LOGC("Exit by Ctrl-C. Bye.\n");
@@ -44,10 +43,12 @@ static void close_sigint(int dummy)
 int main(int argc, char** argv)
 {
   Timer t;
+
   set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   // log_level = 3;
+
 
   if (argc > 1) {
     if (Mode.count(string(argv[1])))
