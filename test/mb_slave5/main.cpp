@@ -66,20 +66,22 @@ int main(void)
 
 //  mb_slave_init();
 
+  t.start();
+
   uint64_t ms = t.millis();
   uint64_t msStart = t.millis();
   uint16_t secPassed = 0; 
-  float fl = (float)1.234;
-  double dbl = 123.4567;
+  float fl = (float)1.23;
+  double dbl = 45.6789;
 
   for (;;) {
-    if (t.millis() > (ms + 2000)) {
-      ms = t.millis();
+    if (t.is_passed_ms(2000)) {
+      t.start("+");
 //      mb_slave_print_reg(0);
 //      mb_slave_print_reg(9);
-      fl *= (float)1.001;
-      dbl *= 1.01;
-      printf("millis: %d,  %d   %f  %f  |\n", secPassed, Slave.read_raw(0), fl, dbl);
+      fl += (float)0.123;
+      dbl += 0.34567;
+      printf("millis: %d,  %d   %9.3f  %12.5f  |\n", secPassed, Slave.read_raw(0), fl, dbl);
       fflush(stdout);
     }
     // =======================================================
@@ -88,7 +90,7 @@ int main(void)
     //    for (int i = 0; i < 10; i++)
     Slave.write_raw(1, w++);
     
-    secPassed = (uint16_t)((t.millis() - msStart)/1000);
+    secPassed = (uint16_t)(t.seconds()/* t.millis()/1000 */);
     Slave.write_raw(0, secPassed);
 
     //
