@@ -140,6 +140,8 @@ void reg_print(string rn, const regdata_t* rd)
   const char* C = getColor(rd->rerrors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rd->rerrors == 0);
 
+  // TODO: full recode with new TYPE_*
+
   if (rd->rtype == TYPE_U16)
     printf("%s%-12s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
   else if (rd->rtype == TYPE_I16)

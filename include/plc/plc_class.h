@@ -70,8 +70,8 @@ public:
   //float get_reg(string rname);
   //float get_reg(int raddr);
 
-  int is_float(string rname); // 0 - 16-bit reg, 1 - 1st reg of 32-bits reg
-  int is_float(int raddr);    // 2 - 2nd reg of 32-bits register
+  int regs_used(string rname); // 0 - 16-bit reg, 1 - 1st reg of 32-bits reg
+  int regs_used(int raddr);    // 2 - 2nd reg of 32-bits register
 
   // Common properties
   bool Enabled = false;

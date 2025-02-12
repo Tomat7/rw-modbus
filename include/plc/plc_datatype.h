@@ -1,0 +1,103 @@
+#pragma once
+
+// reg_datatype.h ----------------------------------
+// Copyright 2025 Tomat7 (star0413@gmail.com)
+
+
+// Defines of data types. (incuding TWO and FOUR words types)
+// See details - https://www.modbustools.com/poll_display_formats.html
+
+enum regtype_t {
+  TYPE_16BIT = 0,
+  TYPE_U16,  // Unsigned Integer 16-bit (uint16_t)
+  TYPE_I16,  // Signed Integer 16-bit (int16_t)
+  TYPE_F100, // floatVar = ModbusVar_int16 / 100.0;
+  TYPE_F10,  // floatVar = ModbusVar_int16 / 10.0;
+  TYPE_HEX,     // ?? for correct view on display
+  TYPE_BINARY,  // ?? for correct view on display
+  // TWO Modbus-words types
+  // *_HH - High byte first, high word first. (Big-endian)
+  // *_HL - High byte first, low word first. (Little-endian Swap)
+  // *_LH - Low byte first, high word first. (Big-endian Swap)
+  // *_LL - Low byte first, low word first. (Little-endian)
+  // See details - https://www.simplymodbus.ca/FAQ.htm#Order
+  TYPE_32BIT = 20,
+  TYPE_U32_HH,  // Unsigned Integer 32-bit (uint32_t U32_var)
+  TYPE_U32_HL,
+  TYPE_U32_LH,
+  TYPE_U32_LL,
+  TYPE_I32_HH,  // Signed Integer 32-bit (int32_t I32_var)
+  TYPE_I32_HL,
+  TYPE_I32_LH,
+  TYPE_I32_LL,
+  TYPE_FLOAT_HH,  // Float 32-bits (float Float_var)
+  TYPE_FLOAT_HL,
+  TYPE_FLOAT_LH,
+  TYPE_FLOAT_LL,
+  // FOUR Modbus-words types
+  // See details - https://www.modbustools.com/poll_display_formats.html
+  TYPE_64BIT = 50,
+  TYPE_U64_HH,  // Unsigned Integer 64-bit (uint64_t U64_var)
+  TYPE_U64_HL,
+  TYPE_U64_LH,
+  TYPE_U64_LL,
+  TYPE_I64_HH,  // Signed Integer 64-bit (int64_t I64_var)
+  TYPE_I64_HL,
+  TYPE_I64_LH,
+  TYPE_I64_LL,
+  TYPE_DOUBLE_HH,  // Double 64-bits (double Dbl_var)
+  TYPE_DOUBLE_HL,
+  TYPE_DOUBLE_LH,
+  TYPE_DOUBLE_LL,
+  TYPE_OTHER = 100,
+  TYPE_1ST = 101, // ?? zachem?
+  TYPE_2ND = 102, // Second word of 2- and 4-words types
+  TYPE_3RD = 103, // Third word of 4-words types
+  TYPE_4TH = 104, // Fourth word of 4-words types
+  TYPE_REFERENCED = 254,  // Reference to other type
+  TYPE_NOTHING = 255,     // No-type type
+};
+
+#define ENUMCAST(x) static_cast<int>(x) // ??
+
+#define TYPE_REF TYPE_REFERENCED
+#define TYPE_NO TYPE_NOTHING
+
+// FLOAT data types (two Modbus words)
+#define FLOAT_HH TYPE_FLOAT_HH
+#define FLOAT_ABCD TYPE_FLOAT_HH
+#define FLOAT_BIGENDIAN TYPE_FLOAT_HH
+
+// High byte first, low word first. (Little-endian Swap)
+#define FLOAT_HL TYPE_FLOAT_HL
+#define FLOAT_CDAB TYPE_FLOAT_HL
+
+// Low byte first, high word first. (Big-endian Swap)
+#define FLOAT_LH TYPE_FLOAT_LH
+#define FLOAT_BADC TYPE_FLOAT_LH
+
+// Low byte first, low word first. (Little-endian)
+#define FLOAT_LL TYPE_FLOAT_LL
+#define FLOAT_DCBA TYPE_FLOAT_LL
+
+// DOUBLE data types (four Modbus words)
+// See details https://www.simplymodbus.ca/FAQ.htm#Order
+
+// High byte first, high word first. (Big-endian)
+#define DOUBLE_HH TYPE_FLOAT_HH
+#define DOUBLE_ABCD TYPE_FLOAT_HH
+#define DOUBLE_BIGENDIAN TYPE_FLOAT_HH
+
+// High byte first, low word first. (Little-endian Swap)
+#define DOUBLE_HL TYPE_FLOAT_HL
+#define DOUBLE_CDAB TYPE_FLOAT_HL
+
+// Low byte first, high word first. (Big-endian Swap)
+#define DOUBLE_LH TYPE_FLOAT_LH
+#define DOUBLE_BADC TYPE_FLOAT_LH
+
+// Low byte first, low word first. (Little-endian)
+#define DOUBLE_LL TYPE_FLOAT_LL
+#define DOUBLE_DCBA TYPE_FLOAT_LL
+
+// eof

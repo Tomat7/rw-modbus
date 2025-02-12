@@ -12,27 +12,7 @@
 
 #include <string>
 
-/* #include <atomic>
-  #include <ctime>
-  #include <iostream>
-  #include <map>
-  #include <mutex>
-  #include <vector> */
-
-#define TYPE_U16 0
-#define TYPE_I16 1
-#define TYPE_F100 2
-#define TYPE_F10 3
-
-#define FLOAT_2 100
-
-#define TYPE_FLOAT_ABCD 21
-#define FLOAT_ABCD TYPE_FLOAT_ABCD
-#define FLOAT_LITTLE_SWAP TYPE_FLOAT_ABCD
-
-#define TYPE_FLOAT_CDAB 22
-#define FLOAT_CDAB TYPE_FLOAT_CDAB
-#define FLOAT_BIG_ENDIAN TYPE_FLOAT_CDAB
+#include "plc_datatype.h"
 
 using namespace std;
 
@@ -54,7 +34,7 @@ struct regdata_t {
   int rupdate = 0;  // 1 - need to write/update remote register, 0 - no update
   int rstatus = 0;  // -1 mean ERROR, any positive - is OK
   int rmode = 0;    // 1 - mean RW, 0 - Read-only
-  int rtype = 0;    // 0 - uint16_t, 1 - int16_t, 2 - float (enum?),
+  regtype_t rtype;    // 0 - uint16_t, 1 - int16_t, 2 - float100 (see plc_datatype.h)
 };
 
 struct reg_t {

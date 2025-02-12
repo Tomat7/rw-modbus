@@ -17,17 +17,43 @@
 #include "plc_class.h"
 
 // mutex PLC_c::logger_mux;
-map<string, int> var_type {
-  {"u", TYPE_U16},       {"i", TYPE_I16},       {"f", TYPE_F100},
-  {"*", 254},            {"-", 255},      /* Referenced registers */
-  {"u16", TYPE_U16},     {"i16", TYPE_I16},     {"f10", TYPE_F10},
-  {"uint16", TYPE_U16},  {"int16", TYPE_I16},   {"f100", TYPE_F100},
-  {"fabcd", FLOAT_ABCD},  {"fcdab", FLOAT_CDAB},  {"fbadc", 23},  {"fdcba", 24},
-  {"f_abcd", FLOAT_ABCD}, {"f_cdab", FLOAT_CDAB}, {"f_badc", 23}, {"f_dcba", 24},
-  {"float_abcd", FLOAT_ABCD},  {"float_abcd_2", FLOAT_2 + FLOAT_ABCD},
-  {"float_cdab", FLOAT_CDAB},  {"float_cdab_2", FLOAT_2 + FLOAT_CDAB},
-  {"float_badc", 23},  {"float_badc_1", 23}, {"float_badc_2", 123},
-  {"float_dcba", 24},  {"float_dcba_1", 24}, {"float_dcba_2", 124}
+map<string, regtype_t> type_map {
+
+  // See plc_datatype.h for details & comments
+  {"*", TYPE_REFERENCED}, {"-", TYPE_NOTHING},    // "Referenced" registers
+  {"u", TYPE_U16},        {"i", TYPE_I16},        {"f", TYPE_F100},
+  {"u16", TYPE_U16},      {"i16", TYPE_I16},      {"f10", TYPE_F10},
+  {"hex", TYPE_HEX},      {"bin", TYPE_BINARY},   {"f100", TYPE_F100},
+
+  // High byte first, high word first (Big-endian) as default
+  {"u32", TYPE_U32_HH},     {"float", TYPE_FLOAT_HH},
+  {"i64", TYPE_I64_HH},     {"double", TYPE_DOUBLE_HH},
+
+  // Other types and word/byte orders.  (longnames)
+  {"u32hh", TYPE_U32_HH},   {"i64hh", TYPE_I64_HH},
+  {"u32hl", TYPE_U32_HL},   {"i64hl", TYPE_I64_HL},
+  {"u32lh", TYPE_U32_LH},   {"i64lh", TYPE_I64_LH},
+  {"u32ll", TYPE_U32_LL},   {"i64ll", TYPE_I64_LL},
+
+  {"fhh", TYPE_FLOAT_HH},   {"float_abcd", TYPE_FLOAT_HH},
+  {"fhl", TYPE_FLOAT_HL},   {"float_cdab", TYPE_FLOAT_HL},
+  {"flh", TYPE_FLOAT_LH},   {"float_badc", TYPE_FLOAT_LH},
+  {"fll", TYPE_FLOAT_LL},   {"float_dcba", TYPE_FLOAT_LL},
+
+  {"f_abcd", TYPE_FLOAT_HH}, {"d_abcd", TYPE_DOUBLE_HH},
+  {"f_cdab", TYPE_FLOAT_HL}, {"d_cdab", TYPE_DOUBLE_HL},
+  {"f_badc", TYPE_FLOAT_LH}, {"d_badc", TYPE_DOUBLE_LH},
+  {"f_dcba", TYPE_FLOAT_LL}, {"d_dcba", TYPE_DOUBLE_LL},
+
+  {"dhh", TYPE_DOUBLE_HH},  {"double_abcd", TYPE_DOUBLE_HH},
+  {"dhl", TYPE_DOUBLE_HL},  {"double_cdab", TYPE_DOUBLE_HL},
+  {"dlh", TYPE_DOUBLE_LH},  {"double_badc", TYPE_DOUBLE_LH},
+  {"dll", TYPE_DOUBLE_LL},  {"double_dcba", TYPE_DOUBLE_LL},
+
+  {"2nd", TYPE_2ND}, {"2", TYPE_2ND},
+  {"3rd", TYPE_3RD}, {"3", TYPE_3RD},
+  {"4th", TYPE_4TH}, {"4", TYPE_4TH},
+
 };
 
 PLC_c::~PLC_c()
@@ -67,17 +93,28 @@ void PLC_c::init_regs()  // Master only
     r.data.rvalue = 777;  // TODO: remove for production
   }
 
-//
+// DONE! -- RECODE!! add 64-bit regg
   for (auto &[a, r] : regs) {
-    if (is_float(a) == 1) {
+    int ru = regs_used(a);
+
+    if (ru > 1) {
       r.r_next = &regs[r.raddr + 1];
       regs[r.raddr + 1].data.rmode = r.data.rmode;
-      regs[r.raddr + 1].data.rtype = r.data.rtype + 100;
+      regs[r.raddr + 1].data.rtype = TYPE_2ND;
     }
+
+    if (ru > 2) {
+      regs[r.raddr + 1].r_next = &regs[r.raddr + 2];
+      regs[r.raddr + 2].data.rmode = r.data.rmode;
+      regs[r.raddr + 2].data.rtype = TYPE_3RD;
+      regs[r.raddr + 2].r_next = &regs[r.raddr + 3];
+      regs[r.raddr + 3].data.rmode = r.data.rmode;
+      regs[r.raddr + 3].data.rtype = TYPE_4TH;
+    }
+
     LOGN("+ REG init: %-9s %2d %2s %3d [%s]", r.ch_name, r.raddr,
          r.str_mode.c_str(), regs[r.raddr].data.rtype, r.fullname.c_str());
   }
-
 }
 
 
@@ -98,8 +135,8 @@ void PLC_c::init_str(reg_t &r)
 void PLC_c::init_type(reg_t &R)
 {
   string st_ = to_lower(R.str_type);
-  if (var_type.count(st_))
-    R.data.rtype = var_type[st_];
+  if (type_map.count(st_))
+    R.data.rtype = type_map[st_];
   else
     LOGA("Error REG: %s, type: %s\n", R.str_name.c_str(), R.str_type.c_str());
 

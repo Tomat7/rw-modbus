@@ -168,26 +168,28 @@ uint16_t PLC_c::get_reg(string rname)  // Set reg's local value != read PLC.
   return rval;
 }
 
-int PLC_c::is_float(int raddr)  // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
+int PLC_c::regs_used(int raddr)  // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
 {
+  // DONE! -- TODO: full recode with new TYPE_*
   int x = 0;
   if (regs.count(raddr)) {
-    auto &rt = regs[raddr].data.rtype;
-    if (rt > 20) {
-      x = 1;
-      if (rt > 100)
-        x = 2;
-    }
+    x = 1;
+    auto &rtype = regs[raddr].data.rtype;
+
+    if ((rtype > TYPE_32BIT) && (rtype < TYPE_64BIT))
+      x = 2;
+    else if ((rtype > TYPE_64BIT) && (rtype < TYPE_OTHER))
+      x = 4;
   }
   return x;
 }
 
-int PLC_c::is_float(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
+int PLC_c::regs_used(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
 {
   int x = 0;
   for (auto &[a, r] : regs) {
     if (r.str_name == rname) {
-      x = is_float(a);
+      x = regs_used(a);
       break;
     }
   }

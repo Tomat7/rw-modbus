@@ -115,10 +115,10 @@ float Reg_c::get_value()
   if (ptr_data_plc != nullptr) {
     if (ptr_data_plc->rtype == TYPE_F100)
       value.fl =(int16_t)(ptr_data_plc->rvalue) * (float)0.01;
-    else if (ptr_data_plc->rtype == TYPE_FLOAT_ABCD) {
+    else if (ptr_data_plc->rtype == FLOAT_HH) {
       value.fl2u[1] = ptr_data_plc->rvalue;
       value.fl2u[0] = (ptr_reg->r_next)->data.rvalue;
-    } else if (ptr_data_plc->rtype == TYPE_FLOAT_CDAB) {
+    } else if (ptr_data_plc->rtype == FLOAT_HL) {
       value.fl2u[0] = ptr_data_plc->rvalue;
       value.fl2u[1] = (ptr_reg->r_next)->data.rvalue;
     }

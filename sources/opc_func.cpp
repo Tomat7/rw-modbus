@@ -32,10 +32,10 @@ void opc_regs_init()
     regdata_t* rd = &rm.ptr_reg->data;
     auto &t = rm.ptr_reg->data.rtype;
 
-    if (t == TYPE_FLOAT_ABCD) {
+    if (t == TYPE_FLOAT_HH) {
       float fl = (int16_t)(rd->rvalue) * (float)1.0;
       OPCs.addVar(n, fl, rd->rmode);
-    } else if (t == TYPE_FLOAT_CDAB) {
+    } else if (t == TYPE_FLOAT_HL) {
       float fl = (int16_t)(rd->rvalue) * (float)1.00;
       OPCs.addVar(n, fl, rd->rmode);
     } else if (t == TYPE_F10) {
@@ -71,6 +71,7 @@ uint16_t opc_update_uint16(string name, Reg_c* R)
 
   OPCs.updateVar(Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix, rd->rerrors, true);
 
+  // TODO: full recode with new TYPE_*
   if (rtype == 2)
     val_get = CAST(uint16_t)(100 * OPCs.updateVar(n, val_fl, isOK));
   else if (rtype == 1)
