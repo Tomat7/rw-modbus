@@ -15,7 +15,7 @@
 
 using namespace std;
 
-union var_union {
+union value_u {
   int16_t i16;
   int32_t i32;
   int64_t i64;
@@ -27,6 +27,7 @@ union var_union {
   double dbl;
   uint16_t fl2u[2];
   uint16_t dbl2u[4];
+  uint8_t byte2u[8];
 };
 
 struct badvalue_t {
@@ -61,7 +62,7 @@ struct var_t {
   int type;                   // UA_DataTypes
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
-  var_union value;
+  value_u value;
   /*   var_union value_wrong;
     var_union value_min;
     var_union value_max; */
@@ -83,7 +84,7 @@ public:
   void delVar(string s);
   int getType(string s);
   int getStatus(string s);           // 0 - is OK, any other (1 or -1) is BAD
-  var_union readRawValue(string s);  // returns value_union
+  value_u readRawValue(string s);  // returns value_union
   int refreshValues();  // getVar for ALL variables, returns - qty of vars
 
   // for init
@@ -163,7 +164,7 @@ void OpcServer_c::setVariableValue(std::string s, T Value_set, bool isOK)
 
   if (vars.count(s)) {
     vars[s].ptr_value = static_cast<T*>(&Value_set);
-    vars[s].value = *static_cast<var_union*>(vars[s].ptr_value);
+    vars[s].value = *static_cast<value_u*>(vars[s].ptr_value);
     writeVariable(vars[s], isOK);
   } else
     LOGA("Set: Ignore non-existing variable: %s", s.c_str());

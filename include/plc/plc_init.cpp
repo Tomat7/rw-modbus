@@ -26,14 +26,20 @@ map<string, regtype_t> type_map {
   {"hex", TYPE_HEX},      {"bin", TYPE_BINARY},   {"f100", TYPE_F100},
 
   // High byte first, high word first (Big-endian) as default
-  {"u32", TYPE_U32_HH},     {"float", TYPE_FLOAT_HH},
-  {"i64", TYPE_I64_HH},     {"double", TYPE_DOUBLE_HH},
+  {"u32", TYPE_U32_HH},     {"i32", TYPE_I32_HH},
+  {"u64", TYPE_U64_HH},     {"i64", TYPE_I64_HH},
+  {"float", TYPE_FLOAT_HH}, {"double", TYPE_DOUBLE_HH},
 
   // Other types and word/byte orders.  (longnames)
-  {"u32hh", TYPE_U32_HH},   {"i64hh", TYPE_I64_HH},
-  {"u32hl", TYPE_U32_HL},   {"i64hl", TYPE_I64_HL},
-  {"u32lh", TYPE_U32_LH},   {"i64lh", TYPE_I64_LH},
-  {"u32ll", TYPE_U32_LL},   {"i64ll", TYPE_I64_LL},
+  {"u32hh", TYPE_U32_HH},   {"i32hh", TYPE_I32_HH},
+  {"u32hl", TYPE_U32_HL},   {"i32hl", TYPE_I32_HL},
+  {"u32lh", TYPE_U32_LH},   {"i32lh", TYPE_I32_LH},
+  {"u32ll", TYPE_U32_LL},   {"i32ll", TYPE_I32_LL},
+
+  {"u64hh", TYPE_U64_HH},   {"i64hh", TYPE_I64_HH},
+  {"u64hl", TYPE_U64_HL},   {"i64hl", TYPE_I64_HL},
+  {"u64lh", TYPE_U64_LH},   {"i64lh", TYPE_I64_LH},
+  {"u64ll", TYPE_U64_LL},   {"i64ll", TYPE_I64_LL},
 
   {"fhh", TYPE_FLOAT_HH},   {"float_abcd", TYPE_FLOAT_HH},
   {"fhl", TYPE_FLOAT_HL},   {"float_cdab", TYPE_FLOAT_HL},

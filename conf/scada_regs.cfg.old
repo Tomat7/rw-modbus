@@ -1,0 +1,51 @@
+//
+// ======= SCADA registers definitions: =======
+//
+// rsource = - is mandatory parameter for SCADA registers (prohibited for Modbus register)
+// rsource = "-" - mean register not linked with Modbus register
+// rsource = "DEVICE.regname" - SCADA register linked with PLC register named "DEVICE.regname"
+//
+// raddr - prohibited parameter for SCADA registers
+//
+
+scadatitle = "SCADA regs config";
+
+regs:
+(
+  { rfolder = ".";  rname = "Millis"; rsource = "-"; rmode = "rw"; rtype = "u"; },
+
+  { rfolder = ".";  rname = "Tkub1";  rsource = "Kub.Temp1"; raddr = 1; rtype = "*"; },
+/*
+  { rfolder = ".";  rname = "Tkub2";  rsource = "Buf.Temp3"; raddr = 2; rtype = "*"; },
+  { rfolder = ".";  rname = "Tbuf";   rsource = "Buf.Temp2"; raddr = 3; rtype = "*"; },
+  { rfolder = ".";  rname = "Tdef";   rsource = "Def.Temp1"; raddr = 4; rtype = "*"; },
+  { rfolder = ".";  rname = "Ttsa";   rsource = "Def.Temp3"; raddr = 5; rtype = "*"; },
+*/
+
+  { rfolder = ".";  rname = "Pset";      rsource = "Kub.Pset";  raddr = 10; rtype = "*"; },
+//  { rfolder = ".";  rname = "Pnow";      rsource = "Kub.Pnow";  raddr = 11; rtype = "*"; },
+//  { rfolder = ".";  rname = "OverPress"; rsource = "Buf.Press"; raddr = 12; rtype = "*"; },
+//  { rfolder = ".";  rname = "AbsPress";  rsource = "Def.Press"; raddr = 13; rtype = "*"; },
+//{ rfolder = ".";  rname = "WaterPump"  rsource = "Buf.Press"; raddr = 14; rtype = "*"; },
+
+
+  { rfolder = ".";  rname = "Process"; rsource = "-"; raddr = 51; rmode = "rw"; rtype = "u"; },
+  { rfolder = ".";  rname = "Mode";    rsource = "-"; raddr = 52; rmode = "rw"; rtype = "u"; },
+  { rfolder = ".";  rname = "Tkub0";   rsource = "-"; raddr = 53; rmode = "rw"; rtype = "f"; },
+  { rfolder = ".";  rname = "T_boil";  rsource = "-"; raddr = 54; rmode = "rw"; rtype = "f"; },
+  { rfolder = ".";  rname = "T_heat";  rsource = "-"; raddr = 55; rmode = "rw"; rtype = "f"; },
+
+  { rfolder = "cfg";  rname = "P_MAX";   rsource = "-"; raddr = 61; rmode = "rw"; rtype = "u"; },
+  { rfolder = "cfg";  rname = "P_WARM";  rsource = "-"; raddr = 62; rmode = "rw"; rtype = "u"; },
+/*
+  { rfolder = "cfg";  rname = "P_HEAD";  rsource = "-"; raddr = 63; rmode = "rw"; rtype = "u"; },
+  { rfolder = "cfg";  rname = "P_BODY";  rsource = "-"; raddr = 64; rmode = "rw"; rtype = "u"; },
+  { rfolder = "cfg";  rname = "P_TAIL";  rsource = "-"; raddr = 65; rmode = "rw"; rtype = "u"; },
+  { rfolder = "cfg";  rname = "P_DIST";  rsource = "-"; raddr = 66; rmode = "rw"; rtype = "u"; },
+  { rfolder = "cfg";  rname = "P_DIST2"; rsource = "-"; raddr = 67; rmode = "rw"; rtype = "u"; },
+  { rfolder = "cfg";  rname = "P_DIST3"; rsource = "-"; raddr = 68; rmode = "rw"; rtype = "u"; },
+  { rfolder = "cfg";  rname = "P_BOIL";  rsource = "-"; raddr = 69; rmode = "rw"; rtype = "u"; },
+*/
+
+  { rfolder = ".";  rname = "empty"; rsource = "-"; rmode = "rw"; rtype = "i"; raddr = 99; }
+);

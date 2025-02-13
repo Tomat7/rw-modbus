@@ -19,7 +19,7 @@ void regs_create_from_masters()
   for (auto &D : PLCvec) {
     for (auto &[a, R] : D.regs) {
       if (R.str_source == "" || R.str_source == "-") {
-        LOGD("(Master) try to create %s, src: %s",
+        LOGI("(Master) try to create %s, src: %s",
              R.fullname.c_str(), R.str_source.c_str());
         REGmap[R.fullname] = {&R, &D};
       }
@@ -30,7 +30,7 @@ void regs_create_from_masters()
     for (auto &[a, R] : D.regs) {
       if (R.str_source != "" && R.str_source != "-") {
         auto &Rsrc = REGmap[R.str_source];
-        LOGD("(Referenced) try to create %s, src: %s",
+        LOGN("(Referenced) try to create %s, src: %s",
              R.fullname.c_str(), R.str_source.c_str());
         LOGD("- %s %d", __func__, 0);
         R.str_mode = Rsrc.ptr_reg->str_mode;

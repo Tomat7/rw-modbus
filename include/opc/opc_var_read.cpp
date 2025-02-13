@@ -20,7 +20,7 @@ void* OpcServer_c::getVariantData(string s)
     UA_Variant_init(uaVariant);
     UA_Server_readValue(uaServer, vars[s].node_id.var, uaVariant);
     if (uaVariant->data != nullptr) {
-      vars[s].value = *static_cast<var_union*>(uaVariant->data);
+      vars[s].value = *static_cast<value_u*>(uaVariant->data);
       VarData = &vars[s].value;
     } else
       VarData = nullptr;
@@ -30,9 +30,9 @@ void* OpcServer_c::getVariantData(string s)
   return VarData;
 }
 
-var_union OpcServer_c::readRawValue(string s)
+value_u OpcServer_c::readRawValue(string s)
 {
-  var_union vu;
+  value_u vu;
   vu.i64 = 0x8000000000000000;
   vu.fl = -999.32f;
   vu.dbl = -9999.987;

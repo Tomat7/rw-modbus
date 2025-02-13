@@ -19,29 +19,23 @@
 #include <vector>
 
 #include "include/plc/plc_class.h"
+#include "include/opc/opc_class.h"
 
 #define MB_SLAVE_CONN_MAX 5
 //#define USE_SYSLOG
 
-
-union float2uint_u {
+/*
+  union float2uint_u {
   float fl;
   uint16_t ui[2];
-};
-
-union value_u {
-  int16_t i16;
-  int32_t i32;
-  int64_t i64;
-  uint16_t ui16;
-  uint32_t ui32;
-  uint64_t ui64;
-  int64_t dt;
-  float fl;
-  double dbl;
-  uint16_t fl2u[2];
-  uint16_t dbl2u[4];
-  uint8_t byte2u[8];
+  };
+*/
+enum class byteorder_t {
+  SINGLE,
+  HH,
+  HL,
+  LH,
+  LL,
 };
 
 using namespace std;
@@ -75,6 +69,7 @@ public:
   bool is_MB();
   bool is_Scada();  // Calculated
   bool has_Ref();    // Referenced to Modbus
+  bool has_Str(string SS, string fs); // Look for fs within SS
 
   // set MODBUS value and return LOCAL
   template <typename T> T set_value(T _val);
@@ -95,6 +90,9 @@ public:
 //  int fd = -1;                        // descriptor of SHARED MEMORY
   const char* rn = nullptr;      // just for FUN! (copy)
   value_u value;                 // just for FUN! (to print with PLC & SHM)
+  byteorder_t byte_order;   // BYTE_ORDER
+  int var_type;             // UA_TYPES_DOUBLE
+  bool visible = false;
   reg_t* ptr_reg = nullptr;      // ptr to PLC reg
 
   string str_topfolder = "";  // "PLC" or "SCADA" (or ??)

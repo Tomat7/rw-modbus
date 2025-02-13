@@ -46,7 +46,7 @@ struct reg_t {
   string str_source = "";   // reference to external register (optional)
   string str_name = "-";    // reg_name
   string str_mode = "*";    // "rw", "r", "w"
-  string str_type = "x";    // "i", "f", "u"
+  string str_type = "*";    // "i", "f", "u"
   const char* ch_name = nullptr;
 };
 

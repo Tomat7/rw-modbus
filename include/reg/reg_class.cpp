@@ -16,6 +16,7 @@
 #include <chrono>
 #include <map>
 #include <mutex>
+#include <string>
 
 #include "include/logger.h"
 #include "include/plc/plc_class.h"
@@ -78,6 +79,18 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 
   str_opcname += _reg->fullname;
 
+  visible = ptr_reg->data.rtype < TYPE_OTHER;
+
+  if (has_Str(ptr_reg->str_type, "HH"))
+    byte_order = byteorder_t::HH;
+  else if (has_Str(ptr_reg->str_type, "HL"))
+    byte_order = byteorder_t::HL;
+  else if (has_Str(ptr_reg->str_type, "LH"))
+    byte_order = byteorder_t::LH;
+  else if (has_Str(ptr_reg->str_type, "LL"))
+    byte_order = byteorder_t::LL;
+
+
   LOGD("- %s %d - done, sizeof(value): %d", __func__, 5, sizeof(value));
 }
 
@@ -85,6 +98,7 @@ bool Reg_c::is_MB() { return (src_reference == ""); }
 bool Reg_c::is_Scada() { return (src_reference == "-"); }
 bool Reg_c::has_Ref() { return !(is_MB() || is_Scada()); }
 
+bool Reg_c::has_Str(string SS, string fs) { return SS.find(fs) != std::string::npos; }
 
 bool Reg_c::is_shm()
 {
