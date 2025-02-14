@@ -161,6 +161,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
       cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
+      //regs_create(&PLCvec.back());
       PLCvec.back().init_regs(); // Necessary to copy str to char* and others
       nb_plc_ready++;
 
@@ -175,6 +176,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
       cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
+      //regs_create(&PLCvec.back());
       PLCvec.back().init_regs(); // Necessary to copy str to char* and others
       nb_plc_ready++;
 
@@ -241,6 +243,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
     }
 
     r.data.rvalue = 555; // TODO: remove for production!
+    Reg_c::init_types(&r);
     pn->regs[r.raddr] = r;
   }
   return;

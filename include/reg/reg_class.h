@@ -21,22 +21,17 @@
 #include "include/plc/plc_class.h"
 #include "include/opc/opc_class.h"
 
+#include "reg_datatype.h"
+
 #define MB_SLAVE_CONN_MAX 5
 //#define USE_SYSLOG
 
-/*
-  union float2uint_u {
-  float fl;
-  uint16_t ui[2];
-  };
-*/
-enum class byteorder_t {
-  SINGLE,
-  HH,
-  HL,
-  LH,
-  LL,
+struct regprop_t {
+  int rtype;
+  int rsize;
+  int rbyteorder;
 };
+
 
 using namespace std;
 
@@ -51,6 +46,7 @@ public:
   Reg_c();
   ~Reg_c();
 
+  static void init_types(reg_t* _reg);
   /*   uint16_t get_plc_val();
     uint16_t get_shm_val(); */
   uint16_t get_local();
@@ -70,6 +66,7 @@ public:
   bool is_Scada();  // Calculated
   bool has_Ref();    // Referenced to Modbus
   bool has_Str(string SS, string fs); // Look for fs within SS
+  string to_lower(string str);
 
   // set MODBUS value and return LOCAL
   template <typename T> T set_value(T _val);
@@ -90,9 +87,11 @@ public:
 //  int fd = -1;                        // descriptor of SHARED MEMORY
   const char* rn = nullptr;      // just for FUN! (copy)
   value_u value;                 // just for FUN! (to print with PLC & SHM)
-  byteorder_t byte_order;   // BYTE_ORDER
-  int var_type;             // UA_TYPES_DOUBLE
+  int var_type;     // UA_TYPES_DOUBLE
+  int var_size;     //
+  int byte_order;   // BYTE_ORDER
   bool visible = false;
+
   reg_t* ptr_reg = nullptr;      // ptr to PLC reg
 
   string str_topfolder = "";  // "PLC" or "SCADA" (or ??)

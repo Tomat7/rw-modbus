@@ -84,6 +84,7 @@ int mb_slave_init();
 int mb_slave();
 
 void regs_create_from_masters();
+void regs_create(PLC_c* D);
 void regs_init_shm();
 void regs_update();
 void regs_update_shm();

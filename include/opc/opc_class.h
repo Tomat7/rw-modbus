@@ -147,14 +147,18 @@ T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
 template <typename T>
 int OpcServer_c::addVar(std::string s, T Value, int rmode)
 {
+  LOGD("%s - 1", __func__);
   rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
   if (rc == 0)
     return 0;
 
+  LOGD("%s - 2", __func__);
   addVar_NodeId(vars[s]);
   vars[s].ptr_value = &Value;
   addVariable(vars[s]);
   return 1;
+
+  LOGD("%s - 3", __func__);
 }
 
 template <typename T>

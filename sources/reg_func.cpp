@@ -31,7 +31,7 @@ int task_regs_refresh_(void* params)
   int x = 0;
 
   for (auto& [n, rm] : REGmap) {
-    if (rm.is_MB() || rm.is_Scada()) {
+    if (rm.visible /* rm.is_MB() || rm.is_Scada() */) {
       uint16_t plc_val/*  = rm.get_plc_val() */;  // Value from PLC
       uint16_t shm_val/*  = rm.get_shm_val() */;  // Value from SHM
       uint16_t old_val = rm.value.ui16;          // Value in memory (in REGmap)
@@ -106,7 +106,11 @@ void regs_update()
   string X;
 
   for (auto& [n, rm] : REGmap) {
-//    reg_print(n, rm.ptr_data_plc);
+
+    if (!rm.visible)
+      continue;
+
+    reg_print(n, &rm.ptr_reg->data);
 
     X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
     X += (STRmap[n].upd_opc) ? "<" : " ";  // If new value got from OPC
@@ -142,11 +146,11 @@ void reg_print(string rn, const regdata_t* rd)
 
   // TODO: full recode with new TYPE_*
 
-  if (rd->rtype == TYPE_U16)
+  if (rd->rtype == UA_TYPES_UINT16)
     printf("%s%-12s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
-  else if (rd->rtype == TYPE_I16)
+  else if (rd->rtype == UA_TYPES_INT16)
     printf("%s%-12s %s%7d", C, rn.c_str(), B, (int16_t)rd->rvalue);
-  else if (rd->rtype == TYPE_F100)
+  else if (rd->rtype == NOTUA_TYPES_F100)
     printf("%s%-12s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
 
   printf(C_NORM);

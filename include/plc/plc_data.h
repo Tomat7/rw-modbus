@@ -12,7 +12,11 @@
 
 #include <string>
 
-#include "plc_datatype.h"
+#define NOTUA_TYPES_1ST 1001  // first reg of "long" (32/64 bits) word
+#define NOTUA_TYPES_2ND 1002  // second reg of "long" (32/64 bits) word
+#define NOTUA_TYPES_3RD 1003  // third reg of "long" (64 bits) word
+#define NOTUA_TYPES_4TH 1004  // fourth reg of "long" (64 bits) word
+
 
 using namespace std;
 
@@ -34,7 +38,11 @@ struct regdata_t {
   int rupdate = 0;  // 1 - need to write/update remote register, 0 - no update
   int rstatus = 0;  // -1 mean ERROR, any positive - is OK
   int rmode = 0;    // 1 - mean RW, 0 - Read-only
-  regtype_t rtype;    // 0 - uint16_t, 1 - int16_t, 2 - float100 (see plc_datatype.h)
+  // for next see https://www.modbustools.com/poll_display_formats.html
+  // the next vars is out of Modbus level, but necessary for correct displaying
+  int rtype;      // 0 - uint16_t (see reg_datatype.h)
+  int rsize;      // how much regs "connected" - float (2 regs), uint64 (4 regs)
+  int rbyteorder; // byte order https://www.simplymodbus.ca/FAQ.htm#Order
 };
 
 struct reg_t {

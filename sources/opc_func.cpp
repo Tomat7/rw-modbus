@@ -32,22 +32,28 @@ void opc_regs_init()
     regdata_t* rd = &rm.ptr_reg->data;
     auto &t = rm.ptr_reg->data.rtype;
 
-    if (t == TYPE_FLOAT_HH) {
-      float fl = (int16_t)(rd->rvalue) * (float)1.0;
-      OPCs.addVar(n, fl, rd->rmode);
-    } else if (t == TYPE_FLOAT_HL) {
-      float fl = (int16_t)(rd->rvalue) * (float)1.00;
-      OPCs.addVar(n, fl, rd->rmode);
-    } else if (t == TYPE_F10) {
+    value_u v;
+    v.ui64 = 0;
+
+    if (t == UA_TYPES_FLOAT) {
+      if (rd->rbyteorder == BO_HH) {
+        v.fl2u[1] = rd->rvalue;
+        v.fl2u[0] = rm.ptr_reg->r_next->data.rvalue;
+      } else if (rd->rbyteorder == BO_HL) {
+        v.fl2u[0] = rd->rvalue;
+        v.fl2u[1] = rm.ptr_reg->r_next->data.rvalue;
+      }
+      OPCs.addVar(n, v.fl, rd->rmode);
+    } else if (t == NOTUA_TYPES_F10) {
       float fl = (int16_t)(rd->rvalue) * (float)0.1;
       OPCs.addVar(n, fl, rd->rmode);
-    } else if (t == TYPE_F100) {
+    } else if (t == NOTUA_TYPES_F100) {
       float fl = (int16_t)(rd->rvalue) * (float)0.01;
       OPCs.addVar(n, fl, rd->rmode);
-    } else if (t == TYPE_I16) {
+    } else if (t == UA_TYPES_INT16) {
       int16_t i16 = (int16_t)(rd->rvalue);
       OPCs.addVar(n, i16, rd->rmode);
-    } else if (t == TYPE_U16) {
+    } else if (t == UA_TYPES_UINT16) {
       uint16_t ui16 = (uint16_t)(rd->rvalue);
       OPCs.addVar(n, ui16, rd->rmode);
     }

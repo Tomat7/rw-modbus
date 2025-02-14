@@ -71,10 +71,11 @@ public:
   //float get_reg(int raddr);
 
   int regs_used(string rname); // 0 - 16-bit reg, 1 - 1st reg of 32-bits reg
-  int regs_used(int raddr);    // 2 - 2nd reg of 32-bits register
+  int regs_size(int raddr);    // 2 - 2nd reg of 32-bits register
 
   // Common properties
   bool Enabled = false;
+  bool is_slave = false;
   string str_folder;
   string str_desc;
   string str_dev_name;
@@ -94,7 +95,6 @@ private:
   mutex* lock_mux = nullptr;
 
   // ============
-  bool is_slave = false;
   int rc = -1;
   int rc_read = -1;
   int rc_write = -1;

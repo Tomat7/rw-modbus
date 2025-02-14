@@ -17,10 +17,13 @@
 #include "plc_class.h"
 
 // mutex PLC_c::logger_mux;
-map<string, regtype_t> type_map {
 
+/* map<string, pair<regtype_t, byteorder_t>> type_map { */
+
+/*
   // See plc_datatype.h for details & comments
-  {"*", TYPE_REFERENCED}, {"-", TYPE_NOTHING},    // "Referenced" registers
+  // {"*", TYPE_REFERENCED, OTHER},
+  {"-", TYPE_NOTHING},    // "Referenced" registers
   {"u", TYPE_U16},        {"i", TYPE_I16},        {"f", TYPE_F100},
   {"u16", TYPE_U16},      {"i16", TYPE_I16},      {"f10", TYPE_F10},
   {"hex", TYPE_HEX},      {"bin", TYPE_BINARY},   {"f100", TYPE_F100},
@@ -60,7 +63,8 @@ map<string, regtype_t> type_map {
   {"3rd", TYPE_3RD}, {"3", TYPE_3RD},
   {"4th", TYPE_4TH}, {"4", TYPE_4TH},
 
-};
+  };
+*/
 
 PLC_c::~PLC_c()
 {
@@ -80,13 +84,13 @@ PLC_c::~PLC_c()
 
 void PLC_c::init_regs()  // Master only
 {
-  ip_addr = str_ip_addr.c_str();
-  dev_name = str_dev_name.c_str();
-  LOGN("+ PLC init: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
-       str_folder.c_str(), str_desc.c_str());
+  /*   ip_addr = str_ip_addr.c_str();
+    dev_name = str_dev_name.c_str();
+    LOGN("+ PLC init: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
+         str_folder.c_str(), str_desc.c_str()); */
 
   for (auto &[a, r] : regs) {
-    init_type(r);
+    //  init_type(r);
     init_str(r);
 
     r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
@@ -99,23 +103,23 @@ void PLC_c::init_regs()  // Master only
     r.data.rvalue = 777;  // TODO: remove for production
   }
 
-// DONE! -- RECODE!! add 64-bit regg
+// RECODE!! add 64-bit regg
   for (auto &[a, r] : regs) {
-    int ru = regs_used(a);
+    int ru = r.data.rsize;
 
     if (ru > 1) {
       r.r_next = &regs[r.raddr + 1];
       regs[r.raddr + 1].data.rmode = r.data.rmode;
-      regs[r.raddr + 1].data.rtype = TYPE_2ND;
+      regs[r.raddr + 1].data.rtype = NOTUA_TYPES_2ND;
     }
 
     if (ru > 2) {
       regs[r.raddr + 1].r_next = &regs[r.raddr + 2];
       regs[r.raddr + 2].data.rmode = r.data.rmode;
-      regs[r.raddr + 2].data.rtype = TYPE_3RD;
+      regs[r.raddr + 2].data.rtype = NOTUA_TYPES_3RD;
       regs[r.raddr + 2].r_next = &regs[r.raddr + 3];
       regs[r.raddr + 3].data.rmode = r.data.rmode;
-      regs[r.raddr + 3].data.rtype = TYPE_4TH;
+      regs[r.raddr + 3].data.rtype = NOTUA_TYPES_4TH;
     }
 
     LOGN("+ REG init: %-9s %2d %2s %3d [%s]", r.ch_name, r.raddr,
@@ -141,11 +145,11 @@ void PLC_c::init_str(reg_t &r)
 void PLC_c::init_type(reg_t &R)
 {
   string st_ = to_lower(R.str_type);
-  if (type_map.count(st_))
-    R.data.rtype = type_map[st_];
-  else
-    LOGA("Error REG: %s, type: %s\n", R.str_name.c_str(), R.str_type.c_str());
-
+  /*   if (type_map.count(st_))
+      R.data.rtype = type_map[st_].first;
+    else
+      LOGA("Error REG: %s, type: %s\n", R.str_name.c_str(), R.str_type.c_str());
+  */
   /*
     auto &rd = R.data;
     if (R.str_type == "u")
