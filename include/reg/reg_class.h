@@ -77,25 +77,26 @@ public:
   // ask MODBUS for current value
   template <typename T> T get_value();
 
-
-  string src_reference;  // keeps "reference" to MB-reg (Tdef = DEF.Temp3)
-  // "-" mean no reference - Scada calculated reg
-  // "" mean no reference - Modbus reg only
-
 //  regdata_t* ptr_data_shm = nullptr;  // ptr to SHARED MEMORY (local) data
 //  regdata_t* ptr_data_plc = nullptr;  // ptr to SHARED MEMORY (PLC/MB) data
 //  int fd = -1;                        // descriptor of SHARED MEMORY
-  const char* rn = nullptr;      // just for FUN! (copy)
-  value_u value;                 // just for FUN! (to print with PLC & SHM)
-  int var_type;     // UA_TYPES_DOUBLE
-  int var_size;     //
-  int byte_order;   // BYTE_ORDER
-  bool visible = false;
 
-  reg_t* ptr_reg = nullptr;      // ptr to PLC reg
+  const char* rn = nullptr;   // just for FUN! (copy)
+  string str_fullname;        // just for FUN! (copy)
 
-  string str_topfolder = "";  // "PLC" or "SCADA" (or ??)
-  string str_opcname = "";  // OPC fullpath: /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
+  value_u value;                 // union of values (by type)
+  int var_type;     // for OPC UA server (ex. UA_TYPES_FLOAT)
+  int var_size;     // for multiply Modbus registers (ex. 32-bit Float)
+  int byte_order;   // for 32/64-bit Modbus register (Big-Endian & other)
+  bool visible = false; // try to hide 2nd/3rd/4th word of multiply MB regs
+
+  string str_topfolder = "";  // "PLC" or "SCADA" top folder-name
+  string str_opcname = "";    // /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
+  string src_reference;       // name of "referenced" MB-reg (ex. DEF.Temp3)
+  // "-" mean no reference - Scada calculated reg!
+  // "" mean no reference - Modbus reg only!
+
+  reg_t* ptr_reg = nullptr;   // ptr to Modbus PLC reg
 
 };
 

@@ -15,11 +15,13 @@ using namespace libconfig;
 static int total_regs = 0;
 
 int cfg_init_plcset(const Setting &cfg, const Setting &pl);
-void cfg_init_regs(const Setting &reg, PLC_c* pn);
-
-void cfg_print_plc_details(const PLC_c &pn);
-void cfg_print_reg_details(const reg_t &rn);
-
+int cfg_init_scadaset(const Setting &cfg, const Setting &pl);
+void cfg_init_plcregs(const Setting &reg, PLC_c* pn);
+void cfg_init_scadaregs(const Setting &reg, PLC_c* pn);
+/*
+  void cfg_print_plc_details(const PLC_c &pn);
+  void cfg_print_reg_details(const reg_t &rn);
+*/
 // Config cfg;
 
 using cchar = const char;
@@ -102,7 +104,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   }
 
   try {
-    cfg_init_plcset(cfg.lookup(dev_type), *DEVlist);
+    cfg_init_scadaset(cfg.lookup(dev_type), *DEVlist);
   } catch (const SettingNotFoundException &nfex) {
     LOGA("Great ERROR! (no '%s' settings?) Exiting.\n", dev_type);
     return (EXIT_FAILURE);
@@ -160,7 +162,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       PLCvec.emplace_back(_devname, _ip, _folder, _desc, _port, _att, _ms, _us);
       PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
-      cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
+      cfg_init_plcregs(cfgPLC[i]["regs"], &PLCvec.back());
       //regs_create(&PLCvec.back());
       PLCvec.back().init_regs(); // Necessary to copy str to char* and others
       nb_plc_ready++;
@@ -168,21 +170,6 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       LOGI("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
            (int)PLCvec.back().regs.size());
       // ===== End PLC filling  =====
-    } else if (cfgPLC[i].lookupValue("name", _devname) &&
-               cfgPLC[i].lookupValue("folder", _folder) &&
-               cfgPLC[i].lookupValue("desc", _desc)) {
-      // It is SCADA registers configuration!
-      PLCvec.emplace_back(_devname, "", _folder, _desc, 0, 0, 0, 0);
-      PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
-
-      cfg_init_regs(cfgPLC[i]["regs"], &PLCvec.back());
-      //regs_create(&PLCvec.back());
-      PLCvec.back().init_regs(); // Necessary to copy str to char* and others
-      nb_plc_ready++;
-
-      LOGI("Configured SCADA: %s, with: %d regs", PLCvec.back().dev_name,
-           (int)PLCvec.back().regs.size());
-      // ===== End SCADA virtual filling =====
     } else {
       LOGA("Error reading PLC configuration: %d\n", i);
       continue; // get out of current iteration if any field wrong in CFG-file */
@@ -198,7 +185,8 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
   return 0;
 }
 
-void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
+
+void cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
 {
   int nb_regs = cfgREG.getLength();
   total_regs += nb_regs;
@@ -207,24 +195,8 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
   for (int j = 0; j < nb_regs; ++j) {
     reg_t r;
 
-    if (cfgREG[j].lookupValue("rsource", r.str_source) &&
-        cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
-        cfgREG[j].lookupValue("rname", r.str_name)) {
-      // This is SCADA register/variable/tag
-      if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
-            cfgREG[j].lookupValue("rtype", r.str_type))) {
-        if (r.str_source == "-") {
-          LOGE("Error reading 'rmode'/'rtype' on %s: %s REG: %d\n",
-               r.str_name.c_str(), j);
-          exit(EXIT_FAILURE);
-          continue;
-        }
-      }
-      r.raddr = j;
-      LOGI("Read 'rsource'/'rfolder' on %s: %s/%s REG: %d",
-           r.str_name.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
-    } else if (cfgREG[j].lookupValue("rname", r.str_name) &&
-               cfgREG[j].lookupValue("raddr", r.raddr)) {
+    if (cfgREG[j].lookupValue("rname", r.str_name) &&
+        cfgREG[j].lookupValue("raddr", r.raddr)) {
       // This is Modbus register
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
             cfgREG[j].lookupValue("rtype", r.str_type))) {
@@ -234,7 +206,7 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
       }
 
       if (!cfgREG[j].lookupValue("rfolder", r.str_rfolder))
-        r.str_rfolder = ".";
+        r.str_rfolder = MB_NO_FOLDER;
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
            pn->str_folder.c_str(), pn->str_dev_name.c_str(), j);
@@ -249,61 +221,5 @@ void cfg_init_regs(const Setting &cfgREG, PLC_c* pn)
   return;
 }
 
-/*
-    // Check the record which expect to get for CFG-file.
-    if (!(cfgREG[j].lookupValue("rname", r.str_name) &&
-          cfgREG[j].lookupValue("raddr", r.raddr)))
-    {
-      LOGE("Error reading 'rname' on %s: %s REG: %d\n",
-           pn->str_folder.c_str(), pn->str_dev_name.c_str(), j);
-      exit(EXIT_FAILURE);
-      continue;
-    }
 
-    // Check the record which expected for SCADA reg.
-    if (cfgREG[j].lookupValue("rsource", r.str_source) &&
-        cfgREG[j].lookupValue("rfolder", r.str_rfolder))
-    {
-      LOGI("Reading 'rsource'/'rfolder' on %s: %s/%s REG: %d",
-           r.str_name.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
-
-      if (r.str_source == "-")
-      {
-        if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
-              cfgREG[j].lookupValue("rtype", r.str_type)))
-        {
-          LOGE("Error reading details on %s: %s REG: %d\n",
-               r.str_name.c_str(), j);
-          exit(EXIT_FAILURE);
-          continue;
-        }
-      }
-      else
-      {
-        cfgREG[j].lookupValue("rmode", r.str_mode);
-        cfgREG[j].lookupValue("rtype", r.str_type);
-      }
-    }
-    else
-    {
-      // Check records for Modbus register.
-      if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
-            cfgREG[j].lookupValue("rtype", r.str_type)))
-      {
-        LOGE("Error reading details on %s, REG: %d\n", r.str_name.c_str(), j);
-        exit(EXIT_FAILURE);
-        continue;
-      }
-
-      if (!cfgREG[j].lookupValue("rfolder", r.str_rfolder))
-        r.str_rfolder = ".";
-
-      if (r.str_type == "*")
-        r.str_mode = pn->regs[r.raddr - 1].str_mode;
-    }
-*/
-
-/*
-  void cfg_deinit() { PLCvec.clear(); }
-*/
 // eof

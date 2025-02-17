@@ -111,27 +111,12 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 // init_type(r);
 // init_str(r);
 
-  /*   if (!_dev->is_slave) {
-      if (_dev->str_dev_name == MB_NO_DEV_NAME) // Scada!
-        _reg->fullname = _reg->str_name;
-      else
-        _reg->fullname = _dev->str_dev_name + "." + _reg->str_name;
-      }
-    _reg->ch_name = _reg->str_name.c_str();
-  */
-  /*   r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
-
-    if (r.raddr < reg_min)
-      reg_min = r.raddr;
-    if (r.raddr > reg_max)
-      reg_max = r.raddr;
-
-    r.data.rvalue = 777;  // TODO: remove for production */
-
 // init locals
   ptr_reg = _reg;
-  rn = ptr_reg->fullname.c_str();
   src_reference = ptr_reg->str_source;
+
+  str_fullname = ptr_reg->fullname;
+  rn = str_fullname.c_str();
 
   str_topfolder = _dev->str_folder;
   str_opcname = "/" + str_topfolder + "/";
@@ -146,8 +131,7 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 
   str_opcname += _reg->fullname;
 
-  // init types
-  init_types(_reg);
+  init_types(_reg);   // init types
   string st_ = to_lower(_reg->str_type);
   var_type = type_map[st_].rtype;
   var_size = type_map[st_].rsize;
@@ -159,7 +143,7 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 //  LOGD("- %s %d - done, sizeof(value): %d", __func__, 5, sizeof(value));
 }
 
-void Reg_c::init_types(reg_t* _reg)
+void Reg_c::init_types(reg_t* _reg) // !! STATIC FUNCTION !!
 {
   string st_ = _reg->str_type;
   for (auto &c : st_)
