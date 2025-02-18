@@ -143,12 +143,12 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
     PLCvec.reserve(vec_size_new + 1);
 
   for (int i = 0; i < nb_plc_cfg; ++i) {
-    string _devname, _folder, _desc, _ip;
+    string _devname, _dfolder, _desc, _ip;
     int _port, _att, _ms, _us;
 
     // ===== Check the record which expect to get for CFG-file.
     if (cfgPLC[i].lookupValue("name", _devname) &&
-        cfgPLC[i].lookupValue("folder", _folder) &&
+        cfgPLC[i].lookupValue("folder", _dfolder) &&
         cfgPLC[i].lookupValue("desc", _desc) &&
         cfgPLC[i].lookupValue("ip", _ip) &&
         cfgPLC[i].lookupValue("port", _port) &&
@@ -159,11 +159,10 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       if (isCheckName && !PLClst.count(_devname))
         continue; // get out of current iteration if PLC not in list
 
-      PLCvec.emplace_back(_devname, _ip, _folder, _desc, _port, _att, _ms, _us);
+      PLCvec.emplace_back(_devname, _ip, _dfolder, _desc, _port, _att, _ms, _us);
       PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
       cfg_init_plcregs(cfgPLC[i]["regs"], &PLCvec.back());
-      //regs_create(&PLCvec.back());
       PLCvec.back().init_regs(); // Necessary to copy str to char* and others
       nb_plc_ready++;
 
@@ -209,7 +208,7 @@ void cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
         r.str_rfolder = MB_NO_FOLDER;
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
-           pn->str_folder.c_str(), pn->str_dev_name.c_str(), j);
+           pn->str_dev_folder.c_str(), pn->str_dev_name.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
     }

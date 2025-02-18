@@ -72,8 +72,8 @@ string OpcServer_c::getPath_Name(string &name)
   }
 
   auto last_slash = path.rfind("/");
-  name = path.substr(last_slash + 1);  // "BUF.Press"
-  path.erase(last_slash + 1);          // folder = "/PLC" or "/SCADA/PLC/"
+  name = path.substr(last_slash + 1); // "BUF.Press"
+  path.erase(last_slash + 1);         // path = "/PLC" or "/SCADA/PLC/"
 
   return path;
 }

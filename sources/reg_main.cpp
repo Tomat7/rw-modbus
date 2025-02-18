@@ -12,8 +12,9 @@
 
 #define MB_READ
 
-void regs_create(PLC_c* D)
-{
+/*
+  void regs_create(PLC_c* D)
+  {
   for (auto &[a, r] : D->regs) {
     if (r.str_source == "" || r.str_source == "-") {
       LOGI("(Master) try to create %s, src: %s",
@@ -21,7 +22,8 @@ void regs_create(PLC_c* D)
       REGmap[r.fullname] = {&r, D};
     }
   }
-}
+  }
+*/
 
 void regs_create_from_masters()
 {

@@ -41,8 +41,9 @@ class Reg_c
 public:
 //  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
   Reg_c(reg_t* _reg, PLC_c* _dev);      // for PLC master
-  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
-  Reg_c(string _rn, string src_ref);       // for Scada regs.
+//  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
+//  Reg_c(string _rn, string src_ref);       // for Scada regs.
+  Reg_c(reg_t* _reg, string _opc_base); // for Scada regs.
   Reg_c();
   ~Reg_c();
 
@@ -67,6 +68,7 @@ public:
   bool has_Ref();    // Referenced to Modbus
   bool has_Str(string SS, string fs); // Look for fs within SS
   string to_lower(string str);
+  void remove_dbl_slashes(string &str);
 
   // set MODBUS value and return LOCAL
   template <typename T> T set_value(T _val);
@@ -90,7 +92,7 @@ public:
   int byte_order;   // for 32/64-bit Modbus register (Big-Endian & other)
   bool visible = false; // try to hide 2nd/3rd/4th word of multiply MB regs
 
-  string str_topfolder = "";  // "PLC" or "SCADA" top folder-name
+//  string str_topfolder = "";  // "PLC" or "SCADA" top folder-name
   string str_opcname = "";    // /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
   string src_reference;       // name of "referenced" MB-reg (ex. DEF.Temp3)
   // "-" mean no reference - Scada calculated reg!

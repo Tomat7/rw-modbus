@@ -15,7 +15,7 @@ using namespace libconfig;
 static int total_regs = 0;
 
 int cfg_init_scadaset(const Setting &cfg, const Setting &pl);
-void cfg_init_scadaregs(const Setting &reg, PLC_c* pn);
+void cfg_init_scadaregs(const Setting &reg, string _dname, string _dfolder);
 /*
   void cfg_print_plc_details(const PLC_c &pn);
   void cfg_print_reg_details(const reg_t &rn);
@@ -53,24 +53,25 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
     PLCvec.reserve(vec_size_new + 1);
 
   for (int i = 0; i < nb_plc_cfg; ++i) {
-    string _devname, _folder, _desc, _ip;
+    string _devname, _dfolder, _desc, _ip;
 //    int _port, _att, _ms, _us;
 
     // ===== Check the record which expect to get for CFG-file.
     if (cfgPLC[i].lookupValue("name", _devname) &&
-        cfgPLC[i].lookupValue("folder", _folder) &&
+        cfgPLC[i].lookupValue("folder", _dfolder) &&
         cfgPLC[i].lookupValue("desc", _desc)) {
       // It is SCADA registers configuration!
-      PLCvec.emplace_back(_devname, "", _folder, _desc, 0, 0, 0, 0);
-      PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
+      // //PLCvec.emplace_back(_devname, "", _folder, _desc, 0, 0, 0, 0);
+      // //PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
-      cfg_init_scadaregs(cfgPLC[i]["regs"], &PLCvec.back());
+      cfg_init_scadaregs(cfgPLC[i]["regs"], _devname, _dfolder);
       //regs_create(&PLCvec.back());
-      PLCvec.back().init_regs(); // Necessary to copy str to char* and others
+      // //PLCvec.back().init_regs(); // Necessary to copy str to char* and others
       nb_plc_ready++;
 
       LOGI("Configured SCADA: %s, with: %d regs", PLCvec.back().dev_name,
            (int)PLCvec.back().regs.size());
+      //PLCvec.erase(PLCvec.end());
       // ===== End SCADA virtual filling =====
     } else {
       LOGA("Error reading SCADA configuration: %d\n", i);
@@ -89,7 +90,7 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
 
 
 
-void cfg_init_scadaregs(const Setting &cfgREG, PLC_c* _D)
+void cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
 {
   int nb_regs = cfgREG.getLength();
   total_regs += nb_regs;
@@ -116,7 +117,7 @@ void cfg_init_scadaregs(const Setting &cfgREG, PLC_c* _D)
            r.str_name.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
-           _D->str_folder.c_str(), _D->str_dev_name.c_str(), j);
+           _dfolder.c_str(), _dname.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
     }
@@ -126,12 +127,16 @@ void cfg_init_scadaregs(const Setting &cfgREG, PLC_c* _D)
     r.ch_name = r.str_name.c_str();
     r.data.rvalue = 888; // TODO: remove for production!
 
-    if (_D->str_dev_name == "-" || _D->str_dev_name == ".") // Scada!
+    if (_dname == "-" || _dname == ".") // Scada!
       r.fullname = r.str_name;
     else
-      r.fullname = _D->str_dev_name + "." + r.str_name;
+      r.fullname = _dname + "." + r.str_name;
 
-    _D->regs[r.raddr] = r;
+
+    string str_opcbase = "/" + _dfolder + "/" + _dname + "/";
+    //_D->regs[r.raddr] = r;
+
+    REGmap[r.fullname] = {&r, str_opcbase};
   }
   return;
 }

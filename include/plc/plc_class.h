@@ -76,7 +76,7 @@ public:
   // Common properties
   bool Enabled = false;
   bool is_slave = false;
-  string str_folder;
+  string str_dev_folder;
   string str_desc;
   string str_dev_name;
   string str_ip_addr;

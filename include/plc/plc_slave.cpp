@@ -32,7 +32,7 @@ PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
   tcp_port = _port;
   reg_max = _m;
   str_desc = _name;
-  str_folder = _name;
+  str_dev_folder = _name;
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;

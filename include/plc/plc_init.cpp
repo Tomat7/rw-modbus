@@ -84,16 +84,19 @@ PLC_c::~PLC_c()
 
 void PLC_c::init_regs()  // Master only
 {
-  /*   ip_addr = str_ip_addr.c_str();
-    dev_name = str_dev_name.c_str();
-    LOGN("+ PLC init: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
-         str_folder.c_str(), str_desc.c_str()); */
-
   for (auto &[a, r] : regs) {
-    //  init_type(r);
-    init_str(r);
+    // init_type(r);
+    // init_str(r);
 
+    r.ch_name = r.str_name.c_str();
     r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
+
+    if (!is_slave) {
+      if (str_dev_name == MB_NO_DEV_NAME) // Scada!
+        r.fullname = r.str_name;
+      else
+        r.fullname = str_dev_name + "." + r.str_name;
+    }
 
     if (r.raddr < reg_min)
       reg_min = r.raddr;
@@ -130,14 +133,6 @@ void PLC_c::init_regs()  // Master only
 
 void PLC_c::init_str(reg_t &r)
 {
-  if (!is_slave) {
-    if (str_dev_name == MB_NO_DEV_NAME) // Scada!
-      r.fullname = r.str_name;
-    else
-      r.fullname = str_dev_name + "." + r.str_name;
-  }
-  r.ch_name = r.str_name.c_str();
-
   return;
 }
 

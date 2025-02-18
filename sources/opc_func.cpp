@@ -56,7 +56,8 @@ void opc_regs_init()
     } else if (t == UA_TYPES_UINT16) {
       uint16_t ui16 = (uint16_t)(rd->rvalue);
       OPCs.addVar(n, ui16, rd->rmode);
-    }
+    } else
+      LOGE("Wrong type: %d, Var: %s", t, n.c_str());
 
   }
 }
