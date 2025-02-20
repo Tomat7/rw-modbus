@@ -40,7 +40,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
   str_ip_addr = _ip;
   ip_addr = str_ip_addr.c_str();
 
-  str_dev_folder = _folder;
+  str_top_folder = _folder;
   str_desc = _desc;
   tcp_port = _port;
   attempts = _att;
@@ -53,7 +53,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
     Enabled = true;
 
   LOGI("+ New PLC created: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
-       str_dev_folder.c_str(), str_desc.c_str());
+       str_top_folder.c_str(), str_desc.c_str());
 //  LOGI("+ New PLC created: %s:%i %s", ip_addr, tcp_port, dev_name);
   if (!Enabled)
     LOGA("- PLC will be ignored: %s:%i %s", ip_addr, tcp_port, dev_name);
@@ -196,6 +196,9 @@ int PLC_c::write_reg(reg_t &R)  // Master only. Write (raw) reg directly to PLC.
 
   return rc;
 }
+
+// int PLC_c::refresh_master() { update_master(); } // Master only.
+
 
 int PLC_c::update_master()  // Master only.
 {

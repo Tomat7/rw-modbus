@@ -16,8 +16,8 @@ static int total_regs = 0;
 
 int cfg_init_plcset(const Setting &cfg, const Setting &pl);
 int cfg_init_scadaset(const Setting &cfg, const Setting &pl);
-void cfg_init_plcregs(const Setting &reg, PLC_c* pn);
-void cfg_init_scadaregs(const Setting &reg, PLC_c* pn);
+int cfg_init_plcregs(const Setting &reg, PLC_c* pn);
+
 /*
   void cfg_print_plc_details(const PLC_c &pn);
   void cfg_print_reg_details(const reg_t &rn);
@@ -162,12 +162,14 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       PLCvec.emplace_back(_devname, _ip, _dfolder, _desc, _port, _att, _ms, _us);
       PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
-      cfg_init_plcregs(cfgPLC[i]["regs"], &PLCvec.back());
+      int nb_regs = cfg_init_plcregs(cfgPLC[i]["regs"], &PLCvec.back());
       PLCvec.back().init_regs(); // Necessary to copy str to char* and others
-      nb_plc_ready++;
 
-      LOGI("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
-           (int)PLCvec.back().regs.size());
+      nb_plc_ready++;
+      total_regs += nb_regs;
+
+      LOGI("Configured PLC: %s, with: %d regs",
+           PLCvec.back().dev_name, nb_regs);
       // ===== End PLC filling  =====
     } else {
       LOGA("Error reading PLC configuration: %d\n", i);
@@ -185,21 +187,21 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
 }
 
 
-void cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
+int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
 {
   int nb_regs = cfgREG.getLength();
-  total_regs += nb_regs;
+  int nb_errors = 0;
 
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
     reg_t r;
 
-    if (cfgREG[j].lookupValue("rname", r.str_name) &&
+    if (cfgREG[j].lookupValue("rname", r.str_rname) &&
         cfgREG[j].lookupValue("raddr", r.raddr)) {
       // This is Modbus register
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
             cfgREG[j].lookupValue("rtype", r.str_type))) {
-        LOGE("Error reading details on %s, REG: %d\n", r.str_name.c_str(), j);
+        LOGE("Error reading details on %s, REG: %d\n", r.str_rname.c_str(), j);
         exit(EXIT_FAILURE);
         continue;
       }
@@ -208,16 +210,18 @@ void cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
         r.str_rfolder = MB_NO_FOLDER;
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
-           pn->str_dev_folder.c_str(), pn->str_dev_name.c_str(), j);
+           pn->str_top_folder.c_str(), pn->str_dev_name.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
     }
 
     r.data.rvalue = 555; // TODO: remove for production!
-    Reg_c::init_types(&r);
-    pn->regs[r.raddr] = r;
+    if (Reg_c::init_types(&r))
+      pn->regs[r.raddr] = r;
+    else
+      nb_errors++;
   }
-  return;
+  return nb_regs - nb_errors;
 }
 
 

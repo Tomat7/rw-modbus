@@ -81,81 +81,117 @@ Reg_c::~Reg_c() { /* LOGD("DEstruct! %x %s", this, this->rn); */ }
 
 Reg_c::Reg_c() { /* LOGD("Construct! %x", this);  */}
 
+// Reg_c::Reg_c(string _rn, string src_ref) { Reg_c(_rn.c_str(), src_ref); }
+
+/*
+  Reg_c::Reg_c(const char* _rn, string src_ref)
+  {
+  rn = get_new_char(_rn);
+  src_reference = src_ref;
+*/  // LOGD("try to open %s", rn);
+
+/*   fd = create_shm_fd(rn);
+  if (fd != -1) {
+    ptr_data_shm = (regdata_t*)create_shm_addr(fd, sizeof(regdata_t));
+    if (ptr_data_shm != nullptr) {
+      sync();
+      LOGI("created- %s, REF: %s, FD: %d, SHM: %x, this: %x",
+           rn, src_reference.c_str(), ptr_data_shm, this);
+    }
+  }
+*/
+/*   if (is_shm())
+    LOGD("Open %s, FD: %d, SHM: %x, this: %x", rn, fd, ptr_data_shm, this);
+  else
+    LOGE("Error open %s", rn); */
+// }
+
 Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 {
+// init PLC vars first
+// init_type(r);
+// init_str(r);
+
+// init locals
+  ptr_reg = _reg;
+  src_reference = ptr_reg->str_source;
+
+  str_fullname = ptr_reg->rfullname;
+  rn = str_fullname.c_str();
+
+  /*   str_topfolder = _dev->str_folder;
+    str_opcname = "/" + str_topfolder + "/";
+
+    string &_dname = _dev->str_dev_name;
+    if (_dname != MB_NO_DEV_NAME)
+      str_opcname += _dname + "/";
+
+    string &_rfolder = _reg->str_rfolder;
+    if ((_rfolder != MB_NO_FOLDER) && (_rfolder != ""))
+      str_opcname += _rfolder + "/";
+  */
+
+  str_opcname = "/" + _dev->str_dev_folder + "/";
+  remove_dbl_slashes(str_opcname);
+  /* auto dbl_slash = str_opcname.find("//");
+    if (dbl_slash != std::string::npos)
+    str_opcname.erase(dbl_slash);
+  */
+  str_opcname += _dev->str_dev_name + "/";
+  remove_dbl_slashes(str_opcname);
+  str_opcname += _reg->str_rfolder + "/";
+  remove_dbl_slashes(str_opcname);
+
+  str_opcname += _reg->rfullname;
+
+//  init_types(_reg);   // init types
   string st_ = to_lower(_reg->str_type);
   if (type_map.count(st_)) {
     var_type = type_map[st_].rtype;
     var_size = type_map[st_].rsize;
     byte_order = type_map[st_].rbyteorder;
-    var_mode = _reg->data.rmode;
+
     auto &rbo = type_map[st_].rbyteorder;
     visible = (rbo != BO_2ND) && (rbo != BO_3RD) && (rbo != BO_4TH);
   } else
     LOGE("Wrong type: %s, reg: %s", _reg->str_type.c_str(), rn);
 
-//  ptr_reg[0] = _reg;
-  for (int i = 0; i < var_size; i++)
-    ptr_reg[i] = &(_dev->regs[(_reg->raddr) + i]);
-
-  str_source = "";  // flag of Modbus register/tag!
-  is_modbus = true; // flag of Modbus register/tag!
-  str_fullname = _reg->rfullname;
-  rn = str_fullname.c_str();
-
-  if (visible) {
-    str_opcname = "/" + _dev->str_top_folder + "/";
-    str_opcname += _dev->str_dev_name + "/";
-    str_opcname += _reg->str_rfolder + "/";
-    str_opcname += _reg->rfullname;
-
-    for (int i = 0; i < 4; i++)
-      remove_dbl_slashes(str_opcname);
-  }
-
-  LOGD(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
-       byte_order, var_mode, str_opcname.c_str());
+//  LOGD("- %s %d - done, sizeof(value): %d", __func__, 5, sizeof(value));
 }
 
-Reg_c::Reg_c(reg_t* _reg, string _opc_base) // For SCADA regs only
+Reg_c::Reg_c(reg_t* _reg, string _opc_base) // For Modbus regs only
 {
-  if (_reg->str_source == "") {
-    str_source = "-";   // flag of SCADA register/tag!
-    is_scada = true;
-  } else {
-    str_source = _reg->str_source;
-    is_ref = true;
-  }
-
+  src_reference = _reg->str_source;
   str_fullname = _reg->rfullname;
   rn = str_fullname.c_str();
-  str_opcname = _opc_base + _reg->str_rfolder + "/" + str_fullname;
+  /*
+    str_opcname = "/" + _dev->str_folder + "/";
+    remove_dbl_slashes(str_opcname);
+    str_opcname += _dev->str_dev_name + "/";
+    remove_dbl_slashes(str_opcname); */
 
+  str_opcname = _opc_base + _reg->str_rfolder + "/" + str_fullname;
   for (int i = 0; i < 4; i++)
     remove_dbl_slashes(str_opcname);
 
-// TODO: copy rpoperties from source
-// TODO: remove extra vars
+//  init_types(_reg);   // init types
   string st_ = to_lower(_reg->str_type);
   if (type_map.count(st_)) {
     var_type = type_map[st_].rtype;
-    var_size = type_map[st_].rsize;         // for SCADA ??
-    byte_order = type_map[st_].rbyteorder;  // for SCADA ??
-    var_mode = _reg->data.rmode;
-    visible = true;
-//    auto &rbo = type_map[st_].rbyteorder;
-//    visible = (rbo != BO_2ND) && (rbo != BO_3RD) && (rbo != BO_4TH);
-  } else
-    LOGE("Wrong type: '%s', reg: '%s'", _reg->str_type.c_str(), rn);
+    var_size = type_map[st_].rsize;
+    byte_order = type_map[st_].rbyteorder;
 
-  LOGD(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
-       byte_order, var_mode, str_opcname.c_str());
+    auto &rbo = type_map[st_].rbyteorder;
+    visible = (rbo != BO_2ND) && (rbo != BO_3RD) && (rbo != BO_4TH);
+  } else
+    LOGE("Wrong type: %s, reg: %s", _reg->str_type.c_str(), rn);
+
+//  LOGD("- %s %d - done, sizeof(value): %d", __func__, 5, sizeof(value));
 }
 
 
-bool Reg_c::init_types(reg_t* _reg) // !! STATIC FUNCTION !!
+void Reg_c::init_types(reg_t* _reg) // !! STATIC FUNCTION !!
 {
-  bool isOK = false;
   string st_ = _reg->str_type;
   for (auto &c : st_)
     c = static_cast<char>(tolower(c));
@@ -164,12 +200,8 @@ bool Reg_c::init_types(reg_t* _reg) // !! STATIC FUNCTION !!
     _reg->data.rtype = type_map[st_].rtype;
     _reg->data.rsize = type_map[st_].rsize;
     _reg->data.rbyteorder = type_map[st_].rbyteorder;
-    isOK = true;
   } else
-    LOGE("Wrong type: '%s', reg: '%s' - IGNORED!",
-         st_.c_str(), _reg->str_rname.c_str());
-
-  return isOK;
+    LOGE("Wrong type: %s, reg: %s", st_.c_str(), _reg->str_rname.c_str());
 }
 
 string Reg_c::to_lower(string str)

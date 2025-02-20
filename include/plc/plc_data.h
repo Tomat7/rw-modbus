@@ -38,24 +38,32 @@ struct regdata_t {
   int rupdate = 0;  // 1 - need to write/update remote register, 0 - no update
   int rstatus = 0;  // -1 mean ERROR, any positive - is OK
   int rmode = 0;    // 1 - mean RW, 0 - Read-only
-  // for next see https://www.modbustools.com/poll_display_formats.html
   // the next vars is out of Modbus level, but necessary for correct displaying
+  // see https://www.modbustools.com/poll_display_formats.html
+  // and https://www.simplymodbus.ca/FAQ.htm#Order
+  // also see ../reg/reg_datatype.h
   int rtype;      // 0 - uint16_t (see reg_datatype.h)
-  int rsize;      // how much regs "connected" - float (2 regs), uint64 (4 regs)
-  int rbyteorder; // byte order https://www.simplymodbus.ca/FAQ.htm#Order
+  int rsize;      // how much "connected " regs "in chain" (optional)
+  int rbyteorder; // byte order "in chain" (Big-Endian, ABCD, etc)
 };
 
 struct reg_t {
   int raddr = 0;
   regdata_t data;
-  reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next reg_t
-  string fullname = "";     // PLC_name.reg_name
-  string str_rfolder = "";   // /PLC/PLC_name/folder/PLC_name.reg_name (opt)
+  // all next params is optional for raw Modbus
+  // naming and good look
+  string str_rname = "-";    // reg_name
+  string rfullname = "";     // PLC_name.reg_name
+  const char* ch_name = nullptr;  // str_rname.c_str()
+  // OPC name of (optional) folder
+  string str_rfolder = "";  // .../PLC_name/rfolder/PLC_name.reg_name (opt)
+  // for SCADA/OPC: reg which/where referenced/pointed to Modbus reg
   string str_source = "";   // reference to external register (optional)
-  string str_name = "-";    // reg_name
+  // strings name of optional params (get it from Config)
   string str_mode = "*";    // "rw", "r", "w"
-  string str_type = "*";    // "i", "f", "u"
-  const char* ch_name = nullptr;
+  string str_type = "*";    // "i", "f", "u", "f100", see reg_init.cpp
+  // keep pointer to next "connected" reg in chain
+//  reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next reg_t
 };
 
 struct activity_t {

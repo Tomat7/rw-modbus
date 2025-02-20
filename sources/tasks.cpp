@@ -19,7 +19,7 @@ void tasks_init()
   Task.add_task(task_opc_refresh_, 250, "OPC:Refresh_");
   Task.add_task(task_regs_refresh_, 500, "REGS:Refresh_");
   Task.add_task(task_millis_, 2500, "Millis_");
-  mb_add_tasks();
+  mb_add_refresh_tasks();
 }
 
 void tasks_start()

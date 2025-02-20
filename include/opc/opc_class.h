@@ -21,7 +21,7 @@ union value_u {
   int64_t i64;
   uint16_t ui16;
   uint32_t ui32;
-  uint64_t ui64;
+  uint64_t ui64 = 0;
   int64_t dt;
   float fl;
   double dbl;
@@ -34,7 +34,7 @@ struct badvalue_t {
   int16_t i16 = -32000;
   int32_t i32 = -65000;
   int64_t i64 = -128000;
-  uint16_t ui16 = 65535;
+  uint16_t ui16 = 65333;
   uint32_t ui32 = 128765;
   uint64_t ui64 = 2565432;
   float fl = -99.54f;

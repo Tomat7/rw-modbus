@@ -15,7 +15,7 @@
 struct regupd_t {
   bool upd_plc = false;    // need print ">"
   bool upd_opc = false;    // need print "<"
-  value_u opc_value;  // value to print
+  uint16_t opc_value = 0;  // value to print
 };
 
 static map<string, regupd_t> STRmap;
@@ -31,51 +31,45 @@ int task_regs_refresh_(void* params)
   int x = 0;
 
   for (auto& [n, rm] : REGmap) {
-    value_u plc_val;  // Value from PLC
-    value_u opc_val;  // from OPC
-    value_u old_val = rm.value; // Value in memory (in REGmap)
+    if (rm.visible /* rm.is_MB() || rm.is_Scada() */) {
+      uint16_t plc_val/*  = rm.get_plc_val() */;  // Value from PLC
+      uint16_t shm_val/*  = rm.get_shm_val() */;  // Value from SHM
+      uint16_t old_val = rm.value.ui16;          // Value in memory (in REGmap)
+      // uint16_t opc_val = opc_update_uint16(n, rm.ptr_data_plc);
+      uint16_t opc_val/*  = opc_update_uint16((rm.ptr_reg)->str_opcname, &rm) */;
 
-    bool isNew_Plc = false; // Got new value from PLC
-    bool isNew_Opc = false; // Got new value from OPC
+      // printf("%7d %7d %7d %7d ==", plc_val, old_val, shm_val, opc_val);
 
-    if (rm.visible) {
-      opc_val = opc_get_value(rm.str_opcname);  // from OPC
-      isNew_Opc = (opc_val.ui64 != old_val.ui64);
-    }
+      bool isNew_Plc = (plc_val != old_val);
+      bool isNew_Opc = (opc_val != shm_val);
 
-    if (rm.is_modbus) {
-      plc_val = rm.get_plc_value();  // Value from PLC
-      isNew_Plc = (plc_val.ui64 != old_val.ui64);
-    }
+      rm.sync(plc_val);  // Save PLC value to REGmap (SHM & local)
 
-    if (isNew_Plc) {
-      rm.sync(plc_val);  // Save PLC value to REGmap
-      if (!STRmap.count(n) || !STRmap[n].upd_plc)
-        STRmap[n].upd_plc = true;
-    }
-
-    if (rm.var_mode && isNew_Opc) {
-      x++;
-      rm.sync(opc_val);
-
-      if (rm.is_modbus)
-        rm.set_plc_value(opc_val);
-
-      if (!STRmap.count(n) || !STRmap[n].upd_opc) {
-        STRmap[n].upd_opc = true;
-        STRmap[n].opc_value = opc_val;
+      if (isNew_Plc) {
+        if (!STRmap.count(n) || !STRmap[n].upd_plc)
+          STRmap[n].upd_plc = true;
       }
-    }
-    // try to fill referenced/virtual register
-    if (rm.is_ref) {
-      auto &rf = REGmap[rm.str_source];
-      //uint16_t plc_val/*  = rf.get_plc_val() */;  // Value from PLC
-      old_val = rm.value          // Value in memory (in REGmap)
-                //uint16_t opc_val = opc_update_uint16(n, rf.ptr_data_plc);
-                //uint16_t opc_val /*=  opc_update_uint16((rm.ptr_reg)->str_opcname, &rf) */;
 
-      isNew_Plc = (plc_val != old_val);
-      isNew_Opc = (opc_val != old_val);
+      if (rm.var_mode && isNew_Opc) {
+        x++;
+        rm.set_plc_reg(opc_val);
+        rm.value.ui16 = opc_val;
+        if (!STRmap.count(n) || !STRmap[n].upd_opc) {
+          STRmap[n].upd_opc = true;
+          STRmap[n].opc_value = opc_val;
+        }
+      }
+      // try to fill referenced/virtual register
+    } else if (rm.has_Ref()) {
+      auto &rf = REGmap[rm.str_source];
+      uint16_t plc_val/*  = rf.get_plc_val() */;  // Value from PLC
+      uint16_t shm_val/*  = rm.get_shm_val() */;  // Value from SHM
+      uint16_t old_val = rm.value.ui16;          // Value in memory (in REGmap)
+      //uint16_t opc_val = opc_update_uint16(n, rf.ptr_data_plc);
+      uint16_t opc_val /*=  opc_update_uint16((rm.ptr_reg)->str_opcname, &rf) */;
+
+      bool isNew_Plc = (plc_val != old_val);
+      bool isNew_Opc = (opc_val != shm_val);
 
 //      rm.sync_regdata(rf.ptr_data_plc);  // Save referenced PLC value
 

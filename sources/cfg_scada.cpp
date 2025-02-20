@@ -11,18 +11,13 @@
 
 using namespace std;
 using namespace libconfig;
+using cchar = const char;
 
 static int total_regs = 0;
 
 int cfg_init_scadaset(const Setting &cfg, const Setting &pl);
-void cfg_init_scadaregs(const Setting &reg, string _dname, string _dfolder);
-/*
-  void cfg_print_plc_details(const PLC_c &pn);
-  void cfg_print_reg_details(const reg_t &rn);
-*/
-// Config cfg;
+int cfg_init_scadaregs(const Setting &reg, string _dname, string _dfolder);
 
-using cchar = const char;
 
 int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
 {
@@ -49,9 +44,6 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
       PLClst.insert(listPLC[i]);
   }
 
-  if (vec_size_new > PLCvec.capacity())
-    PLCvec.reserve(vec_size_new + 1);
-
   for (int i = 0; i < nb_plc_cfg; ++i) {
     string _devname, _dfolder, _desc, _ip;
 //    int _port, _att, _ms, _us;
@@ -61,17 +53,14 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
         cfgPLC[i].lookupValue("folder", _dfolder) &&
         cfgPLC[i].lookupValue("desc", _desc)) {
       // It is SCADA registers configuration!
-      // //PLCvec.emplace_back(_devname, "", _folder, _desc, 0, 0, 0, 0);
-      // //PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
-      cfg_init_scadaregs(cfgPLC[i]["regs"], _devname, _dfolder);
-      //regs_create(&PLCvec.back());
-      // //PLCvec.back().init_regs(); // Necessary to copy str to char* and others
+      int nb_regs = cfg_init_scadaregs(cfgPLC[i]["regs"], _devname, _dfolder);
+      total_regs += nb_regs;
       nb_plc_ready++;
 
-      LOGI("Configured SCADA: %s, with: %d regs", PLCvec.back().dev_name,
-           (int)PLCvec.back().regs.size());
-      //PLCvec.erase(PLCvec.end());
+      LOGI("Configured SCADA set: %s, with: %d regs",
+           _devname.c_str(), nb_regs);
+
       // ===== End SCADA virtual filling =====
     } else {
       LOGA("Error reading SCADA configuration: %d\n", i);
@@ -79,7 +68,7 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
     }
   }
 
-  LOGI("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
+  LOGI("Total SCADA sets: %d, with %d regs", nb_plc_cfg, total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
     LOGA("Wrong PLCs number! Processed: %d, in the list: %d.",
@@ -89,11 +78,10 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
 }
 
 
-
-void cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
+int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
 {
   int nb_regs = cfgREG.getLength();
-  total_regs += nb_regs;
+  int nb_errors = 0;
 
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
@@ -101,20 +89,22 @@ void cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
 
     if (cfgREG[j].lookupValue("rsource", r.str_source) &&
         cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
-        cfgREG[j].lookupValue("rname", r.str_name)) {
+        cfgREG[j].lookupValue("rname", r.str_rname)) {
       // This is SCADA register/variable/tag
+
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
             cfgREG[j].lookupValue("rtype", r.str_type))) {
         if (r.str_source == "-") {
           LOGE("Error reading 'rmode'/'rtype' on %s: %s REG: %d\n",
-               r.str_name.c_str(), j);
+               r.str_rname.c_str(), j);
           exit(EXIT_FAILURE);
           continue;
         }
       }
+
       r.raddr = j;
       LOGI("Read 'rsource'/'rfolder' on %s: %s/%s REG: %d",
-           r.str_name.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
+           r.str_rname.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
            _dfolder.c_str(), _dname.c_str(), j);
@@ -122,23 +112,24 @@ void cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
       continue;
     }
 
-    Reg_c::init_types(&r);
     r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
-    r.ch_name = r.str_name.c_str();
+    r.ch_name = r.str_rname.c_str();
     r.data.rvalue = 888; // TODO: remove for production!
 
     if (_dname == "-" || _dname == ".") // Scada!
-      r.fullname = r.str_name;
+      r.rfullname = r.str_rname;
     else
-      r.fullname = _dname + "." + r.str_name;
-
+      r.rfullname = _dname + "." + r.str_rname;
 
     string str_opcbase = "/" + _dfolder + "/" + _dname + "/";
-    //_D->regs[r.raddr] = r;
 
-    REGmap[r.fullname] = {&r, str_opcbase};
+    if (Reg_c::init_types(&r))
+      REGmap[r.rfullname] = {&r, str_opcbase};
+    else
+      nb_errors++;
   }
-  return;
+
+  return nb_regs - nb_errors;;
 }
 
 /*

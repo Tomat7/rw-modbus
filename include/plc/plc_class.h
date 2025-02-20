@@ -52,6 +52,7 @@ public:
   int read_master();    // for Master only
   int write_master();   // for Master only
   int update_master();  // for Master only
+  int refresh_master()  { return update_master(); }  // for Master only
 
   // For Slave only.
   int handle_slave(int usec = 10000);  // for Slave only. Call very often!
@@ -60,13 +61,28 @@ public:
   int update_slave();  // for Slave only. Copy raw to regs (map).
 
   // Set/Get local values. NO real update to PLC.
-  int set_reg(int raddr, uint16_t rval);
-  int set_reg(string rname, uint16_t rval);
-  int set_reg(int raddr, float rval);
-  int set_reg(string rname, float rval);
-
-  uint16_t get_reg(string rname);
+  static uint16_t get_reg(reg_t* rptr);
   uint16_t get_reg(int raddr);
+  uint16_t get_reg_by_name(string rname);
+  uint16_t get_reg_by_fullname(string rfname);
+
+  static int set_reg(uint16_t rval, reg_t* rptr);
+  int set_reg(uint16_t rval, int raddr);
+  int set_reg_by_name(uint16_t rval, string rname);
+  int set_reg_by_fullname(uint16_t rval, string rfname);
+
+  /*
+    int set_reg(int raddr, uint32_t rval);
+    int set_by_regname(string rname, uint32_t rval);
+    int set_by_fullname(string rname, uint32_t rval);
+
+    int set_reg(int raddr, uint64_t rval);
+    int set_by_regname(string rname, uint64_t rval);
+    int set_by_fullname(string rname, uint64_t rval);
+  */
+  //int set_reg(int raddr, float rval);
+  //int set_reg(string rname, float rval);
+
   //float get_reg(string rname);
   //float get_reg(int raddr);
 
@@ -76,8 +92,8 @@ public:
   // Common properties
   bool Enabled = false;
   bool is_slave = false;
-  string str_dev_folder;
   string str_desc;
+  string str_top_folder;
   string str_dev_name;
   string str_ip_addr;
   const char* dev_name = nullptr;

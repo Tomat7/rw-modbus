@@ -101,9 +101,9 @@ enum byteorder_t {
 #define TYPE_DOUBLE TYPE_DOUBLE_HH // Big-endian as default
 
 #define TYPE_1ST { NOTUA_TYPES_1ST, 1, BO_1ST } // ?? 
-#define TYPE_2ND { NOTUA_TYPES_2ND, 1, BO_2ND } // Second word of 2-words type
-#define TYPE_3RD { NOTUA_TYPES_3RD, 1, BO_3RD } // Third word of 4-words type
-#define TYPE_4TH { NOTUA_TYPES_4TH, 1, BO_4TH } // Fourth word of 4-words type
+#define TYPE_2ND { NOTUA_TYPES_2ND, 0, BO_2ND } // Second word of 2-words type
+#define TYPE_3RD { NOTUA_TYPES_3RD, 0, BO_3RD } // Third word of 4-words type
+#define TYPE_4TH { NOTUA_TYPES_4TH, 0, BO_4TH } // Fourth word of 4-words type
 
 #define TYPE_REFERENCED { NOTUA_TYPES_REF, 0, BO_REF } // Reference to other
 #define TYPE_NOTHING { NOTUA_TYPES_NOTHING, 0, BO_NOTHING }    // No-type type

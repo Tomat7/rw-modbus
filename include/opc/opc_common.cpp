@@ -143,7 +143,9 @@ bool OpcServer_c::isGood(string s)
   return ret;
 }
 
+
 bool OpcServer_c::isVariable(string s) { return vars.count(s); }
+
 
 string OpcServer_c::lookupVar(string s)
 {
@@ -153,9 +155,8 @@ string OpcServer_c::lookupVar(string s)
     if (ss.find(s) != std::string::npos) {
       auto last_slash = ss.rfind("/");  // Find last "/"
       if (last_slash != std::string::npos) {
-        string _s =
-          ss.substr(last_slash + 1);  // Get str after "/" - BUF.Press"
-        if (_s == s)
+        string _s = ss.substr(last_slash + 1);  // Get str after "/"
+        if (_s == s)                            //  - BUF.Press"
           return ss;
       }
     }

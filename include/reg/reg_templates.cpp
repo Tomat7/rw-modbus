@@ -25,6 +25,25 @@
 
 regdata_t* ptr_data_plc = nullptr;
 
+//    ptr_data_plc->rupdate = 1;
+/*
+        if (ptr_data_plc != nullptr) {
+
+          if (ptr_data_plc->rtype == TYPE_F100)
+            ptr_data_plc->rvalue = (uint16_t)(_val * 100);
+          else if (ptr_data_plc->rtype == TYPE_FLOAT_ABCD) {
+            value.fl = _val;
+            ptr_data_plc->rvalue = value.fl2u[1];
+            (ptr_reg->r_next)->data.rvalue = value.fl2u[0];
+          } else if (ptr_data_plc->rtype == TYPE_FLOAT_CDAB) {
+            value.fl = _val;
+            ptr_data_plc->rvalue = value.fl2u[0];
+            (ptr_reg->r_next)->data.rvalue = value.fl2u[1];
+          }
+        }
+*/
+
+
 template <>
 uint16_t Reg_c::set_value(uint16_t _val)
 {
@@ -57,24 +76,8 @@ float Reg_c::set_value(float _val)
 {
   float _fl = value.fl;
 
-  if (fabs(value.fl - _val) > 0.01) {
-//    ptr_data_plc->rupdate = 1;
-    /*
-        if (ptr_data_plc != nullptr) {
-
-          if (ptr_data_plc->rtype == TYPE_F100)
-            ptr_data_plc->rvalue = (uint16_t)(_val * 100);
-          else if (ptr_data_plc->rtype == TYPE_FLOAT_ABCD) {
-            value.fl = _val;
-            ptr_data_plc->rvalue = value.fl2u[1];
-            (ptr_reg->r_next)->data.rvalue = value.fl2u[0];
-          } else if (ptr_data_plc->rtype == TYPE_FLOAT_CDAB) {
-            value.fl = _val;
-            ptr_data_plc->rvalue = value.fl2u[0];
-            (ptr_reg->r_next)->data.rvalue = value.fl2u[1];
-          }
-        } */
-  }
+  if (fabs(_fl - _val) > 0.01)
+    value.fl = _val;
 
   return _fl;
 }
@@ -112,20 +115,26 @@ int16_t Reg_c::get_value()
 template <>
 float Reg_c::get_value()
 {
-  if (ptr_data_plc != nullptr) {
-    if (var_type == NOTUA_TYPES_F100)
-      value.fl =(int16_t)(ptr_data_plc->rvalue) * (float)0.01;
-    else if (var_type == UA_TYPES_FLOAT) {
-      if (byte_order == BO_HH) {
-        value.fl2u[1] = ptr_data_plc->rvalue;
-        value.fl2u[0] = (ptr_reg->r_next)->data.rvalue;
-      } else if (ptr_data_plc->rtype == BO_HL) {
-        value.fl2u[0] = ptr_data_plc->rvalue;
-        value.fl2u[1] = (ptr_reg->r_next)->data.rvalue;
-      }
-    } else
-      value.fl = -99.12f;
-  }
+  value_u v;
+  v.ui64 = 0;
+  v.fl = bad_value.fl;
+
+  for (int i = 0; i < var_size; i++)
+    v.dbl2u[i] = get_plc_reg(ptr_reg[i]);
+
+  if (var_type == NOTUA_TYPES_F100)
+    value.fl = v.i16 * (float)0.01;
+  else if (var_type == UA_TYPES_FLOAT) {
+    if (byte_order == BO_HH) {
+      value.fl2u[1] = v.dbl2u[0];
+      value.fl2u[0] = v.dbl2u[1];;
+    } else if (byte_order == BO_HL) {
+      value.fl2u[0] = v.dbl2u[0];;
+      value.fl2u[1] = v.dbl2u[0];;
+    }
+  } else
+    value.fl = -99.12f;
+
   return value.fl;
 }
 

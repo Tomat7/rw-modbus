@@ -66,7 +66,29 @@ int PLC_c::mb_ctx()
   return rc;
 }
 
-int PLC_c::set_reg(int raddr, uint16_t rval)  // Set reg locally != write PLC.
+
+int PLC_c::set_reg(uint16_t rval, reg_t* rptr) // !! STATIC !!
+{
+  int ret = -1;
+  if (rptr != nullptr) {
+    regdata_t &rd = rptr->data;
+    if (rd.rmode == 1) {
+      if (rd.rvalue != rval) {
+        rd.rvalue = rval;
+        rd.rupdate = 1;
+        LOGD("%d %d", rptr->raddr, rval);
+        ret = 1;  // Update is ok
+      } else
+        ret = 0;  // No update necessary
+    }
+  } else
+    LOGE("");
+
+  return ret;
+}
+
+
+int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
 {
   rc = -1;
   if (raddr <= reg_max) {
@@ -84,40 +106,13 @@ int PLC_c::set_reg(int raddr, uint16_t rval)  // Set reg locally != write PLC.
   return rc;
 }
 
-/*
-  int PLC_c::set_reg(int raddr, float fl)  // Set reg locally != write PLC.
-  {
-  float2uint_u fl2u;
-  fl2u.fl = fl;
-  rc = -1;  // Addr out of range
 
-  if ((raddr + 1) <= reg_max) {
-    regdata_t &rd0 = regs[raddr].data;
-    regdata_t &rd1 = regs[raddr+1].data;
-    if (rd0.rmode == 1) {
-      if ((rd0.rvalue != fl2u.ui[0]) || (rd1.rvalue != fl2u.ui[1])) {
-        rd0.rvalue = fl2u.ui[0];
-        rd0.rvalue = fl2u.ui[0];
-        rd0.rupdate = 1;
-        rd1.rvalue = fl2u.ui[1];
-        rd1.rvalue = fl2u.ui[1];
-        rd1.rupdate = 1;
-        LOGD("%d %f", raddr, fl);
-        rc = 1;  // Update is ok
-      } else
-        rc = 0;  // No update necessary
-    }
-  }
-  return rc;
-  }
-*/
-
-int PLC_c::set_reg(string rname, uint16_t rval)
+int PLC_c::set_reg_by_name(uint16_t rval, string rname)
 {
   rc = -2;  // rname not found
 
   for (auto &[a, r] : regs) {
-    if (r.str_name == rname) {
+    if (r.str_rname == rname) {
       rc = set_reg(a, rval);
       break;
     }
@@ -126,21 +121,32 @@ int PLC_c::set_reg(string rname, uint16_t rval)
   return rc;
 }
 
-/*
-  int PLC_c::set_reg(string rname, float fl)
-  {
+
+int PLC_c::set_reg_by_fullname(uint16_t rval, string rname)
+{
   rc = -2;  // rname not found
 
   for (auto &[a, r] : regs) {
-    if (r.str_name == rname) {
-      rc = set_reg(a, fl);
+    if (r.rfullname == rname) {
+      rc = set_reg(a, rval);
       break;
     }
   }
 
   return rc;
-  }
-*/
+}
+
+// =============================================
+
+uint16_t PLC_c::get_reg(reg_t* rptr) // !! STATIC !!
+{
+  int ret = -1;
+  uint16_t rval = 0;
+  if (rptr != nullptr)
+    rval = rptr->data.rvalue;
+  return rval;
+}
+
 
 uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
 {
@@ -154,12 +160,12 @@ uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
 }
 
 
-uint16_t PLC_c::get_reg(string rname)  // Set reg's local value != read PLC.
+uint16_t PLC_c::get_reg_by_name(string rname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;
   for (auto &[a, r] : regs) {
-    if (r.str_name == rname) {
+    if (r.str_rname == rname) {
       rval = r.data.rvalue;
       rc = 1;
       break;
@@ -167,6 +173,21 @@ uint16_t PLC_c::get_reg(string rname)  // Set reg's local value != read PLC.
   }
   return rval;
 }
+
+uint16_t PLC_c::get_reg_by_fullname(string rfname)  // Set reg's local value != read PLC.
+{
+  uint16_t rval = 0;
+  rc = -1;
+  for (auto &[a, r] : regs) {
+    if (r.str_rname == rfname) {
+      rval = r.data.rvalue;
+      rc = 1;
+      break;
+    }
+  }
+  return rval;
+}
+
 
 int PLC_c::regs_size(int raddr)  // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
 {
@@ -188,7 +209,7 @@ int PLC_c::regs_used(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
 {
   int x = 0;
   for (auto &[a, r] : regs) {
-    if (r.str_name == rname) {
+    if (r.str_rname == rname) {
       x = regs_size(a);
       break;
     }

@@ -16,55 +16,6 @@
 #include "include/logger.h"
 #include "plc_class.h"
 
-// mutex PLC_c::logger_mux;
-
-/* map<string, pair<regtype_t, byteorder_t>> type_map { */
-
-/*
-  // See plc_datatype.h for details & comments
-  // {"*", TYPE_REFERENCED, OTHER},
-  {"-", TYPE_NOTHING},    // "Referenced" registers
-  {"u", TYPE_U16},        {"i", TYPE_I16},        {"f", TYPE_F100},
-  {"u16", TYPE_U16},      {"i16", TYPE_I16},      {"f10", TYPE_F10},
-  {"hex", TYPE_HEX},      {"bin", TYPE_BINARY},   {"f100", TYPE_F100},
-
-  // High byte first, high word first (Big-endian) as default
-  {"u32", TYPE_U32_HH},     {"i32", TYPE_I32_HH},
-  {"u64", TYPE_U64_HH},     {"i64", TYPE_I64_HH},
-  {"float", TYPE_FLOAT_HH}, {"double", TYPE_DOUBLE_HH},
-
-  // Other types and word/byte orders.  (longnames)
-  {"u32hh", TYPE_U32_HH},   {"i32hh", TYPE_I32_HH},
-  {"u32hl", TYPE_U32_HL},   {"i32hl", TYPE_I32_HL},
-  {"u32lh", TYPE_U32_LH},   {"i32lh", TYPE_I32_LH},
-  {"u32ll", TYPE_U32_LL},   {"i32ll", TYPE_I32_LL},
-
-  {"u64hh", TYPE_U64_HH},   {"i64hh", TYPE_I64_HH},
-  {"u64hl", TYPE_U64_HL},   {"i64hl", TYPE_I64_HL},
-  {"u64lh", TYPE_U64_LH},   {"i64lh", TYPE_I64_LH},
-  {"u64ll", TYPE_U64_LL},   {"i64ll", TYPE_I64_LL},
-
-  {"fhh", TYPE_FLOAT_HH},   {"float_abcd", TYPE_FLOAT_HH},
-  {"fhl", TYPE_FLOAT_HL},   {"float_cdab", TYPE_FLOAT_HL},
-  {"flh", TYPE_FLOAT_LH},   {"float_badc", TYPE_FLOAT_LH},
-  {"fll", TYPE_FLOAT_LL},   {"float_dcba", TYPE_FLOAT_LL},
-
-  {"f_abcd", TYPE_FLOAT_HH}, {"d_abcd", TYPE_DOUBLE_HH},
-  {"f_cdab", TYPE_FLOAT_HL}, {"d_cdab", TYPE_DOUBLE_HL},
-  {"f_badc", TYPE_FLOAT_LH}, {"d_badc", TYPE_DOUBLE_LH},
-  {"f_dcba", TYPE_FLOAT_LL}, {"d_dcba", TYPE_DOUBLE_LL},
-
-  {"dhh", TYPE_DOUBLE_HH},  {"double_abcd", TYPE_DOUBLE_HH},
-  {"dhl", TYPE_DOUBLE_HL},  {"double_cdab", TYPE_DOUBLE_HL},
-  {"dlh", TYPE_DOUBLE_LH},  {"double_badc", TYPE_DOUBLE_LH},
-  {"dll", TYPE_DOUBLE_LL},  {"double_dcba", TYPE_DOUBLE_LL},
-
-  {"2nd", TYPE_2ND}, {"2", TYPE_2ND},
-  {"3rd", TYPE_3RD}, {"3", TYPE_3RD},
-  {"4th", TYPE_4TH}, {"4", TYPE_4TH},
-
-  };
-*/
 
 PLC_c::~PLC_c()
 {
@@ -88,14 +39,14 @@ void PLC_c::init_regs()  // Master only
     // init_type(r);
     // init_str(r);
 
-    r.ch_name = r.str_name.c_str();
+    r.ch_name = r.str_rname.c_str();
     r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
 
     if (!is_slave) {
       if (str_dev_name == MB_NO_DEV_NAME) // Scada!
-        r.fullname = r.str_name;
+        r.rfullname = r.str_rname;
       else
-        r.fullname = str_dev_name + "." + r.str_name;
+        r.rfullname = str_dev_name + "." + r.str_rname;
     }
 
     if (r.raddr < reg_min)
@@ -106,27 +57,28 @@ void PLC_c::init_regs()  // Master only
     r.data.rvalue = 777;  // TODO: remove for production
   }
 
-// RECODE!! add 64-bit regg
+// RECODE!! add 64-bit reg
   for (auto &[a, r] : regs) {
-    int ru = r.data.rsize;
+    /*     int rsize = r.data.rsize;
 
-    if (ru > 1) {
-      r.r_next = &regs[r.raddr + 1];
-      regs[r.raddr + 1].data.rmode = r.data.rmode;
-      regs[r.raddr + 1].data.rtype = NOTUA_TYPES_2ND;
-    }
+        if (rsize > 1) {
+          r.r_next = &regs[r.raddr + 1];
+          regs[r.raddr + 1].data.rmode = r.data.rmode;
+          regs[r.raddr + 1].data.rtype = NOTUA_TYPES_2ND;
+        }
 
-    if (ru > 2) {
-      regs[r.raddr + 1].r_next = &regs[r.raddr + 2];
-      regs[r.raddr + 2].data.rmode = r.data.rmode;
-      regs[r.raddr + 2].data.rtype = NOTUA_TYPES_3RD;
-      regs[r.raddr + 2].r_next = &regs[r.raddr + 3];
-      regs[r.raddr + 3].data.rmode = r.data.rmode;
-      regs[r.raddr + 3].data.rtype = NOTUA_TYPES_4TH;
-    }
-
-    LOGN("+ REG init: %-9s %2d %2s %3d [%s]", r.ch_name, r.raddr,
-         r.str_mode.c_str(), regs[r.raddr].data.rtype, r.fullname.c_str());
+        if (rsize > 2) {
+          regs[r.raddr + 1].r_next = &regs[r.raddr + 2];
+          regs[r.raddr + 2].data.rmode = r.data.rmode;
+          regs[r.raddr + 2].data.rtype = NOTUA_TYPES_3RD;
+          regs[r.raddr + 2].r_next = &regs[r.raddr + 3];
+          regs[r.raddr + 3].data.rmode = r.data.rmode;
+          regs[r.raddr + 3].data.rtype = NOTUA_TYPES_4TH;
+        }
+    */
+    LOGN("+ REG init: %-9s %2d %2s %4d %2d %3d [%s]", r.ch_name, r.raddr,
+         r.str_mode.c_str(), regs[r.raddr].data.rtype, regs[r.raddr].data.rsize,
+         regs[r.raddr].data.rbyteorder, r.rfullname.c_str());
   }
 }
 

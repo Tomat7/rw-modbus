@@ -23,39 +23,35 @@ void opc_regs_init()
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
+    if (!rm.visible)
+      continue;
+
     string n, e;
     n = rm.str_opcname;
     e = Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix; // Kub.Temp1.errors
 
     OPCs.addVar(e, (uint16_t)0, 0); // Reg to keep NB of errors
 
-    regdata_t* rd = &rm.ptr_reg->data;
-    auto &t = rm.ptr_reg->data.rtype;
-
     value_u v;
     v.ui64 = 0;
+    int t = rm.var_type;
+    if (rm.is_modbus)
+      t = UA_TYPES_UINT16;
 
-    if (t == UA_TYPES_FLOAT) {
-      if (rd->rbyteorder == BO_HH) {
-        v.fl2u[1] = rd->rvalue;
-        v.fl2u[0] = rm.ptr_reg->r_next->data.rvalue;
-      } else if (rd->rbyteorder == BO_HL) {
-        v.fl2u[0] = rd->rvalue;
-        v.fl2u[1] = rm.ptr_reg->r_next->data.rvalue;
-      }
-      OPCs.addVar(n, v.fl, rd->rmode);
-    } else if (t == NOTUA_TYPES_F10) {
-      float fl = (int16_t)(rd->rvalue) * (float)0.1;
-      OPCs.addVar(n, fl, rd->rmode);
+    if (t == UA_TYPES_FLOAT)
+      OPCs.addVar(n, rm.value.fl, rm.var_mode);
+    else if (t == NOTUA_TYPES_F10) {
+      float fl = (int16_t)(rm.get_plc_reg()) * (float)0.1;
+      OPCs.addVar(n, fl, rm.var_mode);
     } else if (t == NOTUA_TYPES_F100) {
-      float fl = (int16_t)(rd->rvalue) * (float)0.01;
-      OPCs.addVar(n, fl, rd->rmode);
+      float fl = (int16_t)(rm.get_plc_reg()) * (float)0.01;
+      OPCs.addVar(n, fl, rm.var_mode);
     } else if (t == UA_TYPES_INT16) {
-      int16_t i16 = (int16_t)(rd->rvalue);
-      OPCs.addVar(n, i16, rd->rmode);
+      int16_t i16 = (int16_t)(rm.get_plc_reg());
+      OPCs.addVar(n, i16, rm.var_mode);
     } else if (t == UA_TYPES_UINT16) {
-      uint16_t ui16 = (uint16_t)(rd->rvalue);
-      OPCs.addVar(n, ui16, rd->rmode);
+      uint16_t ui16 = (uint16_t)(rm.get_plc_reg());
+      OPCs.addVar(n, ui16, rm.var_mode);
     } else
       LOGE("Wrong type: %d, Var: %s", t, n.c_str());
 
@@ -89,6 +85,7 @@ uint16_t opc_update_uint16(string name, Reg_c* R)
   return val_get;
 }
 
+value_u opc_get_value(string s) { return OPCs.readRawValue(OPCs.lookupVar(s)); }
 
 void opc_deinit() { OPCs.stop(); }
 

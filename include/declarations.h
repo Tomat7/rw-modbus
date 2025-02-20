@@ -78,7 +78,7 @@ void mb_deinit();
 int mb_read();
 int mb_write();
 int mb_update();
-int mb_add_tasks();
+int mb_add_refresh_tasks();
 int mb_print_summary();
 int mb_slave_init();
 int mb_slave();
@@ -98,6 +98,7 @@ void opc_run_thread();
 void opc_init();
 void opc_deinit();
 void opc_start();
+value_u opc_get_value(string s);
 //uint16_t opc_update_uint16(string name, regdata_t* rd);
 uint16_t opc_update_uint16(string name, Reg_c* R);
 // uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);
@@ -111,7 +112,7 @@ int task_millis_(void* params);
 int task_opc_refresh_(void* params);
 int task_regs_refresh_(void* params);
 int task_begin_(void* params);
-int task_mb_update_(void* params);
+int task_plc_refresh_(void* params);
 
 
 template <typename T>

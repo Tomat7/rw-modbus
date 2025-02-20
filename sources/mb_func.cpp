@@ -16,18 +16,18 @@ static vector<int> res;
 static vector<uint64_t> idx;
 static vector<uint64_t> prev_ts;
 
-int task_mb_update_(void* params)
+int task_plc_refresh_(void* params)
 {
   uint64_t x = *(uint64_t*)params;
   PLC_c &D = PLCvec[x];
   prev_ts[x] = D.mb.timestamp_try_ms;
-  res[x] = D.update_master();
+  res[x] = D.refresh_master();
   std::this_thread::yield();
   LOGI("%s: %d Done.", __func__, x);
   return (int)x;
 }
 
-int mb_add_tasks()
+int mb_add_refresh_tasks()
 {
   //  "===== mb_update ====="
   uint64_t i = 0;
@@ -39,8 +39,8 @@ int mb_add_tasks()
   for (i = 0; i < nb_plcs; i++) {
     PLC_c &D = PLCvec[i];
     idx[i] = i;
-    string name = D.str_dev_folder + " " + D.str_dev_name;
-    Task.add_task(task_mb_update_, D.mb.polling_ms, name, &idx[i]);
+    string task_name = D.str_top_folder + ":" + D.str_dev_name + ":refresh_";
+    Task.add_task(task_plc_refresh_, D.mb.polling_ms, task_name, &idx[i]);
   }
 
   std::this_thread::sleep_for(10ms);

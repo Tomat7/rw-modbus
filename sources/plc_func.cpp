@@ -20,7 +20,7 @@ void plc_show2()
   for (auto &D : PLCvec)
     for (auto &[a, R] : D.regs) {
       printf("%s: %s.%-8s (%d) %5d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
-             R.raddr, R.data.rvalue, R.fullname.c_str());
+             R.raddr, R.data.rvalue, R.rfullname.c_str());
     }
 }
 

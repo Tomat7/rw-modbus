@@ -40,35 +40,50 @@ class Reg_c
 {
 public:
 //  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
-  Reg_c(reg_t* _reg, PLC_c* _dev);      // for PLC master
 //  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
 //  Reg_c(string _rn, string src_ref);       // for Scada regs.
+  Reg_c(reg_t* _reg, PLC_c* _dev);      // for PLC master
   Reg_c(reg_t* _reg, string _opc_base); // for Scada regs.
   Reg_c();
   ~Reg_c();
 
-  static void init_types(reg_t* _reg);
+  static bool init_types(reg_t* _reg);
+  uint16_t get_plc_reg(reg_t* rptr);
+  uint16_t get_plc_reg(int x = 0);
+  value_u get_plc_value();
+  int get_plc_errors();
+
+  value_u get_local_value();
+  value_u get_scada_value();
+
+  void set_plc_reg(uint16_t _val, reg_t* rptr);
+  void set_plc_reg(uint16_t _val, int x = 0);
+  void set_plc_value(value_u _value);
+
   /*   uint16_t get_plc_val();
     uint16_t get_shm_val(); */
   uint16_t get_local();
 
-  void set_plc_val(uint16_t _val);
+
 //  void set_shm_val(uint16_t _val);
   void set_local(uint16_t _val);
 
   void sync();
-  void sync(uint16_t _val);
+  void sync(value_u _val);
   void sync_regdata(regdata_t* prt_data);
 
-  int get_mode(); // 1 = "rw"
-  int get_type();
-  bool is_shm();
-  bool is_MB();
-  bool is_Scada();  // Calculated
-  bool has_Ref();    // Referenced to Modbus
+//  int get_mode(); // 1 = "rw"
+//  int get_type();
+
+
+  //bool is_shm();
+//  bool is_MB();
+//  bool is_Scada();  // Calculated
+//  bool has_Ref();    // Referenced to Modbus
   bool has_Str(string SS, string fs); // Look for fs within SS
-  string to_lower(string str);
+
   void remove_dbl_slashes(string &str);
+  string to_lower(string str);
 
   // set MODBUS value and return LOCAL
   template <typename T> T set_value(T _val);
@@ -83,22 +98,27 @@ public:
 //  regdata_t* ptr_data_plc = nullptr;  // ptr to SHARED MEMORY (PLC/MB) data
 //  int fd = -1;                        // descriptor of SHARED MEMORY
 
-  const char* rn = nullptr;   // just for FUN! (copy)
-  string str_fullname;        // just for FUN! (copy)
+  const char* rn = nullptr;   // copy from MB-reg
+  string str_fullname = "";   // copy from MB-reg
+  string str_opcname = "";    // /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
+  string str_source = "";  // name of "referenced" MB-reg (ex. DEF.Temp3)
+// "-" mean no reference - Scada calculated reg!
+// "" mean no reference - Modbus reg only!
+//string str_topfolder = "";  // "PLC" or "SCADA" top folder-name
 
+  badvalue_t bad_value;
   value_u value;                 // union of values (by type)
+  int var_errors;   // regdata_t.rerrors
+  int var_mode;     // 1 - "rw", 0 - "readonly"
   int var_type;     // for OPC UA server (ex. UA_TYPES_FLOAT)
   int var_size;     // for multiply Modbus registers (ex. 32-bit Float)
   int byte_order;   // for 32/64-bit Modbus register (Big-Endian & other)
   bool visible = false; // try to hide 2nd/3rd/4th word of multiply MB regs
+  bool is_modbus = false;
+  bool is_scada = false;
+  bool is_ref = false;  // variable Referenced to Modbus reg(s)
 
-//  string str_topfolder = "";  // "PLC" or "SCADA" top folder-name
-  string str_opcname = "";    // /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
-  string src_reference;       // name of "referenced" MB-reg (ex. DEF.Temp3)
-  // "-" mean no reference - Scada calculated reg!
-  // "" mean no reference - Modbus reg only!
-
-  reg_t* ptr_reg = nullptr;   // ptr to Modbus PLC reg
+  reg_t* ptr_reg[4] = { nullptr };   // ptr to Modbus PLC reg
 
 };
 
