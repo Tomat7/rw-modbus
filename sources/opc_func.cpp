@@ -23,8 +23,8 @@ void opc_regs_init()
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
-    if (!rm.visible)
-      continue;
+    // if (!rm.visible)
+    //  continue;
 
     string n, e;
     n = rm.str_opcname;
@@ -39,30 +39,28 @@ void opc_regs_init()
       t = UA_TYPES_UINT16;
 
     if (t == UA_TYPES_FLOAT)
-      OPCs.addVar(n, rm.value.fl, rm.var_mode);
-    else if (t == NOTUA_TYPES_F10) {
-      float fl = (int16_t)(rm.get_plc_reg()) * (float)0.1;
-      OPCs.addVar(n, fl, rm.var_mode);
-    } else if (t == NOTUA_TYPES_F100) {
-      float fl = (int16_t)(rm.get_plc_reg()) * (float)0.01;
-      OPCs.addVar(n, fl, rm.var_mode);
-    } else if (t == UA_TYPES_INT16) {
-      int16_t i16 = (int16_t)(rm.get_plc_reg());
-      OPCs.addVar(n, i16, rm.var_mode);
-    } else if (t == UA_TYPES_UINT16) {
-      uint16_t ui16 = (uint16_t)(rm.get_plc_reg());
-      OPCs.addVar(n, ui16, rm.var_mode);
-    } else
+      //OPCs.addVar(n, rm.value.fl, rm.var_mode);
+      OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
+    else if (t == NOTUA_TYPES_F10)
+      OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
+    else if (t == NOTUA_TYPES_F100)
+      OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
+    else if (t == UA_TYPES_INT16)
+      OPCs.addVar(n, rm.get_local_value().i16, rm.var_mode);
+    else if (t == UA_TYPES_UINT16)
+      OPCs.addVar(n, rm.get_local_value().ui16, rm.var_mode);
+    else
       LOGE("Wrong type: %d, Var: %s", t, n.c_str());
 
   }
 }
 
 // uint16_t opc_update_uint16(string name, regdata_t* rd)
-uint16_t opc_update_uint16(string name, Reg_c* R)
-{
+/*
+  uint16_t opc_update_uint16(string name, Reg_c* R)
+  {
   // printf("\n===== OPC_update_uint16 =====\n");
-  regdata_t* rd /* = R->ptr_data_plc */;
+  regdata_t* rd = R->ptr_data_plc;
   uint16_t val_ui16 = R->get_value<uint16_t>(); // rd->rvalue;
   int16_t val_i16 = (int16_t)rd->rvalue;
   float val_fl = (int16_t)rd->rvalue * (float)0.01;
@@ -83,9 +81,19 @@ uint16_t opc_update_uint16(string name, Reg_c* R)
     val_get = CAST(uint16_t)(OPCs.updateVar(n, val_ui16, isOK));
 
   return val_get;
+  }
+*/
+
+value_u opc_get_value(string s)
+{
+  return OPCs.readRawValue(OPCs.lookupVar(s));
 }
 
-value_u opc_get_value(string s) { return OPCs.readRawValue(OPCs.lookupVar(s)); }
+
+bool opc_set_value(string s, value_u val, bool isOK)
+{
+  return OPCs.writeRawValue(OPCs.lookupVar(s), val, isOK);
+}
 
 void opc_deinit() { OPCs.stop(); }
 

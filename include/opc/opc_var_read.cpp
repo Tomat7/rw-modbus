@@ -43,4 +43,22 @@ value_u OpcServer_c::readRawValue(string s)
   return vu;
 }
 
+bool OpcServer_c::writeRawValue(string s, value_u _val, bool isOK)
+{
+  bool ret = false;
+  uaDataMux->lock();
+
+  if (vars.count(s)) {
+    vars[s].value = _val;
+    vars[s].ptr_value = &_val;
+    writeVariable(vars[s], isOK);
+    ret = true;
+  } else
+    LOGA("Set: Ignore non-existing variable: %s", s.c_str());
+
+  uaDataMux->unlock();
+
+  return ret;
+}
+
 // eof

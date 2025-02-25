@@ -33,7 +33,8 @@ uint16_t Reg_c::get_plc_reg(reg_t* rptr)  // Set reg's local value != read PLC.
 {
   uint16_t rval = bad_value.ui16;
   if (is_modbus && (rptr != nullptr)) {
-    if (rptr->data.rerrors)
+    var_errors = rptr->data.rerrors;
+    if (var_errors)
       rval = bad_value.ui16;
     else
       rval = PLC_c::get_reg(rptr);
@@ -49,10 +50,23 @@ uint16_t Reg_c::get_plc_reg(int x)  // Get reg's local value != read PLC.
 
 value_u Reg_c::get_plc_value()
 {
-  value_u v;
+  uint16_t mb2u[4] = { 0 };
+
   for (int i = 0; i < var_size; i++)
-    v.dbl2u[i] = get_plc_reg(i);
-  return v;
+    mb2u[i] = get_plc_reg(i);
+
+  if (byte_order == BO_F100)
+    value.fl = (int16_t)mb2u[0] * 0.01f;
+  else if (byte_order == BO_F10)
+    value.fl = (int16_t)mb2u[0] * 0.1f;
+  else if (byte_order == BO_HH)
+    for (int i = 0; i < var_size; i++)
+      value.dbl2u[i] = mb2u[var_size - 1 - i];
+  else if (byte_order == BO_HL)
+    for (int i = 0; i < var_size; i++)
+      value.dbl2u[i] = mb2u[i];
+
+  return value;
 }
 
 // =======================================
@@ -84,13 +98,14 @@ void Reg_c::set_plc_value(value_u v)
 int Reg_c::get_plc_errors()  // Get reg's local value != read PLC.
 {
   int err = 0;
-  if (is_modbus) {
-    for (int i = 0; i < var_size; i++)
-      if (ptr_reg[i] != nullptr)
-        err += ptr_reg[i]->data.rerrors;
-      else
-        LOGE("NULL pointer on reg: %s", str_fullname.c_str());
+
+  for (int i = 0; i < var_size; i++) {
+    if (ptr_reg[i] != nullptr)
+      err += ptr_reg[i]->data.rerrors;
+    else
+      LOGE("NULL pointer on reg: %s", str_fullname.c_str());
   }
+
   return err;
 }
 

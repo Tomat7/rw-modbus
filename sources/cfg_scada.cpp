@@ -87,19 +87,21 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
   for (int j = 0; j < nb_regs; ++j) {
     reg_t r;
 
+    LOGD("1 j= %d", j);
+
     if (cfgREG[j].lookupValue("rsource", r.str_source) &&
         cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
         cfgREG[j].lookupValue("rname", r.str_rname)) {
       // This is SCADA register/variable/tag
+      LOGD("2 j= %d", j);
 
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
             cfgREG[j].lookupValue("rtype", r.str_type))) {
-        if (r.str_source == "-") {
-          LOGE("Error reading 'rmode'/'rtype' on %s: %s REG: %d\n",
-               r.str_rname.c_str(), j);
-          exit(EXIT_FAILURE);
-          continue;
-        }
+        LOGE("Error reading 'rmode'/'rtype' on %s/%s REG: %d\n",
+             _dname.c_str(), r.str_rname.c_str(), j);
+        LOGD("3 j= %d", j);
+        //exit(EXIT_FAILURE);
+        continue;
       }
 
       r.raddr = j;

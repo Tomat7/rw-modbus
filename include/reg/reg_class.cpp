@@ -28,11 +28,11 @@
 #define SYSLOG_NAME "REG-class"
 
 
-bool Reg_c::is_MB() { return (str_source == ""); }
-
-bool Reg_c::is_Scada() { return (str_source == "-"); }
-
-bool Reg_c::has_Ref() { return !(is_MB() || is_Scada()); }
+/*
+  bool Reg_c::is_MB() { return (str_source == ""); }
+  bool Reg_c::is_Scada() { return (str_source == "-"); }
+  bool Reg_c::has_Ref() { return !(is_MB() || is_Scada()); }
+*/
 
 bool Reg_c::has_Str(string SS, string fs) { return SS.find(fs) != std::string::npos; }
 
@@ -41,38 +41,43 @@ bool Reg_c::has_Str(string SS, string fs) { return SS.find(fs) != std::string::n
 
 value_u Reg_c::get_local_value() { return value; }
 
+void Reg_c::set_local_value(value_u _val) { value = _val; }
+
 // value_u Reg_c::get_scada_value() { return OPCs.readRawValue(str_opcname); }
+/*
+  void Reg_c::sync(value_u _val)
+  {
 
-void Reg_c::sync(value_u _val)
-{
-  value = _val;
-}
-
-void Reg_c::sync()
-{
-  /*   sync(get_plc_val()); */
+  }
+*/
+/*
+  void Reg_c::sync()
+  {
+  sync(get_plc_val());
   return;
-}
+  }
+*/
 
-void Reg_c::sync_regdata(regdata_t* ptr_data)
-{
+/* void Reg_c::sync_regdata(regdata_t* ptr_data)
+  {
 
-}
+  }
+*/
 
-uint16_t Reg_c::get_local()
-{
-  /*   if (is_shm()) {
-      regdata_t mem;
-      memcpy(&mem, ptr_data_shm, sizeof(regdata_t));
-      return mem.rvalue;
-    } */
-  return 0;
-}
+//uint16_t Reg_c::get_local()
+//{
+/*   if (is_shm()) {
+    regdata_t mem;
+    memcpy(&mem, ptr_data_shm, sizeof(regdata_t));
+    return mem.rvalue;
+  } */
+//  return 0;
+//}
 
+/*
+  void Reg_c::set_local(uint16_t _val)
+  {
 
-void Reg_c::set_local(uint16_t _val)
-{
-
-}
-
+  }
+*/
 // eof

@@ -178,12 +178,14 @@ int write_shm(string rn, uint16_t val)
   return rc;
 }
 
-int write_rm(string rn, uint16_t val)
-{
+/*
+  int write_rm(string rn, uint16_t val)
+  {
   //  REGmap[rn].set_shm_val(val);
   REGmap[rn].set_local(val);
   return 0;
-}
+  }
+*/
 
 bool isdebug() { return (log_level > 7); }
 

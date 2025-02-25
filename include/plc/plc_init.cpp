@@ -36,18 +36,12 @@ PLC_c::~PLC_c()
 void PLC_c::init_regs()  // Master only
 {
   for (auto &[a, r] : regs) {
-    // init_type(r);
-    // init_str(r);
 
     r.ch_name = r.str_rname.c_str();
     r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
 
-    if (!is_slave) {
-      if (str_dev_name == MB_NO_DEV_NAME) // Scada!
-        r.rfullname = r.str_rname;
-      else
-        r.rfullname = str_dev_name + "." + r.str_rname;
-    }
+    if (!is_slave)
+      r.rfullname = str_dev_name + "." + r.str_rname;
 
     if (r.raddr < reg_min)
       reg_min = r.raddr;
@@ -57,25 +51,10 @@ void PLC_c::init_regs()  // Master only
     r.data.rvalue = 777;  // TODO: remove for production
   }
 
-// RECODE!! add 64-bit reg
+// add pointer to next reg (for each!)
   for (auto &[a, r] : regs) {
-    /*     int rsize = r.data.rsize;
-
-        if (rsize > 1) {
-          r.r_next = &regs[r.raddr + 1];
-          regs[r.raddr + 1].data.rmode = r.data.rmode;
-          regs[r.raddr + 1].data.rtype = NOTUA_TYPES_2ND;
-        }
-
-        if (rsize > 2) {
-          regs[r.raddr + 1].r_next = &regs[r.raddr + 2];
-          regs[r.raddr + 2].data.rmode = r.data.rmode;
-          regs[r.raddr + 2].data.rtype = NOTUA_TYPES_3RD;
-          regs[r.raddr + 2].r_next = &regs[r.raddr + 3];
-          regs[r.raddr + 3].data.rmode = r.data.rmode;
-          regs[r.raddr + 3].data.rtype = NOTUA_TYPES_4TH;
-        }
-    */
+    if (regs.count(r.raddr + 1))
+      r.r_next = &regs[r.raddr + 1];
     LOGN("+ REG init: %-9s %2d %2s %4d %2d %3d [%s]", r.ch_name, r.raddr,
          r.str_mode.c_str(), regs[r.raddr].data.rtype, regs[r.raddr].data.rsize,
          regs[r.raddr].data.rbyteorder, r.rfullname.c_str());

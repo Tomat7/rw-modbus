@@ -50,6 +50,7 @@ struct regdata_t {
 struct reg_t {
   int raddr = 0;
   regdata_t data;
+  reg_t* r_next;
   // all next params is optional for raw Modbus
   // naming and good look
   string str_rname = "-";    // reg_name

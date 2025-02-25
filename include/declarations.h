@@ -99,6 +99,7 @@ void opc_init();
 void opc_deinit();
 void opc_start();
 value_u opc_get_value(string s);
+bool opc_set_value(string s, value_u val, bool isOK);
 //uint16_t opc_update_uint16(string name, regdata_t* rd);
 uint16_t opc_update_uint16(string name, Reg_c* R);
 // uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);

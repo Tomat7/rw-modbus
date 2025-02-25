@@ -48,38 +48,45 @@ public:
   ~Reg_c();
 
   static bool init_types(reg_t* _reg);
+
   uint16_t get_plc_reg(reg_t* rptr);
   uint16_t get_plc_reg(int x = 0);
-  value_u get_plc_value();
-  int get_plc_errors();
-
-  value_u get_local_value();
-  value_u get_scada_value();
 
   void set_plc_reg(uint16_t _val, reg_t* rptr);
   void set_plc_reg(uint16_t _val, int x = 0);
+
+  int get_plc_errors();
+
+  value_u get_plc_value();
   void set_plc_value(value_u _value);
 
-  /*   uint16_t get_plc_val();
-    uint16_t get_shm_val(); */
-  uint16_t get_local();
+  value_u get_local_value();
+  void set_local_value(value_u _value);
+
+  value_u get_opc_value();
+  void set_opc_value(value_u _value);
+
+  //value_u get_scada_value();
+  /*  uint16_t get_plc_val();
+      uint16_t get_shm_val(); */
+//  uint16_t get_local();
 
 
 //  void set_shm_val(uint16_t _val);
-  void set_local(uint16_t _val);
+//  void set_local(uint16_t _val);
 
-  void sync();
-  void sync(value_u _val);
-  void sync_regdata(regdata_t* prt_data);
+  //void sync();
+  //void sync(value_u _val);
+  //void sync_regdata(regdata_t* prt_data);
 
 //  int get_mode(); // 1 = "rw"
 //  int get_type();
-
 
   //bool is_shm();
 //  bool is_MB();
 //  bool is_Scada();  // Calculated
 //  bool has_Ref();    // Referenced to Modbus
+
   bool has_Str(string SS, string fs); // Look for fs within SS
 
   void remove_dbl_slashes(string &str);

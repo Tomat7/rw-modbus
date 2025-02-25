@@ -79,12 +79,17 @@ public:
   void stop();
 
   bool isVariable(string s);
-  bool isGood(string s);
+
+  int getType(string s);
+  int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
+  bool isGood(string s);      // OPC var has no errors
+
   string lookupVar(string s);
   void delVar(string s);
-  int getType(string s);
-  int getStatus(string s);           // 0 - is OK, any other (1 or -1) is BAD
+
   value_u readRawValue(string s);  // returns value_union
+  bool writeRawValue(string s, value_u val, bool isOK);  // write value_union
+
   int refreshValues();  // getVar for ALL variables, returns - qty of vars
 
   // for init
@@ -117,6 +122,7 @@ private:
   string getPath_Name(string &n);
   string strVarDetails(var_t &var);
   string getPathByLevel(string Path, int level);
+
   int addVar_Names(string raw_name, int t, int m);
   void addVar_NodeId(var_t &v);
   void addVariable(var_t &var);

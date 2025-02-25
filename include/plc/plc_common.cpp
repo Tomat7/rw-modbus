@@ -82,7 +82,7 @@ int PLC_c::set_reg(uint16_t rval, reg_t* rptr) // !! STATIC !!
         ret = 0;  // No update necessary
     }
   } else
-    LOGE("");
+    LOGE("Error set reg: %s", rptr->rfullname.c_str());
 
   return ret;
 }
@@ -102,7 +102,9 @@ int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
       } else
         rc = 0;  // No update necessary
     }
-  }
+  } else
+    LOGE("Error set reg: %s", regs[raddr].ch_name);
+
   return rc;
 }
 

@@ -199,15 +199,19 @@ int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
     if (cfgREG[j].lookupValue("rname", r.str_rname) &&
         cfgREG[j].lookupValue("raddr", r.raddr)) {
       // This is Modbus register
-      if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
-            cfgREG[j].lookupValue("rtype", r.str_type))) {
+
+      if (!cfgREG[j].lookupValue("rmode", r.str_mode)) {
         LOGE("Error reading details on %s, REG: %d\n", r.str_rname.c_str(), j);
         exit(EXIT_FAILURE);
         continue;
       }
 
+//      if (!cfgREG[j].lookupValue("rtype", r.str_type))
+      r.str_type = "u";
+
       if (!cfgREG[j].lookupValue("rfolder", r.str_rfolder))
         r.str_rfolder = MB_NO_FOLDER;
+
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
            pn->str_top_folder.c_str(), pn->str_dev_name.c_str(), j);
