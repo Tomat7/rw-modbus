@@ -43,7 +43,7 @@ public:
 //  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
 //  Reg_c(string _rn, string src_ref);       // for Scada regs.
   Reg_c(reg_t* _reg, PLC_c* _dev);      // for PLC master
-  Reg_c(reg_t* _reg, string _opc_base); // for Scada regs.
+  Reg_c(reg_t* _reg, reg_t* _src, string _opc_base); // for Scada regs.
   Reg_c();
   ~Reg_c();
 
@@ -63,14 +63,16 @@ public:
   value_u get_local_value();
   void set_local_value(value_u _value);
 
-  value_u get_opc_value();
-  void set_opc_value(value_u _value);
+  string get_value_string();
 
+  /*
+    value_u get_opc_value();
+    void set_opc_value(value_u _value);
+  */
   //value_u get_scada_value();
   /*  uint16_t get_plc_val();
       uint16_t get_shm_val(); */
 //  uint16_t get_local();
-
 
 //  void set_shm_val(uint16_t _val);
 //  void set_local(uint16_t _val);

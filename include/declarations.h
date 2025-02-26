@@ -55,6 +55,9 @@ extern Schedule_c Task;
 
 
 #define MODBUS_MODES "master", "slave", "scada"
+bool operator<(const value_u &v1, const value_u &v2);
+bool operator>(const value_u &v1, const value_u &v2);
+bool operator!=(const value_u &v1, const value_u &v2);
 
 bool isdebug();
 void init_all();

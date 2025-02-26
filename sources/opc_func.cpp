@@ -23,8 +23,6 @@ void opc_regs_init()
   for (auto &[name, rm] : REGmap) {
     // reg_print(n, rm.ptr_data_plc);
     // n - name, rm - RegMap_c rm.set_shm_val();
-    // if (!rm.visible)
-    //  continue;
 
     string n, e;
     n = rm.str_opcname;

@@ -43,6 +43,37 @@ value_u Reg_c::get_local_value() { return value; }
 
 void Reg_c::set_local_value(value_u _val) { value = _val; }
 
+
+string Reg_c::get_value_string()
+{
+  string rets;
+  if (var_type == UA_TYPES_FLOAT)
+    rets= to_string(value.fl);
+  else if (var_type == UA_TYPES_UINT16)
+    rets= to_string(value.ui16);
+  else if (var_type == UA_TYPES_INT16)
+    rets= to_string(value.i16);
+  return rets;
+}
+
+
+string Reg_c::to_lower(string str)
+{
+  for (auto &c : str)
+    c = static_cast<char>(tolower(c));
+  return str;
+}
+
+void Reg_c::remove_dbl_slashes(string &str)
+{
+  auto dbl_slash = str.find("//");
+  if (dbl_slash != std::string::npos)
+    str.erase(dbl_slash);
+}
+
+
+
+
 // value_u Reg_c::get_scada_value() { return OPCs.readRawValue(str_opcname); }
 /*
   void Reg_c::sync(value_u _val)

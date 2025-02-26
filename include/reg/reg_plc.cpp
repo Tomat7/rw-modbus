@@ -32,7 +32,7 @@
 uint16_t Reg_c::get_plc_reg(reg_t* rptr)  // Set reg's local value != read PLC.
 {
   uint16_t rval = bad_value.ui16;
-  if (is_modbus && (rptr != nullptr)) {
+  if ((is_modbus || is_ref) && (rptr != nullptr)) {
     var_errors = rptr->data.rerrors;
     if (var_errors)
       rval = bad_value.ui16;
@@ -74,7 +74,7 @@ value_u Reg_c::get_plc_value()
 
 void Reg_c::set_plc_reg(uint16_t _val, reg_t* rptr)
 {
-  if (is_modbus && (rptr != nullptr))
+  if ((is_modbus || is_ref)  && (rptr != nullptr))
     PLC_c::set_reg(_val, rptr);
   else
     LOGE("Not Modbus set-reg: %s", str_fullname.c_str());
@@ -88,6 +88,7 @@ void Reg_c::set_plc_reg(uint16_t _val, int x)  // Set reg's local value != read 
 
 void Reg_c::set_plc_value(value_u v)
 {
+  // byte-order not supported yet :-(
   for (int i = 0; i < var_size; i++)
     set_plc_reg(v.dbl2u[i], i);
   return;

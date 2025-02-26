@@ -87,26 +87,22 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
   for (int j = 0; j < nb_regs; ++j) {
     reg_t r;
 
-    LOGD("1 j= %d", j);
-
     if (cfgREG[j].lookupValue("rsource", r.str_source) &&
         cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
         cfgREG[j].lookupValue("rname", r.str_rname)) {
       // This is SCADA register/variable/tag
-      LOGD("2 j= %d", j);
 
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
             cfgREG[j].lookupValue("rtype", r.str_type))) {
         LOGE("Error reading 'rmode'/'rtype' on %s/%s REG: %d\n",
              _dname.c_str(), r.str_rname.c_str(), j);
-        LOGD("3 j= %d", j);
         //exit(EXIT_FAILURE);
         continue;
       }
 
       r.raddr = j;
-      LOGI("Read 'rsource'/'rfolder' on %s: %s/%s REG: %d",
-           r.str_rname.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
+      //LOGI("Read 'rsource'/'rfolder' on %s: %s/%s REG: %d",
+      //     r.str_rname.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(), j);
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
            _dfolder.c_str(), _dname.c_str(), j);
@@ -124,9 +120,18 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
       r.rfullname = _dname + "." + r.str_rname;
 
     string str_opcbase = "/" + _dfolder + "/" + _dname + "/";
+    reg_t* ptr_source = nullptr;
+
+    if (!(r.str_source == "") && !(r.str_source == "-")) {
+      if (reg_exist(r.str_source))
+        ptr_source = REGmap[r.str_source].ptr_reg[0];
+      else
+        LOGE("Wrong 'rsource': '%s' on reg: '%s'",
+             r.str_source.c_str(), r.str_rname.c_str());
+    }
 
     if (Reg_c::init_types(&r))
-      REGmap[r.rfullname] = {&r, str_opcbase};
+      REGmap[r.rfullname] = {&r, ptr_source, str_opcbase};
     else
       nb_errors++;
   }

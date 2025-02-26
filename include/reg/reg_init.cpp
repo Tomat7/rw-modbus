@@ -110,12 +110,12 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
   for (int i = 0; i < 4; i++)
     remove_dbl_slashes(str_opcname);
 
-  LOGD(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
+  LOGI(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
        byte_order, var_mode, str_opcname.c_str());
 }
 
 
-Reg_c::Reg_c(reg_t* _reg, string _opc_base) // For SCADA regs only
+Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base) // For SCADA regs only
 {
   if (_reg->str_source == "" || _reg->str_source == "-") {
     str_source = "-";   // flag of SCADA register/tag!
@@ -143,13 +143,16 @@ Reg_c::Reg_c(reg_t* _reg, string _opc_base) // For SCADA regs only
     LOGE("Wrong type: '%s', reg: '%s'", _reg->str_type.c_str(), rn);
 
   if (is_ref) {
-    for (int i = 0; i < var_size; i++) {
-      ptr_reg[i] = _reg;
-      _reg = _reg->r_next;
-    }
+    if (_src != nullptr) {
+      for (int i = 0; i < var_size; i++) {
+        ptr_reg[i] = _src;
+        _src = _src->r_next;
+      }
+    } else
+      LOGE("Wrong pointer to 'source' on REF reg: %s", rn);
   }
 
-  LOGD(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
+  LOGI(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
        byte_order, var_mode, str_opcname.c_str());
 }
 
@@ -171,20 +174,6 @@ bool Reg_c::init_types(reg_t* _reg) // !! STATIC FUNCTION !!
          st_.c_str(), _reg->str_rname.c_str());
 
   return isOK;
-}
-
-string Reg_c::to_lower(string str)
-{
-  for (auto &c : str)
-    c = static_cast<char>(tolower(c));
-  return str;
-}
-
-void Reg_c::remove_dbl_slashes(string &str)
-{
-  auto dbl_slash = str.find("//");
-  if (dbl_slash != std::string::npos)
-    str.erase(dbl_slash);
 }
 
 // eof

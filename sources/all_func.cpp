@@ -48,11 +48,11 @@ void init_all()
     wait_console(Cfg.timeout_sec);
   }
 
-  t.start(TIMER_START_MSG);
-  regs_create_from_masters();
-  t.spent_auto("=== REG init finished in: ");
-  wait_console(Cfg.timeout_sec);
-  //  t.sleep_ms(TMOUT);
+  /*   t.start(TIMER_START_MSG);
+    regs_create_from_masters();
+    t.spent_auto("=== REG init finished in: ");
+    wait_console(Cfg.timeout_sec);
+    //  t.sleep_ms(TMOUT); */
 
   t.start(TIMER_START_MSG);
   opc_init();

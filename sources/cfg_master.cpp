@@ -94,6 +94,8 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
+  regs_create_from_masters(); // Init PLC reg in REGmap
+
   // The same for Scada (read it like a Modbus device)
   dev_type = "SCADA";
   try {
