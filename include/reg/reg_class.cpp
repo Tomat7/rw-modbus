@@ -49,6 +49,10 @@ string Reg_c::get_value_string()
   string rets;
   if (var_type == UA_TYPES_FLOAT)
     rets= to_string(value.fl);
+  else if (var_type == NOTUA_TYPES_F100)
+    rets= to_string(value.fl);
+  else if (var_type == NOTUA_TYPES_F10)
+    rets= to_string(value.fl);
   else if (var_type == UA_TYPES_UINT16)
     rets= to_string(value.ui16);
   else if (var_type == UA_TYPES_INT16)
