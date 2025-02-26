@@ -51,20 +51,30 @@ uint16_t Reg_c::get_plc_reg(int x)  // Get reg's local value != read PLC.
 value_u Reg_c::get_plc_value()
 {
   uint16_t mb2u[4] = { 0 };
+  value_u val;
 
   for (int i = 0; i < var_size; i++)
     mb2u[i] = get_plc_reg(i);
 
-  if (byte_order == BO_F100)
-    value.fl = (int16_t)mb2u[0] * 0.01f;
-  else if (byte_order == BO_F10)
-    value.fl = (int16_t)mb2u[0] * 0.1f;
-  else if (byte_order == BO_HH)
-    for (int i = 0; i < var_size; i++)
-      value.dbl2u[i] = mb2u[var_size - 1 - i];
-  else if (byte_order == BO_HL)
-    for (int i = 0; i < var_size; i++)
-      value.dbl2u[i] = mb2u[i];
+  if (var_size == 1) {
+    if (var_type == UA_TYPES_UINT16)
+      val.ui16 = (uint16_t)mb2u[0];
+    else if (var_type == UA_TYPES_INT16)
+      val.i16 = (int16_t)mb2u[0];
+    else if (byte_order == BO_F100)
+      val.fl = (int16_t)mb2u[0] * 0.01f;
+    else if (byte_order == BO_F10)
+      val.fl = (int16_t)mb2u[0] * 0.1f;
+  } else if (var_size > 1) {
+    if (byte_order == BO_HH)
+      for (int i = 0; i < var_size; i++)
+        val.dbl2u[i] = mb2u[var_size - 1 - i];
+    else if (byte_order == BO_HL)
+      for (int i = 0; i < var_size; i++)
+        val.dbl2u[i] = mb2u[i];
+  }
+
+  value = val;
 
   return value;
 }
