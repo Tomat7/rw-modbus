@@ -75,7 +75,10 @@ int task_regs_refresh_(void* params)
 
     } else if (rm.is_scada) {
 
-      if (rm.var_mode && isNew_Opc) {
+      STRmap[n].err_opc = opc_err;
+      rm.var_errors = opc_err;
+
+      if (/* rm.var_mode &&  */isNew_Opc) {
         x++;
         rm.set_local_value(opc_val);
         if (!STRmap.count(n) || !STRmap[n].upd_opc) {
@@ -161,8 +164,6 @@ void reg_print(string rn, Reg_c rm)
   // printf("\n===== regs_print =====\n");
   const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rm.var_errors == 0);
-
-  // TODO: full recode with new TYPE_*
 
   printf("%s%-14s %s%s", C, rn.c_str(), B, rm.get_value_string().c_str());
 
