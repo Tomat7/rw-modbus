@@ -100,7 +100,7 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
   str_source = "";  // flag of Modbus register/tag!
   is_modbus = true; // flag of Modbus register/tag!
   str_fullname = _reg->rfullname;
-  rn = str_fullname.c_str();
+  rn = get_new_char(str_fullname.c_str());
 
   str_opcname = "/" + _dev->str_top_folder + "/";
   str_opcname += _dev->str_dev_name + "/";
@@ -112,7 +112,7 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
 
   set_local_value(get_plc_value());
 
-  LOGI(" type:%4d sz:%2d bo:%3d rw:%d val: %u [%s]", var_type, var_size,
+  LOGI("%s type:%4d sz:%2d bo:%3d rw:%d val: %u [%s]", rn, var_type, var_size,
        byte_order, var_mode, value.ui16, str_opcname.c_str());
 }
 
@@ -128,7 +128,7 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base) // For SCADA regs only
   }
 
   str_fullname = _reg->rfullname;
-  rn = str_fullname.c_str();
+  rn = get_new_char(str_fullname.c_str());
   str_opcname = _opc_base + _reg->str_rfolder + "/" + str_fullname;
 
   for (int i = 0; i < 4; i++)
@@ -159,7 +159,7 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base) // For SCADA regs only
   else
     value.ui16 = _reg->data.rvalue;
 
-  LOGI(" type:%4d sz:%2d bo:%3d rw:%d val: %s [%s]", var_type, var_size,
+  LOGI("%s type:%4d sz:%2d bo:%3d rw:%d val: %s [%s]", rn, var_type, var_size,
        byte_order, var_mode, get_value_string().c_str(), str_opcname.c_str());
 }
 
@@ -181,6 +181,14 @@ bool Reg_c::init_types(reg_t* _reg) // !! STATIC FUNCTION !!
          st_.c_str(), _reg->str_rname.c_str());
 
   return isOK;
+}
+
+
+char* Reg_c::get_new_char(const char* _oldch)
+{
+  char* _newch = new char[1 + strlen(_oldch)];
+  strcpy(_newch, _oldch);
+  return _newch;
 }
 
 // eof

@@ -161,8 +161,9 @@ void reg_print(string rn, Reg_c rm)
   // printf("\n===== regs_print =====\n");
   const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rm.var_errors == 0);
+  char ch[50];
 
-  printf("%s%-14s %s%s", C, rn.c_str(), B, rm.get_value_string().c_str());
+  printf("%s%-14s %s%12s", C, rm.rn, B, rm.get_value_chars(ch));
 
   printf(C_NORM);
 

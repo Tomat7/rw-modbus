@@ -69,9 +69,8 @@ public:
   char* get_value_chars(char* retch);
 
 
-
-
   bool has_Str(string SS, string fs); // Look for fs within SS
+  char* get_new_char(const char* _oldch);
 
   void remove_dbl_slashes(string &str);
   string to_lower(string str);
