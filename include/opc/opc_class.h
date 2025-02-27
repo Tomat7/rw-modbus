@@ -32,14 +32,14 @@ union value_u {
 
 
 struct badvalue_t {
-  int16_t i16 = -32000;
-  int32_t i32 = -65000;
-  int64_t i64 = -128000;
+  int16_t i16 = -9999;
+  int32_t i32 = -99999;
+  int64_t i64 = -99999999;
   uint16_t ui16 = 65333;
-  uint32_t ui32 = 128765;
-  uint64_t ui64 = 2565432;
+  uint32_t ui32 = 99999;
+  uint64_t ui64 = 9999999;
   float fl = -99.54f;
-  double dbl = -999.987;
+  double dbl = -999.8765;
 };
 
 struct nodeid_t {
@@ -163,6 +163,7 @@ int OpcServer_c::addVar(std::string s, T Value, int rmode)
   addVar_NodeId(vars[s]);
   vars[s].ptr_value = &Value;
   addVariable(vars[s]);
+  setVariableValue(s, Value, true);
 
   //LOGD("%s - 3", __func__);
   return 1;

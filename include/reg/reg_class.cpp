@@ -13,6 +13,7 @@
 #include <syslog.h>
 #include <unistd.h>
 
+#include <cstdio>
 #include <chrono>
 #include <map>
 #include <mutex>
@@ -60,6 +61,23 @@ string Reg_c::get_value_string()
   return rets;
 }
 
+char* Reg_c::get_value_chars(char* retch)
+{
+  if (var_type == UA_TYPES_DOUBLE)
+    snprintf(retch, 49, "%47.4f", value.fl);
+  else if (var_type == UA_TYPES_FLOAT)
+    snprintf(retch, 49, "%8.3f", value.fl);
+  else if (var_type == NOTUA_TYPES_F100)
+    snprintf(retch, 49, "%7.2f", value.fl);
+  else if (var_type == NOTUA_TYPES_F10)
+    snprintf(retch, 49, "%7.1f", value.fl);
+  else if (var_type == UA_TYPES_UINT16)
+    snprintf(retch, 49, "%u", value.ui16);
+  else if (var_type == UA_TYPES_INT16)
+    snprintf(retch, 49, "%i", value.i16);
+
+  return retch;
+}
 
 string Reg_c::to_lower(string str)
 {
@@ -77,42 +95,4 @@ void Reg_c::remove_dbl_slashes(string &str)
 
 
 
-
-// value_u Reg_c::get_scada_value() { return OPCs.readRawValue(str_opcname); }
-/*
-  void Reg_c::sync(value_u _val)
-  {
-
-  }
-*/
-/*
-  void Reg_c::sync()
-  {
-  sync(get_plc_val());
-  return;
-  }
-*/
-
-/* void Reg_c::sync_regdata(regdata_t* ptr_data)
-  {
-
-  }
-*/
-
-//uint16_t Reg_c::get_local()
-//{
-/*   if (is_shm()) {
-    regdata_t mem;
-    memcpy(&mem, ptr_data_shm, sizeof(regdata_t));
-    return mem.rvalue;
-  } */
-//  return 0;
-//}
-
-/*
-  void Reg_c::set_local(uint16_t _val)
-  {
-
-  }
-*/
 // eof

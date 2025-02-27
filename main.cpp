@@ -128,7 +128,7 @@ int main(int argc, char** argv)
 
     // Slave.handle_slave(timeout_sec * 1000000);
 
-    int ch = read_console(0, timeout_sec * 1000000);
+    int ch = read_console(0, Cfg.timeout_sec * 1000000);
     if (ch != -1)
       parse_char(ch);
     else

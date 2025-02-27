@@ -126,6 +126,14 @@ void parse_char(int ch)
     Cfg.timeout_sec = 5;
     LOGC("Char 's' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     wait_console(Cfg.timeout_sec);
+  } else if ((char)ch == 'o') {
+    LOGC("Char 'o' pressed. Start OPC_refresh_.\n");
+    task_opc_refresh_(nullptr);
+    wait_console(Cfg.timeout_sec);
+  } else if ((char)ch == 'g') {
+    LOGC("Char 'g' pressed. Start REGS_refresh_.\n");
+    task_regs_refresh_(nullptr);
+    wait_console(Cfg.timeout_sec);
   } else if (isdigit((char)ch)) {
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;

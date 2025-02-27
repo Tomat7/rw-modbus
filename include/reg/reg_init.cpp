@@ -84,10 +84,10 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
   string st_ = to_lower(_reg->str_type);
   st_ = "u16";
   if (type_map.count(st_)) {
+    var_mode = _reg->data.rmode;
     var_type = type_map[st_].rtype;
     var_size = type_map[st_].rsize;
     byte_order = type_map[st_].rbyteorder;
-    var_mode = _reg->data.rmode;
 //    auto &rbo = type_map[st_].rbyteorder;
 //    visible = (rbo != BO_2ND) && (rbo != BO_3RD) && (rbo != BO_4TH);
   } else
@@ -110,8 +110,10 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
   for (int i = 0; i < 4; i++)
     remove_dbl_slashes(str_opcname);
 
-  LOGI(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
-       byte_order, var_mode, str_opcname.c_str());
+  set_local_value(get_plc_value());
+
+  LOGI(" type:%4d sz:%2d bo:%3d rw:%d val: %u [%s]", var_type, var_size,
+       byte_order, var_mode, value.ui16, str_opcname.c_str());
 }
 
 
@@ -134,10 +136,10 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base) // For SCADA regs only
 
   string st_ = to_lower(_reg->str_type);
   if (type_map.count(st_)) {
+    var_mode = (_reg->str_mode == "rw") ? 1 : 0;
     var_type = type_map[st_].rtype;
     var_size = type_map[st_].rsize;         // for SCADA ??
     byte_order = type_map[st_].rbyteorder;  // for SCADA ??
-    var_mode = _reg->data.rmode;
     visible = true;
   } else
     LOGE("Wrong type: '%s', reg: '%s'", _reg->str_type.c_str(), rn);
@@ -152,8 +154,13 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base) // For SCADA regs only
       LOGE("Wrong pointer to 'source' on REF reg: %s", rn);
   }
 
-  LOGI(" type:%4d sz:%2d bo:%3d rw:%d [%s]", var_type, var_size,
-       byte_order, var_mode, str_opcname.c_str());
+  if (is_ref)
+    set_local_value(get_plc_value());
+  else
+    value.ui16 = _reg->data.rvalue;
+
+  LOGI(" type:%4d sz:%2d bo:%3d rw:%d val: %s [%s]", var_type, var_size,
+       byte_order, var_mode, get_value_string().c_str(), str_opcname.c_str());
 }
 
 

@@ -61,12 +61,12 @@ void PLC_c::init_regs()  // Master only
   }
 }
 
-
-void PLC_c::init_str(reg_t &r)
-{
+/*
+  void PLC_c::init_str(reg_t &r)
+  {
   return;
-}
-
+  }
+*/
 
 void PLC_c::init_type(reg_t &R)
 {

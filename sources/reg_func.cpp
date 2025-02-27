@@ -37,7 +37,7 @@ int task_regs_refresh_(void* params)
     value_u plc_val;  // Value from PLC
     bool plc_err = false;
     value_u opc_val = opc_get_value(rm.str_opcname);  // from OPC
-    bool opc_err = OPCs.isGood(rm.str_opcname);
+    bool opc_err = !OPCs.isGood(rm.str_opcname);
     value_u old_val = rm.value; // Value in memory (in REGmap)
     bool old_err = rm.var_errors;
 
@@ -46,10 +46,7 @@ int task_regs_refresh_(void* params)
 
     if (rm.is_modbus || rm.is_ref) {
       plc_val = rm.get_plc_value();  // Value from PLC, will update var_errors
-      if (rm.is_modbus)
-        plc_err = rm.var_errors;
-      else
-        plc_err = rm.get_plc_errors();
+      plc_err = rm.get_plc_errors();
 
       STRmap[n].err_plc = plc_err;
       isNew_Plc = (plc_val != old_val);
@@ -62,7 +59,7 @@ int task_regs_refresh_(void* params)
           STRmap[n].upd_plc = true;
       }
 
-      if (rm.var_mode && isNew_Opc) {
+      if (rm.var_mode && isNew_Opc && !plc_err && !opc_err) {
         x++;
         rm.set_plc_value(opc_val);
         rm.set_local_value(opc_val);

@@ -27,19 +27,19 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
   int nb_plc_ready = 0;
   set<string> PLClst;
 
-  uint64_t vec_size_new = 0; // PLCvec.size() + nb_plc_cfg;
+  // uint64_t vec_size_new = 0; // PLCvec.size() + nb_plc_cfg;
 
   LOGW("Total SCADA sets in config: %d, in the list: %d.", nb_plc_cfg, nb_plc_list);
 
   const string &p0 = listPLC[0];
   if ((p0 == "all") || (p0 == "ALL") || (p0 == "All")) {
-    vec_size_new = PLCvec.size() + nb_plc_cfg;
+    //  vec_size_new = PLCvec.size() + nb_plc_cfg;
     LOGC("List with %d SCADA sets ignored.", nb_plc_list);
     LOGC("Will read '%s' %d SCADA sets from configfile!",
          p0.c_str(), nb_plc_cfg);
   } else {
     isCheckName = true;
-    vec_size_new = PLCvec.size() + nb_plc_list;
+    //  vec_size_new = PLCvec.size() + nb_plc_list;
     for (int i = 0; i < nb_plc_list; ++i)
       PLClst.insert(listPLC[i]);
   }
@@ -110,8 +110,8 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
       continue;
     }
 
-    r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
-    r.ch_name = r.str_rname.c_str();
+    //  r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
+    //  r.ch_name = r.str_rname.c_str();
     r.data.rvalue = 888; // TODO: remove for production!
 
     if (_dname == "-" || _dname == ".") // Scada!

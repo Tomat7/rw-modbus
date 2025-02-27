@@ -33,9 +33,9 @@ void* OpcServer_c::getVariantData(string s)
 value_u OpcServer_c::readRawValue(string s)
 {
   value_u vu;
-  vu.i64 = 0x8000000000000000;
-  vu.fl = -999.32f;
-  vu.dbl = -9999.987;
+  /*   vu.i64 = 0x8000000000000000;
+    vu.fl = -999.32f;
+    vu.dbl = -9999.987; */
 
   if (isVariable(s))
     vu = vars[s].value;  // set old (last good) value

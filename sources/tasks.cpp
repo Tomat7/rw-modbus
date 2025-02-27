@@ -15,10 +15,10 @@
 void tasks_init()
 {
   Task.init(Cfg.tasks_nb);
-  // Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
-  Task.add_task(task_opc_refresh_, 250, "OPC:Refresh_");
-  Task.add_task(task_regs_refresh_, 500, "REGS:Refresh_");
   Task.add_task(task_millis_, 2500, "Millis_");
+  //Task.add_task(task_opc_refresh_, 250, "OPC:Refresh_");
+  //Task.add_task(task_regs_refresh_, 500, "REGS:Refresh_");
+  //Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
   mb_add_refresh_tasks();
 }
 
@@ -50,12 +50,14 @@ int task_opc_refresh_(void* params)
   return y;
 }
 
-int task_begin_(void* params)
-{
+/*
+  int task_begin_(void* params)
+  {
   // OPCs.refreshValues();
   LOGI("%s: %d Done.", __func__, *(int*)params);
   return 1;
-}
+  }
+*/
 
 /* void task_mb_update_(void *idx)
   {
