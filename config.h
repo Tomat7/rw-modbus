@@ -13,6 +13,7 @@
 #define OPC_ERRORS_FOLDER "/ERRORS"
 #define OPC_ERRORS_SUFFIX ".error"
 #define OPC_THREAD_NAME "OPC_server"
+#define OPC_POLLING_MS 700
 
 #ifdef DEBUG_FLAG
 #define TIMEOUT_SEC 1
@@ -24,6 +25,8 @@
 #define MB_SLAVE_PORT 1502
 #define MB_SLAVE_REGS_NB 50
 #define TASKS_NB_MAX 500
+#define REGS_REFRESH_MS 900
+#define MILLIS_HEARTBEAT_MS 2900
 
 #define USE_SYSLOG
 

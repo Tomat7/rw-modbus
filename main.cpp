@@ -26,7 +26,7 @@ Schedule_c Task/* (TASKS_NB_MAX) */;
 // INotify IN(CFG_DIR);
 
 const char* mode = "master";
-int timeout_sec = TIMEOUT_SEC;
+//int timeout_sec = TIMEOUT_SEC;
 int rc;
 
 static void close_sigint(int dummy)

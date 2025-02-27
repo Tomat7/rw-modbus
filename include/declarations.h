@@ -24,6 +24,7 @@ struct opc_t {
   string SrvName = OPC_THREAD_NAME;
   string ErrFolder = OPC_ERRORS_FOLDER;
   string ErrSuffix = OPC_ERRORS_SUFFIX;
+  int polling_ms = OPC_POLLING_MS;
 };
 
 struct mb_t {
@@ -35,8 +36,11 @@ struct mb_t {
 struct cfg_t {
   opc_t opc;
   mb_t mb;
+//  int log_level;
   int timeout_sec = TIMEOUT_SEC;
   int tasks_nb = TASKS_NB_MAX;
+  int regs_refresh_ms = REGS_REFRESH_MS;
+  int millis_heartbeat_ms = MILLIS_HEARTBEAT_MS;
   cchar* mode;
 };
 
