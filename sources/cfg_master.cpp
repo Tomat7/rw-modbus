@@ -208,11 +208,8 @@ int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
         continue;
       }
 
-//      if (!cfgREG[j].lookupValue("rtype", r.str_type))
-      r.str_type = "u";
-
       if (!cfgREG[j].lookupValue("rfolder", r.str_rfolder))
-        r.str_rfolder = MB_NO_FOLDER;
+        r.str_rfolder = "";
 
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
@@ -221,7 +218,8 @@ int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
       continue;
     }
 
-    r.data.rvalue = 555; // TODO: remove for production!
+    r.data.rvalue = 555;  // TODO: remove for production!
+    r.str_type = "u";     // Process ALL PLC regs as uint16_t!!
     if (Reg_c::init_types(&r))
       pn->regs[r.raddr] = r;
     else

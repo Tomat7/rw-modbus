@@ -90,7 +90,7 @@ void Reg_c::remove_dbl_slashes(string &str)
 {
   auto dbl_slash = str.find("//");
   if (dbl_slash != std::string::npos)
-    str.erase(dbl_slash);
+    str.erase(dbl_slash, 1);
 }
 
 

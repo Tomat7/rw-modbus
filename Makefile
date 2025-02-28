@@ -74,7 +74,7 @@ OPTFLAGS= -flto=auto -O2
 
 ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
-# === Stolen here https://codeforces.com/blog/entry/15547
+# === "Stolen" here https://codeforces.com/blog/entry/15547
 WARN1_FLAGS= -Wextra -Wfatal-errors -pedantic -Wformat=2 -fconcepts
 WARN2_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond
 WARN3_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wlogical-op
@@ -90,6 +90,7 @@ CXXFLAGS+= $(WARN3_FLAGS)
 #CXXFLAGS+= -fanalyzer
 
 # === Check for DEBUG build ===
+# === My Project depends! ===
 MESSAGE_DEBUG="==="
 
 ifeq ("master","$(filter master,$(MAKECMDGOALS))")
@@ -105,6 +106,8 @@ MESSAGE=" SLAVE"
 OUTFILE=mb_slave
 $(info === SLAVE mode activated! ===)
 endif
+
+# === Debug & other tricks ===
 
 ifeq ("check","$(filter check,$(MAKECMDGOALS))")
 OPTFLAGS=

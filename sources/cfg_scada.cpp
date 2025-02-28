@@ -114,7 +114,7 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
     //  r.ch_name = r.str_rname.c_str();
     r.data.rvalue = 888; // TODO: remove for production!
 
-    if (_dname == "-" || _dname == ".") // Scada!
+    if (_dname == "-" || _dname == "." || _dname == "") // Scada!
       r.rfullname = r.str_rname;
     else
       r.rfullname = _dname + "." + r.str_rname;
@@ -125,9 +125,11 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
     if (!(r.str_source == "") && !(r.str_source == "-")) {
       if (reg_exist(r.str_source))
         ptr_source = REGmap[r.str_source].ptr_reg[0];
-      else
-        LOGE("Wrong 'rsource': '%s' on reg: '%s'",
+      else {
+        LOGE("Wrong 'rsource': '%s' on reg: '%s' - IGNORED!",
              r.str_source.c_str(), r.str_rname.c_str());
+        continue;
+      }
     }
 
     if (Reg_c::init_types(&r))

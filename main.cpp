@@ -97,13 +97,13 @@ int main(int argc, char** argv)
     float myfl = ReadValue(s);
     const char* C = getColor(OPCs.isVariable(s));
     const char* B = getBlynk(OPCs.isGood(s));
-    printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
+    printf("%sT3a: %s%5.2f%s, ", C, B, myfl, NRM);
 
-    s = "Kub.Temp5";
+    s = "Kub.Temp3";
     myfl = ReadValue(s);
     C = getColor(OPCs.isVariable(s));
     B = getBlynk(OPCs.isGood(s));
-    printf("%sT3: %s%5.2f%s, ", C, B, myfl, NRM);
+    printf("%sT3b: %s%5.2f%s, ", C, B, myfl, NRM);
     // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
     int16_t t16 = (int16_t)round(myfl * 100);
     myfl = t16 / 100;

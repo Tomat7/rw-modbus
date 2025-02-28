@@ -88,8 +88,6 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev) // For Modbus regs only
     var_type = type_map[st_].rtype;
     var_size = type_map[st_].rsize;
     byte_order = type_map[st_].rbyteorder;
-//    auto &rbo = type_map[st_].rbyteorder;
-//    visible = (rbo != BO_2ND) && (rbo != BO_3RD) && (rbo != BO_4TH);
   } else
     LOGE("Wrong type: %s, reg: %s", _reg->str_type.c_str(), rn);
 
