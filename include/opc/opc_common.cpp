@@ -178,7 +178,7 @@ int OpcServer_c::RefreshAllValues()
   int x = 0;
   uaDataMux->lock();
   for (auto [_s, v] : vars) {
-    getVariantDataPtr(_s);
+    getRawValue(_s);
     x++;
   }
   uaDataMux->unlock();

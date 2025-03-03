@@ -130,7 +130,7 @@ private:
 
   void writeVariable(var_t &var, bool isOk);
   void* getVariantDataPtr(string s);  // get pointer to UA_Variant.Data
-  value_u* getRawValue(string s);
+  value_u getRawValue(string s);
 
   template <typename T>
   bool getNumericValue(string s, T &Value);
@@ -193,9 +193,11 @@ bool OpcServer_c::getNumericValue(std::string s, T &Value_get)
   uaDataMux->lock();
   bool ret = false;
   void* VarData = getVariantDataPtr(s);
+
   if (VarData != nullptr) {
     Value_get = *(static_cast<T*>(VarData));
     vars[s].ptr_value = static_cast<T*>(&Value_get);
+    vars[s].value = *static_cast<value_u*>(VarData);
     ret = true;
   }
   uaDataMux->unlock();

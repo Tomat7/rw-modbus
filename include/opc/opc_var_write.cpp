@@ -8,6 +8,26 @@
 
 #define DEBUG(a) if (isDebug) { a }
 
+
+bool OpcServer_c::WriteRawValue(string s, value_u raw_vu, bool isOK)
+{
+  bool ret = false;
+  uaDataMux->lock();
+
+  if (vars.count(s)) {
+    vars[s].value = raw_vu;
+    vars[s].ptr_value = &raw_vu;
+    writeVariable(vars[s], isOK);
+    ret = true;
+  } else
+    LOGA("Set: Ignore non-existing variable: %s", s.c_str());
+
+  uaDataMux->unlock();
+
+  return ret;
+}
+
+
 void OpcServer_c::writeVariable(var_t &v, bool isOk)
 {
   if (isOk) {
