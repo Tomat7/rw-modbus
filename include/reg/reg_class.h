@@ -75,14 +75,17 @@ public:
   void remove_dbl_slashes(string &str);
   string to_lower(string str);
 
-  // set MODBUS value and return LOCAL
-  template <typename T> T set_value(T _val);
+  /*
+    // set MODBUS value and return LOCAL
+    template <typename T> T set_value(T _val);
 
-  // read LOCAL saved value
-  template <typename T> T read_value();
+    // read LOCAL saved value
+    template <typename T> T read_value();
 
-  // ask MODBUS for current value
-  template <typename T> T get_value();
+    // ask MODBUS for current value
+    template <typename T> T get_value();
+
+  */
 
   const char* rn = nullptr;   // copy from MB-reg
   string str_fullname = "";   // copy from MB-reg

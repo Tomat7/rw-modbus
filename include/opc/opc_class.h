@@ -78,20 +78,20 @@ public:
   void init(UA_UInt16 _port = 0);  // Necessary init() before run()
   void run();
   void stop();
-
+  /*
+    int getType(string s);
+    int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
+  */
   bool isVariable(string s);
-
-  int getType(string s);
-  int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
   bool isGood(string s);      // OPC var has no errors
 
-  string lookupVar(string s);
+  string LookupVar(string s);
   void delVar(string s);
 
-  value_u readRawValue(string s);  // returns value_union
-  bool writeRawValue(string s, value_u val, bool isOK);  // write value_union
+  value_u ReadRawValue(string s);  // returns value_union
+  bool WriteRawValue(string s, value_u raw_val, bool isOK);  // write value_union
 
-  int refreshValues();  // getVar for ALL variables, returns - qty of vars
+  int RefreshAllValues();  // getVar for ALL variables, returns - qty of vars
 
   // for init
   template <typename T> int addVar(string s, T Value, int rmode);
@@ -128,13 +128,15 @@ private:
   void addVar_NodeId(var_t &v);
   void addVariable(var_t &var);
 
-  template <typename T>
-  bool getVariableValue(string s, T &Value);
-  void* getVariantData(string s);  // get pointer to UA_Variant.Data
+  void writeVariable(var_t &var, bool isOk);
+  void* getVariantDataPtr(string s);  // get pointer to UA_Variant.Data
+  value_u* getRawValue(string s);
 
   template <typename T>
-  void setVariableValue(string s, T Value_set, bool isOK = true);
-  void writeVariable(var_t &var, bool isOk);
+  bool getNumericValue(string s, T &Value);
+
+  template <typename T>
+  void setNumericValue(string s, T Value_set, bool isOK = true);
 
   badvalue_t bad_value;
   map<string, var_t> vars;     // All regs here.
@@ -146,8 +148,8 @@ template <typename T>
 T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
 {
   T Value_get = Value_set;
-  getVariableValue(s, Value_get);
-  setVariableValue(s, Value_set, isOK);
+  getNumericValue(s, Value_get);
+  setNumericValue(s, Value_set, isOK);
   return Value_get;
 }
 
@@ -163,14 +165,14 @@ int OpcServer_c::addVar(std::string s, T Value, int rmode)
   addVar_NodeId(vars[s]);
   vars[s].ptr_value = &Value;
   addVariable(vars[s]);
-  setVariableValue(s, Value, true);
+  setNumericValue(s, Value, true);
 
   //LOGD("%s - 3", __func__);
   return 1;
 }
 
 template <typename T>
-void OpcServer_c::setVariableValue(std::string s, T Value_set, bool isOK)
+void OpcServer_c::setNumericValue(std::string s, T Value_set, bool isOK)
 {
   uaDataMux->lock();
 
@@ -186,11 +188,11 @@ void OpcServer_c::setVariableValue(std::string s, T Value_set, bool isOK)
 }
 
 template <typename T>
-bool OpcServer_c::getVariableValue(std::string s, T &Value_get)
+bool OpcServer_c::getNumericValue(std::string s, T &Value_get)
 {
   uaDataMux->lock();
   bool ret = false;
-  void* VarData = getVariantData(s);
+  void* VarData = getVariantDataPtr(s);
   if (VarData != nullptr) {
     Value_get = *(static_cast<T*>(VarData));
     vars[s].ptr_value = static_cast<T*>(&Value_get);

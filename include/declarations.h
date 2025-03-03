@@ -122,18 +122,18 @@ int task_regs_refresh_(void* params);
 int task_begin_(void* params);
 int task_plc_refresh_(void* params);
 
-
+// ===== OPC functions "fold" =====
 template <typename T>
 void WriteValue(string s_, T val_, bool isOK = true)
 {
-  OPCs.updateVar(OPCs.lookupVar(s_), val_, isOK);
+  OPCs.updateVar(OPCs.LookupVar(s_), val_, isOK);
 }
 
 struct ReadValue {
   string _s;  // Full path to variable
   ReadValue(string svar)
   {
-    _s = OPCs.lookupVar(svar);  // Try to find fullpath-name
+    _s = OPCs.LookupVar(svar);  // Try to find fullpath-name
   }
   template <typename T>
   operator T()
@@ -142,18 +142,5 @@ struct ReadValue {
   }
 };
 
-/*     if (OPCs.isVar(svar))        // if fullpath exist = "/PLC/Kub/Kub.Temp1"
-        _s = svar;
-*/
-/*     else if (( != "")) // varname only - "Tkub0"
-        _s = SCADA_folder + sv;
-    else {                  // Only "Buf.Temp3"
-        string _plc = ss.substr(0, ss.find(".")); // = "Buf"
-        _s = PLC_folder + _plc + "/" + ss;        // = "/PLC/Buf/Buf.Temp3"
-*/
-//        string _plc = ss;
-// auto _dot = _plc.find(".");
-//        _plc.erase(ss.find("."));
-//        auto _dot = ss.find(".");
 
 // eof

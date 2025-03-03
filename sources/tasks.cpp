@@ -39,7 +39,7 @@ int task_millis_(void* params)
 int task_opc_refresh_(void* params)
 {
   UNUSED(params);
-  int y = OPCs.refreshValues();
+  int y = OPCs.RefreshAllValues();
   LOGI("%s done: %d", __func__, y);
   return y;
 }

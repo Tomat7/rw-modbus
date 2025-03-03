@@ -85,10 +85,10 @@ int main(int argc, char** argv)
     */
     string s;
     s = "/PLC/Kub/Kub.millis";
-    printf("Millis: %d, ", OPCs.readRawValue(s).ui16);
+    printf("Millis: %d, ", OPCs.ReadRawValue(s).ui16);
 
     s = "/PLC/Kub/Kub.Temp1";
-    printf("T1: %5.2f, ", OPCs.readRawValue(s).fl);
+    printf("T1: %5.2f, ", OPCs.ReadRawValue(s).fl);
 
     s = "/PLC/Kub/Kub.Temp2";
     printf("T2: %5.2f, ", OPCs.readValue<float>(s));

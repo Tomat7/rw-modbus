@@ -84,13 +84,13 @@ void opc_regs_init()
 
 value_u opc_get_value(string s)
 {
-  return OPCs.readRawValue(OPCs.lookupVar(s));
+  return OPCs.ReadRawValue(OPCs.LookupVar(s));
 }
 
 
 bool opc_set_value(string s, value_u val, bool isOK)
 {
-  return OPCs.writeRawValue(OPCs.lookupVar(s), val, isOK);
+  return OPCs.WriteRawValue(OPCs.LookupVar(s), val, isOK);
 }
 
 void opc_deinit() { OPCs.stop(); }

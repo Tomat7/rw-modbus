@@ -11,7 +11,7 @@
 // void* OpcServer_c::getVariantData(string s);
 // var_union OpcServer_c::readRawValue(string s);
 
-void* OpcServer_c::getVariantData(string s)
+void* OpcServer_c::getVariantDataPtr(string s)
 {
   void* VarData = nullptr;
 
@@ -30,27 +30,30 @@ void* OpcServer_c::getVariantData(string s)
   return VarData;
 }
 
-value_u OpcServer_c::readRawValue(string s)
+value_u* OpcServer_c::getRawValue(string s)
 {
-  value_u vu;
-  /*   vu.i64 = 0x8000000000000000;
-    vu.fl = -999.32f;
-    vu.dbl = -9999.987; */
-
-  if (isVariable(s))
-    vu = vars[s].value;  // set old (last good) value
-
-  return vu;
+  return static_cast<value_u*>(getVariantDataPtr(s));
 }
 
-bool OpcServer_c::writeRawValue(string s, value_u _val, bool isOK)
+
+value_u OpcServer_c::ReadRawValue(string s)
+{
+  value_u raw_vu;
+
+  if (isVariable(s))
+    raw_vu = vars[s].value;  // set old (last good) value
+
+  return raw_vu;
+}
+
+bool OpcServer_c::WriteRawValue(string s, value_u raw_vu, bool isOK)
 {
   bool ret = false;
   uaDataMux->lock();
 
   if (vars.count(s)) {
-    vars[s].value = _val;
-    vars[s].ptr_value = &_val;
+    vars[s].value = raw_vu;
+    vars[s].ptr_value = &raw_vu;
     writeVariable(vars[s], isOK);
     ret = true;
   } else

@@ -121,26 +121,26 @@ void OpcServer_c::delVar(string s)
   LOGI("Deleted Var/Node: %s", s.c_str());
 }
 
-/*
-  int OpcServer_c::getType(string s)
-  {
+/* 
+int OpcServer_c::getType(string s)
+{
   if (vars.count(s))
     return vars[s].type;
   else
     LOGW("Type: Ignore non-existing variable: %s", s.c_str());
   return -1;
-  }
-*/
-/*
-  int OpcServer_c::getStatus(string s)
-  {
+}
+ */
+/* 
+int OpcServer_c::getStatus(string s)
+{
   if (vars.count(s))
     return vars[s].ua_status;  // 0 - is OK, any other (1 or -1) is BAD
   else
     LOGW("Status: Ignore non-existing variable: %s", s.c_str());
   return -1;
-  }
-*/
+}
+ */
 
 bool OpcServer_c::isGood(string s)
 {
