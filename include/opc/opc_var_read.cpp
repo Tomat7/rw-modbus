@@ -15,22 +15,26 @@ void* OpcServer_c::getVariantDataPtr(string s)
     UA_Variant_clear(uaVariant);
     UA_Variant_init(uaVariant);
     UA_Server_readValue(uaServer, vars[s].node_id.var, uaVariant);
-  } else
+  } else {
     LOGW("%s: Ignore non-existing variable: %s", __func__, s.c_str());
+    return nullptr;
+  }
 
   return (uaVariant->data);
 }
 
-value_u OpcServer_c::getRawValue(string s)
+bool OpcServer_c::refreshRawValue(string s)
 {
+  bool ret = false;
   void* v_ = getVariantDataPtr(s);
 
   if (v_ != nullptr) {
     vars[s].value = *static_cast<value_u*>(v_);
     vars[s].ptr_value = &vars[s].value;
+    ret = true;
   }
 
-  return vars[s].value;
+  return false;
 }
 
 

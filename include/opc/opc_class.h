@@ -88,7 +88,7 @@ public:
   string LookupVar(string s);
   void delVar(string s);
 
-  value_u ReadRawValue(string s);  // returns value_union
+  value_u ReadRawValue(string s);  // returns saved value_union
   bool WriteRawValue(string s, value_u raw_val, bool isOK);  // write value_union
 
   int RefreshAllValues();  // getVar for ALL variables, returns - qty of vars
@@ -130,7 +130,7 @@ private:
 
   void writeVariable(var_t &var, bool isOk);
   void* getVariantDataPtr(string s);  // get pointer to UA_Variant.Data
-  value_u getRawValue(string s);
+  bool refreshRawValue(string s);  // Reread value_u form server
 
   template <typename T>
   bool getNumericValue(string s, T &Value);
@@ -191,17 +191,14 @@ template <typename T>
 bool OpcServer_c::getNumericValue(std::string s, T &Value_get)
 {
   uaDataMux->lock();
-  bool ret = false;
-  void* VarData = getVariantDataPtr(s);
+  bool isFresh = refreshRawValue(s);
+//  void* VarData = getVariantDataPtr(s);
 
-  if (VarData != nullptr) {
-    Value_get = *(static_cast<T*>(VarData));
-    vars[s].ptr_value = static_cast<T*>(&Value_get);
-    vars[s].value = *static_cast<value_u*>(VarData);
-    ret = true;
-  }
+  if (isFresh)
+    Value_get = *static_cast<T*>((void*)&vars[s].value);
+
   uaDataMux->unlock();
-  return ret;
+  return isFresh;
 }
 
 // eof

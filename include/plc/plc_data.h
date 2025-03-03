@@ -50,7 +50,7 @@ struct regdata_t {
 struct reg_t {
   int raddr = 0;
   regdata_t data;
-  reg_t* r_next;
+  reg_t* r_next = nullptr;  // keep pointer to next "connected" reg in chain
   // all next params is optional for raw Modbus
   // naming and good look
   string str_rname = "-";    // reg_name
@@ -64,7 +64,7 @@ struct reg_t {
   string str_mode = "*";    // "rw", "r", "w"
   string str_type = "*";    // "i", "f", "u", "f100", see reg_init.cpp
   // keep pointer to next "connected" reg in chain
-//  reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next reg_t
+  //  reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next reg_t
 };
 
 struct activity_t {
