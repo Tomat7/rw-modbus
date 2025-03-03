@@ -54,7 +54,7 @@ int task_regs_refresh_(void* params)
       if (isNew_Plc || (plc_err != old_err)) {
         rm.set_local_value(plc_val);  // Save PLC value to REGmap
         rm.var_errors = plc_err;
-        opc_set_value(rm.str_opcname, plc_val, plc_err);
+        opc_set_value(rm.str_opcname, plc_val, !plc_err);
         if (!STRmap.count(n) || !STRmap[n].upd_plc)
           STRmap[n].upd_plc = true;
       }

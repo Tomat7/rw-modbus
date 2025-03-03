@@ -40,8 +40,7 @@ uint64_t millis()
   return t;
 }
 
-Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name,
-               void* _ptr)
+Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr)
   : func(_func), interval_ms(_ms), task_name(_name), params(_ptr)
 {
   task_mux = new mutex;
