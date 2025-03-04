@@ -87,7 +87,7 @@ private:
   void set_plc_reg(uint16_t _val, reg_t* rptr);
   void set_plc_reg(uint16_t _val, int x = 0);
 
-  value_u fill_plc_value_by_order(byteorder_t _bo);
+  value_u pull_plc_regs_by_order(byteorder_t _bo);
 
   bool has_Str(string SS, string fs); // Look for fs within SS
   char* get_new_char(const char* _oldch);

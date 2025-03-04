@@ -7,15 +7,7 @@
 
 #include "reg_class.h"
 
-//#include <fcntl.h>
-//#include <stdarg.h>
-//#include <sys/mman.h>
-//#include <syslog.h>
 #include <unistd.h>
-
-//#include <chrono>
-//#include <map>
-//#include <mutex>
 #include <string>
 
 #include "include/logger.h"
@@ -54,8 +46,13 @@ uint16_t Reg_c::get_plc_reg(int x)  // Get reg's local value != read PLC.
 
 value_u Reg_c::get_plc_value()
 {
-  bool has_errors = get_plc_errors();
   value_u val;
+  if (is_scada) {
+    LOGE("Not Modbus get-value: %s", str_fullname.c_str());
+    return val;
+  }
+
+  bool has_errors = get_plc_errors();
 
   if (var_size == 1) {
     if (var_type == UA_TYPES_UINT16)
@@ -67,7 +64,7 @@ value_u Reg_c::get_plc_value()
     else if (byte_order == BO_F10)
       val.fl = (has_errors) ? bad_value.fl : (int16_t)get_plc_reg() * 0.1f;
   } else if (var_size == 2) {
-    val = fill_plc_value_by_order(byte_order);
+    val = pull_plc_regs_by_order(byte_order);
     if (var_type == UA_TYPES_UINT32)
       val.ui32 = (has_errors) ? bad_value.ui32 : val.ui32;
     else if (var_type == UA_TYPES_INT32)
@@ -75,7 +72,7 @@ value_u Reg_c::get_plc_value()
     else if (var_type == UA_TYPES_FLOAT)
       val.fl = (has_errors) ? bad_value.fl : val.fl;
   } else if (var_size == 4) {
-    val = fill_plc_value_by_order(byte_order);
+    val = pull_plc_regs_by_order(byte_order);
     if (var_type == UA_TYPES_UINT64)
       val.ui64 = (has_errors) ? bad_value.ui64 : val.ui64;
     else if (var_type == UA_TYPES_INT64)
@@ -109,8 +106,12 @@ void Reg_c::set_plc_reg(uint16_t _val, int x)  // Set reg's local value != read 
 void Reg_c::set_plc_value(value_u v)
 {
   // byte-order not supported yet :-(
-  for (int i = 0; i < var_size; i++)
-    set_plc_reg(v.dbl2u[i], i);
+  if (is_modbus || is_ref)
+    for (int i = 0; i < var_size; i++)
+      set_plc_reg(v.dbl2u[i], i);
+  else
+    LOGE("Not Modbus set-value: %s", str_fullname.c_str());
+
   return;
 }
 
@@ -124,7 +125,7 @@ int Reg_c::get_plc_errors()  // Get reg's local value != read PLC.
     if ((ptr_reg[i] != nullptr) && !is_scada)
       err += ptr_reg[i]->data.rerrors;
     else
-      LOGE("NULL pointer on reg: %s", str_fullname.c_str());
+      LOGE("NULL pointer on reg or Scada: %s", str_fullname.c_str());
   }
 
   return err;
