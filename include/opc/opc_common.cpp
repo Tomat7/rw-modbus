@@ -203,6 +203,8 @@ string OpcServer_c::strVarDetails(var_t &v)
     ret = "(ui64) = " + to_string(*(static_cast<uint64_t*>(v.ptr_value)));
   else if (v.type == UA_TYPES_FLOAT)
     ret = "(float) = " + to_string(*(static_cast<float*>(v.ptr_value)));
+  else if (v.type == UA_TYPES_DOUBLE)
+    ret = "(double) = " + to_string(*(static_cast<double*>(v.ptr_value)));
   else if (v.type == UA_TYPES_DATETIME)
     ret = "(DateTime)";
 

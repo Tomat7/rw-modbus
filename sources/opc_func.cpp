@@ -36,17 +36,18 @@ void opc_regs_init()
     if (rm.is_modbus)
       t = UA_TYPES_UINT16;
 
-    if (t == UA_TYPES_FLOAT)
-      //OPCs.addVar(n, rm.value.fl, rm.var_mode);
+    if (t == UA_TYPES_UINT16)
+      OPCs.addVar(n, rm.get_local_value().ui16, rm.var_mode);
+    else if (t == UA_TYPES_INT16)
+      OPCs.addVar(n, rm.get_local_value().i16, rm.var_mode);
+    else if (t == NOTUA_TYPES_F100)
       OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
     else if (t == NOTUA_TYPES_F10)
       OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
-    else if (t == NOTUA_TYPES_F100)
+    else if (t == UA_TYPES_FLOAT)
       OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
-    else if (t == UA_TYPES_INT16)
-      OPCs.addVar(n, rm.get_local_value().i16, rm.var_mode);
-    else if (t == UA_TYPES_UINT16)
-      OPCs.addVar(n, rm.get_local_value().ui16, rm.var_mode);
+    else if (t == UA_TYPES_DOUBLE)
+      OPCs.addVar(n, rm.get_local_value().dbl, rm.var_mode);
     else
       LOGE("Wrong type: %d, Var: %s", t, n.c_str());
 

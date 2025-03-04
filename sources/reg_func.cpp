@@ -158,7 +158,7 @@ void reg_print(Reg_c rm)
   const char* B = getBlynk(rm.var_errors == 0);
   char ch[50];
 
-  printf("%s%-14s %s%10s", C, rm.rn, B, rm.get_local_value_chars(ch));
+  printf("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
 
   printf(C_NORM);
 

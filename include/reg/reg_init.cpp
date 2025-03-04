@@ -158,7 +158,7 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base) // For SCADA regs only
     value.ui16 = _reg->data.rvalue;
 
   char ch[50];
-  LOGI("%s type:%4d sz:%2d bo:%3d rw:%d val: %s [%s]", rn, var_type, var_size,
+  LOGI("%-7s type:%4d sz:%2d bo:%3d rw:%d val: %14s [%s]", rn, var_type, var_size,
        byte_order, var_mode, get_local_value_chars(ch), str_opcname.c_str());
 }
 

@@ -64,9 +64,9 @@ string Reg_c::get_local_value_string()
 char* Reg_c::get_local_value_chars(char* retch)
 {
   if (var_type == UA_TYPES_DOUBLE)
-    snprintf(retch, 49, "%47.4f", value.fl);
+    snprintf(retch, 49, "%14.4f", value.dbl);
   else if (var_type == UA_TYPES_FLOAT)
-    snprintf(retch, 49, "%8.3f", value.fl);
+    snprintf(retch, 49, "%10.3f", value.fl);
   else if (var_type == NOTUA_TYPES_F100)
     snprintf(retch, 49, "%7.2f", value.fl);
   else if (var_type == NOTUA_TYPES_F10)
@@ -75,6 +75,8 @@ char* Reg_c::get_local_value_chars(char* retch)
     snprintf(retch, 49, "%u", value.ui16);
   else if (var_type == UA_TYPES_INT16)
     snprintf(retch, 49, "%i", value.i16);
+  else
+    LOGE("Type not supported: %i", var_type);
 
   return retch;
 }
