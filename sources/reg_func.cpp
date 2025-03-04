@@ -38,7 +38,7 @@ int task_regs_refresh_(void* params)
     bool plc_err = false;
     value_u opc_val = opc_get_value(rm.str_opcname);  // from OPC
     bool opc_err = !OPCs.isGood(rm.str_opcname);
-    value_u old_val = rm.value; // Value in memory (in REGmap)
+    value_u old_val = rm.get_local_value(); // Value in memory (in REGmap)
     bool old_err = rm.var_errors;
 
     bool isNew_Plc = false; // Got new value from PLC
@@ -158,7 +158,7 @@ void reg_print(Reg_c rm)
   const char* B = getBlynk(rm.var_errors == 0);
   char ch[50];
 
-  printf("%s%-14s %s%10s", C, rm.rn, B, rm.get_value_chars(ch));
+  printf("%s%-14s %s%10s", C, rm.rn, B, rm.get_local_value_chars(ch));
 
   printf(C_NORM);
 

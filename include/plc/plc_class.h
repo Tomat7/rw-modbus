@@ -19,7 +19,7 @@
 #include <vector>
 
 #include "include/macros.h"
-#include "plc_data.h"
+#include "plc_datatype.h"
 
 //#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 #define MB_SLAVE_CONN_MAX 5

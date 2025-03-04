@@ -24,7 +24,7 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-value_u Reg_c::fill_by_order(byteorder_t _bo)  // Get reg's local value != read PLC.
+value_u Reg_c::fill_plc_value_by_order(byteorder_t _bo)  // Get reg's local value != read PLC.
 {
   value_u _val;
   uint16_t mb2u[4] = { 0 };

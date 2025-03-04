@@ -34,7 +34,7 @@ bool OpcServer_c::refreshRawValue(string s)
     ret = true;
   }
 
-  return false;
+  return ret;
 }
 
 

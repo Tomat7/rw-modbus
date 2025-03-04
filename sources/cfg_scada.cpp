@@ -124,7 +124,7 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
 
     if (!(r.str_source == "") && !(r.str_source == "-")) {
       if (reg_exist(r.str_source))
-        ptr_source = REGmap[r.str_source].ptr_reg[0];
+        ptr_source = REGmap[r.str_source].get_ptr(0);
       else {
         LOGE("Wrong 'rsource': '%s' on reg: '%s' - IGNORED!",
              r.str_source.c_str(), r.str_rname.c_str());

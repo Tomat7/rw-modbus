@@ -49,43 +49,17 @@ public:
 
   static bool init_types(reg_t* _reg);
 
-  uint16_t get_plc_reg(reg_t* rptr);
-  uint16_t get_plc_reg(int x = 0);
-
-  void set_plc_reg(uint16_t _val, reg_t* rptr);
-  void set_plc_reg(uint16_t _val, int x = 0);
+  reg_t* get_ptr(int x = 0);
 
   int get_plc_errors();
-  value_u fill_by_order(byteorder_t _bo);
-
-
   value_u get_plc_value();
   void set_plc_value(value_u _value);
 
   value_u get_local_value();
   void set_local_value(value_u _value);
 
-  string get_value_string();
-  char* get_value_chars(char* retch);
-
-
-  bool has_Str(string SS, string fs); // Look for fs within SS
-  char* get_new_char(const char* _oldch);
-
-  void remove_dbl_slashes(string &str);
-  string to_lower(string str);
-
-  /*
-    // set MODBUS value and return LOCAL
-    template <typename T> T set_value(T _val);
-
-    // read LOCAL saved value
-    template <typename T> T read_value();
-
-    // ask MODBUS for current value
-    template <typename T> T get_value();
-
-  */
+  string get_local_value_string();
+  char* get_local_value_chars(char* retch);
 
   const char* rn = nullptr;   // copy from MB-reg
   string str_fullname = "";   // copy from MB-reg
@@ -94,8 +68,6 @@ public:
 // "-" mean no reference - Scada calculated reg!
 // "" mean no reference - Modbus reg only!
 
-  badvalue_t bad_value;
-  value_u value;                 // union of values (by type)
   int var_errors = 0;   // regdata_t.rerrors
   int var_mode = 0;     // 1 - "rw", 0 - "readonly"
   int var_type = UA_TYPES_UINT16; // for OPC UA server (ex. UA_TYPES_FLOAT)
@@ -106,6 +78,24 @@ public:
   bool is_scada = false;
   bool is_ref = false;  // variable Referenced to Modbus reg(s)
 
+
+private:
+
+  uint16_t get_plc_reg(reg_t* rptr);
+  uint16_t get_plc_reg(int x = 0);
+
+  void set_plc_reg(uint16_t _val, reg_t* rptr);
+  void set_plc_reg(uint16_t _val, int x = 0);
+
+  value_u fill_plc_value_by_order(byteorder_t _bo);
+
+  bool has_Str(string SS, string fs); // Look for fs within SS
+  char* get_new_char(const char* _oldch);
+  void remove_dbl_slashes(string &str);
+  string to_lower(string str);
+
+  value_u value;                 // union of values (by type)
+  badvalue_t bad_value;
   reg_t* ptr_reg[4] = { nullptr };   // ptr to Modbus PLC reg
 
 };

@@ -45,7 +45,7 @@ value_u Reg_c::get_local_value() { return value; }
 void Reg_c::set_local_value(value_u _val) { value = _val; }
 
 
-string Reg_c::get_value_string()
+string Reg_c::get_local_value_string()
 {
   string rets;
   if (var_type == UA_TYPES_FLOAT)
@@ -61,7 +61,7 @@ string Reg_c::get_value_string()
   return rets;
 }
 
-char* Reg_c::get_value_chars(char* retch)
+char* Reg_c::get_local_value_chars(char* retch)
 {
   if (var_type == UA_TYPES_DOUBLE)
     snprintf(retch, 49, "%47.4f", value.fl);
