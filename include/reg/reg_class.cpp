@@ -21,7 +21,7 @@
 
 #include "include/logger.h"
 #include "include/plc/plc_class.h"
-#include "include/shmem/shmem.h"
+//#include "include/shmem/shmem.h"
 
 #ifdef SYSLOG_NAME
 #undef SYSLOG_NAME

@@ -15,7 +15,7 @@
 $(info === The GOALS is: $(MAKECMDGOALS))
 
 # === COMMON: Version/standard & Directories & files & libraries ===
-CXX_VER=c++17
+CXX_VER=c++20
 OUTFILE=a.out
 OBJDIR =./tmp/obj
 SUBDIRS= include sources
@@ -50,7 +50,7 @@ ifeq ("c++20", "$(CXX_VER)")
 ifneq ("$(wildcard $(CXX_ASTRA))","")
 CXX=$(CXX_ASTRA)
 endif
-$(info === C++ std v.20 activated! ===)
+$(info === C++ std v.20 activated! === )
 endif
 CC=$(CXX)
 

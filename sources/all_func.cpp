@@ -148,8 +148,8 @@ void parse_char(int ch)
   }
 }
 
-int write_shm(string rn, uint16_t val)
-{
+/* int write_shm(string rn, uint16_t val)
+  {
   regdata_t* ptr_shm = nullptr;
   int fd = get_shm_fd(rn.c_str());
   LOGD("Reg: %s, got FD: %d", rn.c_str(), fd);
@@ -184,7 +184,8 @@ int write_shm(string rn, uint16_t val)
   LOGC("close_shm2: %x", ptr_shm);
 
   return rc;
-}
+  }
+*/
 
 /*
   int write_rm(string rn, uint16_t val)
