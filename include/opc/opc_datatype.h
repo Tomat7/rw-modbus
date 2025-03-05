@@ -1,7 +1,11 @@
 #pragma once
+// plc_datatype.h ----------------------------------
+// Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
+
+//#include "include/open62541/open62541.h"
 
 #include <string>
 #include <variant>

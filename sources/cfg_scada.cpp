@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <libconfig.h++>
+
 #include "config.h"
 #include "libs.h"
 // #include "./plc_class.h"

@@ -3,6 +3,8 @@
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
+//#include "include/open62541/open62541.h"
+
 #include <mutex>
 #include <string>
 #include <thread>

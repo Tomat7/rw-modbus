@@ -44,9 +44,9 @@ value_u Reg_c::get_local_value() { return value; }
 
 void Reg_c::set_local_value(value_u _val) { value = _val; }
 
-
-string Reg_c::get_local_value_string()
-{
+/*
+  string Reg_c::get_local_value_string()
+  {
   string rets;
   if (var_type == UA_TYPES_FLOAT)
     rets= to_string(value.fl);
@@ -59,7 +59,8 @@ string Reg_c::get_local_value_string()
   else if (var_type == UA_TYPES_INT16)
     rets= to_string(value.i16);
   return rets;
-}
+  }
+*/
 
 char* Reg_c::get_local_value_chars(char* retch)
 {

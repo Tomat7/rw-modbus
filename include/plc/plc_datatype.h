@@ -51,22 +51,22 @@ struct reg_t {
   int raddr = 0;
   regdata_t data;
   reg_t* r_next = nullptr;  // keep pointer to next "connected" reg in chain
+  string str_mode = "*";    // "rw", "r", "w" - (read from Config)
   // all next params is optional for raw Modbus
-  // naming and good look
+  // it's necessary for naming and good look
   string str_rname = "-";    // reg_name
   string rfullname = "";     // PLC_name.reg_name
   const char* ch_name = nullptr;  // str_rname.c_str()
   // OPC name of (optional) folder
-  string str_rfolder = "";  // .../PLC_name/rfolder/PLC_name.reg_name (opt)
+  // .../PLC_name/rfolder/PLC_name.reg_name (opt)
+  string str_rfolder = "";
   // for SCADA/OPC: reg which/where referenced/pointed to Modbus reg
-  string str_source = "";   // reference to external register (optional)
-  // strings name of optional params (get it from Config)
-  string str_mode = "*";    // "rw", "r", "w"
+  // reference to external register (optional)
+  string str_source = "";
   string str_type = "*";    // "i", "f", "u", "f100", see reg_init.cpp
-  // keep pointer to next "connected" reg in chain
-  //  reg_t* r_next = nullptr;  // Float & (u)int32 - ptr to next reg_t
 };
 
+// TODO:  !!!
 struct activity_t {
   bool modbus = false;            // enable Modbus requests
   bool opc = false;               // enable OPC mapping

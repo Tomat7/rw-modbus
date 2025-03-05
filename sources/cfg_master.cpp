@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <libconfig.h++>
+
 #include "config.h"
 #include "libs.h"
 // #include "./plc_class.h"
@@ -148,7 +150,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
     string _devname, _dfolder, _desc, _ip;
     int _port, _att, _ms, _us;
 
-    // ===== Check the record which expect to get for CFG-file.
+    // ===== Check the record which ex pect to get for CFG-file.
     if (cfgPLC[i].lookupValue("name", _devname) &&
         cfgPLC[i].lookupValue("folder", _dfolder) &&
         cfgPLC[i].lookupValue("desc", _desc) &&

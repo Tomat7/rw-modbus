@@ -1,6 +1,6 @@
 #pragma once
-// opc_templates.h
-//
+// plc_templates.h ----------------------------------
+// Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include "opc_class.h"
 

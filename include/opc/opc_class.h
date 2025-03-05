@@ -1,7 +1,10 @@
 #pragma once
+// opc_class.h ----------------------------------
+// Copyright 2024 Tomat7 (star0413@gmail.com)
 
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
+
 #include <string.h>
 
 #include <iostream>

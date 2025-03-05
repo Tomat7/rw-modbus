@@ -5,8 +5,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "include/opc/opc_class.h"
-#include "include/plc/plc_class.h"
+//#include "include/opc/opc_class.h"
+//#include "include/plc/plc_class.h"
 #include "include/reg/reg_class.h"
 #include "include/scheduler/scheduler.h"
 
