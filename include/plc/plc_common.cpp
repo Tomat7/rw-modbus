@@ -16,13 +16,11 @@
 #include "include/logger.h"
 #include "plc_class.h"
 
-
 // mutex PLC_c::logger_mux;
 
 int PLC_c::get_rc_read() { return rc_read; }
 
 int PLC_c::get_rc_write() { return rc_write; }
-
 
 void PLC_c::mb_deinit()
 {
@@ -66,8 +64,7 @@ int PLC_c::mb_ctx()
   return rc;
 }
 
-
-int PLC_c::set_reg(uint16_t rval, reg_t* rptr) // !! STATIC !!
+int PLC_c::set_reg(uint16_t rval, reg_t* rptr)  // !! STATIC !!
 {
   int ret = -1;
   if (rptr != nullptr) {
@@ -86,7 +83,6 @@ int PLC_c::set_reg(uint16_t rval, reg_t* rptr) // !! STATIC !!
 
   return ret;
 }
-
 
 int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
 {
@@ -108,7 +104,6 @@ int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
   return rc;
 }
 
-
 int PLC_c::set_reg_by_name(uint16_t rval, string rname)
 {
   rc = -2;  // rname not found
@@ -122,7 +117,6 @@ int PLC_c::set_reg_by_name(uint16_t rval, string rname)
 
   return rc;
 }
-
 
 int PLC_c::set_reg_by_fullname(uint16_t rval, string rname)
 {
@@ -140,14 +134,13 @@ int PLC_c::set_reg_by_fullname(uint16_t rval, string rname)
 
 // =============================================
 
-uint16_t PLC_c::get_reg(reg_t* rptr) // !! STATIC !!
+uint16_t PLC_c::get_reg(reg_t* rptr)  // !! STATIC !!
 {
   uint16_t rval = 0;
   if (rptr != nullptr)
     rval = rptr->data.rvalue;
   return rval;
 }
-
 
 uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
 {
@@ -160,8 +153,8 @@ uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
   return rval;
 }
 
-
-uint16_t PLC_c::get_reg_by_name(string rname)  // Set reg's local value != read PLC.
+uint16_t PLC_c::get_reg_by_name(
+  string rname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;
@@ -175,7 +168,8 @@ uint16_t PLC_c::get_reg_by_name(string rname)  // Set reg's local value != read 
   return rval;
 }
 
-uint16_t PLC_c::get_reg_by_fullname(string rfname)  // Set reg's local value != read PLC.
+uint16_t PLC_c::get_reg_by_fullname(
+  string rfname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;
@@ -208,7 +202,8 @@ uint16_t PLC_c::get_reg_by_fullname(string rfname)  // Set reg's local value != 
 */
 
 /*
-  int PLC_c::regs_used(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
+  int PLC_c::regs_used(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits
+  reg
   {
   int x = 0;
   for (auto &[a, r] : regs) {
@@ -227,7 +222,8 @@ uint64_t PLC_c::millis()
   uint64_t t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
   /* #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
     uint64_t t;
-    t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count(); */
+    t =
+    CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count(); */
   return t;
 }
 

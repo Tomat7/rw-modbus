@@ -3,14 +3,15 @@
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
-
 //#include "include/open62541/open62541.h"
 
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) { a }
-
+#define DEBUG(a) \
+  if (isDebug) { \
+    a            \
+  }
 
 bool OpcServer_c::WriteRawValue(string s, value_u raw_vu, bool isOK)
 {
@@ -29,7 +30,6 @@ bool OpcServer_c::WriteRawValue(string s, value_u raw_vu, bool isOK)
 
   return ret;
 }
-
 
 void OpcServer_c::writeVariable(var_t &v, bool isOk)
 {

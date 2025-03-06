@@ -24,10 +24,11 @@ static mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
 static queue<string> Print_queue;
 //                                      Alert-1  Crit-2  Error-3 Warn-4
-static const char* ch_color[9] = {C_STD, C_RED,  C_REDB, C_REDB, C_MAGB,
-//                               Notice-5 Info-6  Debug-7
-                                  C_YELB, C_GRN,  C_CYN,  C_STD
-                                 };
+static const char* ch_color[9] = {
+  C_STD, C_RED, C_REDB, C_REDB, C_MAGB,
+  //                               Notice-5 Info-6  Debug-7
+  C_YELB, C_GRN, C_CYN, C_STD
+};
 
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)

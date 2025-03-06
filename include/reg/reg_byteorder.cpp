@@ -24,10 +24,11 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-value_u Reg_c::pull_plc_regs_by_order(byteorder_t _bo)  // Get reg's local value != read PLC.
+value_u Reg_c::pull_plc_regs_by_order(
+  byteorder_t _bo)  // Get reg's local value != read PLC.
 {
   value_u _val;
-  uint16_t mb2u[4] = { 0 };
+  uint16_t mb2u[4] = {0};
 
   for (int i = 0; i < var_size; i++)
     mb2u[i] = get_plc_reg(i);
@@ -42,8 +43,6 @@ value_u Reg_c::pull_plc_regs_by_order(byteorder_t _bo)  // Get reg's local value
   return _val;
 }
 
-
 /* value_u Reg_c::push_plc_regs_by_order(byteorder_t _bo); */
 
 // eof
-

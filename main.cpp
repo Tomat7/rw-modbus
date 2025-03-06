@@ -1,12 +1,12 @@
 // main.cpp ---------------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#include <cmath>
 #include <map>
 #include <set>
 #include <string>
 #include <variant>
 #include <vector>
-#include <cmath>
 
 #include "./config.h"
 #include "./libs.h"
@@ -19,14 +19,14 @@ map<string, Reg_c> REGmap;
 vector<PLC_c> PLCvec;
 // PLC_c Slave(MB_SLAVE_PORT);
 OpcServer_c OPCs;
-Schedule_c Task/* (TASKS_NB_MAX) */;
-//string PLC_folder = PLC_FOLDER;
-//string SCADA_folder = OPC_SCADA_FOLDER;
+Schedule_c Task /* (TASKS_NB_MAX) */;
+// string PLC_folder = PLC_FOLDER;
+// string SCADA_folder = OPC_SCADA_FOLDER;
 
 // INotify IN(CFG_DIR);
 
 const char* mode = "master";
-//int timeout_sec = TIMEOUT_SEC;
+// int timeout_sec = TIMEOUT_SEC;
 int rc;
 
 static void close_sigint(int dummy)
@@ -48,7 +48,6 @@ int main(int argc, char** argv)
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   // log_level = 3;
-
 
   if (argc > 1) {
     if (Mode.count(string(argv[1])))
@@ -107,7 +106,6 @@ int main(int argc, char** argv)
     // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
     int16_t t16 = (int16_t)round(myfl * 100);
     myfl = t16 / 100;
-
 
     printf("\n");
 

@@ -40,7 +40,8 @@ uint64_t millis()
   return t;
 }
 
-Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr)
+Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name,
+               void* _ptr)
   : func(_func), interval_ms(_ms), task_name(_name), params(_ptr)
 {
   task_mux = new mutex;
@@ -94,7 +95,8 @@ int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
       nb_tasks = tasks.size();
       LOGN("New task: %s, ms: %d, total: %d", _name.c_str(), _ms, nb_tasks);
     } else
-      LOGE("Too short interval! Task: %s, ms: %d - IGNORED!", _name.c_str(), _ms);
+      LOGE("Too short interval! Task: %s, ms: %d - IGNORED!", _name.c_str(),
+           _ms);
 
   } else
     LOGA("Can't add task! Now: %d, capacity: %d", nb_tasks, nb_capct);

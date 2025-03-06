@@ -1,10 +1,10 @@
 // main.cpp ---------------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#include <locale>  // tolower
 #include <map>
 #include <string>
 #include <vector>
-#include <locale> // tolower
 
 #include "config.h"
 #include "libs.h"
@@ -95,7 +95,7 @@ void deinit_all()
   regs_deinit();
   opc_deinit();
   LOGD("opc_deinit() - done");
-//  regs_deinit_shm();
+  //  regs_deinit_shm();
   LOGD("regs_deinit() - done");
   mb_deinit();
   LOGD("mb_deinit() - done");
@@ -204,6 +204,5 @@ string to_lower(string str)
     c = static_cast<char>(tolower(c));
   return str;
 }
-
 
 // eof

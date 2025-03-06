@@ -77,7 +77,7 @@ void regs_deinit()
   return;
 }
 
-//REGmap[R.fullname].ptr_reg->str_title = D.str_title;
+// REGmap[R.fullname].ptr_reg->str_title = D.str_title;
 /*         R.str_mode = REGmap[R.str_source].ptr_reg->str_mode;
         R.str_type = REGmap[R.str_source].ptr_reg->str_type;
         R.data.rmode = REGmap[R.str_source].ptr_data_plc->rmode;

@@ -5,13 +5,13 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
-#include "reg_class.h"
-
 #include <unistd.h>
+
 #include <string>
 
 #include "include/logger.h"
 #include "include/plc/plc_class.h"
+#include "reg_class.h"
 //#include "include/shmem/shmem.h"
 
 #ifdef SYSLOG_NAME
@@ -19,11 +19,7 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-
-reg_t* Reg_c::get_ptr(int x)
-{
-  return ptr_reg[x];
-}
+reg_t* Reg_c::get_ptr(int x) { return ptr_reg[x]; }
 
 uint16_t Reg_c::get_plc_reg(reg_t* rptr)  // Set reg's local value != read PLC.
 {
@@ -88,16 +84,16 @@ value_u Reg_c::get_plc_value()
 
 // =======================================
 
-
 void Reg_c::set_plc_reg(uint16_t _val, reg_t* rptr)
 {
-  if ((is_modbus || is_ref)  && (rptr != nullptr))
+  if ((is_modbus || is_ref) && (rptr != nullptr))
     PLC_c::set_reg(_val, rptr);
   else
     LOGE("Not Modbus set-reg: %s", str_fullname.c_str());
 }
 
-void Reg_c::set_plc_reg(uint16_t _val, int x)  // Set reg's local value != read PLC.
+void Reg_c::set_plc_reg(uint16_t _val,
+                        int x)  // Set reg's local value != read PLC.
 {
   set_plc_reg(_val, ptr_reg[x]);
   return;
@@ -131,6 +127,4 @@ int Reg_c::get_plc_errors()  // Get reg's local value != read PLC.
   return err;
 }
 
-
 // eof
-

@@ -4,7 +4,6 @@
 
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
-
 #include <string.h>
 
 #include <iostream>
@@ -16,6 +15,14 @@
 
 #include "include/logger.h"
 #include "opc_datatype.h"
+
+#define MANUFACTURER_NAME "tomat7@vm32.ru"
+#define PRODUCT_NAME "Modbus-OPC UA gate"
+#define PRODUCT_URI "https://github.com/Tomat7/rw-modbus"
+#define APPLICATION_NAME "open62541-based Modbus-OPC UA gate"
+//#define APPLICATION_URI "urn:unconfigured:application"
+#define APPLICATION_URI_SERVER "opc.tcp://mb-opc.vm32.ru"
+//#define APPLICATION_URI_SERVER "urn:open62541.server.application"
 
 using namespace std;
 
@@ -33,32 +40,40 @@ public:
     int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
   */
   bool isVariable(string s);
-  bool isGood(string s);      // OPC var has no errors
+  bool isGood(string s);  // OPC var has no errors
 
   string LookupVar(string s);
   void delVar(string s);
 
   value_u ReadRawValue(string s);  // returns saved value_union
-  bool WriteRawValue(string s, value_u raw_val, bool isOK);  // write value_union
+  bool WriteRawValue(string s, value_u raw_val,
+                     bool isOK);  // write value_union
 
   int RefreshAllValues();  // getVar for ALL variables, returns - qty of vars
 
   // for init
-  template <typename T> int addVar(string s, T Value, int rmode);
+  template <typename T>
+  int addVar(string s, T Value, int rmode);
 
   // get T value and set Value_set
-  template <typename T> T updateVar(string s, T Value_set, bool isOK);
+  template <typename T>
+  T updateVar(string s, T Value_set, bool isOK);
 
   // ask OPC server for current value
-  template <typename T> T getValue(string s);
-  template <typename T> bool getValue(string s, T &x);
+  template <typename T>
+  T getValue(string s);
+  template <typename T>
+  bool getValue(string s, T &x);
 
   // read value saved on previous getValue
-  template <typename T> T readValue(string s);
-  template <typename T> bool readValue(string s, T &x);
+  template <typename T>
+  T readValue(string s);
+  template <typename T>
+  bool readValue(string s, T &x);
   //  Definition at the bottom of THIS file
 
 private:
+  void init_config(UA_ServerConfig* conf);
   bool isDebug = true;
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
@@ -82,7 +97,7 @@ private:
 
   void writeVariable(var_t &var, bool isOk);
   void* getVariantDataPtr(string s);  // get pointer to UA_Variant.Data
-  bool refreshRawValue(string s);  // Reread value_u form server
+  bool refreshRawValue(string s);     // Reread value_u form server
 
   template <typename T>
   bool getNumericValue(string s, T &Value);
@@ -98,7 +113,5 @@ private:
 // ======== Definition of TEMPLATEs =========
 
 #include "opc_templates.h"
-
-
 
 // eof

@@ -3,14 +3,15 @@
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
-
 //#include "include/open62541/open62541.h"
 
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) { a }
-
+#define DEBUG(a) \
+  if (isDebug) { \
+    a            \
+  }
 
 void* OpcServer_c::getVariantDataPtr(string s)
 {
@@ -40,7 +41,6 @@ bool OpcServer_c::refreshRawValue(string s)
   return ret;
 }
 
-
 value_u OpcServer_c::ReadRawValue(string s)
 {
   value_u raw_vu;
@@ -52,6 +52,5 @@ value_u OpcServer_c::ReadRawValue(string s)
 
   return raw_vu;
 }
-
 
 // eof

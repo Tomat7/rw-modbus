@@ -27,14 +27,13 @@
 #define MB_NO_FOLDER "."
 // #define USE_SYSLOG
 
-
 using namespace std;
 
 class PLC_c
 {
 public:
   // for Master
-  //PLC_c(string _ip = "none", string _name = "Master");
+  // PLC_c(string _ip = "none", string _name = "Master");
   PLC_c(string _devname, string _ip, string _title, string _desc, int _port,
         int _atm, int _ms, int _us);
 
@@ -52,7 +51,7 @@ public:
   int read_master();    // for Master only
   int write_master();   // for Master only
   int update_master();  // for Master only
-  int refresh_master()  { return update_master(); }  // for Master only
+  int refresh_master() { return update_master(); }  // for Master only
 
   // For Slave only.
   int handle_slave(int usec = 10000);  // for Slave only. Call very often!
@@ -80,14 +79,14 @@ public:
     int set_by_regname(string rname, uint64_t rval);
     int set_by_fullname(string rname, uint64_t rval);
   */
-  //int set_reg(int raddr, float rval);
-  //int set_reg(string rname, float rval);
+  // int set_reg(int raddr, float rval);
+  // int set_reg(string rname, float rval);
 
-  //float get_reg(string rname);
-  //float get_reg(int raddr);
+  // float get_reg(string rname);
+  // float get_reg(int raddr);
 
-  int regs_used(string rname); // 0 - 16-bit reg, 1 - 1st reg of 32-bits reg
-  int regs_size(int raddr);    // 2 - 2nd reg of 32-bits register
+  int regs_used(string rname);  // 0 - 16-bit reg, 1 - 1st reg of 32-bits reg
+  int regs_size(int raddr);     // 2 - 2nd reg of 32-bits register
 
   // Common properties
   bool Enabled = false;

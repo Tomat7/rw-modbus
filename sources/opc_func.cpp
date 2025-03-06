@@ -15,7 +15,6 @@
 
 #define CAST(_XTYPE) static_cast<_XTYPE>
 
-
 void opc_regs_init()
 {
   printf("\n===== %s =====\n", __func__);
@@ -26,9 +25,9 @@ void opc_regs_init()
 
     string n, e;
     n = rm.str_opcname;
-    e = Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix; // Kub.Temp1.errors
+    e = Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix;  // Kub.Temp1.errors
 
-    OPCs.addVar(e, (uint16_t)0, 0); // Reg to keep NB of errors
+    OPCs.addVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
 
     value_u v;
     v.ui64 = 0;
@@ -50,7 +49,6 @@ void opc_regs_init()
       OPCs.addVar(n, rm.get_local_value().dbl, rm.var_mode);
     else
       LOGE("Wrong type: %d, Var: %s", t, n.c_str());
-
   }
 }
 
@@ -83,11 +81,7 @@ void opc_regs_init()
   }
 */
 
-value_u opc_get_value(string s)
-{
-  return OPCs.ReadRawValue(OPCs.LookupVar(s));
-}
-
+value_u opc_get_value(string s) { return OPCs.ReadRawValue(OPCs.LookupVar(s)); }
 
 bool opc_set_value(string s, value_u val, bool isOK)
 {

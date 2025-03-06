@@ -22,7 +22,9 @@
 #endif
 
 #ifdef DEEP_DEBUG
-#define _(x) std::cout << #x << std::endl; x
+#define _(x)                    \
+  std::cout << #x << std::endl; \
+  x
 #else
 #define _(x) x
 #endif

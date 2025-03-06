@@ -16,14 +16,14 @@
 #define CAST_MILLIS std::chrono::duration_cast<millis_t>
 #define CAST_MICROS std::chrono::duration_cast<micros_t>
 
-//using namespace std;
-//using namespace chrono;
+// using namespace std;
+// using namespace chrono;
 
 using cchar = const char;
 
-using hires_clock_t = std::chrono::high_resolution_clock; // just to save
-using sys_clock_t = std::chrono::system_clock;    // just to save here
-using std_clock_t = std::chrono::steady_clock;    // just to save here
+using hires_clock_t = std::chrono::high_resolution_clock;  // just to save
+using sys_clock_t = std::chrono::system_clock;             // just to save here
+using std_clock_t = std::chrono::steady_clock;             // just to save here
 
 class Timer
 {
@@ -63,7 +63,7 @@ public:
     end = cclock_t::now();
   }
 
-// ===== is_passed_* =====
+  // ===== is_passed_* =====
 
   bool is_passed_sec(double sec) { return passed_sec() > sec; }
 
@@ -71,7 +71,7 @@ public:
 
   bool is_passed_us(int64_t us) { return passed_us() > us; }
 
-// ===== passed_* =====
+  // ===== passed_* =====
 
   double passed_sec() const
   {
@@ -88,7 +88,7 @@ public:
     return DURATION_CAST<micros_t>(cclock_t::now() - begin).count();
   }
 
-// ===== elapsed_* =====
+  // ===== elapsed_* =====
 
   double elapsed_sec() const
   {
@@ -98,13 +98,13 @@ public:
 
   int64_t elapsed_ms() const
   {
-    //auto msec = DURATION_CAST<millis_t>(end - begin);
+    // auto msec = DURATION_CAST<millis_t>(end - begin);
     return DURATION_CAST<millis_t>(end - begin).count();
   }
 
   int64_t elapsed_us() const
   {
-    //auto usec = DURATION_CAST<micros_t>(end - begin);
+    // auto usec = DURATION_CAST<micros_t>(end - begin);
     return DURATION_CAST<micros_t>(end - begin).count();
   }
 
@@ -119,7 +119,8 @@ public:
 
   void spent_ms(cchar* txt1 = "Time spent: ", cchar* txt2 = " msec.")
   {
-    /* cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) << txt2
+    /* cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) <<
+       txt2
          << '\n'; */
     printf("%s %8.1f %s\n", txt1, elapsed_sec() * 1000, txt2);
   }
@@ -165,27 +166,15 @@ public:
 
   // ============================
 
-  double seconds()
-  {
-    return epoch_seconds() - start_seconds;
-  }
+  double seconds() { return epoch_seconds() - start_seconds; }
 
-  int64_t millis()
-  {
-    return epoch_millis() - start_millis;
-  }
+  int64_t millis() { return epoch_millis() - start_millis; }
 
-  int64_t micros()
-  {
-    return epoch_micros() - start_micros;
-  }
+  int64_t micros() { return epoch_micros() - start_micros; }
 
   // ============================
 
-  auto now_since_epoch()
-  {
-    return cclock_t::now().time_since_epoch();
-  }
+  auto now_since_epoch() { return cclock_t::now().time_since_epoch(); }
   // ===========================
 
   double epoch_seconds()
@@ -202,7 +191,6 @@ public:
   {
     return CAST_MICROS(cclock_t::now().time_since_epoch()).count();
   }
-
 };
 
 // eof

@@ -13,7 +13,10 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) { a }
+#define DEBUG(a) \
+  if (isDebug) { \
+    a            \
+  }
 
 #define CHAR_PTR const_cast<char *>
 #define CHAR_P const_cast<char *>
@@ -74,8 +77,8 @@ string OpcServer_c::getPath_Name(string &name)
   }
 
   auto last_slash = path.rfind("/");
-  name = path.substr(last_slash + 1); // "BUF.Press"
-  path.erase(last_slash + 1);         // path = "/PLC" or "/SCADA/PLC/"
+  name = path.substr(last_slash + 1);  // "BUF.Press"
+  path.erase(last_slash + 1);          // path = "/PLC" or "/SCADA/PLC/"
 
   return path;
 }

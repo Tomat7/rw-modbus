@@ -17,7 +17,6 @@
 #define NOTUA_TYPES_3RD 1003  // third reg of "long" (64 bits) word
 #define NOTUA_TYPES_4TH 1004  // fourth reg of "long" (64 bits) word
 
-
 using namespace std;
 
 struct mbdata_t {
@@ -42,9 +41,9 @@ struct regdata_t {
   // see https://www.modbustools.com/poll_display_formats.html
   // and https://www.simplymodbus.ca/FAQ.htm#Order
   // also see ../reg/reg_datatype.h
-  int rtype;      // 0 - uint16_t (see reg_datatype.h)
-  int rsize;      // how much "connected " regs "in chain" (optional)
-  int rbyteorder; // byte order "in chain" (Big-Endian, ABCD, etc)
+  int rtype;       // 0 - uint16_t (see reg_datatype.h)
+  int rsize;       // how much "connected " regs "in chain" (optional)
+  int rbyteorder;  // byte order "in chain" (Big-Endian, ABCD, etc)
 };
 
 struct reg_t {
@@ -54,8 +53,8 @@ struct reg_t {
   string str_mode = "*";    // "rw", "r", "w" - (read from Config)
   // all next params is optional for raw Modbus
   // it's necessary for naming and good look
-  string str_rname = "-";    // reg_name
-  string rfullname = "";     // PLC_name.reg_name
+  string str_rname = "-";         // reg_name
+  string rfullname = "";          // PLC_name.reg_name
   const char* ch_name = nullptr;  // str_rname.c_str()
   // OPC name of (optional) folder
   // .../PLC_name/rfolder/PLC_name.reg_name (opt)
@@ -63,16 +62,15 @@ struct reg_t {
   // for SCADA/OPC: reg which/where referenced/pointed to Modbus reg
   // reference to external register (optional)
   string str_source = "";
-  string str_type = "*";    // "i", "f", "u", "f100", see reg_init.cpp
+  string str_type = "*";  // "i", "f", "u", "f100", see reg_init.cpp
 };
 
 // TODO:  !!!
 struct activity_t {
-  bool modbus = false;            // enable Modbus requests
-  bool opc = false;               // enable OPC mapping
-  bool display = false;           // enable printing values on display
-  bool summary = false;           // enable summary printing
+  bool modbus = false;   // enable Modbus requests
+  bool opc = false;      // enable OPC mapping
+  bool display = false;  // enable printing values on display
+  bool summary = false;  // enable summary printing
 };
-
 
 // eof

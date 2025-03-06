@@ -13,7 +13,7 @@ T OpcServer_c::getValue(string s)
   if (!getNumericValue(s, x))
     if (isVariable(s))
       x = *static_cast<T*>((void*)&vars[s].value);
-//      x = vars[s].value;
+  //      x = vars[s].value;
   return x;
 }
 
@@ -36,10 +36,10 @@ template <typename T>
 T OpcServer_c::readValue(string s)
 {
   T x = bad_value.ui16;
-  if (isVariable(s))         // check for existing
+  if (isVariable(s))  // check for existing
     x = *static_cast<T*>((void*)&vars[s].value);
-//    x = vars[s].value.ui16;  // if var exist - return last good value
-  return x;                  // else - the "BAD" value will return
+  //    x = vars[s].value.ui16;  // if var exist - return last good value
+  return x;  // else - the "BAD" value will return
 }
 
 template <typename T>
@@ -51,7 +51,7 @@ bool OpcServer_c::readValue(string s, T &x)
     if (isGood(s))
       ret = true;
   }
-  return ret;           // else - the "BAD" value will return
+  return ret;  // else - the "BAD" value will return
 }
 
 // ======== Definition of TEMPLATEs =========
@@ -68,18 +68,18 @@ T OpcServer_c::updateVar(std::string s, T Value_set, bool isOK)
 template <typename T>
 int OpcServer_c::addVar(std::string s, T Value, int rmode)
 {
-  //LOGD("%s - 1", __func__);
+  // LOGD("%s - 1", __func__);
   rc = addVar_Names(s, types[type_index(typeid(Value))], rmode);
   if (rc == 0)
     return 0;
 
-  //LOGD("%s - 2", __func__);
+  // LOGD("%s - 2", __func__);
   addVar_NodeId(vars[s]);
   vars[s].ptr_value = &Value;
   addVariable(vars[s]);
   setNumericValue(s, Value, true);
 
-  //LOGD("%s - 3", __func__);
+  // LOGD("%s - 3", __func__);
   return 1;
 }
 

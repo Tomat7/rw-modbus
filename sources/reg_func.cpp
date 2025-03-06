@@ -13,11 +13,11 @@
 #define MB_READ
 
 struct regupd_t {
-  bool upd_plc = false;    // need print ">"
-  bool upd_opc = false;    // need print "<"
-  bool err_plc = false;    // need print ">"
-  bool err_opc = false;    // need print "<"
-  value_u opc_value;  // value to print
+  bool upd_plc = false;  // need print ">"
+  bool upd_opc = false;  // need print "<"
+  bool err_plc = false;  // need print ">"
+  bool err_opc = false;  // need print "<"
+  value_u opc_value;     // value to print
 };
 
 static map<string, regupd_t> STRmap;
@@ -38,11 +38,11 @@ int task_regs_refresh_(void* params)
     bool plc_err = false;
     value_u opc_val = opc_get_value(rm.str_opcname);  // from OPC
     bool opc_err = !OPCs.isGood(rm.str_opcname);
-    value_u old_val = rm.get_local_value(); // Value in memory (in REGmap)
+    value_u old_val = rm.get_local_value();  // Value in memory (in REGmap)
     bool old_err = rm.var_errors;
 
-    bool isNew_Plc = false; // Got new value from PLC
-    bool isNew_Opc = (opc_val != old_val); // Got new value from OPC?
+    bool isNew_Plc = false;                 // Got new value from PLC
+    bool isNew_Opc = (opc_val != old_val);  // Got new value from OPC?
 
     if (rm.is_modbus || rm.is_ref) {
       plc_val = rm.get_plc_value();  // Value from PLC, will update var_errors
@@ -71,11 +71,10 @@ int task_regs_refresh_(void* params)
       }
 
     } else if (rm.is_scada) {
-
       STRmap[n].err_opc = opc_err;
       rm.var_errors = opc_err;
 
-      if (/* rm.var_mode &&  */isNew_Opc) {
+      if (/* rm.var_mode &&  */ isNew_Opc) {
         x++;
         rm.set_local_value(opc_val);
         if (!STRmap.count(n) || !STRmap[n].upd_opc) {
@@ -130,7 +129,6 @@ void regs_update()
   return;
 }
 
-
 void reg_print(string rn, const regdata_t* rd)
 {
   // printf("\n===== regs_print =====\n");
@@ -171,7 +169,6 @@ const char* getBlynk(bool noErrors)
 {
   return noErrors ? C_NORM : ESC_BLINK;  // Dark grey blym-blym
 }
-
 
 /*  */
 

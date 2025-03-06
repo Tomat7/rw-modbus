@@ -13,8 +13,8 @@
 #include <syslog.h>
 #include <unistd.h>
 
-#include <cstdio>
 #include <chrono>
+#include <cstdio>
 #include <map>
 #include <mutex>
 #include <string>
@@ -28,15 +28,16 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-
 /*
   bool Reg_c::is_MB() { return (str_source == ""); }
   bool Reg_c::is_Scada() { return (str_source == "-"); }
   bool Reg_c::has_Ref() { return !(is_MB() || is_Scada()); }
 */
 
-bool Reg_c::has_Str(string SS, string fs) { return SS.find(fs) != std::string::npos; }
-
+bool Reg_c::has_Str(string SS, string fs)
+{
+  return SS.find(fs) != std::string::npos;
+}
 
 // ========================================
 
@@ -95,7 +96,5 @@ void Reg_c::remove_dbl_slashes(string &str)
   if (dbl_slash != std::string::npos)
     str.erase(dbl_slash, 1);
 }
-
-
 
 // eof

@@ -15,12 +15,23 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) if (isDebug) { a }
+#define DEBUG(a) \
+  if (isDebug) { \
+    a            \
+  }
 
-bool operator<(const value_u &v1, const value_u &v2) { return v1.ui64 < v2.ui64; }
-bool operator>(const value_u &v1, const value_u &v2) { return v1.ui64 > v2.ui64; }
-bool operator!=(const value_u &v1, const value_u &v2) { return v1.ui64 != v2.ui64; }
-
+bool operator<(const value_u &v1, const value_u &v2)
+{
+  return v1.ui64 < v2.ui64;
+}
+bool operator>(const value_u &v1, const value_u &v2)
+{
+  return v1.ui64 > v2.ui64;
+}
+bool operator!=(const value_u &v1, const value_u &v2)
+{
+  return v1.ui64 != v2.ui64;
+}
 
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
@@ -55,8 +66,22 @@ void OpcServer_c::init(UA_UInt16 _port)
 
   UA_ServerConfig* uaServerConfig = UA_Server_getConfig(uaServer);
   UA_ServerConfig_setDefault(uaServerConfig);
+  init_config(uaServerConfig);
   UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
   LOGN("Init: server ready to start on port:%d", uaPort);
+}
+
+void OpcServer_c::init_config(UA_ServerConfig* conf)
+{
+  auto &Info = conf->buildInfo;
+  Info.productUri = UA_STRING_ALLOC(PRODUCT_URI);
+  Info.manufacturerName = UA_STRING_ALLOC(MANUFACTURER_NAME);
+  Info.productName = UA_STRING_ALLOC(PRODUCT_NAME);
+
+  auto &Desc = conf->applicationDescription;
+  Desc.applicationUri = UA_STRING_ALLOC(APPLICATION_URI_SERVER);
+  Desc.productUri = UA_STRING_ALLOC(PRODUCT_URI);
+  Desc.applicationName = UA_LOCALIZEDTEXT_ALLOC("en", APPLICATION_NAME);
 }
 
 void OpcServer_c::run()
@@ -153,9 +178,7 @@ bool OpcServer_c::isGood(string s)
   return ret;
 }
 
-
 bool OpcServer_c::isVariable(string s) { return vars.count(s); }
-
 
 string OpcServer_c::LookupVar(string s)
 {

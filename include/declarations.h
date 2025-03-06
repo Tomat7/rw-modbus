@@ -36,7 +36,7 @@ struct mb_t {
 struct cfg_t {
   opc_t opc;
   mb_t mb;
-//  int log_level;
+  //  int log_level;
   int timeout_sec = TIMEOUT_SEC;
   int tasks_nb = TASKS_NB_MAX;
   int regs_refresh_ms = REGS_REFRESH_MS;
@@ -46,17 +46,16 @@ struct cfg_t {
 
 extern cfg_t Cfg;
 
-//extern int Cfg.timeout_sec;
-//extern cchar* mode;
+// extern int Cfg.timeout_sec;
+// extern cchar* mode;
 extern map<string, Reg_c> REGmap;
 extern vector<PLC_c> PLCvec;
 // extern PLC_c Slave;
 
 extern OpcServer_c OPCs;
 extern Schedule_c Task;
-//extern string PLC_folder;
-//extern string SCADA_folder;
-
+// extern string PLC_folder;
+// extern string SCADA_folder;
 
 #define MODBUS_MODES "master", "slave", "scada"
 bool operator<(const value_u &v1, const value_u &v2);
@@ -107,7 +106,7 @@ void opc_deinit();
 void opc_start();
 value_u opc_get_value(string s);
 bool opc_set_value(string s, value_u val, bool isOK);
-//uint16_t opc_update_uint16(string name, regdata_t* rd);
+// uint16_t opc_update_uint16(string name, regdata_t* rd);
 uint16_t opc_update_uint16(string name, Reg_c* R);
 // uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);
 int write_shm(string, uint16_t);
@@ -141,6 +140,5 @@ struct ReadValue {
     return OPCs.readValue<T>(_s);
   }
 };
-
 
 // eof

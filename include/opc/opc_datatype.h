@@ -38,7 +38,6 @@ union value_u {
   uint8_t byte2u[8];
 };
 
-
 struct badvalue_t {
   int16_t i16 = -9999;
   int32_t i32 = -99999;
@@ -72,11 +71,10 @@ struct var_t {
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
   value_u value;
-//  variant_t value;
+  //  variant_t value;
   /*   var_union value_wrong;
     var_union value_min;
     var_union value_max; */
 };
 
 // eof
-

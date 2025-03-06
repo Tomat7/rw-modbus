@@ -18,9 +18,8 @@
 #include <string>
 #include <vector>
 
-#include "include/plc/plc_class.h"
 #include "include/opc/opc_class.h"
-
+#include "include/plc/plc_class.h"
 #include "reg_datatype.h"
 
 #define MB_SLAVE_CONN_MAX 5
@@ -32,18 +31,16 @@ struct regprop_t {
   byteorder_t rbyteorder;
 };
 
-
 using namespace std;
-
 
 class Reg_c
 {
 public:
-//  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
-//  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
-//  Reg_c(string _rn, string src_ref);       // for Scada regs.
-  Reg_c(reg_t* _reg, PLC_c* _dev);      // for PLC master
-  Reg_c(reg_t* _reg, reg_t* _src, string _opc_base); // for Scada regs.
+  //  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
+  //  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
+  //  Reg_c(string _rn, string src_ref);       // for Scada regs.
+  Reg_c(reg_t* _reg, PLC_c* _dev);                    // for PLC master
+  Reg_c(reg_t* _reg, reg_t* _src, string _opc_base);  // for Scada regs.
   Reg_c();
   ~Reg_c();
 
@@ -61,26 +58,25 @@ public:
   string get_local_value_string();
   char* get_local_value_chars(char* retch);
 
-  const char* rn = nullptr;   // copy from MB-reg
-  string str_fullname = "";   // copy from MB-reg
-  string str_opcname = "";    // /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
-  string str_source = "";  // name of "referenced" MB-reg (ex. DEF.Temp3)
-// "-" mean no reference - Scada calculated reg!
-// "" mean no reference - Modbus reg only!
+  const char* rn = nullptr;  // copy from MB-reg
+  string str_fullname = "";  // copy from MB-reg
+  string str_opcname = "";   // /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
+  string str_source = "";    // name of "referenced" MB-reg (ex. DEF.Temp3)
+  // "-" mean no reference - Scada calculated reg!
+  // "" mean no reference - Modbus reg only!
 
-  int var_errors = 0;   // regdata_t.rerrors
-  int var_mode = 0;     // 1 - "rw", 0 - "readonly"
-  int var_type = UA_TYPES_UINT16; // for OPC UA server (ex. UA_TYPES_FLOAT)
-  int var_size = 1;     // for multiply Modbus registers (ex. 32-bit Float)
-  byteorder_t byte_order = BO_SNGL; // for 32/64-bit Modbus register (Big-Endian & other)
-  bool visible = false; // try to hide 2nd/3rd/4th word of multiply MB regs
+  int var_errors = 0;              // regdata_t.rerrors
+  int var_mode = 0;                // 1 - "rw", 0 - "readonly"
+  int var_type = UA_TYPES_UINT16;  // for OPC UA server (ex. UA_TYPES_FLOAT)
+  int var_size = 1;  // for multiply Modbus registers (ex. 32-bit Float)
+  byteorder_t byte_order =
+    BO_SNGL;           // for 32/64-bit Modbus register (Big-Endian & other)
+  bool visible = false;  // try to hide 2nd/3rd/4th word of multiply MB regs
   bool is_modbus = false;
   bool is_scada = false;
   bool is_ref = false;  // variable Referenced to Modbus reg(s)
 
-
 private:
-
   uint16_t get_plc_reg(reg_t* rptr);
   uint16_t get_plc_reg(int x = 0);
 
@@ -89,15 +85,14 @@ private:
 
   value_u pull_plc_regs_by_order(byteorder_t _bo);
 
-  bool has_Str(string SS, string fs); // Look for fs within SS
+  bool has_Str(string SS, string fs);  // Look for fs within SS
   char* get_new_char(const char* _oldch);
   void remove_dbl_slashes(string &str);
   string to_lower(string str);
 
-  value_u value;                 // union of values (by type)
+  value_u value;  // union of values (by type)
   badvalue_t bad_value;
-  reg_t* ptr_reg[4] = { nullptr };   // ptr to Modbus PLC reg
-
+  reg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC reg
 };
 
 // eof

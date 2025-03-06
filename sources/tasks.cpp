@@ -12,14 +12,11 @@ void tasks_init()
   Task.add_task(task_millis_, Cfg.millis_heartbeat_ms, "Millis_");
   Task.add_task(task_opc_refresh_, Cfg.opc.polling_ms, "OPC:Refresh_");
   Task.add_task(task_regs_refresh_, Cfg.regs_refresh_ms, "REGS:Refresh_");
-  //Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
+  // Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);
   mb_add_refresh_tasks();
 }
 
-void tasks_start()
-{
-  Task.run();
-}
+void tasks_start() { Task.run(); }
 
 int task_millis_(void* params)
 {

@@ -16,7 +16,6 @@
 #include "include/logger.h"
 #include "plc_class.h"
 
-
 PLC_c::~PLC_c()
 {
   // lock_now();
@@ -32,11 +31,9 @@ PLC_c::~PLC_c()
        dev_name);
 }
 
-
 void PLC_c::init_regs()  // Master only
 {
   for (auto &[a, r] : regs) {
-
     r.ch_name = r.str_rname.c_str();
     r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
 
@@ -51,7 +48,7 @@ void PLC_c::init_regs()  // Master only
     r.data.rvalue = 777;  // TODO: remove for production
   }
 
-// add pointer to next reg (for each!)
+  // add pointer to next reg (for each!)
   for (auto &[a, r] : regs) {
     if (regs.count(r.raddr + 1))
       r.r_next = &regs[r.raddr + 1];

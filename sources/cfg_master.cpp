@@ -1,11 +1,10 @@
 // cfg_func.cpp --------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
+#include <libconfig.h++>
 #include <set>
 #include <string>
 #include <vector>
-
-#include <libconfig.h++>
 
 #include "config.h"
 #include "libs.h"
@@ -33,8 +32,8 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   // Read the file. If there is an error, report it and exit.
   printf("\n======= cfg_read_Master =======\n");
 
-  int _log = log_level;          // log_level = 0 at start (no logging)
-  log_level = LOG_LEVEL_DEFAULT; // Need "work" logging
+  int _log = log_level;           // log_level = 0 at start (no logging)
+  log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging
   Config cfg;
   openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
   LOGC("Mode: '%s'.", cfg_mode);
@@ -82,7 +81,8 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   Setting* DEVlist;
   const char* dev_type = "PLC";
   try {
-    DEVlist = &cfg.lookup("plc_list_" + string(dev_type) /* string(cfg_mode) */);
+    DEVlist =
+      &cfg.lookup("plc_list_" + string(dev_type) /* string(cfg_mode) */);
   } catch (const SettingNotFoundException &nfex) {
     LOGA("No 'plc_list_%s' configured!", dev_type /* cfg_mode */);
     return (EXIT_FAILURE);
@@ -96,7 +96,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
-  regs_create_from_masters(); // Init PLC reg in REGmap
+  regs_create_from_masters();  // Init PLC reg in REGmap
 
   // The same for Scada (read it like a Modbus device)
   dev_type = "SCADA";
@@ -127,7 +127,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
   int nb_plc_ready = 0;
   set<string> PLClst;
 
-  uint64_t vec_size_new = 0; // PLCvec.size() + nb_plc_cfg;
+  uint64_t vec_size_new = 0;  // PLCvec.size() + nb_plc_cfg;
 
   LOGW("Total PLCs in config: %d, in the list: %d.", nb_plc_cfg, nb_plc_list);
 
@@ -161,35 +161,36 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
         cfgPLC[i].lookupValue("timeout", _us)) {
       // It is PLC configuration!
       if (isCheckName && !PLClst.count(_devname))
-        continue; // get out of current iteration if PLC not in list
+        continue;  // get out of current iteration if PLC not in list
 
-      PLCvec.emplace_back(_devname, _ip, _dfolder, _desc, _port, _att, _ms, _us);
+      PLCvec.emplace_back(_devname, _ip, _dfolder, _desc, _port, _att, _ms,
+                          _us);
       PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
       int nb_regs = cfg_init_plcregs(cfgPLC[i]["regs"], &PLCvec.back());
-      PLCvec.back().init_regs(); // Necessary to copy str to char* and others
+      PLCvec.back().init_regs();  // Necessary to copy str to char* and others
 
       nb_plc_ready++;
       total_regs += nb_regs;
 
-      LOGI("Configured PLC: %s, with: %d regs",
-           PLCvec.back().dev_name, nb_regs);
+      LOGI("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
+           nb_regs);
       // ===== End PLC filling  =====
     } else {
       LOGA("Error reading PLC configuration: %d\n", i);
-      continue; // get out of current iteration if any field wrong in CFG-file */
+      continue;  // get out of current iteration if any field wrong in CFG-file
+      // */
     }
   }
 
   LOGI("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
-    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.",
-         nb_plc_ready, nb_plc_list);
+    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready,
+         nb_plc_list);
 
   return 0;
 }
-
 
 int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
 {
@@ -229,6 +230,5 @@ int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
   }
   return nb_regs - nb_errors;
 }
-
 
 // eof
