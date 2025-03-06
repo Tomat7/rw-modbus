@@ -17,18 +17,19 @@
 #include <mutex>
 #include <queue>
 
-int log_level = 0;  // 0 - no messages at all - will get from Config
+int log_level = 0;
+// 0 - no messages at all - will get from Config
 // 9 - all messages on screen
 
 static mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
 static queue<string> Print_queue;
-//                                      Alert-1  Crit-2  Error-3 Warn-4
+
 static const char* ch_color[9] = {
-  C_STD, C_RED, C_REDB, C_REDB, C_MAGB,
-  //                               Notice-5 Info-6  Debug-7
-  C_YELB, C_GRN, C_CYN, C_STD
+//      Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7
+  C_STD, C_RED, C_MAGB, C_REDB, C_YELB, C_BLUB, C_GRN, C_CYN, C_STD
 };
+
 
 void logger(const char* _logname, int _prio, const char* _func,
             const char* _fmt, ...)
@@ -100,9 +101,10 @@ void logger_flush()
   }
 }
 
-void logger_fout(const char* _logname, int _prio, const char* _func,
+/*
+  void logger_fout(const char* _logname, int _prio, const char* _func,
                  const char* _fmt, ...)
-{
+  {
   LOCK_GUARD(logger_mux);
   openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
 
@@ -183,10 +185,12 @@ void logger_fout(const char* _logname, int _prio, const char* _func,
 
   fclose(fout);
   close(pipefd[0]);
-}
+  }
+*/
 
-void logdebug(const char* logname, int prio, const char* format, ...)
-{
+/*
+  void logdebug(const char* logname, int prio, const char* format, ...)
+  {
   //  logger_mux.lock();
   LOCK_GUARD(logger_mux);
   FILE* fout = stdout;
@@ -213,7 +217,8 @@ void logdebug(const char* logname, int prio, const char* format, ...)
   fprintf(fout, "%s\n", C_NORM);
   closelog();
   //  logger_mux.unlock();
-}
+  }
+*/
 
 char* get_new_char(const char* _oldch)
 {
