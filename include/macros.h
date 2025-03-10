@@ -22,17 +22,15 @@
 #endif
 
 #ifdef DEEP_DEBUG
-#define _(x)                    \
-  std::cout << #x << std::endl; \
-  x
+#define _(x) std::cout << #x << std::endl;
+x
 #else
 #define _(x) x
 #endif
 
 #ifndef __SHORT_FILENAME__
-#define __SHORT_FILENAME__                                                 \
-  (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 \
-                                    : __FILE__)
+#define __SHORT_FILENAME__ (__builtin_strrchr(__FILE__, '/') ? \
+                            __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
 #endif
 
 #define UNUSED(x) (void)(x)

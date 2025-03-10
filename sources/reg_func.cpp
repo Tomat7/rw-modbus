@@ -129,6 +129,7 @@ void regs_update()
   return;
 }
 
+/* 
 void reg_print(string rn, const regdata_t* rd)
 {
   // printf("\n===== regs_print =====\n");
@@ -148,6 +149,7 @@ void reg_print(string rn, const regdata_t* rd)
 
   return;
 }
+ */
 
 void reg_print(Reg_c rm)
 {

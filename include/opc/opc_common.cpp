@@ -49,19 +49,13 @@ void OpcServer_c::init(UA_UInt16 _port)
 
   uaSrvMux = new mutex;
   uaDataMux = new mutex;
-  // uaGetMux = new mutex;
-  //uaServer = UA_Server_new();
+
   UA_ServerConfig uaServerConfig;
-  //  = UA_Server_getConfig(uaServer);
   memset(&uaServerConfig, 0, sizeof(UA_ServerConfig));
-  //UA_ServerConfig_setDefault(uaServerConfig);
-  LOGFORCE("Memset done");
   UA_ServerConfig_setMinimal(&uaServerConfig, uaPort, NULL);
-  //UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
-  LOGFORCE("SetMinimal done");
+  //UA_ServerConfig_setBasics_withPort(&uaServerConfig, uaPort);
   wait_console(3);
-  init_config(&uaServerConfig);
-  LOGFORCE("INIT done");
+  init_info_desc(&uaServerConfig);
 
   uaServer = UA_Server_newWithConfig(&uaServerConfig);
   uaVariant = UA_Variant_new();
@@ -69,12 +63,21 @@ void OpcServer_c::init(UA_UInt16 _port)
   LOGN("Init: server ready to start on port:%d", uaPort);
 }
 
-void OpcServer_c::init_config(UA_ServerConfig* conf)
+void OpcServer_c::init_info_desc(UA_ServerConfig* conf)
 {
   auto &Info = conf->buildInfo;
   Info.productUri = UA_STRING_ALLOC(PRODUCT_URI);
   Info.manufacturerName = UA_STRING_ALLOC(MANUFACTURER_NAME);
   Info.productName = UA_STRING_ALLOC(PRODUCT_NAME);
+
+  string _Version = string(OPC_LAZY_LIB_NAME) + "v."
+                  + string(OPC_LAZY_LIB_VERSION)
+                  + " based on open62541 v."
+                  + to_string(UA_OPEN62541_VER_MAJOR) + "."
+                  + to_string(UA_OPEN62541_VER_MINOR) + "."
+                  + to_string(UA_OPEN62541_VER_PATCH)
+                  + UA_OPEN62541_VER_LABEL;
+  //Info.softwareVersion = UA_STRING_ALLOC(_Version.c_str());
 
   auto &Desc = conf->applicationDescription;
   Desc.applicationUri = UA_STRING_ALLOC(APPLICATION_URI_SERVER);

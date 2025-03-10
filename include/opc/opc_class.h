@@ -20,6 +20,10 @@
 #include "include/logger.h"
 #include "opc_datatype.h"
 
+#define OPC_LAZY_LIB_NAME "OPC Lazy server "
+#define OPC_LAZY_LIB_VERSION "0.01"
+
+#ifndef MANUFACTURER_NAME
 #define MANUFACTURER_NAME "tomat7@vm32.ru"
 #define PRODUCT_NAME "Modbus-OPC UA gate"
 #define PRODUCT_URI "https://github.com/Tomat7/rw-modbus"
@@ -27,6 +31,7 @@
 //#define APPLICATION_URI "urn:unconfigured:application"
 #define APPLICATION_URI_SERVER "opc.tcp://mb-opc.vm32.ru"
 //#define APPLICATION_URI_SERVER "urn:open62541.server.application"
+#endif // MANUFACTURER_NAME
 
 using namespace std;
 
@@ -76,7 +81,7 @@ public:
   //  Definition at the bottom of THIS file
 
 private:
-  void init_config(UA_ServerConfig* conf);
+  void init_info_desc(UA_ServerConfig* conf);
   bool isDebug = true;
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;

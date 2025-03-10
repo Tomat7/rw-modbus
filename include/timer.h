@@ -35,9 +35,7 @@ private:
   using millis_t = std::chrono::milliseconds;
   using micros_t = std::chrono::microseconds;
 
-  std::chrono::time_point<cclock_t> begin;
-  std::chrono::time_point<cclock_t> end;
-
+  std::chrono::time_point<cclock_t> begin, end;
   uint64_t start_millis, start_micros;
   double start_seconds;
 
@@ -120,8 +118,7 @@ public:
   void spent_ms(cchar* txt1 = "Time spent: ", cchar* txt2 = " msec.")
   {
     /* cout << txt1 << fixed << setprecision(p) << (elapsed_sec() * 1000) <<
-       txt2
-         << '\n'; */
+       txt2 << '\n'; */
     printf("%s %8.1f %s\n", txt1, elapsed_sec() * 1000, txt2);
   }
 

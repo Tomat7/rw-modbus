@@ -34,8 +34,8 @@ class PLC_c
 public:
   // for Master
   // PLC_c(string _ip = "none", string _name = "Master");
-  PLC_c(string _devname, string _ip, string _title, string _desc, int _port,
-        int _atm, int _ms, int _us);
+  PLC_c(string _devname, string _ip, string _title, string _desc,
+        int _port, int _atm, int _ms, int _us);
 
   // for Slave
   PLC_c(int _port = 502, int _m = 1, string _name = "Slave");

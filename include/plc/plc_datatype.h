@@ -56,11 +56,9 @@ struct reg_t {
   string str_rname = "-";         // reg_name
   string rfullname = "";          // PLC_name.reg_name
   const char* ch_name = nullptr;  // str_rname.c_str()
-  // OPC name of (optional) folder
-  // .../PLC_name/rfolder/PLC_name.reg_name (opt)
+  // (optional) OPC name of folder - /.../PLC_name/rfolder/PLC_name.reg_name
   string str_rfolder = "";
-  // for SCADA/OPC: reg which/where referenced/pointed to Modbus reg
-  // reference to external register (optional)
+  // (optional) for SCADA/OPC: reg which/where referenced/pointed to Modbus reg
   string str_source = "";
   string str_type = "*";  // "i", "f", "u", "f100", see reg_init.cpp
 };
