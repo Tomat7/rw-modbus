@@ -71,28 +71,37 @@ map<string, regprop_t> type_map{
 
   {"fhh", TYPE_FLOAT_HH},
   {"float_abcd", TYPE_FLOAT_HH},
+
   {"fhl", TYPE_FLOAT_HL},
   {"float_cdab", TYPE_FLOAT_HL},
+
   {"flh", TYPE_FLOAT_LH},
   {"float_badc", TYPE_FLOAT_LH},
+
   {"fll", TYPE_FLOAT_LL},
   {"float_dcba", TYPE_FLOAT_LL},
 
   {"f_abcd", TYPE_FLOAT_HH},
   {"d_abcd", TYPE_DOUBLE_HH},
+
   {"f_cdab", TYPE_FLOAT_HL},
   {"d_cdab", TYPE_DOUBLE_HL},
+
   {"f_badc", TYPE_FLOAT_LH},
   {"d_badc", TYPE_DOUBLE_LH},
+
   {"f_dcba", TYPE_FLOAT_LL},
   {"d_dcba", TYPE_DOUBLE_LL},
 
   {"dhh", TYPE_DOUBLE_HH},
   {"double_abcd", TYPE_DOUBLE_HH},
+
   {"dhl", TYPE_DOUBLE_HL},
   {"double_cdab", TYPE_DOUBLE_HL},
+
   {"dlh", TYPE_DOUBLE_LH},
   {"double_badc", TYPE_DOUBLE_LH},
+
   {"dll", TYPE_DOUBLE_LL},
   {"double_dcba", TYPE_DOUBLE_LL},
 
@@ -105,11 +114,9 @@ map<string, regprop_t> type_map{
 
 };
 
-Reg_c::~Reg_c() /* LOGD("DEstruct! %x %s", this, this->rn); */
-{}
+Reg_c::~Reg_c() { /* LOGD("DEstruct! %x %s", this, this->rn); */ }
 
-Reg_c::Reg_c() /* LOGD("Construct! %x", this);  */
-{}
+Reg_c::Reg_c() { /* LOGD("Construct! %x", this);  */ }
 
 Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)  // For Modbus regs only
 {

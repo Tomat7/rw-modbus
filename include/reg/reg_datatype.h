@@ -35,10 +35,8 @@ enum byteorder_t {
 };
 
 // { variable type, number of MB-words, byte-order }
-#define TYPE_U16 \
-  { UA_TYPES_UINT16, 1, BO_SNGL }
-#define TYPE_I16 \
-  { UA_TYPES_INT16, 1, BO_SNGL }
+#define TYPE_U16 { UA_TYPES_UINT16, 1, BO_SNGL }
+#define TYPE_I16 { UA_TYPES_INT16, 1, BO_SNGL }
 
 #define NOTUA_TYPES_1ST 1001  // first reg of "long" (32/64 bits) word
 #define NOTUA_TYPES_2ND 1002  // second reg of "long" (32/64 bits) word
@@ -47,10 +45,8 @@ enum byteorder_t {
 
 #define NOTUA_TYPES_F10 1010   // floatVar = ModbusVar_int16 / 10.0;
 #define NOTUA_TYPES_F100 1100  // floatVar = ModbusVar_int16 / 100.0;
-#define TYPE_F10 \
-  { NOTUA_TYPES_F10, 1, BO_F10 }
-#define TYPE_F100 \
-  { NOTUA_TYPES_F100, 1, BO_F100 }
+#define TYPE_F10 { NOTUA_TYPES_F10, 1, BO_F10 }
+#define TYPE_F100 { NOTUA_TYPES_F100, 1, BO_F100 }
 
 #define NOTUA_TYPES_HEX 2001
 #define NOTUA_TYPES_BINARY 2002
@@ -62,90 +58,58 @@ enum byteorder_t {
   TWO Modbus-words types
   See details - https://www.simplymodbus.ca/FAQ.htm#Order
 */
-#define TYPE_U32_HH \
-  { UA_TYPES_UINT32, 2, BO_HH }
-#define TYPE_U32_HL \
-  { UA_TYPES_UINT32, 2, BO_HL }
-#define TYPE_U32_LH \
-  { UA_TYPES_UINT32, 2, BO_LH }
-#define TYPE_U32_LL \
-  { UA_TYPES_UINT32, 2, BO_LL }
+#define TYPE_U32_HH { UA_TYPES_UINT32, 2, BO_HH }
+#define TYPE_U32_HL { UA_TYPES_UINT32, 2, BO_HL }
+#define TYPE_U32_LH { UA_TYPES_UINT32, 2, BO_LH }
+#define TYPE_U32_LL { UA_TYPES_UINT32, 2, BO_LL }
 #define TYPE_U32 TYPE_U32_HH  // Big-endian as default
 
-#define TYPE_I32_HH \
-  { UA_TYPES_INT32, 2, BO_HH }
-#define TYPE_I32_HL \
-  { UA_TYPES_INT32, 2, BO_HL }
-#define TYPE_I32_LH \
-  { UA_TYPES_INT32, 2, BO_LH }
-#define TYPE_I32_LL \
-  { UA_TYPES_INT32, 2, BO_LL }
+#define TYPE_I32_HH { UA_TYPES_INT32, 2, BO_HH }
+#define TYPE_I32_HL { UA_TYPES_INT32, 2, BO_HL }
+#define TYPE_I32_LH { UA_TYPES_INT32, 2, BO_LH }
+#define TYPE_I32_LL { UA_TYPES_INT32, 2, BO_LL }
 #define TYPE_I32 TYPE_I32_HH  // Big-endian as default
 
 // Float 32-bits (float Float_var = 123.00f)
-#define TYPE_FLOAT_HH \
-  { UA_TYPES_FLOAT, 2, BO_HH }
-#define TYPE_FLOAT_HL \
-  { UA_TYPES_FLOAT, 2, BO_HL }
-#define TYPE_FLOAT_LH \
-  { UA_TYPES_FLOAT, 2, BO_LH }
-#define TYPE_FLOAT_LL \
-  { UA_TYPES_FLOAT, 2, BO_LL }
+#define TYPE_FLOAT_HH { UA_TYPES_FLOAT, 2, BO_HH }
+#define TYPE_FLOAT_HL { UA_TYPES_FLOAT, 2, BO_HL }
+#define TYPE_FLOAT_LH { UA_TYPES_FLOAT, 2, BO_LH }
+#define TYPE_FLOAT_LL { UA_TYPES_FLOAT, 2, BO_LL }
 #define TYPE_FLOAT TYPE_FLOAT_HH  // Big-endian as default
 
 /*
   FOUR Modbus-words types
   See details - https://www.modbustools.com/poll_display_formats.html
 */
-#define TYPE_U64_HH \
-  { UA_TYPES_UINT64, 4, BO_HH }
-#define TYPE_U64_HL \
-  { UA_TYPES_UINT64, 4, BO_HL }
-#define TYPE_U64_LH \
-  { UA_TYPES_UINT64, 4, BO_LH }
-#define TYPE_U64_LL \
-  { UA_TYPES_UINT64, 4, BO_LL }
+#define TYPE_U64_HH { UA_TYPES_UINT64, 4, BO_HH }
+#define TYPE_U64_HL { UA_TYPES_UINT64, 4, BO_HL }
+#define TYPE_U64_LH { UA_TYPES_UINT64, 4, BO_LH }
+#define TYPE_U64_LL { UA_TYPES_UINT64, 4, BO_LL }
 #define TYPE_U64 TYPE_U64_HH  // Big-endian as default
 
-#define TYPE_I64_HH \
-  { UA_TYPES_INT64, 4, BO_HH }
-#define TYPE_I64_HL \
-  { UA_TYPES_INT64, 4, BO_HL }
-#define TYPE_I64_LH \
-  { UA_TYPES_INT64, 4, BO_LH }
-#define TYPE_I64_LL \
-  { UA_TYPES_INT64, 4, BO_LL }
+#define TYPE_I64_HH { UA_TYPES_INT64, 4, BO_HH }
+#define TYPE_I64_HL { UA_TYPES_INT64, 4, BO_HL }
+#define TYPE_I64_LH { UA_TYPES_INT64, 4, BO_LH }
+#define TYPE_I64_LL { UA_TYPES_INT64, 4, BO_LL }
 #define TYPE_I64 TYPE_I64_HH  // Big-endian as default
 
 // Double 64-bits (double Dbl_var = 12345.6789)
-#define TYPE_DOUBLE_HH \
-  { UA_TYPES_DOUBLE, 4, BO_HH }
-#define TYPE_DOUBLE_HL \
-  { UA_TYPES_DOUBLE, 4, BO_HL }
-#define TYPE_DOUBLE_LH \
-  { UA_TYPES_DOUBLE, 4, BO_LH }
-#define TYPE_DOUBLE_LL \
-  { UA_TYPES_DOUBLE, 4, BO_LL }
+#define TYPE_DOUBLE_HH { UA_TYPES_DOUBLE, 4, BO_HH }
+#define TYPE_DOUBLE_HL { UA_TYPES_DOUBLE, 4, BO_HL }
+#define TYPE_DOUBLE_LH { UA_TYPES_DOUBLE, 4, BO_LH }
+#define TYPE_DOUBLE_LL { UA_TYPES_DOUBLE, 4, BO_LL }
 #define TYPE_DOUBLE TYPE_DOUBLE_HH  // Big-endian as default
 
-#define TYPE_1ST \
-  { NOTUA_TYPES_1ST, 1, BO_1ST }  // ??
-#define TYPE_2ND \
-  { NOTUA_TYPES_2ND, 0, BO_2ND }  // Second word of 2-words type
-#define TYPE_3RD \
-  { NOTUA_TYPES_3RD, 0, BO_3RD }  // Third word of 4-words type
-#define TYPE_4TH \
-  { NOTUA_TYPES_4TH, 0, BO_4TH }  // Fourth word of 4-words type
+#define TYPE_1ST { NOTUA_TYPES_1ST, 1, BO_1ST }  // ??
+#define TYPE_2ND { NOTUA_TYPES_2ND, 0, BO_2ND }  // Second word of 2-words type
+#define TYPE_3RD { NOTUA_TYPES_3RD, 0, BO_3RD }  // Third word of 4-words type
+#define TYPE_4TH { NOTUA_TYPES_4TH, 0, BO_4TH }  // Fourth word of 4-words type
 
-#define TYPE_REFERENCED \
-  { NOTUA_TYPES_REF, 0, BO_REF }  // Reference to other
-#define TYPE_NOTHING \
-  { NOTUA_TYPES_NOTHING, 0, BO_NOTHING }  // No-type type
+#define TYPE_REFERENCED { NOTUA_TYPES_REF, 0, BO_REF }  // Reference to other
+#define TYPE_NOTHING { NOTUA_TYPES_NOTHING, 0, BO_NOTHING }  // No-type type
 
-#define TYPE_HEX \
-  { NOTUA_TYPES_HEX, 1, BO_HEX }  // HEX display type
-#define TYPE_BINARY \
-  { NOTUA_TYPES_BINARY, 1, BO_BINARY }  // Binary display type
+#define TYPE_HEX { NOTUA_TYPES_HEX, 1, BO_HEX }  // HEX display type
+#define TYPE_BINARY { NOTUA_TYPES_BINARY, 1, BO_BINARY }  // Binary display type
 
 #define ENUMCAST(x) static_cast<int>(x)  // ??
 /*
@@ -154,9 +118,7 @@ enum byteorder_t {
 */
 // FLOAT data types (two Modbus words)
 #define FLOAT_HH TYPE_FLOAT_HH
-#define FLOAT_ABCD                              \
-  TYPE_FLOAT_type_map[ptr_reg->str_type].rtype; \
-  H
+#define FLOAT_ABCD TYPE_FLOAT_HH
 #define FLOAT_BIGENDIAN TYPE_FLOAT_HH
 
 // High byte first, low word first. (Little-endian Swap)

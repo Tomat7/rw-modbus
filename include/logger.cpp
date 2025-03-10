@@ -25,9 +25,9 @@ static mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
 static queue<string> Print_queue;
 
-static const char* ch_color[9] = {
-//      Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7
-  C_STD, C_RED, C_MAGB, C_REDB, C_YELB, C_BLUB, C_GRN, C_CYN, C_STD
+static const char* ch_color[10] = {
+//  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7 X-8    Z-9
+  C_MAGB, C_RED, C_MAGB, C_REDB, C_YELB, C_BLUB, C_GRN, C_CYN, C_STD, C_STD
 };
 
 

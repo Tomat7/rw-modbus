@@ -10,13 +10,16 @@
 #include <modbus/modbus.h>
 #include <string.h>
 
-#include <atomic>
-#include <ctime>
-#include <iostream>
-#include <map>
-#include <mutex>
+// #include <atomic>
+/*
+  #include <ctime>
+  #include <iostream>
+  #include <map>
+  #include <mutex>
+  #include <vector>
+*/
+
 #include <string>
-#include <vector>
 
 #include "include/opc/opc_class.h"
 #include "include/plc/plc_class.h"
@@ -69,8 +72,7 @@ public:
   int var_mode = 0;                // 1 - "rw", 0 - "readonly"
   int var_type = UA_TYPES_UINT16;  // for OPC UA server (ex. UA_TYPES_FLOAT)
   int var_size = 1;  // for multiply Modbus registers (ex. 32-bit Float)
-  byteorder_t byte_order =
-    BO_SNGL;           // for 32/64-bit Modbus register (Big-Endian & other)
+  byteorder_t byte_order = BO_SNGL;// for 32/64-bit Modbus register
   bool visible = false;  // try to hide 2nd/3rd/4th word of multiply MB regs
   bool is_modbus = false;
   bool is_scada = false;

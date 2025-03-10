@@ -1,8 +1,8 @@
-/* 
-#include <open62541/plugin/log_stdout.h>
-#include <open62541/server.h>
-#include <open62541/server_config_default.h>
- */
+/*
+  #include <open62541/plugin/log_stdout.h>
+  #include <open62541/server.h>
+  #include <open62541/server_config_default.h>
+*/
 //#include "include/open62541/open62541.h"
 
 #include <map>
@@ -12,6 +12,7 @@
 #include <typeindex>
 #include <typeinfo>
 
+#include "include/console.h"
 #include "include/logger.h"
 #include "opc_class.h"
 
@@ -50,12 +51,19 @@ void OpcServer_c::init(UA_UInt16 _port)
   uaDataMux = new mutex;
   // uaGetMux = new mutex;
   //uaServer = UA_Server_new();
-  UA_ServerConfig* uaServerConfig = UA_Server_getConfig(uaServer);
-  UA_ServerConfig_setDefault(uaServerConfig);
-  init_config(uaServerConfig);
-  UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
+  UA_ServerConfig uaServerConfig;
+  //  = UA_Server_getConfig(uaServer);
+  memset(&uaServerConfig, 0, sizeof(UA_ServerConfig));
+  //UA_ServerConfig_setDefault(uaServerConfig);
+  LOGFORCE("Memset done");
+  UA_ServerConfig_setMinimal(&uaServerConfig, uaPort, NULL);
+  //UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
+  LOGFORCE("SetMinimal done");
+  wait_console(3);
+  init_config(&uaServerConfig);
+  LOGFORCE("INIT done");
 
-  uaServer = UA_Server_newWithConfig(uaServerConfig);
+  uaServer = UA_Server_newWithConfig(&uaServerConfig);
   uaVariant = UA_Variant_new();
 
   LOGN("Init: server ready to start on port:%d", uaPort);

@@ -7,12 +7,6 @@
 
 #include "reg_class.h"
 
-//#include <fcntl.h>
-//#include <stdarg.h>
-//#include <sys/mman.h>
-//#include <unistd.h>
-
-//#include <map>
 #include <string>
 
 #include "include/logger.h"
@@ -24,8 +18,8 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-value_u Reg_c::pull_plc_regs_by_order(
-  byteorder_t _bo)  // Get reg's local value != read PLC.
+// Get reg's local value != read PLC.
+value_u Reg_c::pull_plc_regs_by_order(byteorder_t _bo)
 {
   value_u _val;
   uint16_t mb2u[4] = {0};

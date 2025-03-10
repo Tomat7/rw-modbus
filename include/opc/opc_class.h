@@ -9,9 +9,10 @@
 //#include "include/open62541/open62541.h"
 #include <string.h>
 
-#include <iostream>
-#include <map>
+//#include <iostream>
+
 #include <mutex>
+#include <map>
 #include <string>
 #include <typeindex>
 #include <typeinfo>

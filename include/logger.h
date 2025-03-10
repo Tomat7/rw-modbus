@@ -33,16 +33,17 @@
 #define FILE_LINE __FILE__ ":" STR(__LINE__)
 #define _FL_ FILE_LINE
 
-#define LOGFORCE(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)
-#define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
-#define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
-#define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)
-#define LOGW(...) logger(FILE_LINE, LOG_WARNING, __func__, __VA_ARGS__)
-#define LOGN(...) logger(FILE_LINE, LOG_NOTICE, __func__, __VA_ARGS__)
-#define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
-#define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)
-#define LOGX(...) logger(FILE_LINE, 8, __func__, __VA_ARGS__)
-#define LOGZ(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)
+#define LOGFORCE(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)       // 0 
+#define LOGALWAYS(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)      // 0 
+#define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)   // 1
+#define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)    // 2
+#define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)     // 3
+#define LOGW(...) logger(FILE_LINE, LOG_WARNING, __func__, __VA_ARGS__) // 4
+#define LOGN(...) logger(FILE_LINE, LOG_NOTICE, __func__, __VA_ARGS__)  // 5
+#define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)    // 6
+#define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)   // 7
+#define LOGX(...) logger(FILE_LINE, 8, __func__, __VA_ARGS__)           // 8
+#define LOGZ(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)           // 9
 
 #define LOGIFA(...) logif(rc, FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
 #define LOGIFC(...) logif(rc, FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
