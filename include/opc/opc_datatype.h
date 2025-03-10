@@ -13,16 +13,6 @@
 
 using namespace std;
 
-/*
-  using fl2 = uint16_t[2];
-  using dbl4 = uint16_t[4];
-  using byte8 = uint8_t[8];
-
-  using value_u = variant<int16_t, int32_t, int64_t, uint16_t, uint32_t,
-      uint64_t, int64_t, float, double,
-      fl2, dbl4, byte8>;
-*/
-
 union value_u {
   int16_t i16;
   int32_t i32;

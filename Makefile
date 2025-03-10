@@ -19,10 +19,11 @@ CXX_VER=c++20
 OUTFILE=a.out
 OBJDIR =./tmp/obj
 SUBDIRS= include sources
-
 INCLUDES = -I.
 LIBS=libmodbus libconfig++ open62541
-LDLIBS= -lrt -lpthread
+LDLIBS= -lrt -lpthread -lmbedtls 
+#-lmbedx509 -lmbedcrypto
+#OPEN62541_O= include/open62541/open62541.o
 LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
 ALLDIRS= $(foreach dir,$(SUBDIRS),$(shell find -L $(dir) -maxdepth 1 -type d))
@@ -169,19 +170,18 @@ fulldebug: clean $(OUTFILE)
 #a.out: $(OBJLIST)
 $(OUTFILE): $(OBJLIST)
 	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
-#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(OUTFILE) $(LDLIBS)
 	$(LINK.o) $(OPTFLAGS) $^ $(LDLIBS) -o $@
 	@echo -e $(GRE)"=== Finished$(MESSAGE) ==="$(NC)
 	@ls -Fog --color $(OUTFILE)
 	@echo -e $(GRE)$(MESSAGE_DEBUG)$(NC)
 	sleep 2
-
+#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(OUTFILE) $(LDLIBS)
+#	$(LINK.o) $(OPTFLAGS) $(OPEN62541_O) $^ $(LDLIBS) -o $@
 #================== Compiling ==============================
 $(OBJDIR)/%.o: %.cpp
 	@echo -e $(YEL)"=== Compiling$(MESSAGE): $<"$(NC)
-#	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 	$(COMPILE.cpp) $(INCLUDES) $(OPTFLAGS) $(DEPFLAGS)/$<.d -o $@ $<
-
+#	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 # ================== Cleaning =============================
 clean: format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)

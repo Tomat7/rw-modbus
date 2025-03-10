@@ -1,17 +1,14 @@
-
-#include <open62541/plugin/log_stdout.h>
-#include <open62541/server.h>
-#include <open62541/server_config_default.h>
-
+/*
+  #include <open62541/plugin/log_stdout.h>
+  #include <open62541/server.h>
+  #include <open62541/server_config_default.h>
+*/
 //#include "include/open62541/open62541.h"
 
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) \
-  if (isDebug) { \
-    a            \
-  }
+#define DEBUG(a) if(isDebug){a}
 
 void* OpcServer_c::getVariantDataPtr(string s)
 {

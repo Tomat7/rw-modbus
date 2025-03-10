@@ -1,8 +1,8 @@
-
+/* 
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
-
+ */
 //#include "include/open62541/open62541.h"
 
 #include <map>
@@ -15,23 +15,11 @@
 #include "include/logger.h"
 #include "opc_class.h"
 
-#define DEBUG(a) \
-  if (isDebug) { \
-    a            \
-  }
+#define DEBUG(a) if(isDebug){a}
 
-bool operator<(const value_u &v1, const value_u &v2)
-{
-  return v1.ui64 < v2.ui64;
-}
-bool operator>(const value_u &v1, const value_u &v2)
-{
-  return v1.ui64 > v2.ui64;
-}
-bool operator!=(const value_u &v1, const value_u &v2)
-{
-  return v1.ui64 != v2.ui64;
-}
+bool operator<(const value_u &v1, const value_u &v2) { return v1.ui64 < v2.ui64; }
+bool operator>(const value_u &v1, const value_u &v2) { return v1.ui64 > v2.ui64; }
+bool operator!=(const value_u &v1, const value_u &v2) { return v1.ui64 != v2.ui64; }
 
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
@@ -59,15 +47,17 @@ void OpcServer_c::init(UA_UInt16 _port)
     uaPort = _port;
 
   uaSrvMux = new mutex;
-  // uaGetMux = new mutex;
   uaDataMux = new mutex;
-  uaServer = UA_Server_new();
-  uaVariant = UA_Variant_new();
-
+  // uaGetMux = new mutex;
+  //uaServer = UA_Server_new();
   UA_ServerConfig* uaServerConfig = UA_Server_getConfig(uaServer);
   UA_ServerConfig_setDefault(uaServerConfig);
   init_config(uaServerConfig);
   UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
+
+  uaServer = UA_Server_newWithConfig(uaServerConfig);
+  uaVariant = UA_Variant_new();
+
   LOGN("Init: server ready to start on port:%d", uaPort);
 }
 

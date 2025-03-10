@@ -4,6 +4,9 @@
 
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
+#include <open62541/server_config_default.h>
+
+//#include "include/open62541/open62541.h"
 #include <string.h>
 
 #include <iostream>
@@ -46,8 +49,7 @@ public:
   void delVar(string s);
 
   value_u ReadRawValue(string s);  // returns saved value_union
-  bool WriteRawValue(string s, value_u raw_val,
-                     bool isOK);  // write value_union
+  bool WriteRawValue(string s, value_u raw_val, bool isOK);  // write value_u
 
   int RefreshAllValues();  // getVar for ALL variables, returns - qty of vars
 
