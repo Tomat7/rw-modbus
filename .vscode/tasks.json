@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run.Build",
+            "group": "build",
+            "type": "shell",
+            "command": "make",
+            "args": ["run"]
+        },
+        {
+            "label": "Debug.Build",
+            "group": "build",
+            "type": "shell",
+            "command": "make",
+            "args": ["debug"]
+        },
+        {
+            "label": "Full.Build",
+            "group": "build",
+            "type": "shell",
+            "command": "make",
+            "args": ["fulldebug"]
+        }
+    ]
+}

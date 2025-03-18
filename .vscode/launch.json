@@ -1,0 +1,54 @@
+{
+    "configurations": [
+    {
+        "name": "Compile&Run",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/a.out",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "preLaunchTask": "Run.Build",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+    },
+    {
+        "name": "GDB Debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/a.out",
+        "args": ["scada"],
+        "stopAtEntry": true,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "preLaunchTask": "Debug.Build",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+    }
+    ]
+}
