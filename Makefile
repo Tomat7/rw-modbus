@@ -185,10 +185,13 @@ $(OBJDIR)/%.o: %.cpp
 # ================== Cleaning =============================
 clean: format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
-	@rm -rfv $(OBJFILES) $(DEPFILES)
-	rm -rfv a.out
-	find test -maxdepth 5 -type f -name *.o -print -delete
-	find test -maxdepth 5 -type f -name *.d -print -delete
+#	@rm -rfv $(OBJFILES) $(DEPFILES)
+#	rm -rfv a.out
+#	find test -maxdepth 5 -type f -name *.o -print -delete
+#	find test -maxdepth 5 -type f -name *.d -print -delete
+	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print
+	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
+
 	@echo $(SRCDIR1)
 
 # ================== Formatting ===========================
