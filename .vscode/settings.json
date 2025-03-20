@@ -73,6 +73,14 @@
         "complex": "cpp",
         "list": "cpp",
         "future": "cpp",
-        "cfenv": "cpp"
+        "cfenv": "cpp",
+        "csetjmp": "cpp",
+        "cuchar": "cpp",
+        "forward_list": "cpp",
+        "unordered_set": "cpp",
+        "regex": "cpp",
+        "scoped_allocator": "cpp",
+        "shared_mutex": "cpp",
+        "valarray": "cpp"
     }
 }

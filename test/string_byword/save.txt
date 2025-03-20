@@ -1,0 +1,21 @@
+{
+    string line_str = "a line of text to iterate through";
+    string word;
+    
+    // istringstream iss(line_str, istringstream::in);
+
+    std::string cmdline = "ls" + string(">") + LS_OUTFILE;
+    std::system(cmdline.c_str()); // executes the UNIX command 
+    std::cout << std::ifstream(LS_OUTFILE).rdbuf();
+
+    std::stringstream ss;
+    ss << std::ifstream(LS_OUTFILE).rdbuf();
+
+    istringstream iss(ss.str(), istringstream::in);
+    // stringstream iss(ss.str());
+
+    while (iss >> word)
+    {
+        printf("%s\n", word.c_str()); // Do something on `word` here...
+    }
+}
