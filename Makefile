@@ -24,6 +24,17 @@ LIBS=libmodbus libconfig++ open62541
 LDLIBS= -lrt -lpthread -lmbedtls 
 #-lmbedx509 -lmbedcrypto
 #OPEN62541_O= include/open62541/open62541.o
+
+# === C/CPP flags configuration ===
+CXXFLAGS= -Wall -std=$(CXX_VER)
+LDFLAGS = -Wall -std=$(CXX_VER)
+DEPFLAGS= -MD -MF $(OBJDIR)
+OPTFLAGS= -flto=auto -Os -s -Wl,--as-needed
+
+ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
+
+
+# ==== Folders processing ===
 LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
 ALLDIRS= $(foreach dir,$(SUBDIRS),$(shell find -L $(dir) -maxdepth 1 -type d))
@@ -44,15 +55,18 @@ CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 OUTF=$(shell ls -Fog $(OUTFILE))
 
 
-# === C++ version/standart (trick for Astra Linux) ===
+# === C++ version/standart (trick for Astra Linux 1.7) ===
 # CXX = g++ # by default
-CXX_ASTRA=/usr/lib/gcc-astra/bin/g++
-ifeq ("c++20", "$(CXX_VER)")
-ifneq ("$(wildcard $(CXX_ASTRA))","")
-CXX=$(CXX_ASTRA)
-endif
-$(info === C++ std v.20 activated! === )
-endif
+# 2025-03-21 upgraded to Astra 1.8 -> not need anymore
+#
+#CXX_ASTRA=/usr/lib/gcc-astra/bin/g++
+#ifeq ("c++20", "$(CXX_VER)")
+#ifneq ("$(wildcard $(CXX_ASTRA))","")
+#CXX=$(CXX_ASTRA)
+#endif
+#$(info === C++ std v.20 activated! === )
+#endif
+
 CC=$(CXX)
 
 
@@ -67,13 +81,6 @@ CC=$(CXX)
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=hello
 
-# === C/CPP flags configuretion ===
-CXXFLAGS= -Wall -std=$(CXX_VER)
-LDFLAGS = -Wall -std=$(CXX_VER)
-DEPFLAGS= -MD -MF $(OBJDIR)
-OPTFLAGS= -flto=auto -O2
-
-ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
 # === "Stolen" here https://codeforces.com/blog/entry/15547
 WARN1_FLAGS= -Wextra -Wfatal-errors -pedantic -Wformat=2 -fconcepts
@@ -177,11 +184,13 @@ $(OUTFILE): $(OBJLIST)
 	sleep 2
 #	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(OUTFILE) $(LDLIBS)
 #	$(LINK.o) $(OPTFLAGS) $(OPEN62541_O) $^ $(LDLIBS) -o $@
+
 #================== Compiling ==============================
 $(OBJDIR)/%.o: %.cpp
 	@echo -e $(YEL)"=== Compiling$(MESSAGE): $<"$(NC)
 	$(COMPILE.cpp) $(INCLUDES) $(OPTFLAGS) $(DEPFLAGS)/$<.d -o $@ $<
 #	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
+
 # ================== Cleaning =============================
 clean: format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
@@ -189,7 +198,7 @@ clean: format-linux
 #	rm -rfv a.out
 #	find test -maxdepth 5 -type f -name *.o -print -delete
 #	find test -maxdepth 5 -type f -name *.d -print -delete
-	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print
+#	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print
 	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
 
 	@echo $(SRCDIR1)

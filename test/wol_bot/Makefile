@@ -27,6 +27,13 @@ LIBS=
 LDLIBS=  -lTgBot -lboost_system -lssl -lcrypto -lpthread -lcurl
 #/usr/local/lib/libTgBot.a /usr/lib/x86_64-linux-gnu/libboost_system.so -lrt -lpthread -lmbedtls 
 
+# === C/CPP flags configuretion ===
+CXXFLAGS= -Wall -std=$(CXX_VER) -DHAVE_CURL 
+LDFLAGS = -Wall -std=$(CXX_VER)
+DEPFLAGS= -MD -MF $(OBJDIR)
+OPTFLAGS= -flto=auto -Os -s -Wl,--as-needed
+
+
 #-lmbedx509 -lmbedcrypto
 #OPEN62541_O= include/open62541/open62541.o
 LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
@@ -72,11 +79,6 @@ CC=$(CXX)
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=hello
 
-# === C/CPP flags configuretion ===
-CXXFLAGS= -Wall -std=$(CXX_VER) -DHAVE_CURL 
-LDFLAGS = -Wall -std=$(CXX_VER)
-DEPFLAGS= -MD -MF $(OBJDIR)
-OPTFLAGS= -flto=auto -Os -s -Wl,--as-needed
 
 ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
