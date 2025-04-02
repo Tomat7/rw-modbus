@@ -22,9 +22,7 @@ SUBDIRS= include sources
 
 INCLUDES = -I.
 LIBS=libmodbus libconfig++ open62541
-LDLIBS= -lrt -lpthread -lmbedtls 
-#-lmbedx509 -lmbedcrypto
-#OPEN62541_O= include/open62541/open62541.o
+LDLIBS= -lrt -lpthread -lmbedtls #-lmbedx509 -lmbedcrypto #OPEN62541_O= include/open62541/open62541.o
 OBJDIR =./tmp/obj
 CC=$(CXX)
 
@@ -32,8 +30,7 @@ CC=$(CXX)
 CXXFLAGS= -Wall -std=$(CXX_VER)
 LDFLAGS = -Wall -std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
-OPTFLAGS= -flto=auto -O2
-#-Os -s -Wl,--as-needed
+OPTFLAGS= -flto=auto -O2 #-Os -s -Wl,--as-needed
 
 ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
@@ -70,8 +67,6 @@ OUTF=$(shell ls -Fog $(EXEC_FILE))
 #$(info === C++ std v.20 activated! === )
 #endif
 
-
-
 # === Add libs here === OLD!!
 #LIBCONFIG=$(shell pkg-config --libs libconfig++)
 #LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
@@ -92,16 +87,13 @@ GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2
 SANIT_FLAGS= -fstack-protector -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
 DEBUG_FLAGS= -g -DDEBUG_FLAG
 
-CXXFLAGS+= $(WARN1_FLAGS)
-CXXFLAGS+= $(WARN2_FLAGS)
-CXXFLAGS+= $(WARN3_FLAGS)
+CXXFLAGS+= $(WARN1_FLAGS) $(WARN2_FLAGS) $(WARN3_FLAGS)
 #CXXFLAGS+= $(GLIBC_FLAGS)
 #CXXFLAGS+= $(SANIT_FLAGS)
 #CXXFLAGS+= -fanalyzer
 
 # === Check for DEBUG build ===
-# === My Project depends! ===
-MESSAGE_DEBUG="==="
+MESSAGE_DEBUG="===+++===+++==="
 
 ifeq ("master","$(filter master,$(MAKECMDGOALS))")
 CPPFLAGS+= -DMB_MASTER
@@ -156,7 +148,7 @@ endif
 RED='\033[0;91m' \033[32m<text> 
 GRE="\033[0;32m"
 GRB="\033[0;92m"
-YEL="\033[0;93m"
+YEL="\033[0;93m"# === My Project depends! ===
 YEB="\033[1;33m"
 BLU='\033[0;94m'
 WHI='\033[0;97m'
@@ -194,44 +186,51 @@ $(OBJDIR)/%.o: %.cpp
 #	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 
 # ================== Cleaning =============================
-clean: format-linux
-	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
+clean: format
+	@echo -e $(BLU)"=== Cleaning UP with... $<"$(NC)
 #	@rm -rfv $(OBJFILES) $(DEPFILES)
 	@rm -rfv $(EXEC_FILE)
 #	find test -maxdepth 5 -type f -name *.o -print -delete
-#	find test -maxdepth 5 -type f -name *.d -print -delete
-#	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print
 	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
-
-	@echo $(SRCDIR1)
+#	@echo $(SRCDIR1)
 
 # ================== Formatting ===========================
 # Simple format current directory only
-clang:
-	clang-format -i --verbose *.cpp *.h
+format: AStyle-linux
 
-google:
-	clang-format -i -style=google --verbose *.cpp *.h
+clang: Clang-LLVM
+#	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+#	clang-format -i --verbose *.cpp *.h
+
+google: Clang-google
+#	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+#	clang-format -i -style=google --verbose *.cpp *.h
 
 # ================ ALL FILE recursively! ==================
 # Reindent *.cpp to Linux code-style
-format-linux:
+AStyle-linux:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n -s2 --style=linux $(ASTYLEFILES)
 
-format-kr:
+AStyle-kr:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n --style=kr $(ASTYLEFILES)
 
-format-allman:
+AStyle-allman:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n --style=allman $(ASTYLEFILES)
 
-format-google2:
+AStyle-google:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n -s2 --style=google $(ASTYLEFILES)
 
 # Reindent *.cpp to LLVM code-style by clang-format
-format-clang:
+Clang-LLVM:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	clang-format -i -style=LLVM --verbose $(CLANGFILES)
 
-format-google:
+Clang-google:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	clang-format -i -style=google --verbose $(CLANGFILES)
 
 # === eof ===
