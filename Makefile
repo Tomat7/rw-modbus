@@ -27,8 +27,9 @@ OBJDIR =./tmp/obj
 CC=$(CXX)
 
 # === C/CPP flags configuration ===
-CXXFLAGS= -Wall -std=$(CXX_VER)
-LDFLAGS = -Wall -std=$(CXX_VER)
+CPPFLAGS= -std=$(CXX_VER)
+CXXFLAGS= -Wall -Wextra -Wpedantic -Wfatal-errors
+#LDFLAGS = -Wall #-std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
 OPTFLAGS= -flto=auto -O2 #-Os -s -Wl,--as-needed
 
@@ -54,19 +55,6 @@ CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 
 OUTF=$(shell ls -Fog $(EXEC_FILE))
 
-
-# === C++ version/standart (trick for Astra Linux 1.7) ===  OLD!!
-# CXX = g++ # by default
-# 2025-03-21 upgraded to Astra 1.8 -> not need anymore
-#
-#CXX_ASTRA=/usr/lib/gcc-astra/bin/g++
-#ifeq ("c++20", "$(CXX_VER)")
-#ifneq ("$(wildcard $(CXX_ASTRA))","")
-#CXX=$(CXX_ASTRA)
-#endif
-#$(info === C++ std v.20 activated! === )
-#endif
-
 # === Add libs here === OLD!!
 #LIBCONFIG=$(shell pkg-config --libs libconfig++)
 #LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
@@ -79,15 +67,16 @@ OUTF=$(shell ls -Fog $(EXEC_FILE))
 #EXECUTABLE=hello
 
 
-# === "Stolen" here https://codeforces.com/blog/entry/15547
-WARN1_FLAGS= -Wextra -Wfatal-errors -pedantic -Wformat=2 -fconcepts
-WARN2_FLAGS= -Wshadow -Wfloat-equal -Wconversion -Wduplicated-cond
-WARN3_FLAGS= -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wlogical-op
+# === Add more warning. "Stolen" here https://codeforces.com/blog/entry/15547
+WARN1_FLAGS= -Wshadow -Wformat=2 -Wfloat-equal -Wconversion
+WARN2_FLAGS= -Wcast-align -Wcast-qual
+WARN3_FLAGS= -Wduplicated-cond -Wlogical-op -Wshift-overflow=2
+CXXFLAGS+=$(WARN1_FLAGS) $(WARN2_FLAGS) $(WARN3_FLAGS)
+
+# === For debugging & "deep" research
 GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 
 SANIT_FLAGS= -fstack-protector -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
 DEBUG_FLAGS= -g -DDEBUG_FLAG
-
-CXXFLAGS+= $(WARN1_FLAGS) $(WARN2_FLAGS) $(WARN3_FLAGS)
 #CXXFLAGS+= $(GLIBC_FLAGS)
 #CXXFLAGS+= $(SANIT_FLAGS)
 #CXXFLAGS+= -fanalyzer
@@ -198,6 +187,8 @@ clean: format
 # Simple format current directory only
 format: AStyle-linux
 
+kr: AStyle-KR
+
 clang: Clang-LLVM
 #	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 #	clang-format -i --verbose *.cpp *.h
@@ -211,7 +202,7 @@ AStyle-linux:
 	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n -s2 --style=linux $(ASTYLEFILES)
 
-AStyle-kr:
+AStyle-KR:
 	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n --style=kr $(ASTYLEFILES)
 
