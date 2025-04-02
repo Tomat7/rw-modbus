@@ -81,6 +81,8 @@
         "regex": "cpp",
         "scoped_allocator": "cpp",
         "shared_mutex": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "any": "cpp",
+        "expected": "cpp"
     }
 }

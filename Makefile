@@ -16,29 +16,32 @@ $(info === The GOALS is: $(MAKECMDGOALS))
 
 # === COMMON: Version/standard & Directories & files & libraries ===
 CXX_VER=c++20
-OUTFILE=a.out
-OBJDIR =./tmp/obj
+EXEC_FILE=a.out
+SRCDIRS= .
 SUBDIRS= include sources
+
 INCLUDES = -I.
 LIBS=libmodbus libconfig++ open62541
 LDLIBS= -lrt -lpthread -lmbedtls 
 #-lmbedx509 -lmbedcrypto
 #OPEN62541_O= include/open62541/open62541.o
+OBJDIR =./tmp/obj
+CC=$(CXX)
 
 # === C/CPP flags configuration ===
 CXXFLAGS= -Wall -std=$(CXX_VER)
 LDFLAGS = -Wall -std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
-OPTFLAGS= -flto=auto -Os -s -Wl,--as-needed
+OPTFLAGS= -flto=auto -O2
+#-Os -s -Wl,--as-needed
 
 ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
-
 
 # ==== Folders processing ===
 LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
 ALLDIRS= $(foreach dir,$(SUBDIRS),$(shell find -L $(dir) -maxdepth 1 -type d))
-SRCDIRS=. $(ALLDIRS)
+SRCDIRS+= $(ALLDIRS)
 
 $(shell mkdir $(OBJDIR) 2>/dev/null)
 $(foreach dir,$(SRCDIRS),$(shell mkdir $(OBJDIR)/$(dir) 2>/dev/null))
@@ -52,10 +55,10 @@ OBJFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.o))
 ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
 CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 
-OUTF=$(shell ls -Fog $(OUTFILE))
+OUTF=$(shell ls -Fog $(EXEC_FILE))
 
 
-# === C++ version/standart (trick for Astra Linux 1.7) ===
+# === C++ version/standart (trick for Astra Linux 1.7) ===  OLD!!
 # CXX = g++ # by default
 # 2025-03-21 upgraded to Astra 1.8 -> not need anymore
 #
@@ -67,7 +70,6 @@ OUTF=$(shell ls -Fog $(OUTFILE))
 #$(info === C++ std v.20 activated! === )
 #endif
 
-CC=$(CXX)
 
 
 # === Add libs here === OLD!!
@@ -104,14 +106,14 @@ MESSAGE_DEBUG="==="
 ifeq ("master","$(filter master,$(MAKECMDGOALS))")
 CPPFLAGS+= -DMB_MASTER
 MESSAGE=" MASTER"
-OUTFILE=mb_master
+EXEC_FILE=mb_master
 $(info === MASTER mode activated! ===)
 endif
 
 ifeq ("slave","$(filter slave,$(MAKECMDGOALS))")
 CPPFLAGS+= -DMB_SLAVE
 MESSAGE=" SLAVE"
-OUTFILE=mb_slave
+EXEC_FILE=mb_slave
 $(info === SLAVE mode activated! ===)
 endif
 
@@ -164,25 +166,25 @@ NC='\033[0m' # No Color
 
 include $(DEPFILES)
 
-all: $(OUTFILE)
-master: $(OUTFILE)
-slave: $(OUTFILE)
+all: $(EXEC_FILE)
+master: $(EXEC_FILE)
+slave: $(EXEC_FILE)
 
-run: clean $(OUTFILE)
-check: clean $(OUTFILE)
-debug: clean $(OUTFILE)
-fulldebug: clean $(OUTFILE)
+run: clean $(EXEC_FILE)
+check: clean $(EXEC_FILE)
+debug: clean $(EXEC_FILE)
+fulldebug: clean $(EXEC_FILE)
 
 # ================ Linking ================================
 #a.out: $(OBJLIST)
-$(OUTFILE): $(OBJLIST)
+$(EXEC_FILE): $(OBJLIST)
 	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
 	$(LINK.o) $(OPTFLAGS) $^ $(LDLIBS) -o $@
 	@echo -e $(GRE)"=== Finished$(MESSAGE) ==="$(NC)
-	@ls -Fog --color $(OUTFILE)
+	@ls -Fog --color $(EXEC_FILE)
 	@echo -e $(GRE)$(MESSAGE_DEBUG)$(NC)
 	sleep 2
-#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(OUTFILE) $(LDLIBS)
+#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(EXEC_FILE) $(LDLIBS)
 #	$(LINK.o) $(OPTFLAGS) $(OPEN62541_O) $^ $(LDLIBS) -o $@
 
 #================== Compiling ==============================
@@ -195,7 +197,7 @@ $(OBJDIR)/%.o: %.cpp
 clean: format-linux
 	@echo -e $(BLU)"=== Cleaning UP..."$(NC)
 #	@rm -rfv $(OBJFILES) $(DEPFILES)
-#	rm -rfv a.out
+	@rm -rfv $(EXEC_FILE)
 #	find test -maxdepth 5 -type f -name *.o -print -delete
 #	find test -maxdepth 5 -type f -name *.d -print -delete
 #	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print
@@ -232,4 +234,5 @@ format-clang:
 format-google:
 	clang-format -i -style=google --verbose $(CLANGFILES)
 
-# ===
+# === eof ===
+
