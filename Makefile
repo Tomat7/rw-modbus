@@ -206,8 +206,7 @@ google: Clang-google
 #	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 #	clang-format -i -style=google --verbose *.cpp *.h
 
-# ================ ALL FILE recursively! ==================
-# Reindent *.cpp to Linux code-style
+# ================ Styling ALL SRC FILES recursively! ==================
 AStyle-linux:
 	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n -s2 --style=linux $(ASTYLEFILES)
@@ -224,7 +223,6 @@ AStyle-google:
 	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	astyle $(ASTYLEFLAGS) -n -s2 --style=google $(ASTYLEFILES)
 
-# Reindent *.cpp to LLVM code-style by clang-format
 Clang-LLVM:
 	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	clang-format -i -style=LLVM --verbose $(CLANGFILES)
