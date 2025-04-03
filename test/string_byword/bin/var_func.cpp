@@ -114,7 +114,7 @@ void* getPtrToVariable(void* var, char* &vName, int& vType, bool isDebug)
   void *val = nullptr;
   var_t* v = (var_t*)var;
 
-  vName = v->name;
+  vName = v->ua_varname;
   vType = v->type;
 
   if (vType == UA_TYPES_DATETIME) {

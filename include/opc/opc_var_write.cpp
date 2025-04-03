@@ -10,13 +10,14 @@
 
 #define DEBUG(a) if(isDebug){a}
 
-bool OpcServer_c::WriteRawValue(string s, value_u raw_vu, bool isOK)
+
+bool OpcServer_c::WriteRawUnion(string s, value_u raw_vu, bool isOK)
 {
   bool ret = false;
   uaDataMux->lock();
 
   if (vars.count(s)) {
-    vars[s].value = raw_vu;
+    vars[s].raw_value = raw_vu;
     vars[s].ptr_value = &raw_vu;
     writeVariable(vars[s], isOK);
     ret = true;

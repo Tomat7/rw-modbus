@@ -13,7 +13,7 @@ void addCurrentTimeDataSourceVariable(UA_Server* server);
 void addCurrentTimeExternalDataSource(UA_Server* server);
 
 struct var_t {
-  char* name;
+  char* ua_varname;
   int type;           // UA_TYPES_INT16, UA_TYPES_UINT16, UA_TYPES_INT32, UA_TYPES_UINT32, 
                       // UA_TYPES_INT64, UA_TYPES_UINT64, UA_TYPES_FLOAT, UA_TYPES_DATETIME
   union value_u {

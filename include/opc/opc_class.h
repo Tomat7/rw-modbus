@@ -45,33 +45,33 @@ public:
     int getType(string s);
     int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
   */
-  bool isVariable(string s);
-  bool isGood(string s);  // OPC var has no errors
+  bool isVariable(string s);  // Variable exist
+  bool isGood(string s);      // OPC var has no errors
 
-  string LookupVar(string s);
+  string getVarFullName(string s);
   void delVar(string s);
 
   value_u ReadRawValue(string s);  // returns saved value_union
-  bool WriteRawValue(string s, value_u raw_val, bool isOK);  // write value_u
+  bool WriteRawUnion(string s, value_u raw_val, bool isOK);  // write value_u
 
   int RefreshAllValues();  // getVar for ALL variables, returns - qty of vars
 
   // for init
   template <typename T>
-  int addVar(string s, T Value, int rmode);
+  int addVar(string s, T Number, int rmode);
 
-  // get T value and set Value_set
+  // return T value and set Numeric_set
   template <typename T>
-  T updateVar(string s, T Value_set, bool isOK);
+  T updateVar(string s, T Numeric_set, bool isOK);
 
-  // ask OPC server for current value
+  // ask OPC server for current value (refresh)
   template <typename T>
-  T getValue(string s);
+  T getNumber(string s);
 
   template <typename T>
-  bool getValue(string s, T &x);
+  bool ReadNumber(string s, T &x);
 
-  // read value saved on previous getValue
+  // read value saved on previous/last correct getValue
   template <typename T>
   T readValue(string s);
 
@@ -85,8 +85,7 @@ private:
   UA_UInt16 uaPort = 4840;
   UA_Server* uaServer = nullptr;
   UA_Variant* uaVariant = nullptr;
-  mutex* uaSrvMux = nullptr;
-  // mutex* uaGetMux = nullptr;
+  mutex* uaSrvMux = nullptr;  // mutex* uaGetMux = nullptr;
   mutex* uaDataMux = nullptr;
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
@@ -110,7 +109,7 @@ private:
   bool getNumericValue(string s, T &Value);
 
   template <typename T>
-  void setNumericValue(string s, T Value_set, bool isOK = true);
+  void WriteNumericValue(string s, T Numeric_set, bool isOK = true);
 
   badvalue_t bad_value;
   map<string, var_t> vars;     // All regs here.

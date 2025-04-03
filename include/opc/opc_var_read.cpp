@@ -10,6 +10,7 @@
 
 #define DEBUG(a) if(isDebug){a}
 
+
 void* OpcServer_c::getVariantDataPtr(string s)
 {
   if (vars.count(s)) {
@@ -30,8 +31,8 @@ bool OpcServer_c::refreshRawValue(string s)
   void* v_ = getVariantDataPtr(s);
 
   if (v_ != nullptr) {
-    vars[s].value = *static_cast<value_u*>(v_);
-    vars[s].ptr_value = &vars[s].value;
+    vars[s].raw_value = *static_cast<value_u*>(v_);
+    vars[s].ptr_value = &vars[s].raw_value;
     ret = true;
   }
 
@@ -43,7 +44,7 @@ value_u OpcServer_c::ReadRawValue(string s)
   value_u raw_vu;
 
   if (isVariable(s))
-    raw_vu = vars[s].value;  // set old (last good) value
+    raw_vu = vars[s].raw_value;  // set old (last good) value
   else
     LOGW("%s: Ignore non-existing variable: %s", __func__, s.c_str());
 

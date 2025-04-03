@@ -27,8 +27,8 @@ OBJDIR =./tmp/obj
 CC=$(CXX)
 
 # === C/CPP flags configuration ===
-CPPFLAGS= -std=$(CXX_VER)
-CXXFLAGS= -Wall -Wextra -Wpedantic -Wfatal-errors
+#CPPFLAGS= -std=$(CXX_VER)
+CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors
 #LDFLAGS = -Wall #-std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
 OPTFLAGS= -flto=auto -O2 #-Os -s -Wl,--as-needed
@@ -48,12 +48,12 @@ SRCFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
 DEPFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.cpp.d))
 
 OBJLIST =$(patsubst %.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
-OBJFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.o))
+#OBJFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.o))
 
 ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
 CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 
-OUTF=$(shell ls -Fog $(EXEC_FILE))
+#OUTF=$(shell ls -Fog $(EXEC_FILE))
 
 # === Add libs here === OLD!!
 #LIBCONFIG=$(shell pkg-config --libs libconfig++)
@@ -65,7 +65,6 @@ OUTF=$(shell ls -Fog $(EXEC_FILE))
 #SOURCES=plc32.cpp plc_read.cpp
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=hello
-
 
 # === Add more warning. "Stolen" here https://codeforces.com/blog/entry/15547
 WARN1_FLAGS= -Wshadow -Wformat=2 -Wfloat-equal -Wconversion
@@ -157,7 +156,6 @@ debug: clean $(EXEC_FILE)
 fulldebug: clean $(EXEC_FILE)
 
 # ================ Linking ================================
-#a.out: $(OBJLIST)
 $(EXEC_FILE): $(OBJLIST)
 	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
 	$(LINK.o) $(OPTFLAGS) $^ $(LDLIBS) -o $@
@@ -177,11 +175,9 @@ $(OBJDIR)/%.o: %.cpp
 # ================== Cleaning =============================
 clean: format
 	@echo -e $(BLU)"=== Cleaning UP with... $<"$(NC)
-#	@rm -rfv $(OBJFILES) $(DEPFILES)
 	@rm -rfv $(EXEC_FILE)
 #	find test -maxdepth 5 -type f -name *.o -print -delete
 	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
-#	@echo $(SRCDIR1)
 
 # ================== Formatting ===========================
 # Simple format current directory only

@@ -13,17 +13,17 @@ void add_pump_main(UA_Server *server);
 int main(void)
 {
   var_t myI32;
-  myI32.name = "myInt";
+  myI32.ua_varname = "myInt";
   myI32.type = UA_TYPES_INT32;
   myI32.value.i32 = 77555;
 
   var_t myFloat;
-  myFloat.name = "myFloat";
+  myFloat.ua_varname = "myFloat";
   myFloat.type = UA_TYPES_FLOAT;
   myFloat.value.fl = 3.14;
 
   var_t myDateTime;
-  myDateTime.name = "myDateTime";
+  myDateTime.ua_varname = "myDateTime";
   myDateTime.type = UA_TYPES_DATETIME;
   myDateTime.value.dt = UA_DateTime_now();
 

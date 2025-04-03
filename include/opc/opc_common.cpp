@@ -178,7 +178,7 @@ bool OpcServer_c::isGood(string s)
 
 bool OpcServer_c::isVariable(string s) { return vars.count(s); }
 
-string OpcServer_c::LookupVar(string s)
+string OpcServer_c::getVarFullName(string s)
 {
   for (auto [ss, v] : vars) {
     if (ss == s)

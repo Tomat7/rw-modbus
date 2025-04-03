@@ -47,20 +47,26 @@ struct nodeid_t {
 
 struct var_t {
   string key_name;            // /PLC/Kub/Kub.Temp1
-  char* ua_name = nullptr;    // key_name.c_str()
-  string str_name;            // Kub.Temp1
-  char* name = nullptr;       // str_name.c_str()
-  string str_path;            // /PLC/Kub/
-  char* path = nullptr;       // str_path.c_str()
-  string str_pathname;        // str_path + str_name = /PLC/Kub/Kub.Temp1
-  char* path_name = nullptr;  // str_full.c_str()
+  char* ua_keyname = nullptr;    // key_name.c_str()
+
+  string var_name;              // Kub.Temp1
+  char* ua_varname = nullptr;  // str_name.c_str()
+
+  string var_path;            // /PLC/Kub/
+  char* ua_varpath = nullptr;       // str_path.c_str()
+
+//  string str_pathname;        // str_path + str_name = /PLC/Kub/Kub.Temp1
+//  char* path_name = nullptr;  // str_full.c_str()
+
   nodeid_t node_id;           // UA_NodeId (var, parent, reference)
+  value_u raw_value;          // value_u
   void* ptr_value;            // ptr to "correct" value_u
+
   int rmode;                  // 1 - mean RW
   int type;                   // UA_DataTypes
   UA_StatusCode ua_status;
   UA_DateTime ua_timestamp;
-  value_u value;
+
   //  variant_t value;
   /*   var_union value_wrong;
     var_union value_min;
