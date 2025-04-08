@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+RED='\033[0;91m'
+GRE="\033[0;32m"
+YEL="\033[0;93m"
+YEB="\033[1;33m"
+BLU='\033[0;94m'
+WHI='\033[0;97m'
+NC='\033[0m' # No Color
+# =======================
+
+## This script is used to clean all git commit
+if [[ "$1" = 'all' ]];then
+    echo "Clean all git commit"
+    git checkout --orphan latest_branch
+    git add -A
+    git commit -am "Delete all previous commit"
+    git branch -D master
+    git branch -m master
+fi
+
+echo "Cleanup refs and logs"
+rm -Rf .git/refs/original
+rm -Rf .git/logs/
+
+echo "Cleanup unnecessary files"
+git gc --aggressive --prune=now
+
+echo "Prune all unreachable objects"
+git prune --expire now
+
+#git push -f origin master

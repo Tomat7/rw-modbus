@@ -1,0 +1,175 @@
+// reg_func.cpp -----------------------------
+// Copyright 2024 Tomat7 (star0413@gmail.com)
+
+#include <string.h>
+
+#include <map>
+#include <string>
+#include <vector>
+
+#include "config.h"
+#include "libs.h"
+
+#define MB_READ
+
+struct regupd_t {
+  bool upd_plc = false;  // need print ">"
+  bool upd_opc = false;  // need print "<"
+  bool err_plc = false;  // need print ">"
+  bool err_opc = false;  // need print "<"
+  value_u opc_value;     // value to print
+};
+
+static map<string, regupd_t> STRmap;
+static mutex regmap_mux;  // already defined in .h
+
+void reg_print(string, const regdata_t*);
+void reg_print(Reg_c);
+
+int task_regs_refresh_(void* params)
+{
+  UNUSED(params);
+  LOGX(" ===== %s =====", __func__);
+  regmap_mux.lock();
+  int x = 0;
+
+  for (auto& [n, rm] : REGmap) {
+    value_u plc_val;  // Value from PLC
+    bool plc_err = false;
+    value_u opc_val = opc_get_value(rm.str_opcname);  // from OPC
+    bool opc_err = !OPCs.isGood(rm.str_opcname);
+    value_u old_val = rm.get_local_value();  // Value in memory (in REGmap)
+    bool old_err = rm.var_errors;
+
+    bool isNew_Plc = false;                 // Got new value from PLC
+    bool isNew_Opc = (opc_val != old_val);  // Got new value from OPC?
+
+    if (rm.is_modbus || rm.is_ref) {
+      plc_val = rm.get_plc_value();  // Value from PLC, will update var_errors
+      plc_err = rm.get_plc_errors();
+
+      STRmap[n].err_plc = plc_err;
+      isNew_Plc = (plc_val != old_val);
+
+      if (isNew_Plc || (plc_err != old_err)) {
+        rm.set_local_value(plc_val);  // Save PLC value to REGmap
+        rm.var_errors = plc_err;
+        opc_set_value(rm.str_opcname, plc_val, !plc_err);
+        if (!STRmap.count(n) || !STRmap[n].upd_plc)
+          STRmap[n].upd_plc = true;
+      }
+
+      if (rm.var_mode && isNew_Opc && !plc_err && !opc_err) {
+        x++;
+        rm.set_plc_value(opc_val);
+        rm.set_local_value(opc_val);
+        rm.var_errors = plc_err || opc_err;
+        if (!STRmap.count(n) || !STRmap[n].upd_opc) {
+          STRmap[n].upd_opc = true;
+          STRmap[n].opc_value = opc_val;
+        }
+      }
+
+    } else if (rm.is_scada) {
+      STRmap[n].err_opc = opc_err;
+      rm.var_errors = opc_err;
+
+      if (/* rm.var_mode &&  */ isNew_Opc) {
+        x++;
+        rm.set_local_value(opc_val);
+        if (!STRmap.count(n) || !STRmap[n].upd_opc) {
+          STRmap[n].upd_opc = true;
+          STRmap[n].opc_value = opc_val;
+        }
+      }
+    }
+  }
+
+  regmap_mux.unlock();
+  LOGI("%s done: %d", __func__, x);
+
+  return x;
+}
+
+void regs_update()
+{
+  printf("\n===== regs_update =====\n");
+  // task_regs_refresh_();
+  regmap_mux.lock();
+  bool is_eol = false;
+  string X;
+
+  for (auto& [n, rm] : REGmap) {
+    //  reg_print(n, &rm.ptr_reg[0]->data);
+    reg_print(rm);
+
+    X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
+    X += (STRmap[n].upd_opc) ? "<" : " ";  // If new value got from OPC
+    printf("%s", X.c_str());
+
+    if (STRmap[n].upd_opc)
+      printf("%7d", STRmap[n].opc_value.ui16);
+    else
+      printf("%7s", "       ");
+
+    if (is_eol)
+      printf(" + %s\n", NRM);
+    else
+      printf(" +     %s", NRM);
+
+    is_eol = !is_eol;
+  }
+
+  if (is_eol)
+    printf("\n");
+
+  STRmap.clear();
+  regmap_mux.unlock();
+
+  return;
+}
+
+void reg_print(string rn, const regdata_t* rd)
+{
+  // printf("\n===== regs_print =====\n");
+  const char* C = getColor(rd->rerrors == 0);  // C_WHIB;  // NRM;
+  const char* B = getBlynk(rd->rerrors == 0);
+
+  // TODO: full recode with new TYPE_*
+
+  if (rd->rtype == UA_TYPES_UINT16)
+    printf("%s%-14s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
+  else if (rd->rtype == UA_TYPES_INT16)
+    printf("%s%-14s %s%7d", C, rn.c_str(), B, (int16_t)rd->rvalue);
+  else if (rd->rtype == NOTUA_TYPES_F100)
+    printf("%s%-14s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
+
+  printf(C_NORM);
+
+  return;
+}
+
+void reg_print(Reg_c rm)
+{
+  // printf("\n===== regs_print =====\n");
+  const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;
+  const char* B = getBlynk(rm.var_errors == 0);
+  char ch[50];
+
+  printf("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
+
+  printf(C_NORM);
+
+  return;
+}
+
+const char* getColor(bool noErrors) { return noErrors ? C_BOLD : C_DARK; }
+
+const char* getBlynk(bool noErrors)
+{
+  return noErrors ? C_NORM : ESC_BLINK;  // Dark grey blym-blym
+}
+
+/*  */
+
+// eof

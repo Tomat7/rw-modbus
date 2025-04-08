@@ -1,0 +1,26 @@
+0) Все роли в одном файле!
+1) любая (или сразу все) роли можно указать в командной строке
+2) определить какая роль (slave/scada) создает SHM для виртуальных регистров
+3) определить алгоритм (приоритеты) для записи/обновления регистров
+4) -- OPC-UA // ++ plc-class/slave: заполнение reg именем и номером регистра
+5) -- OPC-UA // + plc-class/slave: запись/чтение reg по имени и номеру
+6) определиться с конфигурационными переменными - T_HEAT, Pmax и пр. - кто их создает?
+7) -- порядок старта ролей? - Master, REGmap, Scada, Referenced
+8) ++ OPC-UA // ++ дописать конфиг для Slave & Scada
+9) экраны для каждого режима - Slave/Master/Sdada
+10) смена режима экрана по hot-key
+11) как хранить GlobalVar (reboot safe)
+12) -- Done? // добавить семафор на Ctrl-C и блокировки
+13) -- Done // заменить все cout на printf
+14) ++ OPC UA server вместо Slave
+15) ++ Scheduler/TaskPlanner for Modbus reads & other regs update
+16) ++ Colorize logger levels output
+17) ++ Enabled/Active (true/false) state for PLC
+18) reg_t struct review & refactoring
+19) ++ add "prefix" for registers
+20)
+21)
+22)
+
+
+
