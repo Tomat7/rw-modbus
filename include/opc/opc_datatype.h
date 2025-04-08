@@ -64,8 +64,8 @@ struct var_t {
 //  string str_pathname;        // str_path + str_name = /PLC/Kub/Kub.Temp1
 //  char* path_name = nullptr;  // str_full.c_str()
 //  variant_t value;
-  /*   var_union value_wrong;
-    var_union value_min;
-    var_union value_max; */
+/*   var_union value_wrong;
+  var_union value_min;
+  var_union value_max; */
 
 // eof
