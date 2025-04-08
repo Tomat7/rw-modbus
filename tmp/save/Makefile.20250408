@@ -34,6 +34,7 @@ CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors
 DEPFLAGS= -MD -MF $(OBJDIR)
 OPTFLAGS= -flto=auto -O2 #-Os -s -Wl,--as-needed
 
+ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
 
 # ==== Folders processing ===
 LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
@@ -50,8 +51,21 @@ DEPFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.cpp.d))
 OBJLIST =$(patsubst %.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
 #OBJFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.o))
 
+ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
+CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
+
 #OUTF=$(shell ls -Fog $(EXEC_FILE))
 
+# === Add libs here === OLD!!
+#LIBCONFIG=$(shell pkg-config --libs libconfig++)
+#LIBMODBUS=$(shell pkg-config --libs --cflags libmodbus)
+#LIBNCURSES=$(shell pkg-config ncurses --libs)
+#LDLIBS+= $(LIBCONFIG) $(LIBMODBUS) $(LIBNCURSES)
+#LIBS= -lconfig -lmodbus
+#INCLUDES = -I.
+#SOURCES=plc32.cpp plc_read.cpp
+#OBJECTS=$(SOURCES:.cpp=.o)
+#EXECUTABLE=hello
 
 # === Add more warning. "Stolen" here https://codeforces.com/blog/entry/15547
 WARN1_FLAGS= -Wshadow -Wformat=2 -Wfloat-equal -Wconversion
@@ -173,12 +187,12 @@ format: AStyle-linux
 kr: AStyle-KR
 
 clang: Clang-LLVM
+#	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+#	clang-format -i --verbose *.cpp *.h
 
 google: Clang-google
-
-ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
-ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
-CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
+#	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+#	clang-format -i -style=google --verbose *.cpp *.h
 
 # ================ Styling ALL SRC FILES recursively! ==================
 AStyle-linux:
