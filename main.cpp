@@ -84,13 +84,15 @@ int main(int argc, char** argv)
     */
     string s;
     s = "/PLC/Kub/Kub.millis";
-    printf("Millis: %d, ", OPCs.ReadRawValue(s).ui16);
+    printf("Millis: %d, ", OPCs.ReadRawUnion(s).ui16);
 
     s = "/PLC/Kub/Kub.Temp1";
-    printf("T1: %5.2f, ", OPCs.ReadRawValue(s).fl);
+    printf("T1: %5.2f, ", OPCs.ReadRawUnion(s).fl);
 
     s = "/PLC/Kub/Kub.Temp2";
-    printf("T2: %5.2f, ", OPCs.readValue<float>(s));
+    float fl;
+    OPCs.ReadNumber(s, fl);
+    printf("T2: %5.2f", fl);
 
     s = "Kub.Temp3";
     float myfl = ReadValue(s);

@@ -19,8 +19,7 @@ bool OpcServer_c::WriteRawUnion(string s, value_u raw_vu, bool isOK)
   if (vars.count(s)) {
     vars[s].raw_value = raw_vu;
     vars[s].ptr_value = &raw_vu;
-    writeVariable(vars[s], isOK);
-    ret = true;
+    ret = write_Variable(vars[s], isOK);
   } else
     LOGA("Set: Ignore non-existing variable: %s", s.c_str());
 
@@ -29,7 +28,7 @@ bool OpcServer_c::WriteRawUnion(string s, value_u raw_vu, bool isOK)
   return ret;
 }
 
-void OpcServer_c::writeVariable(var_t &v, bool isOk)
+bool OpcServer_c::write_Variable(var_t &v, bool isOk)
 {
   if (isOk) {
     v.ua_status = UA_STATUSCODE_GOOD;
@@ -58,9 +57,12 @@ void OpcServer_c::writeVariable(var_t &v, bool isOk)
   wv.value.serverTimestamp = UA_DateTime_now();
   wv.value.hasSourceTimestamp = true;
   wv.value.sourceTimestamp = v.ua_timestamp;
-  UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
+  bool wr_status = UA_Server_writeDataValue(uaServer, v.node_id.var, wv.value);
 
-  return;
+  if (v.ua_status == UA_STATUSCODE_GOOD)
+    v.ua_status = wr_status;
+
+  return (v.ua_status == UA_STATUSCODE_GOOD);
 }
 
 // eof

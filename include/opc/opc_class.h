@@ -41,43 +41,52 @@ public:
   void init(UA_UInt16 _port = 0);  // Necessary init() before run()
   void run();
   void stop();
-  /*
-    int getType(string s);
-    int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
-  */
+
   bool isVariable(string s);  // Variable exist
+  bool isFolder(string s);    // Folder (container) exist
   bool isGood(string s);      // OPC var has no errors
 
-  string getVarFullName(string s);
-  void delVar(string s);
+  string GetVarFullName(string s);
+  void DeleteVar(string s);
 
-  value_u ReadRawValue(string s);  // returns saved value_union
+  value_u ReadRawUnion(string s);  // returns saved value_union
   bool WriteRawUnion(string s, value_u raw_val, bool isOK);  // write value_u
 
   int RefreshAllValues();  // getVar for ALL variables, returns - qty of vars
 
   // for init
   template <typename T>
-  int addVar(string s, T Number, int rmode);
+  int AddVar(string s, T Number, int rmode);
 
   // return T value and set Numeric_set
   template <typename T>
-  T updateVar(string s, T Numeric_set, bool isOK);
-
-  // ask OPC server for current value (refresh)
-  template <typename T>
-  T getNumber(string s);
+  T UpdateVar(string s, T Numeric_set, bool &isOK);
 
   template <typename T>
   bool ReadNumber(string s, T &x);
 
-  // read value saved on previous/last correct getValue
   template <typename T>
-  T readValue(string s);
+  bool WriteNumber(string s, T &x, bool isOK);
 
-  template <typename T>
-  bool readValue(string s, T &x);
-  //  Definition at the bottom of THIS file
+  /*
+    int getType(string s);
+    int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
+  */
+  /*
+    // ask OPC server for current value (refresh)
+    template <typename T>
+    T GetNumber(string s);
+  */
+  /*
+    // read value saved on previous/last correct getValue
+    template <typename T>
+    T ReadValue(string s);
+  */
+  /*
+    template <typename T>
+    bool ReadValue(string s, T &x);
+    //  Definition at the bottom of THIS file
+  */
 
 private:
   void init_config(UA_ServerConfig* conf);
@@ -90,26 +99,26 @@ private:
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
 
-  UA_NodeId getFolder_NodeId(string str_path);
-  UA_NodeId addFolders(string full_name, UA_NodeId parentNodeId);
-  int countSlash(string Path);
-  string getPath_Name(string &n);
-  string strVarDetails(var_t &var);
-  string getPathByLevel(string Path, int level);
+  UA_NodeId get_FolderNodeId(string str_path);
+  UA_NodeId add_FolderToParent(string full_name, UA_NodeId parentNodeId);
+  int count_Slash(string Path);
+  string get_PathName(string &n);
+  string get_StrVarDetails(var_t &var);
+  string get_PathByLevel(string Path, int level);
 
-  int addVar_Names(string raw_name, int t, int m);
-  void addVar_NodeId(var_t &v);
-  void addVariable(var_t &var);
+  int add_VarName(string raw_name, int rtype, int rmode);
+  void add_VarNodeId(var_t &v);
+  void add_Variable(var_t &var);
 
-  void writeVariable(var_t &var, bool isOk);
-  void* getVariantDataPtr(string s);  // get pointer to UA_Variant.Data
-  bool refreshRawValue(string s);     // Reread value_u form server
-
-  template <typename T>
-  bool getNumericValue(string s, T &Value);
+  bool write_Variable(var_t &var, bool isOk);
+  void* get_VariantDataPtr(string s);  // get pointer to UA_Variant.Data
+  bool refresh_RawValue(string s);     // Reread value_u form server
 
   template <typename T>
-  void WriteNumericValue(string s, T Numeric_set, bool isOK = true);
+  bool get_NumericValue(string s, T &Value);
+
+  template <typename T>
+  bool set_NumericValue(string s, T Numeric_set, bool isOK);
 
   badvalue_t bad_value;
   map<string, var_t> vars;     // All regs here.

@@ -19,7 +19,7 @@
 #define CHAR_P const_cast<char *>
 
 
-int OpcServer_c::addVar_Names(string raw_name, int t, int m)
+int OpcServer_c::add_VarName(string raw_name, int t, int m)
 {
   if (vars.count(raw_name)) {
     LOGA("Add: Ignore existing variable: %s", raw_name.c_str());
@@ -32,9 +32,10 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   }
 
   string str_name = raw_name;                // /PLC/Kub/Kub.Temp1
-  string str_path = getPath_Name(str_name);  // /PLC/Kub/, str_name=Kub.Temp1
+  string str_path = get_PathName(str_name);  // /PLC/Kub/, str_name=Kub.Temp1
 
   var_t v;
+  v.is_var = true;
   v.type = t;
   v.rmode = m;
   v.key_name = raw_name;  // KEY for map and OPC FQName - /PLC/Kub/Kub.Temp1
@@ -56,7 +57,7 @@ int OpcServer_c::addVar_Names(string raw_name, int t, int m)
   return 1;
 }
 
-string OpcServer_c::getPath_Name(string &name)
+string OpcServer_c::get_PathName(string &name)
 {
   string path = name;
 
@@ -81,7 +82,7 @@ string OpcServer_c::getPath_Name(string &name)
   return path;
 }
 
-void OpcServer_c::addVar_NodeId(var_t &v)
+void OpcServer_c::add_VarNodeId(var_t &v)
 {
   v.node_id.var = UA_NODEID_STRING(1, v.ua_keyname);
 
@@ -92,12 +93,12 @@ void OpcServer_c::addVar_NodeId(var_t &v)
     v.node_id.reference = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
   } else {
     // v.node_id.reference = UA_NS0ID(HASCOMPONENT);
-    v.node_id.parent = getFolder_NodeId(v.var_path);
+    v.node_id.parent = get_FolderNodeId(v.var_path);
     v.node_id.reference = UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT);
   }
 }
 
-UA_NodeId OpcServer_c::getFolder_NodeId(string str_path)
+UA_NodeId OpcServer_c::get_FolderNodeId(string str_path)
 {
   // UA_NodeId parentNode = UA_NS0ID(OBJECTSFOLDER);
   UA_NodeId parentNode = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
@@ -106,20 +107,20 @@ UA_NodeId OpcServer_c::getFolder_NodeId(string str_path)
     parentNode = vars[str_path].node_id.var;
   else {
     string Path;
-    int folder_levels = countSlash(str_path) - 1;
+    int folder_levels = count_Slash(str_path) - 1;
     for (int i = 1; i <= folder_levels; i++) {
-      Path = getPathByLevel(str_path, i);
+      Path = get_PathByLevel(str_path, i);
       if (vars.count(Path))
         parentNode = vars[Path].node_id.var;
       else
-        parentNode = addFolders(Path, parentNode);
+        parentNode = add_FolderToParent(Path, parentNode);
     }
   }
 
   return parentNode;
 }
 
-UA_NodeId OpcServer_c::addFolders(string str_path, UA_NodeId parentNodeId)
+UA_NodeId OpcServer_c::add_FolderToParent(string str_path, UA_NodeId parentNodeId)
 {
   char* folder_path = const_cast<char*>(str_path.c_str());
   string str_displayName = str_path;
@@ -147,6 +148,7 @@ UA_NodeId OpcServer_c::addFolders(string str_path, UA_NodeId parentNodeId)
 
   var_t v;
 //  v.str_pathname = str_path;
+  v.is_var = false;
   v.node_id.var = folderId;
   vars[str_path] = v;
 
@@ -157,7 +159,7 @@ UA_NodeId OpcServer_c::addFolders(string str_path, UA_NodeId parentNodeId)
   return folderId;
 }
 
-int OpcServer_c::countSlash(string Path)
+int OpcServer_c::count_Slash(string Path)
 {
   size_t index = 0;
   int count = 0;
@@ -171,7 +173,7 @@ int OpcServer_c::countSlash(string Path)
   return count;
 }
 
-string OpcServer_c::getPathByLevel(string Path, int level)
+string OpcServer_c::get_PathByLevel(string Path, int level)
 {
   size_t index = 0;
   Path.erase(0, 1);  // remove first "/"
@@ -185,7 +187,7 @@ string OpcServer_c::getPathByLevel(string Path, int level)
   return Path;
 }
 
-void OpcServer_c::addVariable(var_t &v)
+void OpcServer_c::add_Variable(var_t &v)
 {
   if (v.ptr_value == nullptr) {
     LOGA("Wrong ptr: %s", v.ua_varname);
@@ -207,10 +209,10 @@ void OpcServer_c::addVariable(var_t &v)
     uaServer, v.node_id.var, v.node_id.parent, v.node_id.reference, varQName,
     UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE), attr, NULL, NULL);
 
-  string d = strVarDetails(v);
+  string d = get_StrVarDetails(v);
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                    "NewVar: %s %s, path: %s - %s", v.ua_varname, d.c_str(),
-                    v.ua_keyname, UA_StatusCode_name(rc));)
+                    "NewVar: %s %s, path: %s - %s, type: %i", v.ua_varname, d.c_str(),
+                    v.ua_keyname, UA_StatusCode_name(rc), v.type);)
 }
 
 // eof

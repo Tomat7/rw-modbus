@@ -57,8 +57,9 @@ struct var_t {
   void* ptr_value;            // ptr to "correct" value_u
   int rmode;                  // 1 - mean RW
   int type;                   // UA_DataTypes
-  UA_StatusCode ua_status;
-  UA_DateTime ua_timestamp;
+  bool is_var = false;        // for Variable = true, folder = false
+  UA_StatusCode ua_status;    // set by Scada or form Modbus status
+  UA_DateTime ua_timestamp;   // save timestamp of last write/update
 };
 
 //  string str_pathname;        // str_path + str_name = /PLC/Kub/Kub.Temp1

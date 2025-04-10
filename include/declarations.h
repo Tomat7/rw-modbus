@@ -125,19 +125,21 @@ int task_plc_refresh_(void* params);
 template <typename T>
 void WriteValue(string s_, T val_, bool isOK = true)
 {
-  OPCs.updateVar(OPCs.getVarFullName(s_), val_, isOK);
+  OPCs.UpdateVar(OPCs.GetVarFullName(s_), val_, isOK);
 }
 
 struct ReadValue {
   string _s;  // Full path to variable
   ReadValue(string svar)
   {
-    _s = OPCs.getVarFullName(svar);  // Try to find fullpath-name
+    _s = OPCs.GetVarFullName(svar);  // Try to find fullpath-name
   }
   template <typename T>
   operator T()
   {
-    return OPCs.readValue<T>(_s);
+    T x;
+    OPCs.ReadNumber(_s, x);
+    return x;
   }
 };
 

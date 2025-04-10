@@ -107,7 +107,8 @@ void OpcServer_c::stop()
   for (auto &[s, v] : vars)
     vs.insert(s);
   for (auto &s : vs)
-    delVar(s);
+    DeleteVar(s);
+
   vars.clear();
   LOGN("Stop: map cleared.");
 
@@ -139,7 +140,7 @@ void OpcServer_c::stop()
   LOGN("Stop: MUX free.");
 }
 
-void OpcServer_c::delVar(string s)
+void OpcServer_c::DeleteVar(string s)
 {
   UA_Server_deleteNode(uaServer, vars[s].node_id.var, true);
   vars.erase(s);
@@ -169,16 +170,29 @@ void OpcServer_c::delVar(string s)
 
 bool OpcServer_c::isGood(string s)
 {
-  bool ret = false;
-  if (vars.count(s))
-    if (vars[s].ua_status == UA_STATUSCODE_GOOD)
-      ret = true;
-  return ret;
+  bool is_good = false;
+  if (isVariable(s))
+    is_good = (vars[s].ua_status == UA_STATUSCODE_GOOD);
+  return is_good;
 }
 
-bool OpcServer_c::isVariable(string s) { return vars.count(s); }
+bool OpcServer_c::isVariable(string s)
+{
+  if (vars.count(s))
+    return vars[s].is_var;
+  else
+    return false;
+}
 
-string OpcServer_c::getVarFullName(string s)
+bool OpcServer_c::isFolder(string s)
+{
+  if (vars.count(s))
+    return !vars[s].is_var;
+  else
+    return false;
+}
+
+string OpcServer_c::GetVarFullName(string s)
 {
   for (auto [ss, v] : vars) {
     if (ss == s)
@@ -201,7 +215,7 @@ int OpcServer_c::RefreshAllValues()
   int x = 0;
   uaDataMux->lock();
   for (auto [_s, v] : vars) {
-    refreshRawValue(_s);
+    refresh_RawValue(_s);
     x++;
   }
   uaDataMux->unlock();
@@ -209,7 +223,7 @@ int OpcServer_c::RefreshAllValues()
   return x;
 }
 
-string OpcServer_c::strVarDetails(var_t &v)
+string OpcServer_c::get_StrVarDetails(var_t &v)
 {
   string ret;
   if (v.type == UA_TYPES_INT16)

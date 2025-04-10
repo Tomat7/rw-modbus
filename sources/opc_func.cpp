@@ -27,7 +27,7 @@ void opc_regs_init()
     n = rm.str_opcname;
     e = Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix;  // Kub.Temp1.errors
 
-    OPCs.addVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
+    OPCs.AddVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
 
     value_u v;
     v.ui64 = 0;
@@ -36,17 +36,17 @@ void opc_regs_init()
       t = UA_TYPES_UINT16;
 
     if (t == UA_TYPES_UINT16)
-      OPCs.addVar(n, rm.get_local_value().ui16, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().ui16, rm.var_mode);
     else if (t == UA_TYPES_INT16)
-      OPCs.addVar(n, rm.get_local_value().i16, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().i16, rm.var_mode);
     else if (t == NOTUA_TYPES_F100)
-      OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode);
     else if (t == NOTUA_TYPES_F10)
-      OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode);
     else if (t == UA_TYPES_FLOAT)
-      OPCs.addVar(n, rm.get_local_value().fl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode);
     else if (t == UA_TYPES_DOUBLE)
-      OPCs.addVar(n, rm.get_local_value().dbl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().dbl, rm.var_mode);
     else
       LOGE("Wrong type: %d, Var: %s", t, n.c_str());
   }
@@ -81,11 +81,11 @@ void opc_regs_init()
   }
 */
 
-value_u opc_get_value(string s) { return OPCs.ReadRawValue(OPCs.getVarFullName(s)); }
+value_u opc_get_value(string s) { return OPCs.ReadRawUnion(OPCs.GetVarFullName(s)); }
 
 bool opc_set_value(string s, value_u val, bool isOK)
 {
-  return OPCs.WriteRawUnion(OPCs.getVarFullName(s), val, isOK);
+  return OPCs.WriteRawUnion(OPCs.GetVarFullName(s), val, isOK);
 }
 
 void opc_deinit() { OPCs.stop(); }

@@ -11,7 +11,7 @@
 #define DEBUG(a) if(isDebug){a}
 
 
-void* OpcServer_c::getVariantDataPtr(string s)
+void* OpcServer_c::get_VariantDataPtr(string s)
 {
   if (vars.count(s)) {
     UA_Variant_clear(uaVariant);
@@ -25,21 +25,21 @@ void* OpcServer_c::getVariantDataPtr(string s)
   return (uaVariant->data);
 }
 
-bool OpcServer_c::refreshRawValue(string s)
+bool OpcServer_c::refresh_RawValue(string s)
 {
-  bool ret = false;
-  void* v_ = getVariantDataPtr(s);
+  bool is_fresh = false;
+  void* vardata_ = get_VariantDataPtr(s);
 
-  if (v_ != nullptr) {
-    vars[s].raw_value = *static_cast<value_u*>(v_);
+  if (vardata_ != nullptr) {
+    vars[s].raw_value = *static_cast<value_u*>(vardata_);
     vars[s].ptr_value = &vars[s].raw_value;
-    ret = true;
+    is_fresh = true;
   }
 
-  return ret;
+  return is_fresh;
 }
 
-value_u OpcServer_c::ReadRawValue(string s)
+value_u OpcServer_c::ReadRawUnion(string s)
 {
   value_u raw_vu;
 
