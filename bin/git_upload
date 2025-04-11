@@ -30,8 +30,9 @@ git push -v -f -u origin --all
 echo -e $YEB ==== PUSH to GitHub ==== $NC
 git push -v -f github --all
 
-echo -e $GRE ==== Finished... $NC
-date
+DATE=`date`
+echo -e $GRE ==== Finished on $GRB$DATE $NC
+
 sleep 3
 
 
