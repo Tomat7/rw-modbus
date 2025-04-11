@@ -27,7 +27,7 @@ then
     git stash save "$NOW"
     echo -e $GRE ==== Doing git PULL. $NC
     git pull -v 
-    echo -e === Last PULL on $now ===
+    echo -e === Last PULL on $NOW === > .lastget 
 # --------------
     echo -e $RED
     read -p "==== Warning! Will CLEAR STASH & LOST ALL CHANGES! (Y/N): " ANS
@@ -40,7 +40,7 @@ then
 	echo -e $BLU ==== STASH SAVED! Use: 'git stash pop/apply' $NC
     fi
 # -------------
-    echo -e $GRE ==== Finished. $NC
+    echo -e $GRE ==== Finished. $NOW $NC
 else
     echo -e $BLU ==== Doing nothing. Relax and Bye! $NC
 fi
