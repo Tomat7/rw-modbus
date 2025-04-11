@@ -30,6 +30,7 @@ echo -e $YEB ==== PUSH to GitHub ==== $NC
 git push -v -f github --all
 
 echo -e $GRE ==== Finished... $NC
+date
 sleep 3
 
 
