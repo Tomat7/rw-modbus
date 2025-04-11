@@ -32,6 +32,8 @@ git push -v -f github --all
 
 DATE=`date`
 echo -e $GRE ==== Finished on $GRB$DATE $NC
+echo -e === Finished on $DATE > .lastupload
+
 
 sleep 3
 
