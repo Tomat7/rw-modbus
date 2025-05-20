@@ -34,7 +34,8 @@
 #define _FL_ FILE_LINE
 
 #define LOGFORCE(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)       // 0 
-#define LOGALWAYS(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)      // 0 
+#define LOGBROADCAST(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)   // 0 
+
 #define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)   // 1
 #define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)    // 2
 #define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)     // 3

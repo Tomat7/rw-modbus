@@ -39,7 +39,8 @@ int mb_add_refresh_tasks()
   for (i = 0; i < nb_plcs; i++) {
     PLC_c &D = PLCvec[i];
     idx[i] = i;
-    string task_name = D.str_top_folder + ":" + D.str_dev_name + ":refresh_";
+    //string task_name = D.str_top_folder + ":" + D.str_dev_name + ":refresh_";
+    string task_name = "Modbus:" + D.str_dev_name; // + ":refresh_";
     Task.add_task(task_plc_refresh_, D.mb.polling_ms, task_name, &idx[i]);
   }
 

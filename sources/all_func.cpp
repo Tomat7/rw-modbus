@@ -106,38 +106,38 @@ void parse_char(int ch)
   int loglvl;
 
   if (((char)ch == 'e') || ((char)ch == 'q')) {
-    LOGFORCE("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
+    LOGA("Char 'e' or 'q' pressed. Correct shutdown. Bye.\n");
     wait_console(Cfg.timeout_sec);
     deinit_all();
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'r') {
-    LOGFORCE("Char 'r' pressed. Full reconfiguration.\n");
+    LOGA("Char 'r' pressed. Full reconfiguration.\n");
     wait_console(Cfg.timeout_sec);
     reinit();
   } else if ((char)ch == 'f') {
     Cfg.timeout_sec = 1;
-    LOGFORCE("Char 'f' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
+    LOGA("Char 'f' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     wait_console(Cfg.timeout_sec);
   } else if ((char)ch == 'm') {
     Cfg.timeout_sec = 3;
-    LOGFORCE("Char 'm' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
+    LOGA("Char 'm' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     wait_console(Cfg.timeout_sec);
   } else if ((char)ch == 's') {
     Cfg.timeout_sec = 5;
-    LOGFORCE("Char 's' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
+    LOGA("Char 's' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     wait_console(Cfg.timeout_sec);
   } else if ((char)ch == 'o') {
-    LOGFORCE("Char 'o' pressed. Start OPC_refresh_.\n");
+    LOGA("Char 'o' pressed. Start OPC_refresh_.\n");
     task_opc_refresh_(nullptr);
     wait_console(Cfg.timeout_sec);
   } else if ((char)ch == 'g') {
-    LOGFORCE("Char 'g' pressed. Start REGS_refresh_.\n");
+    LOGA("Char 'g' pressed. Start REGS_refresh_.\n");
     task_regs_refresh_(nullptr);
     wait_console(Cfg.timeout_sec);
   } else if (isdigit((char)ch)) {
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;
-    LOGFORCE("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
+    LOGA("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
     log_level = loglvl;
     wait_console(Cfg.timeout_sec);
   } else if ((char)ch == ' ')

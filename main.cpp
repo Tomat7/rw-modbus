@@ -53,16 +53,16 @@ int main(int argc, char** argv)
     if (Mode.count(string(argv[1])))
       mode = argv[1];
     else
-      LOGFORCE("Argument '%s' ignored.", argv[1]);
+      LOGA("Argument '%s' ignored.", argv[1]);
   }
 
   if (argc > 2) {
     char ch = *argv[2];
     if ((strlen(argv[2]) == 1) && (isdigit((char)ch))) {
       log_level = int((char)ch - '0');
-      LOGFORCE("LOG_LEVEL set to: %d", log_level);
+      LOGA("LOG_LEVEL set to: %d", log_level);
     } else
-      LOGFORCE("Argument '%s' ignored.", argv[2]);
+      LOGA("Argument '%s' ignored.", argv[2]);
   }
 
   init_all();

@@ -101,7 +101,7 @@ void opc_start()
 
 void opc_run_thread()
 {
-  prctl(PR_SET_NAME, Cfg.opc.SrvName);
+  prctl(PR_SET_NAME, Cfg.opc.SrvName.c_str());
   OPCs.run();
 }
 

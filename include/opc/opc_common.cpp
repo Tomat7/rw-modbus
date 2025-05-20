@@ -55,13 +55,13 @@ void OpcServer_c::init(UA_UInt16 _port)
   //  = UA_Server_getConfig(uaServer);
   memset(&uaServerConfig, 0, sizeof(UA_ServerConfig));
   //UA_ServerConfig_setDefault(uaServerConfig);
-  LOGFORCE("Memset done");
+  LOGI("Memset done");
   UA_ServerConfig_setMinimal(&uaServerConfig, uaPort, NULL);
   //UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
-  LOGFORCE("SetMinimal done");
+  LOGI("SetMinimal done");
   wait_console(3);
   init_config(&uaServerConfig);
-  LOGFORCE("INIT done");
+  LOGI("INIT done");
 
   uaServer = UA_Server_newWithConfig(&uaServerConfig);
   uaVariant = UA_Variant_new();

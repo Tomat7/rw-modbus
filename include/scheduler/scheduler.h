@@ -61,7 +61,7 @@ private:
   static mutex scheduler_mux;
   /* static  int nb_max; */
 
-  static void run_cycle_();
+  static void scheduler_cycle_();
   static void run_task_(/* function<int()> task, */ uint64_t i);  //* isRun);
   static void clear();
 };

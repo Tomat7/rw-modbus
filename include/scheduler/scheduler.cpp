@@ -109,14 +109,14 @@ void Schedule_c::run()
 {
   if (!isRunning) {
     isRunning = true;
-    thread run_cycle(run_cycle_);
+    thread run_cycle(scheduler_cycle_);
     run_cycle.detach();
     LOGN("RunCycle: Detached");
   } else
     LOGA("RunCycle: already detached");
 }
 
-void Schedule_c::run_cycle_()
+void Schedule_c::scheduler_cycle_()
 {
   scheduler_mux.lock();
   prctl(PR_SET_NAME, "Scheduler:cycle");

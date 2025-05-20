@@ -13,7 +13,7 @@
 // #define OPC_SCADA_FOLDER "/SCADA/"
 #define OPC_ERRORS_FOLDER "/ERRORS"
 #define OPC_ERRORS_SUFFIX ".error"
-#define OPC_THREAD_NAME "OPC_server"
+#define OPC_THREAD_NAME "OPC:server"
 #define OPC_POLLING_MS 700
 
 #ifdef DEBUG_FLAG
