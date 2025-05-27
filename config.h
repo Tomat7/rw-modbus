@@ -8,6 +8,7 @@
 #define CFG_DIR "/var/tmp/conf"
 #define CFG_FILE "modbus.cfg"
 
+#define OPC_URL "opc.tcp://localhost:4840"
 #define OPC_SERVER_PORT 4840
 // #define OPC_PLC_FOLDER "/PLC/"
 // #define OPC_SCADA_FOLDER "/SCADA/"

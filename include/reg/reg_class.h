@@ -21,7 +21,7 @@
 
 #include <string>
 
-#include "include/opc/opc_class.h"
+#include "include/opc_server/opcs_class.h"
 #include "include/plc/plc_class.h"
 #include "reg_datatype.h"
 

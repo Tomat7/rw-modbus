@@ -11,7 +11,7 @@
 #include <typeinfo>
 
 #include "include/logger.h"
-#include "opc_class.h"
+#include "opcs_class.h"
 
 #define DEBUG(a) if(isDebug){a}
 
@@ -36,7 +36,7 @@ int OpcServer_c::add_VarName(string raw_name, int t, int m)
 
   var_t v;
   v.is_var = true;
-  v.type = t;
+  v.ua_type = t;
   v.rmode = m;
   v.key_name = raw_name;  // KEY for map and OPC FQName - /PLC/Kub/Kub.Temp1
   v.var_name = str_name;  // Kub.Temp1
@@ -196,11 +196,11 @@ void OpcServer_c::add_Variable(var_t &v)
 
   UA_Byte acl = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
   UA_VariableAttributes attr = UA_VariableAttributes_default;
-  UA_Variant_setScalar(&attr.value, v.ptr_value, &UA_TYPES[v.type]);
+  UA_Variant_setScalar(&attr.value, v.ptr_value, &UA_TYPES[v.ua_type]);
 
   attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", v.ua_varname);
   attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", v.ua_varname);
-  attr.dataType = UA_TYPES[v.type].typeId;
+  attr.dataType = UA_TYPES[v.ua_type].typeId;
   attr.accessLevel = acl;
 
   UA_QualifiedName varQName = UA_QUALIFIEDNAME(1, v.ua_keyname);
@@ -212,7 +212,7 @@ void OpcServer_c::add_Variable(var_t &v)
   string d = get_StrVarDetails(v);
   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                     "NewVar: %s %s, path: %s - %s, type: %i", v.ua_varname, d.c_str(),
-                    v.ua_keyname, UA_StatusCode_name(rc), v.type);)
+                    v.ua_keyname, UA_StatusCode_name(rc), v.ua_type);)
 }
 
 // eof

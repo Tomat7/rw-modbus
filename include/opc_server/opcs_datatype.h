@@ -56,7 +56,7 @@ struct var_t {
   value_u raw_value;          // value_u
   void* ptr_value;            // ptr to "correct" value_u
   int rmode;                  // 1 - mean RW
-  int type;                   // UA_DataTypes
+  int ua_type;                   // UA_DataTypes
   bool is_var = false;        // for Variable = true, folder = false
   UA_StatusCode ua_status;    // set by Scada or form Modbus status
   UA_DateTime ua_timestamp;   // save timestamp of last write/update

@@ -6,7 +6,7 @@
 //#include "include/open62541/open62541.h"
 
 #include "include/logger.h"
-#include "opc_class.h"
+#include "opcs_class.h"
 
 #define DEBUG(a) if(isDebug){a}
 
@@ -39,7 +39,7 @@ bool OpcServer_c::write_Variable(var_t &v, bool isOk)
   /* Write a different value */
   UA_VariableAttributes Attr;
   UA_Variant_init(&Attr.value);
-  UA_Variant_setScalar(&Attr.value, v.ptr_value, &UA_TYPES[v.type]);
+  UA_Variant_setScalar(&Attr.value, v.ptr_value, &UA_TYPES[v.ua_type]);
 
   // Use a more detailed write function than UA_Server_writeValue
   UA_WriteValue wv;

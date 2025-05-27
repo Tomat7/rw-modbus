@@ -18,6 +18,7 @@ cfg_t Cfg;
 map<string, Reg_c> REGmap;
 vector<PLC_c> PLCvec;
 // PLC_c Slave(MB_SLAVE_PORT);
+OpcClient_c OPCclient;
 OpcServer_c OPCs;
 Schedule_c Task /* (TASKS_NB_MAX) */;
 // string PLC_folder = PLC_FOLDER;
@@ -67,6 +68,9 @@ int main(int argc, char** argv)
 
   init_all();
 
+  OPCclient.init("opc.tcp://localhost:4840");
+  uint16_t cnt = 0;
+  uint16_t ccc = 0;
   // logger_set_queue(true);
 
   for (;;) {
@@ -74,6 +78,21 @@ int main(int argc, char** argv)
     printf("%s", ESC_CLS);
     printf("%s", ESC_HOME);
     fflush(stdout);
+
+    cnt++;
+    string s = OPCs.GetVarFullName("Millis");
+
+    t.start();
+    OPCclient.ReadNumber(s, ccc);
+    t.spent_auto("OPC Client read ONE reg in: ");
+
+    if (OPCclient.WriteNumber(s, cnt)) {
+      OPCclient.ReadNumber(s, ccc);
+      OPCs.RefreshAllValues();
+      printf("%s: %d %d %d\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+    } else
+      printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+
     /*
         i++;
         string s;
@@ -82,9 +101,9 @@ int main(int argc, char** argv)
         s = "/PLC/Kub/Kub.Temp1";
         OPCs.setVar(s, (float)i);
     */
-    string s;
+
     s = "/PLC/Kub/Kub.millis";
-    printf("Millis: %d, ", OPCs.ReadRawUnion(s).ui16);
+    printf("Kub.millis: %d, ", OPCs.ReadRawUnion(s).ui16);
 
     s = "/PLC/Kub/Kub.Temp1";
     printf("T1: %5.2f, ", OPCs.ReadRawUnion(s).fl);

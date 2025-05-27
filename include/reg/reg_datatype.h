@@ -3,7 +3,7 @@
 // reg_datatype.h ----------------------------------
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
-#include "include/opc/opc_class.h"
+#include "include/opc_server/opcs_class.h"
 #include "include/plc/plc_class.h"
 
 /*

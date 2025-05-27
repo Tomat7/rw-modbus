@@ -14,7 +14,7 @@
 
 #include "include/console.h"
 #include "include/logger.h"
-#include "opc_class.h"
+#include "opcs_class.h"
 
 #define DEBUG(a) if(isDebug){a}
 
@@ -226,23 +226,23 @@ int OpcServer_c::RefreshAllValues()
 string OpcServer_c::get_StrVarDetails(var_t &v)
 {
   string ret;
-  if (v.type == UA_TYPES_INT16)
+  if (v.ua_type == UA_TYPES_INT16)
     ret = "(i16) = " + to_string(*(static_cast<int16_t*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_INT32)
+  else if (v.ua_type == UA_TYPES_INT32)
     ret = "(i32) = " + to_string(*(static_cast<int32_t*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_INT64)
+  else if (v.ua_type == UA_TYPES_INT64)
     ret = "(i64) = " + to_string(*(static_cast<int64_t*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_UINT16)
+  else if (v.ua_type == UA_TYPES_UINT16)
     ret = "(ui16) = " + to_string(*(static_cast<uint16_t*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_UINT32)
+  else if (v.ua_type == UA_TYPES_UINT32)
     ret = "(ui32) = " + to_string(*(static_cast<uint32_t*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_UINT64)
+  else if (v.ua_type == UA_TYPES_UINT64)
     ret = "(ui64) = " + to_string(*(static_cast<uint64_t*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_FLOAT)
+  else if (v.ua_type == UA_TYPES_FLOAT)
     ret = "(float) = " + to_string(*(static_cast<float*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_DOUBLE)
+  else if (v.ua_type == UA_TYPES_DOUBLE)
     ret = "(double) = " + to_string(*(static_cast<double*>(v.ptr_value)));
-  else if (v.type == UA_TYPES_DATETIME)
+  else if (v.ua_type == UA_TYPES_DATETIME)
     ret = "(DateTime)";
 
   return ret;

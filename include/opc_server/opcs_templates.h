@@ -2,7 +2,7 @@
 // plc_templates.h ----------------------------------
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
-#include "opc_class.h"
+#include "opcs_class.h"
 
 
 // ======= Definition of add TEMPLATEs =========
@@ -14,6 +14,8 @@ int OpcServer_c::AddVar(std::string s, T Numeric, int rmode)
   rc = add_VarName(s, types[type_index(typeid(Numeric))], rmode);
   if (rc == 0)
     return 0;
+
+//  UA_Variant_hasScalarType(&value, &UA_TYPES[UA_TYPES_FLOAT];
 
   // LOGD("%s - 2", __func__);
   add_VarNodeId(vars[s]);

@@ -18,7 +18,7 @@
 #include <typeinfo>
 
 #include "include/logger.h"
-#include "opc_datatype.h"
+#include "opcs_datatype.h"
 
 #ifndef MANUFACTURER_NAME
 #define MANUFACTURER_NAME "tomat7@vm32.ru"
@@ -122,11 +122,11 @@ private:
 
   badvalue_t bad_value;
   map<string, var_t> vars;     // All regs here.
-  map<type_index, int> types;  // Types coding is in constructor
+  map<type_index, int> types;  // UA types coding (index is CPP type_index)
 };
 
 // ======== Definition of TEMPLATEs =========
 
-#include "opc_templates.h"
+#include "opcs_templates.h"
 
 // eof
