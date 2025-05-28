@@ -79,6 +79,8 @@ int main(int argc, char** argv)
     printf("%s", ESC_HOME);
     fflush(stdout);
 
+// ======= Write ===========================
+
     cnt++;
     string s = OPCs.GetVarFullName("Millis");
 
@@ -93,6 +95,16 @@ int main(int argc, char** argv)
     } else
       printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
 
+// ======= Read ==============================
+
+    float t1 = 0;
+    s = OPCs.GetVarFullName("Tkub1");
+
+    if (OPCclient.ReadNumber(s, t1))
+      printf("%s: %f %f\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+    else
+      printf("%s: %f %f error!\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+// ===========================================
     /*
         i++;
         string s;

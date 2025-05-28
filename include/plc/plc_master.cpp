@@ -73,7 +73,7 @@ int PLC_c::mb_connect()  // Master only
       mb.errors++;
       mb.errors_cn++;
       if (att >= attempts)
-        LOGE("%s %s connect error: %s ", ip_addr, dev_name,
+        LOGE("%s %s connect: %s ", ip_addr, dev_name,
              modbus_strerror(errno));
     }
   }
@@ -124,7 +124,7 @@ int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
     mb.errors++;
     mb.errors_rd++;
     if (att >= attempts)
-      LOGE("%s %s read error: %s ", ip_addr, dev_name, modbus_strerror(errno));
+      LOGE("%s %s read: %s ", ip_addr, dev_name, modbus_strerror(errno));
   } else if (rc != nb_regs) {
     mb.errors++;
     mb.errors_rd++;
@@ -166,7 +166,7 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
 
       if (rc == -1) {
         rc_write--;
-        LOGW("%s %s write reg: %s error: %s", ip_addr, dev_name, R.ch_name,
+        LOGW("%s %s write reg %s: %s", ip_addr, dev_name, R.ch_name,
              modbus_strerror(errno));
       }
     }

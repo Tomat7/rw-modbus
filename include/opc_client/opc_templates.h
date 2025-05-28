@@ -36,8 +36,10 @@ bool OpcClient_c::ReadNumber(string varname, T &x)
     x = *(T*)uaVariant->data;
     rc = true;
   } else {
-    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                "Reading the value failed: %s", UA_StatusCode_name(scRead));
+    LOGE("%s reading: %s", varname.c_str(), UA_StatusCode_name(scRead));
+//    x = *(T*)uaVariant->data;
+//    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+//                "Reading the value failed: %s", UA_StatusCode_name(scRead));
   }
 
   UA_Variant_clear(uaVariant);
@@ -65,14 +67,16 @@ bool OpcClient_c::WriteNumber(string varname, T &x)
 
   scWrite = UA_Variant_setScalarCopy(uaVariant, &value, &UA_TYPES[uaType]);
   if (scWrite != UA_STATUSCODE_GOOD) {
-    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                "Variant/Scalar failed: %s", UA_StatusCode_name(scWrite));
+    LOGE("Variant/Scalar: %s", UA_StatusCode_name(scWrite));
+    /*  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                    "Variant/Scalar: %s", UA_StatusCode_name(scWrite)); */
   } else {
     scWrite = UA_Client_writeValueAttribute(uaClient, nodeId, uaVariant);
-    if (scWrite != UA_STATUSCODE_GOOD)
-      UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                  "Writing failed: %s", UA_StatusCode_name(scWrite));
-    else
+    if (scWrite != UA_STATUSCODE_GOOD) {
+      LOGE("Writing: %s", UA_StatusCode_name(scWrite));
+      /*  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                        "Writing: %s", UA_StatusCode_name(scWrite)); */
+    } else
       rc = true;
   }
 
