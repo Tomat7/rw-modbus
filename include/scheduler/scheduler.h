@@ -30,7 +30,8 @@ class Task_c
 public:
   Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr);
   ~Task_c();
-  static void run(Task_c*);
+  // static void run(Task_c*);
+  void run();
 
   function<int(void*)> func;
   volatile bool taskRunning = false;

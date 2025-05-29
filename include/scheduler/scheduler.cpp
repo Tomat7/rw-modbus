@@ -56,8 +56,25 @@ Task_c::~Task_c()
   LOGD("DEstruct Tasks_c: %s. %x", this->task_name.c_str(), this);
 }
 
-void Task_c::run(Task_c* t)
+
+void Task_c::run()  // for way 3&4
 {
+  LOGD("Task-run: %s", task_name.c_str());
+  task_mux->lock();
+  prctl(PR_SET_NAME, task_name.c_str());
+  taskRunning = true;
+  millis_last_run = millis();
+  rc = func(params);
+  counter_errors = 0;
+  counter_run++;
+  taskRunning = false;
+  task_mux->unlock();
+  LOGD("Task-done: %s %d", task_name.c_str(), rc);
+}
+
+/*
+  void Task_c::run(Task_c* t)  // for way 1&2
+  {
   LOGD("Task-run: %s", t->task_name.c_str());
   t->task_mux->lock();
   prctl(PR_SET_NAME, t->task_name.c_str());
@@ -69,8 +86,8 @@ void Task_c::run(Task_c* t)
   t->taskRunning = false;
   t->task_mux->unlock();
   LOGD("Task-done: %s %d", t->task_name.c_str(), t->rc);
-}
-
+  }
+*/
 // ======= Scheduler ===============================================
 
 Schedule_c::Schedule_c(int nb_)
@@ -142,6 +159,7 @@ void Schedule_c::scheduler_cycle_()
   uint64_t nb_tasks = tasks.size();
   vector<thread> threads(nb_tasks);
   // function<void(Task_c*)> f; // for other way1
+  function<void()> fn_task; // for other way 3
 
   while (isRunning) {
     this_thread::sleep_for(10ms);
@@ -149,12 +167,16 @@ void Schedule_c::scheduler_cycle_()
     for (uint64_t i = 0; i < nb_tasks; i++) {
       Task_c &t = tasks[i];
       // f = tasks[i].run; // for other way1
+      fn_task = std::bind_front(&Task_c::run, &tasks[i]); // for other way3
       if ((millis() - t.millis_last_run) > t.interval_ms) {
         if ((!t.taskRunning) && isRunning) {
           // LOGD("Task-ready: %s \n", t.task_name.c_str());
-          // threads[i] = thread(f, &tasks[i]); // for other way1
-          // threads[i] = thread(t.run, &tasks[i]); // for other way2
-          threads[i] = thread(run_task_, i);
+          // threads[i] = thread(f, &tasks[i]); // way 1
+          // threads[i] = thread(t.run, &tasks[i]); // way2
+          threads[i] = thread(fn_task); // way3
+          // threads[i] = thread(std::bind(&Task_c::run, &tasks[i])); // way 4a
+          // threads[i] = thread(std::bind_front(&Task_c::run, &tasks[i])); // 4b
+          // threads[i] = thread(run_task_, i);  // classic & stupid
           threads[i].detach();
         } else {
           LOGC("Task-error: %s still running!", t.task_name.c_str());
