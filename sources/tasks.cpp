@@ -16,7 +16,7 @@ void tasks_init()
   mb_add_refresh_tasks();
 }
 
-void tasks_start() { Task.run(); }
+void tasks_start() { Task.start(); }
 
 int task_millis_(void* params)
 {

@@ -40,8 +40,10 @@ uint64_t millis()
   return t;
 }
 
-Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name,
-               void* _ptr)
+// ======= Tasks ===============================================
+
+Task_c::Task_c(function<int(void*)> _func, uint64_t _ms,
+               string _name, void* _ptr)
   : func(_func), interval_ms(_ms), task_name(_name), params(_ptr)
 {
   task_mux = new mutex;
@@ -53,6 +55,23 @@ Task_c::~Task_c()
   delete this->task_mux;
   LOGD("DEstruct Tasks_c: %s. %x", this->task_name.c_str(), this);
 }
+
+void Task_c::run(Task_c* t)
+{
+  LOGD("Task-run: %s", t->task_name.c_str());
+  t->task_mux->lock();
+  prctl(PR_SET_NAME, t->task_name.c_str());
+  t->taskRunning = true;
+  t->millis_last_run = millis();
+  t->rc = t->func(t->params);
+  t->counter_errors = 0;
+  t->counter_run++;
+  t->taskRunning = false;
+  t->task_mux->unlock();
+  LOGD("Task-done: %s %d", t->task_name.c_str(), t->rc);
+}
+
+// ======= Scheduler ===============================================
 
 Schedule_c::Schedule_c(int nb_)
 {
@@ -76,8 +95,8 @@ void Schedule_c::init(int _nb)
     LOGC("Wrong Schedule_c capacity: %d", _nb);
 }
 
-int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
-                         void* _ptr)
+int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms,
+                         string _name, void* _ptr)
 {
   scheduler_mux.lock();
   uint64_t nb_tasks = tasks.size();
@@ -105,7 +124,7 @@ int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms, string _name,
   return ret;
 }
 
-void Schedule_c::run()
+void Schedule_c::start()
 {
   if (!isRunning) {
     isRunning = true;
@@ -122,15 +141,19 @@ void Schedule_c::scheduler_cycle_()
   prctl(PR_SET_NAME, "Scheduler:cycle");
   uint64_t nb_tasks = tasks.size();
   vector<thread> threads(nb_tasks);
+  // function<void(Task_c*)> f; // for other way1
 
   while (isRunning) {
     this_thread::sleep_for(10ms);
 
     for (uint64_t i = 0; i < nb_tasks; i++) {
       Task_c &t = tasks[i];
+      // f = tasks[i].run; // for other way1
       if ((millis() - t.millis_last_run) > t.interval_ms) {
         if ((!t.taskRunning) && isRunning) {
           // LOGD("Task-ready: %s \n", t.task_name.c_str());
+          // threads[i] = thread(f, &tasks[i]); // for other way1
+          // threads[i] = thread(t.run, &tasks[i]); // for other way2
           threads[i] = thread(run_task_, i);
           threads[i].detach();
         } else {
@@ -186,12 +209,12 @@ void Schedule_c::run_task_(uint64_t i)
   prctl(PR_SET_NAME, tasks[i].task_name.c_str());
   tasks[i].taskRunning = true;
   tasks[i].millis_last_run = millis();
-  int ret = tasks[i].func(tasks[i].params);
+  tasks[i].rc = tasks[i].func(tasks[i].params);
   tasks[i].counter_errors = 0;
   tasks[i].counter_run++;
   tasks[i].taskRunning = false;
   tasks[i].task_mux->unlock();
-  LOGD("Task-done: %s %d", tasks[i].task_name.c_str(), ret);
+  LOGD("Task-done: %s %d", tasks[i].task_name.c_str(), tasks[i].rc);
 }
 
 // eof

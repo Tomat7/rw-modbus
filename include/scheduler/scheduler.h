@@ -30,6 +30,7 @@ class Task_c
 public:
   Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr);
   ~Task_c();
+  static void run(Task_c*);
 
   function<int(void*)> func;
   volatile bool taskRunning = false;
@@ -39,8 +40,10 @@ public:
   uint64_t counter_errors = 0;  // cntr of err. run while not finished previous
   mutex* task_mux = nullptr;
   string task_name;
+  int rc = 0; // Return code for... future use
   void* params;  // optional ptr to function's parameter
 };
+
 
 class Schedule_c
 {
@@ -51,7 +54,7 @@ public:
   static int add_task(function<int(void*)> _func, uint64_t _ms,
                       string _name = "Noname", void* _ptr = nullptr);
   static void init(int _nb = 0);
-  static void run();
+  static void start();
   static void stop();
 
 private:
