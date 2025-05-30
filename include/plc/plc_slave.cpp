@@ -128,7 +128,6 @@ int PLC_c::check_slave()
 int PLC_c::handle_slave(int usec)
 {
   //  LOCK_GUARD(network_mux);
-
   struct timeval tv;
   tv.tv_sec = 0;
   tv.tv_usec = usec;

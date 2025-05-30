@@ -21,7 +21,6 @@
 #include "include/macros.h"
 #include "plc_datatype.h"
 
-//#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
 #define MB_SLAVE_CONN_MAX 5
 #define MB_NO_DEV_NAME "-"
 #define MB_NO_FOLDER "."

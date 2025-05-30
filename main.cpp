@@ -11,9 +11,6 @@
 #include "./config.h"
 #include "./libs.h"
 
-// using namespace std;
-// using namespace libconfig;
-
 cfg_t Cfg;
 map<string, Reg_c> REGmap;
 vector<PLC_c> PLCvec;

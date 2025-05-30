@@ -8,8 +8,11 @@
 
 #include "config.h"
 #include "libs.h"
-using namespace std;
-// using namespace libconfig;
+
+// using std::string;
+// using std::mutex;
+// using std::map;
+// using std::type_index;
 
 static mutex mbupdate_mux;
 static vector<int> res;
@@ -44,6 +47,7 @@ int mb_add_refresh_tasks()
     Task.add_task(task_plc_refresh_, D.mb.polling_ms, task_name, &idx[i]);
   }
 
+  using namespace std::chrono_literals;
   std::this_thread::sleep_for(10ms);
   printf("mb_update threads STARTED.\n");
   std::this_thread::yield();
@@ -66,82 +70,6 @@ int mb_print_summary()
   return (int)nb_plcs;
 }
 
-/*
-  void mb_update_master(int x)
-  {
-  PLC_c &D = PLCvec[x];
-  prev_ts[x] = D.mb.timestamp_try_ms;
-  res[x] = D.update_master();
-  std::this_thread::yield();
-  return;
-  }
-
-
-  int mb_update()
-  {
-  //  "===== mb_update ====="
-  uint64_t i = 0;
-  uint64_t nb_plcs = PLCvec.size();
-  vector<thread> thr(nb_plcs);
-  res.resize((int)nb_plcs);
-  prev_ts.resize(nb_plcs);
-
-  logger_set_queue(true);
-
-  for (i = 0; i < nb_plcs; i++)
-    thr[i] = thread(mb_update_master, i);
-
-  std::this_thread::sleep_for(10ms);
-  printf("mb_update threads STARTED and ready to JOIN.\n");
-  std::this_thread::yield();
-
-  for (auto &th : thr) {
-    printf(".");
-    th.join();
-  }
-
-  printf("\n");
-  std::this_thread::sleep_for(10ms);
-  logger_set_queue(false);
-  logger_flush();
-
-  //   for (i = 0; i < nb_plcs; i++)
-  //    mb_print_summary((int)i);
-
-  mb_print_summary();
-  res.clear();
-  prev_ts.clear();
-
-  return 0;
-  }
-
-  int mb_read()
-  {
-  printf("\n===== mb_read =====\n");
-  int ret = 0;
-
-  for (auto &D : PLCvec) {
-    uint64_t old = D.mb.timestamp_try_ms;
-    ret = D.read_master();
-    printf("%-7s_dT: %4ld ret: %2d err: %d cn: %d rd: %d wr: %d rc: %2d\n",
-           D.dev_name, D.mb.timestamp_try_ms - old, ret, D.mb.errors,
-           D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc());
-  }
-  return 0;
-  }
-
-  int mb_write()
-  {
-  printf("\n===== mb_write =====\n");
-
-  for (auto &D : PLCvec) {
-    D.write_master();
-    //    tt.sleep_ms(10);
-  }
-
-  return 0;
-  }
-*/
 
 void mb_deinit()
 {

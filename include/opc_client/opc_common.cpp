@@ -18,11 +18,6 @@
 
 #define DEBUG(a) if(isDebug){a}
 
-/*
-  bool operator<(const value_u &v1, const value_u &v2) { return v1.ui64 < v2.ui64; }
-  bool operator>(const value_u &v1, const value_u &v2) { return v1.ui64 > v2.ui64; }
-  bool operator!=(const value_u &v1, const value_u &v2) { return v1.ui64 != v2.ui64; }
-*/
 
 OpcClient_c::OpcClient_c(const char* url_)
 {
