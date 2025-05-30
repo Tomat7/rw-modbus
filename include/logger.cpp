@@ -21,9 +21,9 @@ int log_level = 0;
 // 0 - no messages at all - will get from Config
 // 9 - all messages on screen
 
-static mutex logger_mux;  // already defined in .h
+static std::mutex logger_mux;  // already defined in .h
 static bool print_to_queue = false;
-static queue<string> Print_queue;
+static std::queue<std::string> Print_queue;
 
 static const char* ch_color[10] = {
 //  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7 X-8    Z-9
@@ -52,7 +52,7 @@ void logger(const char* _logname, int _prio, const char* _func,
   char buff_va[MESSAGE_MAX_LEN + 1] = {0};
   char buff_fn[MESSAGE_MAX_LEN + 1] = {0};
 
-  string fmt = (string)_func + "(): " + (string)_fmt;
+  std::string fmt = (std::string)_func + "(): " + (std::string)_fmt;
 
   if (!no_print) {
     color = ch_color[_prio];
@@ -82,7 +82,7 @@ void logger(const char* _logname, int _prio, const char* _func,
     snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NORM);
 
     if (print_to_queue)
-      Print_queue.emplace(string(buffer));
+      Print_queue.emplace(std::string(buffer));
     else
       printf("%s", buffer);
   }
@@ -237,7 +237,7 @@ char* add_slash(const char* _rn)
 
 const char* add_funcname(const char* _fmt, const char* _func)
 {
-  string fmt = (string)_func + "(): " + (string)_fmt;
+  std::string fmt = (std::string)_func + "(): " + (std::string)_fmt;
   _fmt = fmt.c_str();
   return _fmt;
 }

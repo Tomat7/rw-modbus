@@ -11,7 +11,9 @@
 #include <variant>
 #include <vector>
 
-using namespace std;
+//using namespace std;
+using std::string;
+using std::mutex;
 
 union value_u {
   int16_t i16;

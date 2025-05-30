@@ -30,7 +30,11 @@
 //#define APPLICATION_URI_SERVER "urn:open62541.server.application"
 #endif
 
-using namespace std;
+//using namespace std;
+using std::string;
+using std::mutex;
+using std::map;
+using std::type_index;
 
 class OpcServer_c
 {

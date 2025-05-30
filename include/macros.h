@@ -12,7 +12,16 @@
 #endif
 
 #ifndef LOCK_GUARD
-#define LOCK_GUARD(lg) const std::lock_guard<std::mutex> lock(lg)
+#define LOCK_GUARD(_LG) const std::lock_guard<std::mutex> lock(_LG)
+#endif
+
+#ifndef LOCK_UNIQUE
+#define LOCK_UNIQUE(_LQ) const std::unique_lock<std::mutex> lock(_LQ)
+#endif
+
+#ifndef LOCK_NOW
+#define LOCK_NOW(_L, _MTX) static std::mutex _MTX; std::unique_lock<std::mutex> _L(_MTX)
+#define LOCKNOW(_L) static std::mutex _L##_mux; std::unique_lock<std::mutex> _L(_L##_mux)
 #endif
 
 #ifdef FULL_DEBUG

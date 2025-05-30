@@ -16,8 +16,6 @@
 #include "include/logger.h"
 #include "plc_class.h"
 
-// mutex PLC_c::logger_mux;
-
 int PLC_c::get_rc_read() { return rc_read; }
 
 int PLC_c::get_rc_write() { return rc_write; }
@@ -183,48 +181,12 @@ uint16_t PLC_c::get_reg_by_fullname(
   return rval;
 }
 
-/*
-  int PLC_c::regs_size(int raddr)  // 0 - 16 bit reg, 1 - 1st reg of 32-bits reg
-  {
-  // DONE! -- TODO: full recode with new TYPE_*
-  int x = 0;
-  if (regs.count(raddr)) {
-    x = 1;
-    auto &rtype = regs[raddr].data.rtype;
 
-        if ((rtype > TYPE_32BIT) && (rtype < TYPE_64BIT))
-          x = 2;
-        else if ((rtype > TYPE_64BIT) && (rtype < TYPE_OTHER))
-          x = 4;
-  }
-  return x;
-  }
-*/
-
-/*
-  int PLC_c::regs_used(string rname) // 0 - 16 bit reg, 1 - 1st reg of 32-bits
-  reg
-  {
-  int x = 0;
-  for (auto &[a, r] : regs) {
-    if (r.str_rname == rname) {
-      x = regs_size(a);
-      break;
-    }
-  }
-  return x;
-  }
-*/
 uint64_t PLC_c::millis()
 {
   using namespace std::chrono;
 #define CAST_MILLIS duration_cast<milliseconds>
-  uint64_t t = CAST_MILLIS(system_clock::now().time_since_epoch()).count();
-  /* #define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
-    uint64_t t;
-    t =
-    CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count(); */
-  return t;
+  return CAST_MILLIS(system_clock::now().time_since_epoch()).count();
 }
 
 string PLC_c::to_lower(string str)

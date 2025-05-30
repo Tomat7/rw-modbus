@@ -11,29 +11,29 @@
 #include <iostream>
 #include <thread>
 
-#define DURATION_CAST std::chrono::duration_cast
-#define CAST_SECOND std::chrono::duration_cast<second_t>
-#define CAST_MILLIS std::chrono::duration_cast<millis_t>
-#define CAST_MICROS std::chrono::duration_cast<micros_t>
-
 // using namespace std;
 // using namespace chrono;
 
 using cchar = const char;
 
-using hires_clock_t = std::chrono::high_resolution_clock;  // just to save
-using sys_clock_t = std::chrono::system_clock;             // just to save here
-using std_clock_t = std::chrono::steady_clock;             // just to save here
+// Псевдонимы типов используются для удобного доступа к вложенным типам
+using second_t = std::chrono::duration<double, std::ratio<1>>;
+using millis_t = std::chrono::milliseconds;
+using micros_t = std::chrono::microseconds;
 
-class Timer
-{
+#define DURATION_CAST std::chrono::duration_cast
+#define CAST_SECOND std::chrono::duration_cast<second_t>
+#define CAST_MILLIS std::chrono::duration_cast<millis_t>
+#define CAST_MICROS std::chrono::duration_cast<micros_t>
+
+using hi_clock_t = std::chrono::high_resolution_clock;    // just to save
+using sys_clock_t = std::chrono::system_clock;            // just to save here
+using std_clock_t = std::chrono::steady_clock;            // just to save here
+
+using cclock_t = std_clock_t;  // make a choise - what clock to use now?!
+
+class Timer {
 private:
-  // Псевдонимы типов используются для удобного доступа к вложенным типам
-  using cclock_t = std_clock_t;  // what clock to use then?!
-
-  using second_t = std::chrono::duration<double, std::ratio<1>>;
-  using millis_t = std::chrono::milliseconds;
-  using micros_t = std::chrono::microseconds;
 
   std::chrono::time_point<cclock_t> begin;
   std::chrono::time_point<cclock_t> end;

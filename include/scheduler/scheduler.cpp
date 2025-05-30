@@ -26,24 +26,33 @@
 #endif
 #define SYSLOG_NAME "Task-scheduler"
 
+using std::string;
+using std::mutex;
+using std::vector;
+using std::function;
+using std::thread;
+using std::this_thread::sleep_for;
+
+using namespace std::chrono_literals;
+
 volatile bool Schedule_c::isRunning = false;
 /* int Schedule_c::nb_max = 0; */
 vector<Task_c> Schedule_c::tasks;
 // vector<thread> Schedule_c::threads;
 mutex Schedule_c::scheduler_mux;
 
-uint64_t millis()
+
+static uint64_t millis()
 {
-#define CAST_MILLIS std::chrono::duration_cast<std::chrono::milliseconds>
-  uint64_t t;
-  t = CAST_MILLIS(std::chrono::system_clock::now().time_since_epoch()).count();
-  return t;
+  using namespace std::chrono;
+#define CAST_MILLIS duration_cast<milliseconds>
+  return CAST_MILLIS(system_clock::now().time_since_epoch()).count();
 }
+
 
 // ======= Tasks ===============================================
 
-Task_c::Task_c(function<int(void*)> _func, uint64_t _ms,
-               string _name, void* _ptr)
+Task_c::Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr)
   : func(_func), interval_ms(_ms), task_name(_name), params(_ptr)
 {
   task_mux = new mutex;
@@ -162,7 +171,7 @@ void Schedule_c::scheduler_cycle_()
   function<void()> fn_task; // for other way 3
 
   while (isRunning) {
-    this_thread::sleep_for(10ms);
+    sleep_for(10ms);
 
     for (uint64_t i = 0; i < nb_tasks; i++) {
       Task_c &t = tasks[i];
@@ -186,7 +195,7 @@ void Schedule_c::scheduler_cycle_()
       }
     }
 
-    this_thread::yield();
+    std::this_thread::yield();
   }
 
   for (uint64_t i = 0; i < nb_tasks; i++)
@@ -203,7 +212,7 @@ void Schedule_c::scheduler_cycle_()
 void Schedule_c::stop()
 {
   isRunning = false;
-  this_thread::sleep_for(20ms);
+  sleep_for(20ms);
   scheduler_mux.lock();
 
   LOGD("Stop: Try to lock.");
@@ -215,7 +224,7 @@ void Schedule_c::stop()
     tasks[i].task_mux->unlock();
 
   LOGD("Stop: Try to clear.");
-  this_thread::sleep_for(10ms);
+  sleep_for(10ms);
 
   tasks.clear();
   scheduler_mux.unlock();

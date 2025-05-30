@@ -23,24 +23,25 @@
 #define SCHEDULE_MAX_TASK 50
 //#define USE_SYSLOG
 
-using namespace std;
+//using namespace std;
+
 
 class Task_c
 {
 public:
-  Task_c(function<int(void*)> _func, uint64_t _ms, string _name, void* _ptr);
+  Task_c(std::function<int(void*)> _func, uint64_t _ms, std::string _name, void* _ptr);
   ~Task_c();
   // static void run(Task_c*);
   void run();
 
-  function<int(void*)> func;
+  std::function<int(void*)> func;
   volatile bool taskRunning = false;
   volatile uint64_t millis_last_run = 0;  // last run millis
   uint64_t interval_ms = 0;
   uint64_t counter_run = 0;     // counter of run
   uint64_t counter_errors = 0;  // cntr of err. run while not finished previous
-  mutex* task_mux = nullptr;
-  string task_name;
+  std::mutex* task_mux = nullptr;
+  std::string task_name;
   int rc = 0; // Return code for... future use
   void* params;  // optional ptr to function's parameter
 };
@@ -52,17 +53,17 @@ public:
   Schedule_c(int nb_ = 1);
   ~Schedule_c();
 
-  static int add_task(function<int(void*)> _func, uint64_t _ms,
-                      string _name = "Noname", void* _ptr = nullptr);
+  static int add_task(std::function<int(void*)> _func, uint64_t _ms,
+                      std::string _name = "Noname", void* _ptr = nullptr);
   static void init(int _nb = 0);
   static void start();
   static void stop();
 
 private:
-  static vector<Task_c> tasks;
+  static std::vector<Task_c> tasks;
   // vector<thread> threads;
   volatile static bool isRunning;
-  static mutex scheduler_mux;
+  static std::mutex scheduler_mux;
   /* static  int nb_max; */
 
   static void scheduler_cycle_();

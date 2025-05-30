@@ -27,15 +27,18 @@
 #define MB_NO_FOLDER "."
 // #define USE_SYSLOG
 
-using namespace std;
+//using namespace std;
+
+using std::string;
+using std::mutex;
 
 class PLC_c
 {
 public:
   // for Master
   // PLC_c(string _ip = "none", string _name = "Master");
-  PLC_c(string _devname, string _ip, string _title, string _desc, int _port,
-        int _atm, int _ms, int _us);
+  PLC_c(string _devname, string _ip, string _title, string _desc,
+        int _port, int _atm, int _ms, int _us);
 
   // for Slave
   PLC_c(int _port = 502, int _m = 1, string _name = "Slave");
@@ -103,7 +106,7 @@ public:
   int reg_max = 0;   // maximal address of reg
   int reg_qty = 0;   // number of regs
   mbdata_t mb;
-  map<int, reg_t> regs;  // All regs here.
+  std::map<int, reg_t> regs;  // All regs here.
 
 private:
   modbus_t* ctx = nullptr;

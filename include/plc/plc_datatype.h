@@ -17,7 +17,8 @@
 #define NOTUA_TYPES_3RD 1003  // third reg of "long" (64 bits) word
 #define NOTUA_TYPES_4TH 1004  // fourth reg of "long" (64 bits) word
 
-using namespace std;
+//using namespace std;
+using std::string;
 
 struct mbdata_t {
   int status = 0;                 // rc value of last func (init/connect/read)

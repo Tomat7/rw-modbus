@@ -28,13 +28,16 @@
 #define MB_SLAVE_CONN_MAX 5
 //#define USE_SYSLOG
 
+//using namespace std;
+using std::string;
+using std::vector;
+
 struct regprop_t {
   int rtype;
   int rsize;
   byteorder_t rbyteorder;
 };
 
-using namespace std;
 
 class Reg_c
 {

@@ -36,7 +36,10 @@
 //#define APPLICATION_URI_SERVER "urn:open62541.server.application"
 #endif
 
-using namespace std;
+//using namespace std;
+using std::string;
+using std::mutex;
+using std::type_index;
 
 class OpcClient_c
 {
@@ -54,7 +57,7 @@ public:
 private:
   bool connect();
 
-  map<type_index, int> types;  // UA types coding (index is CPP type_index)
+  std::map<type_index, int> types;  // UA types coding (index is CPP type_index)
   mutex* muxClient = nullptr;
   UA_Client *uaClient = nullptr;
   UA_StatusCode scConnect = UA_STATUSCODE_BAD;

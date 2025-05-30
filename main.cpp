@@ -17,17 +17,16 @@
 cfg_t Cfg;
 map<string, Reg_c> REGmap;
 vector<PLC_c> PLCvec;
-// PLC_c Slave(MB_SLAVE_PORT);
 OpcClient_c OPCclient;
 OpcServer_c OPCs;
 Schedule_c Task /* (TASKS_NB_MAX) */;
+// PLC_c Slave(MB_SLAVE_PORT);
 // string PLC_folder = PLC_FOLDER;
 // string SCADA_folder = OPC_SCADA_FOLDER;
-
 // INotify IN(CFG_DIR);
+// int timeout_sec = TIMEOUT_SEC;
 
 const char* mode = "master";
-// int timeout_sec = TIMEOUT_SEC;
 int rc;
 
 static void close_sigint(int dummy)
@@ -45,7 +44,7 @@ int main(int argc, char** argv)
 {
   Timer t;
 
-  set<string> Mode{MODBUS_MODES};
+  std::set<string> Mode{MODBUS_MODES};
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   // log_level = 3;
