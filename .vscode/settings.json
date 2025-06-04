@@ -84,6 +84,12 @@
         "valarray": "cpp",
         "any": "cpp",
         "expected": "cpp",
-        "stacktrace": "cpp"
+        "stacktrace": "cpp",
+        "barrier": "cpp",
+        "coroutine": "cpp",
+        "source_location": "cpp",
+        "latch": "cpp",
+        "span": "cpp",
+        "spanstream": "cpp"
     }
 }

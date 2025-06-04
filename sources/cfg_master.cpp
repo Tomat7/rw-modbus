@@ -10,11 +10,8 @@
 #include "libs.h"
 // #include "./plc_class.h"
 
-//using namespace std;
-//using namespace libconfig;
-
+using namespace libconfig;
 using std::set;
-using libconfig::Setting;
 
 static int total_regs = 0;
 

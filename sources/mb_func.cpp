@@ -9,15 +9,15 @@
 #include "config.h"
 #include "libs.h"
 
-// using std::string;
-// using std::mutex;
-// using std::map;
-// using std::type_index;
+using std::string;
+//using std::mutex;
+using std::map;
+// using std::vector;
 
 static mutex mbupdate_mux;
-static vector<int> res;
-static vector<uint64_t> idx;
-static vector<uint64_t> prev_ts;
+static std::vector<int> res;
+static std::vector<uint64_t> idx;
+static std::vector<uint64_t> prev_ts;
 
 int task_plc_refresh_(void* params)
 {

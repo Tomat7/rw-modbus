@@ -60,7 +60,6 @@
 #define D(a)
 #endif
 
-// using namespace std;
 
 extern int log_level;  // 0 - no messages at all, 9 - all on screen
 // static mutex logger_mux;

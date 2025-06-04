@@ -54,14 +54,11 @@ void OpcServer_c::init(UA_UInt16 _port)
   uaDataMux = new mutex;
   // uaGetMux = new mutex;
   //uaServer = UA_Server_new();
-  UA_ServerConfig uaServerConfig;
   //  = UA_Server_getConfig(uaServer);
-  memset(&uaServerConfig, 0, sizeof(UA_ServerConfig));
   //UA_ServerConfig_setDefault(uaServerConfig);
-  LOGI("Memset done");
-  UA_ServerConfig_setMinimal(&uaServerConfig, uaPort, NULL);
-  //UA_ServerConfig_setBasics_withPort(uaServerConfig, uaPort);
-  LOGI("SetMinimal done");
+  UA_ServerConfig uaServerConfig;
+  memset(&uaServerConfig, 0, sizeof(UA_ServerConfig)); // LOGI("Memset done");
+  UA_ServerConfig_setMinimal(&uaServerConfig, uaPort, NULL); // LOGI("SetMin");
   wait_console(3);
   init_config(&uaServerConfig);
   LOGI("INIT done");

@@ -28,7 +28,6 @@
 #define MB_SLAVE_CONN_MAX 5
 //#define USE_SYSLOG
 
-//using namespace std;
 using std::string;
 using std::vector;
 

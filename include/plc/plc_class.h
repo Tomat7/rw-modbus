@@ -26,8 +26,6 @@
 #define MB_NO_FOLDER "."
 // #define USE_SYSLOG
 
-//using namespace std;
-
 using std::string;
 using std::mutex;
 

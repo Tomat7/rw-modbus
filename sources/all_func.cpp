@@ -10,7 +10,6 @@
 #include "libs.h"
 
 #define TIMER_START_MSG nullptr
-// using namespace std;
 // using namespace libconfig;
 
 void init_all()

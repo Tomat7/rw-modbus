@@ -23,8 +23,6 @@
 #define SCHEDULE_MAX_TASK 50
 //#define USE_SYSLOG
 
-//using namespace std;
-
 
 class Task_c
 {

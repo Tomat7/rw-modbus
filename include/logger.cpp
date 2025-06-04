@@ -22,8 +22,8 @@ int log_level = 0;
 // 9 - all messages on screen
 
 static std::mutex logger_mux;  // already defined in .h
-static bool print_to_queue = false;
 static std::queue<std::string> Print_queue;
+static bool print_to_queue = false;
 
 static const char* ch_color[10] = {
 //  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7 X-8    Z-9

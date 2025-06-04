@@ -30,7 +30,6 @@
 //#define APPLICATION_URI_SERVER "urn:open62541.server.application"
 #endif
 
-//using namespace std;
 using std::string;
 using std::mutex;
 using std::map;

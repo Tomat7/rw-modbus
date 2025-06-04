@@ -6,7 +6,6 @@
 #include "config.h"
 #include "libs.h"
 
-// using namespace std;
 // using namespace libconfig;
 
 // void plc_show_regs(int i);
@@ -33,8 +32,8 @@ void plc_show1()
 
   for (int i = 0; i < nb_plcs; ++i) {  // Cycle for PLCs
     plc_print_details(i);
-    //    for (int j = 0; j < PLCset[i].reg_qty; ++j) // Cycle for REGs
-    for (auto &[a, R] : PLCvec[i].regs)
+
+    for (auto &[a, R] : PLCvec[i].regs) // Cycle for REGs
       plc_print_reg_details(i, a);
   }
 

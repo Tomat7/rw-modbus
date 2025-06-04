@@ -74,7 +74,7 @@ bool OpcClient_c::WriteNumber(string varname, T &x)
     scWrite = UA_Client_writeValueAttribute(uaClient, nodeId, uaVariant);
     if (scWrite != UA_STATUSCODE_GOOD) {
       LOGE("Writing: %s", UA_StatusCode_name(scWrite));
-      /*  UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+      /*    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                         "Writing: %s", UA_StatusCode_name(scWrite)); */
     } else
       rc = true;
