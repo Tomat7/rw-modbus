@@ -81,4 +81,72 @@
   }
 */
 
+
+// uint16_t opc_update_uint16(string name, regdata_t* rd)
+/*
+  uint16_t opc_update_uint16(string name, Reg_c* R)
+  {
+  // printf("\n===== OPC_update_uint16 =====\n");
+  regdata_t* rd = R->ptr_data_plc;
+  uint16_t val_ui16 = R->get_value<uint16_t>(); // rd->rvalue;
+  int16_t val_i16 = (int16_t)rd->rvalue;
+  float val_fl = (int16_t)rd->rvalue * (float)0.01;
+  bool isOK = (rd->rerrors == 0);
+  int rtype = rd->rtype;
+
+  string n = name; //(R->ptr_reg)->str_opcname;
+  uint16_t val_get = 0;
+
+  OPCs.updateVar(Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix, rd->rerrors, true);
+
+  // TODO: full recode with new TYPE_*
+  if (rtype == 2)
+    val_get = CAST(uint16_t)(100 * OPCs.updateVar(n, val_fl, isOK));
+  else if (rtype == 1)
+    val_get = CAST(uint16_t)(OPCs.updateVar(n, val_i16, isOK));
+  else if (rtype == 0)
+    val_get = CAST(uint16_t)(OPCs.updateVar(n, val_ui16, isOK));
+
+  return val_get;
+  }
+*/
+
+
+  
+/*
+  template<typename T>
+  uint16_t opc_update_var(string s, T Value_set, bool isOK)
+  {
+  T Value_get = Value_set;
+  Value_get = OPCs.getVar(s, Value_get);
+  if (OPCs.getType(s) == UA_TYPES_FLOAT) {
+    Value_get = (uint16_t)(Value_get * 100);
+    Value_set = Value_set * (T)0.01;
+  }
+  OPCs.setVar(s, Value_set, isOK);
+  return (uint16_t)Value_get;
+  }
+*/
+
+/*     string parent = name;
+    string folder = rm.ptr_reg->str_title;
+    size_t z = parent.find(".");
+    parent.erase(z);
+*/
+// n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
+/* if (folder != "")
+  n += "/" + folder;    // = /PLC/
+  if (parent != "")
+  n += + "/" + parent;  // = /PLC/Kub
+
+  n += "/" + name;        // = /PLC/Kub/Kub.Temp1
+*/
+
+/*   string parent = name;
+  string folder = rm.ptr_reg->str_title;
+  size_t z = parent.find(".");
+  parent.erase(z);
+*/
+// string n = PLC_folder + parent + "/" + name;
+
 // eof

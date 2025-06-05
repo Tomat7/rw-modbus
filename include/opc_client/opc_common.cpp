@@ -15,9 +15,12 @@
 #include "include/console.h"
 #include "include/logger.h"
 #include "opc_client.h"
+//#include "opc_templates.h"
 
 #define DEBUG(a) if(isDebug){a}
 
+namespace OPC
+{
 
 OpcClient_c::OpcClient_c(const char* url_)
 {
@@ -106,5 +109,7 @@ void OpcClient_c::stop()
   muxClient = nullptr;
   LOGN("Stop: muxClient free.");
 }
+
+} // namespace OPC
 
 // eof

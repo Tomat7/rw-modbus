@@ -14,7 +14,7 @@
 cfg_t Cfg;
 map<string, Reg_c> REGmap;
 vector<PLC_c> PLCvec;
-OpcClient_c OPCclient;
+OPC::OpcClient_c OPCclient;
 OpcServer_c OPCs;
 Schedule_c Task /* (TASKS_NB_MAX) */;
 // PLC_c Slave(MB_SLAVE_PORT);
@@ -65,9 +65,9 @@ int main(int argc, char** argv)
   init_all();
 
   OPCclient.init("opc.tcp://localhost:4840");
-  uint16_t cnt = 0;
-  uint16_t ccc = 0;
-  // logger_set_queue(true);
+//  uint16_t cnt = 0;
+//  uint16_t ccc = 0;
+//  logger_set_queue(true);
 
   for (;;) {
     logger_set_queue(true);
@@ -75,66 +75,8 @@ int main(int argc, char** argv)
     printf("%s", ESC_HOME);
     fflush(stdout);
 
-// ======= Write ===========================
-
-    cnt++;
-    string s = OPCs.GetVarFullName("Millis");
-
-    t.start();
-    OPCclient.ReadNumber(s, ccc);
-    t.spent_auto("OPC Client read ONE reg in: ");
-
-    if (OPCclient.WriteNumber(s, cnt)) {
-      OPCclient.ReadNumber(s, ccc);
-      OPCs.RefreshAllValues();
-      printf("%s: %d %d %d\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
-    } else
-      printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
-
-// ======= Read ==============================
-
-    float t1 = 0;
-    s = OPCs.GetVarFullName("Tkub1");
-
-    if (OPCclient.ReadNumber(s, t1))
-      printf("%s: %f %f\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
-    else
-      printf("%s: %f %f error!\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
-// ===========================================
-    /*
-        i++;
-        string s;
-        s = "/PLC/Kub/Kub.millis";
-        OPCs.setVar(s, i);
-        s = "/PLC/Kub/Kub.Temp1";
-        OPCs.setVar(s, (float)i);
-    */
-
-    s = "/PLC/Kub/Kub.millis";
-    printf("Kub.millis: %d, ", OPCs.ReadRawUnion(s).ui16);
-
-    s = "/PLC/Kub/Kub.Temp1";
-    printf("T1: %5.2f, ", OPCs.ReadRawUnion(s).fl);
-
-    s = "/PLC/Kub/Kub.Temp2";
-    float fl;
-    OPCs.ReadNumber(s, fl);
-    printf("T2: %5.2f", fl);
-
-    s = "Kub.Temp3";
-    float myfl = ReadValue(s);
-    const char* C = getColor(OPCs.isVariable(s));
-    const char* B = getBlynk(OPCs.isGood(s));
-    printf("%sT3a: %s%5.2f%s, ", C, B, myfl, NRM);
-
-    s = "Kub.Temp3";
-    myfl = ReadValue(s);
-    C = getColor(OPCs.isVariable(s));
-    B = getBlynk(OPCs.isGood(s));
-    printf("%sT3b: %s%5.2f%s, ", C, B, myfl, NRM);
-    // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
-    int16_t t16 = (int16_t)round(myfl * 100);
-    myfl = t16 / 100;
+    opc_client_();
+    opc_server_();
 
     printf("\n");
 

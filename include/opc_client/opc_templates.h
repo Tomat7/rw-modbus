@@ -4,6 +4,8 @@
 
 #include "opc_client.h"
 
+namespace OPC
+{
 
 // ======= Definition of __READ__ TEMPLATE =========
 
@@ -86,5 +88,7 @@ bool OpcClient_c::WriteNumber(string varname, T &x)
 
   return rc;
 }
+
+} // namespace OPC
 
 // eof

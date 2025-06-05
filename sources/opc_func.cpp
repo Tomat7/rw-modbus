@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/prctl.h>
 
+#include <cmath>
 #include <map>
 #include <string>
 #include <vector>
@@ -52,35 +53,6 @@ void opc_regs_init()
   }
 }
 
-// uint16_t opc_update_uint16(string name, regdata_t* rd)
-/*
-  uint16_t opc_update_uint16(string name, Reg_c* R)
-  {
-  // printf("\n===== OPC_update_uint16 =====\n");
-  regdata_t* rd = R->ptr_data_plc;
-  uint16_t val_ui16 = R->get_value<uint16_t>(); // rd->rvalue;
-  int16_t val_i16 = (int16_t)rd->rvalue;
-  float val_fl = (int16_t)rd->rvalue * (float)0.01;
-  bool isOK = (rd->rerrors == 0);
-  int rtype = rd->rtype;
-
-  string n = name; //(R->ptr_reg)->str_opcname;
-  uint16_t val_get = 0;
-
-  OPCs.updateVar(Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix, rd->rerrors, true);
-
-  // TODO: full recode with new TYPE_*
-  if (rtype == 2)
-    val_get = CAST(uint16_t)(100 * OPCs.updateVar(n, val_fl, isOK));
-  else if (rtype == 1)
-    val_get = CAST(uint16_t)(OPCs.updateVar(n, val_i16, isOK));
-  else if (rtype == 0)
-    val_get = CAST(uint16_t)(OPCs.updateVar(n, val_ui16, isOK));
-
-  return val_get;
-  }
-*/
-
 value_u opc_get_value(string s) { return OPCs.ReadRawUnion(OPCs.GetVarFullName(s)); }
 
 bool opc_set_value(string s, value_u val, bool isOK)
@@ -105,40 +77,90 @@ void opc_run_thread()
   OPCs.run();
 }
 
-/*
-  template<typename T>
-  uint16_t opc_update_var(string s, T Value_set, bool isOK)
-  {
-  T Value_get = Value_set;
-  Value_get = OPCs.getVar(s, Value_get);
-  if (OPCs.getType(s) == UA_TYPES_FLOAT) {
-    Value_get = (uint16_t)(Value_get * 100);
-    Value_set = Value_set * (T)0.01;
-  }
-  OPCs.setVar(s, Value_set, isOK);
-  return (uint16_t)Value_get;
-  }
-*/
 
-/*     string parent = name;
-    string folder = rm.ptr_reg->str_title;
-    size_t z = parent.find(".");
-    parent.erase(z);
-*/
-// n = PLC_folder + parent + "/" + name;  // full - /PLC/Kub/Kub.Temp1
-/* if (folder != "")
-  n += "/" + folder;    // = /PLC/
-  if (parent != "")
-  n += + "/" + parent;  // = /PLC/Kub
+// ======= OPC server operations =======
 
-  n += "/" + name;        // = /PLC/Kub/Kub.Temp1
-*/
+void opc_server_()
+{
+  using OPC_server::ReadValue;
+  using OPC_server::WriteValue;
+  /*
+          i++;
+          string s;
+          s = "/PLC/Kub/Kub.millis";
+          OPCs.setVar(s, i);
+          s = "/PLC/Kub/Kub.Temp1";
+          OPCs.setVar(s, (float)i);
+  */
 
-/*   string parent = name;
-  string folder = rm.ptr_reg->str_title;
-  size_t z = parent.find(".");
-  parent.erase(z);
-*/
-// string n = PLC_folder + parent + "/" + name;
+  string s = "/PLC/Kub/Kub.millis";
+  printf("Kub.millis: %d, ", OPCs.ReadRawUnion(s).ui16);
+
+  s = "/PLC/Kub/Kub.Temp1";
+  printf("T1: %5.2f, ", OPCs.ReadRawUnion(s).fl);
+
+  s = "/PLC/Kub/Kub.Temp2";
+  float fl;
+  OPCs.ReadNumber(s, fl);
+  printf("T2: %5.2f", fl);
+
+  s = "Kub.Temp3";
+  float myfl = ReadValue(s);
+  const char* C = getColor(OPCs.isVariable(s));
+  const char* B = getBlynk(OPCs.isGood(s));
+  printf("%sT3a: %s%5.2f%s, ", C, B, myfl, NRM);
+
+  s = "Kub.Temp3";
+  myfl = ReadValue(s);
+  C = getColor(OPCs.isVariable(s));
+  B = getBlynk(OPCs.isGood(s));
+  printf("%sT3b: %s%5.2f%s, ", C, B, myfl, NRM);
+  // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
+  int16_t t16 = (int16_t)round(myfl * 100);
+  myfl = t16 / 100;
+}
+
+// ======= OPC CLIENT operations =======
+void opc_client_()
+{
+  using OPC_client::ReadValue;
+  using OPC_client::WriteValue;
+
+  static uint16_t cnt = 0;
+  static uint16_t ccc = 0;
+
+  cnt++;
+  string s = OPCs.GetVarFullName("Millis");
+
+//    t.start();
+//  OPCclient.ReadNumber(s, ccc);
+  ccc = ReadValue(s);
+//    t.spent_auto("OPC Client read ONE reg in: ");
+
+  /*
+    if (OPCclient.WriteNumber(s, cnt)) {
+      OPCclient.ReadNumber(s, ccc);
+      OPCs.RefreshAllValues();
+      printf("%s: %d %d %d\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+    } else
+      printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+  */
+  if (OPCclient.WriteNumber(s, cnt)) {
+    // OPCclient.ReadNumber(s, ccc);
+    ccc = ReadValue(s);
+    OPCs.RefreshAllValues();
+    printf("%s: %d %d %d\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+  } else
+    printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+// ======= Read CLIENT =======
+
+  float t1 = 0;
+  s = OPCs.GetVarFullName("Tkub1");
+
+  if (OPCclient.ReadNumber(s, t1))
+    printf("%s: %f %f\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+  else
+    printf("%s: %f %f error!\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+}
 
 // eof

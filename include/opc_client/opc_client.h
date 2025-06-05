@@ -40,6 +40,9 @@ using std::string;
 using std::mutex;
 using std::type_index;
 
+namespace OPC
+{
+
 class OpcClient_c
 {
 public:
@@ -66,6 +69,8 @@ private:
 //  int rc = 0;
 
 };
+
+} // namespace OPC
 
 // ======== Definition of TEMPLATEs =========
 

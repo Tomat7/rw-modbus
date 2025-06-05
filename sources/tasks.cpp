@@ -25,7 +25,7 @@ int task_millis_(void* params)
   for (auto& [n, rm] : REGmap) {
     if (n.find("millis") != std::string::npos) {
       LOGD("%s", n.c_str());
-      WriteValue(n, 0);
+      OPC_server::WriteValue(n, 0);
       x++;
     }
   }
