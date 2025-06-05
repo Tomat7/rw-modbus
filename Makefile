@@ -121,14 +121,18 @@ $(info === FULL Debug options activated! ===)
 endif
 
 # === Colors (just for fun) ===
-RED='\033[0;91m' \033[32m<text> 
-GRE="\033[0;32m"
-GRB="\033[0;92m"
-YEL="\033[0;93m"# === My Project depends! ===
-YEB="\033[1;33m"
+ifneq ("/usr/bin/dash","$(shell readlink -f /bin/sh)")
+E=-e
+endif
+RED='\033[0;91m' # \033[32m<text> 
+GRE='\033[0;32m'
+GRB='\033[0;92m'
+YEL='\033[0;93m' # === My Project depends! ===
+ECHO_YEL=@echo $(E) '\033[0;93m'
+YEB='\033[1;33m'
 BLU='\033[0;94m'
 WHI='\033[0;97m'
-NC='\033[0m' # No Color
+NC='\033[0m'     # No Color
 
 # =====================================================================
 
@@ -156,7 +160,7 @@ $(EXEC_FILE): $(OBJLIST)
 
 #================== Compiling ==============================
 $(OBJDIR)/%.o: %.cpp
-	@echo -e $(YEL)"=== Compiling$(MESSAGE): $<"$(NC)
+	$(ECHO_YEL)"=== Compiling$(MESSAGE): $<"$(NC)
 	$(COMPILE.cpp) $(INCLUDES) $(OPTFLAGS) $(DEPFLAGS)/$<.d -o $@ $<
 #	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
 
