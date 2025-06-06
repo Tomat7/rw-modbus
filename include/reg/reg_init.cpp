@@ -71,17 +71,23 @@ map<string, regprop_t> type_map{
 
   {"fhh", TYPE_FLOAT_BE}, // Big-endian
   {"fbe", TYPE_FLOAT_BE},
+  {"float_be", TYPE_FLOAT_BE},
   {"float_abcd", TYPE_FLOAT_BE},
 
   {"flh", TYPE_FLOAT_BES}, // Big-endian Swap
   {"fbes", TYPE_FLOAT_BES},
+  {"float_bes", TYPE_FLOAT_BES},
   {"float_badc", TYPE_FLOAT_BES},
 
 
   {"fll", TYPE_FLOAT_LE}, // Little-endian
+  {"fle", TYPE_FLOAT_LE},
+  {"float_le", TYPE_FLOAT_LE},
   {"float_dcba", TYPE_FLOAT_LE},
 
   {"fhl", TYPE_FLOAT_LES}, // Little-endian Swap
+  {"fles", TYPE_FLOAT_LES},
+  {"float_les", TYPE_FLOAT_LES},
   {"float_cdab", TYPE_FLOAT_LES},
 
 
@@ -98,15 +104,23 @@ map<string, regprop_t> type_map{
   {"d_dcba", TYPE_DOUBLE_LE},
 
   {"dhh", TYPE_DOUBLE_BE},
+  {"dbe", TYPE_DOUBLE_BE},
+  {"double_be", TYPE_DOUBLE_BE},
   {"double_abcd", TYPE_DOUBLE_BE},
 
   {"dhl", TYPE_DOUBLE_LES},
+  {"dles", TYPE_DOUBLE_LES},
+  {"double_les", TYPE_DOUBLE_LES},
   {"double_cdab", TYPE_DOUBLE_LES},
 
   {"dlh", TYPE_DOUBLE_BES},
+  {"dbes", TYPE_DOUBLE_BES},
+  {"double_bes", TYPE_DOUBLE_BES},
   {"double_badc", TYPE_DOUBLE_BES},
 
   {"dll", TYPE_DOUBLE_LE},
+  {"dle", TYPE_DOUBLE_LE},
+  {"double_le", TYPE_DOUBLE_LE},
   {"double_dcba", TYPE_DOUBLE_LE},
 
   {"2nd", TYPE_2ND},

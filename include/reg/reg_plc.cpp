@@ -60,7 +60,8 @@ value_u Reg_c::get_plc_value()
     else if (byte_order == BO_F10)
       val.fl = (has_errors) ? bad_value.fl : (int16_t)get_plc_reg() * 0.1f;
   } else if (var_size == 2) {
-    val = pull_plc_regs_by_order(byte_order);
+    //val = pull_plc_regs_by_order(byte_order);
+    pull_plc_value32();
     if (var_type == UA_TYPES_UINT32)
       val.ui32 = (has_errors) ? bad_value.ui32 : val.ui32;
     else if (var_type == UA_TYPES_INT32)
@@ -68,7 +69,8 @@ value_u Reg_c::get_plc_value()
     else if (var_type == UA_TYPES_FLOAT)
       val.fl = (has_errors) ? bad_value.fl : val.fl;
   } else if (var_size == 4) {
-    val = pull_plc_regs_by_order(byte_order);
+    //val = pull_plc_regs_by_order(byte_order);
+    pull_plc_value64();
     if (var_type == UA_TYPES_UINT64)
       val.ui64 = (has_errors) ? bad_value.ui64 : val.ui64;
     else if (var_type == UA_TYPES_INT64)
