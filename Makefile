@@ -124,13 +124,14 @@ endif
 ifneq ("/usr/bin/dash","$(shell readlink -f /bin/sh)")
 E=-e
 endif
-RED='\033[0;91m' # \033[32m<text> 
+RED='\033[0;91m'
+ECHO_RED=@echo $(E) '\033[0;91m'
 GRE='\033[0;32m'
-GRB='\033[0;92m'
-YEL='\033[0;93m' # === My Project depends! ===
+ECHO_GRE=@echo $(E) '\033[0;32m'
+YEL='\033[0;93m'
 ECHO_YEL=@echo $(E) '\033[0;93m'
-YEB='\033[1;33m'
 BLU='\033[0;94m'
+ECHO_BLU=@echo $(E) '\033[0;94m'
 WHI='\033[0;97m'
 NC='\033[0m'     # No Color
 
@@ -149,11 +150,11 @@ fulldebug: clean $(EXEC_FILE)
 
 # ================ Linking ================================
 $(EXEC_FILE): $(OBJLIST)
-	@echo -e $(GRE)"=== Linking$(MESSAGE): $@"$(NC)
+	$(ECHO_GRE)"=== Linking$(MESSAGE): $@"$(NC)
 	$(LINK.o) $(OPTFLAGS) $^ $(LDLIBS) -o $@
-	@echo -e $(GRE)"=== Finished$(MESSAGE) ==="$(NC)
+	$(ECHO_GRE)"=== Finished$(MESSAGE) ==="$(NC)
 	@ls -Fog --color $(EXEC_FILE)
-	@echo -e $(GRE)$(MESSAGE_DEBUG)$(NC)
+	$(ECHO_GRE)$(MESSAGE_DEBUG)$(NC)
 	sleep 2
 #	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(EXEC_FILE) $(LDLIBS)
 #	$(LINK.o) $(OPTFLAGS) $(OPEN62541_O) $^ $(LDLIBS) -o $@
@@ -166,7 +167,7 @@ $(OBJDIR)/%.o: %.cpp
 
 # ================== Cleaning =============================
 clean: format
-	@echo -e $(BLU)"=== Cleaning UP with... $<"$(NC)
+	$(ECHO_BLU)"=== Cleaning UP with... $<"$(NC)
 	@rm -rfv $(EXEC_FILE)
 #	find test -maxdepth 5 -type f -name *.o -print -delete
 	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
