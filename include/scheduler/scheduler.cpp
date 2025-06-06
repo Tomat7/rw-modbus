@@ -140,8 +140,7 @@ int Schedule_c::add_task(function<int(void*)> _func, uint64_t _ms,
       nb_tasks = tasks.size();
       LOGN("New task: %s, ms: %d, total: %d", _name.c_str(), _ms, nb_tasks);
     } else
-      LOGE("Too short interval! Task: %s, ms: %d - IGNORED!", _name.c_str(),
-           _ms);
+      LOGE("Too short! Task: %s, ms: %d - IGNORED!", _name.c_str(), _ms);
 
   } else
     LOGA("Can't add task! Now: %d, capacity: %d", nb_tasks, nb_capct);

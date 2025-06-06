@@ -43,67 +43,71 @@ map<string, regprop_t> type_map{
   {"f100", TYPE_F100},
 
   // High byte first, high word first (Big-endian) as default
-  {"u32", TYPE_U32_HH},
-  {"i32", TYPE_I32_HH},
-  {"u64", TYPE_U64_HH},
-  {"i64", TYPE_I64_HH},
-  {"float", TYPE_FLOAT_HH},
-  {"double", TYPE_DOUBLE_HH},
+  {"u32", TYPE_U32_BE},
+  {"i32", TYPE_I32_BE},
+  {"u64", TYPE_U64_BE},
+  {"i64", TYPE_I64_BE},
+  {"float", TYPE_FLOAT_BE},
+  {"double", TYPE_DOUBLE_BE},
 
   // Other types and word/byte orders.  (longnames)
-  {"u32hh", TYPE_U32_HH},
-  {"i32hh", TYPE_I32_HH},
-  {"u32hl", TYPE_U32_HL},
-  {"i32hl", TYPE_I32_HL},
-  {"u32lh", TYPE_U32_LH},
-  {"i32lh", TYPE_I32_LH},
-  {"u32ll", TYPE_U32_LL},
-  {"i32ll", TYPE_I32_LL},
+  {"u32hh", TYPE_U32_BE},
+  {"i32hh", TYPE_I32_BE},
+  {"u32hl", TYPE_U32_LES},
+  {"i32hl", TYPE_I32_LES},
+  {"u32lh", TYPE_U32_BES},
+  {"i32lh", TYPE_I32_BES},
+  {"u32ll", TYPE_U32_LE},
+  {"i32ll", TYPE_I32_LE},
 
-  {"u64hh", TYPE_U64_HH},
-  {"i64hh", TYPE_I64_HH},
-  {"u64hl", TYPE_U64_HL},
-  {"i64hl", TYPE_I64_HL},
-  {"u64lh", TYPE_U64_LH},
-  {"i64lh", TYPE_I64_LH},
-  {"u64ll", TYPE_U64_LL},
-  {"i64ll", TYPE_I64_LL},
+  {"u64hh", TYPE_U64_BE},
+  {"i64hh", TYPE_I64_BE},
+  {"u64hl", TYPE_U64_LES},
+  {"i64hl", TYPE_I64_LES},
+  {"u64lh", TYPE_U64_BES},
+  {"i64lh", TYPE_I64_BES},
+  {"u64ll", TYPE_U64_LE},
+  {"i64ll", TYPE_I64_LE},
 
-  {"fhh", TYPE_FLOAT_HH},
-  {"float_abcd", TYPE_FLOAT_HH},
+  {"fhh", TYPE_FLOAT_BE}, // Big-endian
+  {"fbe", TYPE_FLOAT_BE},
+  {"float_abcd", TYPE_FLOAT_BE},
 
-  {"fhl", TYPE_FLOAT_HL},
-  {"float_cdab", TYPE_FLOAT_HL},
+  {"flh", TYPE_FLOAT_BES}, // Big-endian Swap
+  {"fbes", TYPE_FLOAT_BES},
+  {"float_badc", TYPE_FLOAT_BES},
 
-  {"flh", TYPE_FLOAT_LH},
-  {"float_badc", TYPE_FLOAT_LH},
 
-  {"fll", TYPE_FLOAT_LL},
-  {"float_dcba", TYPE_FLOAT_LL},
+  {"fll", TYPE_FLOAT_LE}, // Little-endian
+  {"float_dcba", TYPE_FLOAT_LE},
 
-  {"f_abcd", TYPE_FLOAT_HH},
-  {"d_abcd", TYPE_DOUBLE_HH},
+  {"fhl", TYPE_FLOAT_LES}, // Little-endian Swap
+  {"float_cdab", TYPE_FLOAT_LES},
 
-  {"f_cdab", TYPE_FLOAT_HL},
-  {"d_cdab", TYPE_DOUBLE_HL},
 
-  {"f_badc", TYPE_FLOAT_LH},
-  {"d_badc", TYPE_DOUBLE_LH},
+  {"f_abcd", TYPE_FLOAT_BE},
+  {"d_abcd", TYPE_DOUBLE_BE},
 
-  {"f_dcba", TYPE_FLOAT_LL},
-  {"d_dcba", TYPE_DOUBLE_LL},
+  {"f_cdab", TYPE_FLOAT_LES},
+  {"d_cdab", TYPE_DOUBLE_LES},
 
-  {"dhh", TYPE_DOUBLE_HH},
-  {"double_abcd", TYPE_DOUBLE_HH},
+  {"f_badc", TYPE_FLOAT_BES},
+  {"d_badc", TYPE_DOUBLE_BES},
 
-  {"dhl", TYPE_DOUBLE_HL},
-  {"double_cdab", TYPE_DOUBLE_HL},
+  {"f_dcba", TYPE_FLOAT_LE},
+  {"d_dcba", TYPE_DOUBLE_LE},
 
-  {"dlh", TYPE_DOUBLE_LH},
-  {"double_badc", TYPE_DOUBLE_LH},
+  {"dhh", TYPE_DOUBLE_BE},
+  {"double_abcd", TYPE_DOUBLE_BE},
 
-  {"dll", TYPE_DOUBLE_LL},
-  {"double_dcba", TYPE_DOUBLE_LL},
+  {"dhl", TYPE_DOUBLE_LES},
+  {"double_cdab", TYPE_DOUBLE_LES},
+
+  {"dlh", TYPE_DOUBLE_BES},
+  {"double_badc", TYPE_DOUBLE_BES},
+
+  {"dll", TYPE_DOUBLE_LE},
+  {"double_dcba", TYPE_DOUBLE_LE},
 
   {"2nd", TYPE_2ND},
   {"2", TYPE_2ND},

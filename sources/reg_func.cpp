@@ -129,25 +129,6 @@ void regs_update()
   return;
 }
 
-void reg_print(string rn, const regdata_t* rd)
-{
-  // printf("\n===== regs_print =====\n");
-  const char* C = getColor(rd->rerrors == 0);  // C_WHIB;  // NRM;
-  const char* B = getBlynk(rd->rerrors == 0);
-
-  // TODO: full recode with new TYPE_*
-
-  if (rd->rtype == UA_TYPES_UINT16)
-    printf("%s%-14s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
-  else if (rd->rtype == UA_TYPES_INT16)
-    printf("%s%-14s %s%7d", C, rn.c_str(), B, (int16_t)rd->rvalue);
-  else if (rd->rtype == NOTUA_TYPES_F100)
-    printf("%s%-14s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
-
-  printf(C_NORM);
-
-  return;
-}
 
 void reg_print(Reg_c rm)
 {
@@ -170,6 +151,28 @@ const char* getBlynk(bool noErrors)
   return noErrors ? C_NORM : ESC_BLINK;  // Dark grey blym-blym
 }
 
-/*  */
+
+/*
+  void reg_print(string rn, const regdata_t* rd)
+  {
+  // printf("\n===== regs_print =====\n");
+  const char* C = getColor(rd->rerrors == 0);  // C_WHIB;  // NRM;
+  const char* B = getBlynk(rd->rerrors == 0);
+
+  // TODO: full recode with new TYPE_*
+
+  if (rd->rtype == UA_TYPES_UINT16)
+    printf("%s%-14s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
+  else if (rd->rtype == UA_TYPES_INT16)
+    printf("%s%-14s %s%7d", C, rn.c_str(), B, (int16_t)rd->rvalue);
+  else if (rd->rtype == NOTUA_TYPES_F100)
+    printf("%s%-14s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
+
+  printf(C_NORM);
+
+  return;
+  }
+*/
+
 
 // eof

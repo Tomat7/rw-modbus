@@ -52,7 +52,7 @@ void PLC_c::init_regs()  // Master only
   for (auto &[a, r] : regs) {
     if (regs.count(r.raddr + 1))
       r.r_next = &regs[r.raddr + 1];
-    LOGN("+ REG init: %-9s %2d %2s %4d %2d %3d [%s]", r.ch_name, r.raddr,
+    LOGI("+ REG init: %-9s %2d %2s %4d %2d %3d [%s]", r.ch_name, r.raddr,
          r.str_mode.c_str(), regs[r.raddr].data.rtype, regs[r.raddr].data.rsize,
          regs[r.raddr].data.rbyteorder, r.rfullname.c_str());
   }
@@ -65,27 +65,29 @@ void PLC_c::init_regs()  // Master only
   }
 */
 
-void PLC_c::init_type(reg_t &R)
-{
+/*
+  void PLC_c::init_type(reg_t &R)
+  {
   string st_ = to_lower(R.str_type);
-  /*   if (type_map.count(st_))
-      R.data.rtype = type_map[st_].first;
-    else
-      LOGA("Error REG: %s, type: %s\n", R.str_name.c_str(), R.str_type.c_str());
-  */
-  /*
-    auto &rd = R.data;
-    if (R.str_type == "u")
-      rd.rtype = 0;
-    else if (R.str_type == "i")
-      rd.rtype = 1;
-    else if (R.str_type == "f")
-      rd.rtype = 2;
-    else if (R.str_source == "")
-      LOGA("Error REG type: %s\n", R.str_name.c_str());
-  */
   return;
-}
+  }
+*/
+/*   if (type_map.count(st_))
+    R.data.rtype = type_map[st_].first;
+  else
+    LOGA("Error REG: %s, type: %s\n", R.str_name.c_str(), R.str_type.c_str());
+*/
+/*
+  auto &rd = R.data;
+  if (R.str_type == "u")
+    rd.rtype = 0;
+  else if (R.str_type == "i")
+    rd.rtype = 1;
+  else if (R.str_type == "f")
+    rd.rtype = 2;
+  else if (R.str_source == "")
+    LOGA("Error REG type: %s\n", R.str_name.c_str());
+*/
 
 /*
   void PLC_c::init_str(reg_t &R)

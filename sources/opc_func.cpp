@@ -30,8 +30,8 @@ void opc_regs_init()
 
     OPCs.AddVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
 
-    value_u v;
-    v.ui64 = 0;
+    //  value_u v;
+    //  v.ui64 = 0;
     int t = rm.var_type;
     if (rm.is_modbus)
       t = UA_TYPES_UINT16;

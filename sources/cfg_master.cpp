@@ -96,7 +96,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
-  regs_create_from_masters();  // Init PLC reg in REGmap
+  regs_create_from_plc();  // Init PLC reg in REGmap
 
   // The same for Scada (read it like a Modbus device)
   dev_type = "SCADA";
@@ -173,7 +173,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       nb_plc_ready++;
       total_regs += nb_regs;
 
-      LOGI("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
+      LOGN("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
            nb_regs);
       // ===== End PLC filling  =====
     } else {
@@ -183,7 +183,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
     }
   }
 
-  LOGI("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
+  LOGN("Total PLCs: %d, with %d regs", (int)PLCvec.size(), total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
     LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready,

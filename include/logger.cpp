@@ -26,8 +26,8 @@ static std::queue<std::string> Print_queue;
 static bool print_to_queue = false;
 
 static const char* ch_color[10] = {
-//  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7 X-8    Z-9
-  C_MAGB, C_RED, C_MAGB, C_REDB, C_YELB, C_BLUB, C_GRN, C_CYN, C_STD, C_STD
+//  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7  X-8    Z-9
+  C_MAGB, C_RED, C_MAGB, C_REDB, C_YELB, C_GRN,  C_BLUB, C_CYN, C_STD, C_STD
 };
 
 

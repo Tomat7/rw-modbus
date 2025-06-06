@@ -39,23 +39,6 @@ value_u Reg_c::get_local_value() { return value; }
 
 void Reg_c::set_local_value(value_u _val) { value = _val; }
 
-/*
-  string Reg_c::get_local_value_string()
-  {
-  string rets;
-  if (var_type == UA_TYPES_FLOAT)
-    rets= to_string(value.fl);
-  else if (var_type == NOTUA_TYPES_F100)
-    rets= to_string(value.fl);
-  else if (var_type == NOTUA_TYPES_F10)
-    rets= to_string(value.fl);
-  else if (var_type == UA_TYPES_UINT16)
-    rets= to_string(value.ui16);
-  else if (var_type == UA_TYPES_INT16)
-    rets= to_string(value.i16);
-  return rets;
-  }
-*/
 
 char* Reg_c::get_local_value_chars(char* retch)
 {
@@ -90,5 +73,23 @@ void Reg_c::remove_dbl_slashes(string &str)
   if (dbl_slash != std::string::npos)
     str.erase(dbl_slash, 1);
 }
+
+/*
+  string Reg_c::get_local_value_string()
+  {
+  string rets;
+  if (var_type == UA_TYPES_FLOAT)
+    rets= to_string(value.fl);
+  else if (var_type == NOTUA_TYPES_F100)
+    rets= to_string(value.fl);
+  else if (var_type == NOTUA_TYPES_F10)
+    rets= to_string(value.fl);
+  else if (var_type == UA_TYPES_UINT16)
+    rets= to_string(value.ui16);
+  else if (var_type == UA_TYPES_INT16)
+    rets= to_string(value.i16);
+  return rets;
+  }
+*/
 
 // eof

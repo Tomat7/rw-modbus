@@ -94,7 +94,7 @@ int mb_print_summary();
 // int mb_slave_init();
 // int mb_slave();
 
-void regs_create_from_masters();
+void regs_create_from_plc();
 void regs_update();
 void regs_deinit();
 bool reg_exist(string);

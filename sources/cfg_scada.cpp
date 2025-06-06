@@ -30,8 +30,8 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
 
   // uint64_t vec_size_new = 0; // PLCvec.size() + nb_plc_cfg;
 
-  LOGW("Total SCADA sets in config: %d, in the list: %d.", nb_plc_cfg,
-       nb_plc_list);
+  LOGW("Total SCADA sets in config: %d, in the list: %d.",
+       nb_plc_cfg, nb_plc_list);
 
   const string &p0 = listPLC[0];
   if ((p0 == "all") || (p0 == "ALL") || (p0 == "All")) {
@@ -74,8 +74,8 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
   LOGI("Total SCADA sets: %d, with %d regs", nb_plc_cfg, total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
-    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.", nb_plc_ready,
-         nb_plc_list);
+    LOGA("Wrong PLCs number! Processed: %d, in the list: %d.",
+         nb_plc_ready, nb_plc_list);
 
   return 0;
 }
@@ -107,8 +107,8 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
       //     r.str_rname.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(),
       //     j);
     } else {
-      LOGE("Error reading 'rname' on %s: %s REG: %d\n", _dfolder.c_str(),
-           _dname.c_str(), j);
+      LOGE("Error reading 'rname' on %s: %s REG: %d\n",
+           _dfolder.c_str(), _dname.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
     }
@@ -142,7 +142,6 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
   }
 
   return nb_regs - nb_errors;
-  ;
 }
 
 /*

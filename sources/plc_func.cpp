@@ -6,29 +6,26 @@
 #include "config.h"
 #include "libs.h"
 
-// using namespace libconfig;
-
-// void plc_show_regs(int i);
-
 void plc_print_details(int i);
 void plc_print_reg_details(int i, int j);
 
 void plc_show2()
 {
-  printf("\n===== plc_show2 =====\n");
+  printf("\n======= %s =======\n", __func__);
+
   for (auto &D : PLCvec)
     for (auto &[a, R] : D.regs) {
-      printf("%s: %s.%-8s (%d) %5d   [%s]\n", D.ip_addr, D.dev_name, R.ch_name,
-             R.raddr, R.data.rvalue, R.rfullname.c_str());
+      LOGI("%s: %s.%-8s (%d) %5d   [%s]", D.ip_addr, D.dev_name, R.ch_name,
+           R.raddr, R.data.rvalue, R.rfullname.c_str());
     }
 }
 
 void plc_show1()
 {
-  printf("\n===== plc_show1 =====\n");
+  printf("\n======= %s =======\n", __func__);
 
   int nb_plcs = static_cast<int>(PLCvec.size());
-  LOGI("Total PLCs: %d", nb_plcs);
+  LOGN("Total PLCs: %d", nb_plcs);
 
   for (int i = 0; i < nb_plcs; ++i) {  // Cycle for PLCs
     plc_print_details(i);
