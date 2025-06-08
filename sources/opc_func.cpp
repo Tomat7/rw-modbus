@@ -40,6 +40,10 @@ void opc_regs_init()
       OPCs.AddVar(n, rm.get_local_value().ui16, rm.var_mode);
     else if (t == UA_TYPES_INT16)
       OPCs.AddVar(n, rm.get_local_value().i16, rm.var_mode);
+    else if (t == UA_TYPES_UINT32)
+      OPCs.AddVar(n, rm.get_local_value().ui32, rm.var_mode);
+    else if (t == UA_TYPES_INT32)
+      OPCs.AddVar(n, rm.get_local_value().i32, rm.var_mode);
     else if (t == NOTUA_TYPES_F100)
       OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode);
     else if (t == NOTUA_TYPES_F10)

@@ -28,7 +28,7 @@
 
 /* map<string, pair<regtype_t, byteorder_t>> type_map { */
 
-map<string, regprop_t> type_map{
+map<string, regprop_t> type_map {
   // See reg_datatype.h for details & comments
   {"*", TYPE_REFERENCED},  // "Referenced" registers
   {"-", TYPE_NOTHING},     // ??
@@ -51,14 +51,14 @@ map<string, regprop_t> type_map{
   {"double", TYPE_DOUBLE_BE},
 
   // Other types and word/byte orders.  (longnames)
-  {"u32hh", TYPE_U32_BE},
-  {"i32hh", TYPE_I32_BE},
-  {"u32hl", TYPE_U32_LES},
-  {"i32hl", TYPE_I32_LES},
-  {"u32lh", TYPE_U32_BES},
-  {"i32lh", TYPE_I32_BES},
-  {"u32ll", TYPE_U32_LE},
-  {"i32ll", TYPE_I32_LE},
+  {"u32be", TYPE_U32_BE},
+  {"i32be", TYPE_I32_BE},
+  {"u32les", TYPE_U32_LES},
+  {"i32les", TYPE_I32_LES},
+  {"u32bes", TYPE_U32_BES},
+  {"i32bes", TYPE_I32_BES},
+  {"u32le", TYPE_U32_LE},
+  {"i32le", TYPE_I32_LE},
 
   {"u64hh", TYPE_U64_BE},
   {"i64hh", TYPE_I64_BE},

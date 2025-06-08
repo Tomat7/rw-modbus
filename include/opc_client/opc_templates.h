@@ -20,7 +20,7 @@ bool OpcClient_c::ReadNumber(string varname, T &x)
   /* Read the value attribute of the node. UA_Client_readValueAttribute is a
      wrapper for the raw read service available as UA_Client_Service_read. */
   /* Variants can hold scalar values and arrays of any type */
-  UA_Variant *uaVariant = UA_Variant_new();
+  UA_Variant* uaVariant = UA_Variant_new();
   UA_Variant_clear(uaVariant);
   UA_Variant_init(uaVariant);
 
@@ -60,7 +60,7 @@ bool OpcClient_c::WriteNumber(string varname, T &x)
 
   bool rc = false;
   T value = x;
-  UA_Variant *uaVariant = UA_Variant_new();
+  UA_Variant* uaVariant = UA_Variant_new();
   UA_Variant_clear(uaVariant);
   UA_Variant_init(uaVariant);
 

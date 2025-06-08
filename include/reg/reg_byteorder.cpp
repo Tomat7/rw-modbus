@@ -51,15 +51,52 @@ value_u Reg_c::pull_plc_value32()
   for (int i = 0; i < var_size; i++)
     _u32.mb2u[i] = get_plc_reg(i);
 
-  if ((byte_order == BO_BE) || (byte_order == BO_BES))
-    _val32 = be32toh(_u32.mb32);
-  else if ((byte_order == BO_LE) || (byte_order == BO_LES))
-    _val32 = le32toh(_u32.mb32);
+  /*
+    if ((byte_order == BO_BE) || (byte_order == BO_LE))
+      _val32 = bswap_32(_u32.mb32);
+    else
+      _val32 = _u32.mb32;
+  */
+  /*
+    if ((byte_order == BO_BE) || (byte_order == BO_BES))
+      value.ui32 = be32toh(_val32);
+    else if ((byte_order == BO_LE) || (byte_order == BO_LES))
+      value.ui32 = le32toh(_val32);
+  */
 
-  if ((byte_order == BO_BES) || (byte_order == BO_LES))
-    value.ui32 = bswap_32(_val32);
-  else
+  /*
+    if ((byte_order == BO_BE) || (byte_order == BO_BES))
+      _val32 = _u32.mb32; //be32toh(_u32.mb32);
+    else if ((byte_order == BO_LE) || (byte_order == BO_LES))
+      _val32 = le32toh(_u32.mb32);
+
+    if ((byte_order == BO_BES) || (byte_order == BO_LE))
+      value.ui32 = bswap_32(_val32);
+    else
+      value.ui32 = _val32;
+  */
+
+  if (byte_order == BO_LES) {
+    _val32 = le32toh(_u32.mb32);
     value.ui32 = _val32;
+  } else if (byte_order == BO_LE) {
+    _val32 = _u32.mb32;
+//    _val32 = le32toh(_u32.mb32);
+    value.ui32 = _val32;
+//    value.ui32 = bswap_32(_val32);
+  } else if (byte_order == BO_BE) {
+    _val32 = bswap_32(_u32.mb32);
+    value.ui32 = be32toh(_val32);
+//    _val32 = _u32.mb32;
+//    _val32 = be32toh(_u32.mb32);
+//    value.ui32 = bswap_32(_val32);
+//    value.ui32 = _val32;
+  } else if (byte_order == BO_BES) {
+//    _val32 = _u32.mb32;
+    _val32 = be32toh(_u32.mb32);
+    value.ui32 = bswap_32(_val32);
+//    value.ui32 = _val32;
+  }
 
   return value;
 }
