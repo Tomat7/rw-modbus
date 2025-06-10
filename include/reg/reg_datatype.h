@@ -10,17 +10,17 @@
   Defines of data types. (incuding TWO and FOUR words types)
    _BE - High byte first, high word first. (Big-endian, HH)
    _LE - Low byte first, low word first. (Little-endian, LL)
-   _BES - Low byte first, high word first. (Big-endian Swap, LH)
-   _LES - High byte first, low word first. (Little-endian Swap, HL)
+   _BS - Low byte first, high word first. (Big-endian Swap, LH)
+   _LS - High byte first, low word first. (Little-endian Swap, HL)
   See details - https://www.modbustools.com/poll_display_formats.html
 */
 enum byteorder_t {
   BO_ZERO,
   BO_SNGL,
-  BO_BE,
-  BO_BES,
-  BO_LE,
-  BO_LES,
+  BO_BE,    // Big-endian, HH
+  BO_BS,    // Big-endian Swap, LH
+  BO_LE,    // Little-endian, LL
+  BO_LS,    // Little-endian Swap, HL
   BO_OTHER = 10,
   BO_F10,   // floatVar = ModbusVar_int16 / 10.0;
   BO_F100,  // floatVar = ModbusVar_int16 / 100.0;
@@ -59,22 +59,22 @@ enum byteorder_t {
   See details - https://www.simplymodbus.ca/FAQ.htm#Order
 */
 #define TYPE_U32_BE { UA_TYPES_UINT32, 2, BO_BE }
-#define TYPE_U32_LES { UA_TYPES_UINT32, 2, BO_LES }
-#define TYPE_U32_BES { UA_TYPES_UINT32, 2, BO_BES }
+#define TYPE_U32_BS { UA_TYPES_UINT32, 2, BO_BS }
 #define TYPE_U32_LE { UA_TYPES_UINT32, 2, BO_LE }
+#define TYPE_U32_LS { UA_TYPES_UINT32, 2, BO_LS }
 #define TYPE_U32 TYPE_U32_BE  // Big-endian as default
 
 #define TYPE_I32_BE { UA_TYPES_INT32, 2, BO_BE }
-#define TYPE_I32_LES { UA_TYPES_INT32, 2, BO_LES }
-#define TYPE_I32_BES { UA_TYPES_INT32, 2, BO_BES }
+#define TYPE_I32_BS { UA_TYPES_INT32, 2, BO_BS }
 #define TYPE_I32_LE { UA_TYPES_INT32, 2, BO_LE }
+#define TYPE_I32_LS { UA_TYPES_INT32, 2, BO_LS }
 #define TYPE_I32 TYPE_I32_BE  // Big-endian as default
 
 // Float 32-bits (float Float_var = 123.00f)
 #define TYPE_FLOAT_BE { UA_TYPES_FLOAT, 2, BO_BE }
-#define TYPE_FLOAT_LES { UA_TYPES_FLOAT, 2, BO_LES }
-#define TYPE_FLOAT_BES { UA_TYPES_FLOAT, 2, BO_BES }
+#define TYPE_FLOAT_BS { UA_TYPES_FLOAT, 2, BO_BS }
 #define TYPE_FLOAT_LE { UA_TYPES_FLOAT, 2, BO_LE }
+#define TYPE_FLOAT_LS { UA_TYPES_FLOAT, 2, BO_LS }
 #define TYPE_FLOAT TYPE_FLOAT_BE  // Big-endian as default
 
 /*
@@ -82,22 +82,22 @@ enum byteorder_t {
   See details - https://www.modbustools.com/poll_display_formats.html
 */
 #define TYPE_U64_BE { UA_TYPES_UINT64, 4, BO_BE }
-#define TYPE_U64_LES { UA_TYPES_UINT64, 4, BO_LES }
-#define TYPE_U64_BES { UA_TYPES_UINT64, 4, BO_BES }
+#define TYPE_U64_BS { UA_TYPES_UINT64, 4, BO_BS }
 #define TYPE_U64_LE { UA_TYPES_UINT64, 4, BO_LE }
+#define TYPE_U64_LS { UA_TYPES_UINT64, 4, BO_LS }
 #define TYPE_U64 TYPE_U64_BE  // Big-endian as default
 
 #define TYPE_I64_BE { UA_TYPES_INT64, 4, BO_BE }
-#define TYPE_I64_LES { UA_TYPES_INT64, 4, BO_LES }
-#define TYPE_I64_BES { UA_TYPES_INT64, 4, BO_BES }
+#define TYPE_I64_BS { UA_TYPES_INT64, 4, BO_BS }
 #define TYPE_I64_LE { UA_TYPES_INT64, 4, BO_LE }
+#define TYPE_I64_LS { UA_TYPES_INT64, 4, BO_LS }
 #define TYPE_I64 TYPE_I64_BE  // Big-endian as default
 
 // Double 64-bits (double Dbl_var = 12345.6789)
 #define TYPE_DOUBLE_BE { UA_TYPES_DOUBLE, 4, BO_BE }
-#define TYPE_DOUBLE_LES { UA_TYPES_DOUBLE, 4, BO_LES }
-#define TYPE_DOUBLE_BES { UA_TYPES_DOUBLE, 4, BO_BES }
+#define TYPE_DOUBLE_BS { UA_TYPES_DOUBLE, 4, BO_BS }
 #define TYPE_DOUBLE_LE { UA_TYPES_DOUBLE, 4, BO_LE }
+#define TYPE_DOUBLE_LS { UA_TYPES_DOUBLE, 4, BO_LS }
 #define TYPE_DOUBLE TYPE_DOUBLE_BE  // Big-endian as default
 
 #define TYPE_1ST { NOTUA_TYPES_1ST, 1, BO_1ST }  // ??
@@ -121,36 +121,32 @@ enum byteorder_t {
 #define FLOAT_ABCD TYPE_FLOAT_BE
 #define FLOAT_BIGENDIAN TYPE_FLOAT_BE
 
-// High byte first, low word first. (Little-endian Swap)
-#define FLOAT_LES TYPE_FLOAT_LES
-#define FLOAT_CDAB TYPE_FLOAT_LES
-
 // Low byte first, high word first. (Big-endian Swap)
-#define FLOAT_BES TYPE_FLOAT_BES
-#define FLOAT_BADC TYPE_FLOAT_BES
+#define FLOAT_BS TYPE_FLOAT_BS
+#define FLOAT_BADC TYPE_FLOAT_BS
 
 // Low byte first, low word first. (Little-endian)
 #define FLOAT_LE TYPE_FLOAT_LE
 #define FLOAT_DCBA TYPE_FLOAT_LE
 
+// High byte first, low word first. (Little-endian Swap)
+#define FLOAT_LS TYPE_FLOAT_LS
+#define FLOAT_CDAB TYPE_FLOAT_LS
+
+
 // DOUBLE data types (four Modbus words)
 // See details https://www.simplymodbus.ca/FAQ.htm#Order
 
 // High byte first, high word first. (Big-endian)
-#define DOUBLE_BE TYPE_FLOAT_BE
-#define DOUBLE_ABCD TYPE_FLOAT_BE
-#define DOUBLE_BIGENDIAN TYPE_FLOAT_BE
-
-// High byte first, low word first. (Little-endian Swap)
-#define DOUBLE_LES TYPE_FLOAT_LES
-#define DOUBLE_CDAB TYPE_FLOAT_LES
+#define DOUBLE_BE TYPE_DOUBLE_BE
 
 // Low byte first, high word first. (Big-endian Swap)
-#define DOUBLE_BES TYPE_FLOAT_BES
-#define DOUBLE_BADC TYPE_FLOAT_BES
+#define DOUBLE_BS TYPE_DOUBLE_BS
 
 // Low byte first, low word first. (Little-endian)
-#define DOUBLE_LE TYPE_FLOAT_LE
-#define DOUBLE_DCBA TYPE_FLOAT_LE
+#define DOUBLE_LE TYPE_DOUBLE_LE
+
+// High byte first, low word first. (Little-endian Swap)
+#define DOUBLE_LS TYPE_DOUBLE_LS
 
 // eof

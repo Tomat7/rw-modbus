@@ -36,6 +36,11 @@ union ui32_u {
   uint16_t mb2u[2] = {0};
 };
 
+union ui64_u {
+  uint64_t mb64;
+  uint16_t mb2u[4] = {0};
+};
+
 struct regprop_t {
   int rtype;
   int rsize;

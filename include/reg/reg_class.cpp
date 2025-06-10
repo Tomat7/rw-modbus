@@ -58,6 +58,10 @@ char* Reg_c::get_local_value_chars(char* retch)
     snprintf(retch, 49, "%#x", value.ui32);
   else if (var_type == UA_TYPES_INT32)
     snprintf(retch, 49, "%#x", value.i32);
+  else if (var_type == UA_TYPES_UINT64)
+    snprintf(retch, 49, "%#lx", value.ui64);
+  else if (var_type == UA_TYPES_INT64)
+    snprintf(retch, 49, "%#lx", value.i64);
   else
     LOGE("Type not supported: %i", var_type);
 
