@@ -19,6 +19,18 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
+
+// Get reg's local value != read PLC.
+uint32_t Reg_c::mb_words_swap32(ui32_u _u32)
+{
+  //ui32_u _u32;
+  //_u32.mb32 = _x32;
+  uint16_t _x16 = _u32.mb2u[0];
+  _u32.mb2u[0] = _u32.mb2u[1];
+  _u32.mb2u[1] = _x16;
+  return _u32.mb32;
+}
+
 // Get reg's local value != read PLC.
 value_u Reg_c::pull_plc_regs_by_order(byteorder_t _bo)
 {
@@ -41,61 +53,26 @@ value_u Reg_c::pull_plc_regs_by_order(byteorder_t _bo)
 
 value_u Reg_c::pull_plc_value32()
 {
-  uint32_t _val32;
-
-  union ui32_u {
-    uint32_t mb32;
-    uint16_t mb2u[2] = {0};
-  } _u32;
+  ui32_u _u32;
 
   for (int i = 0; i < var_size; i++)
-    _u32.mb2u[i] = get_plc_reg(i);
+    _u32.mb2u[i] = get_plc_reg(var_size - i - 1);
 
-  /*
-    if ((byte_order == BO_BE) || (byte_order == BO_LE))
-      _val32 = bswap_32(_u32.mb32);
-    else
-      _val32 = _u32.mb32;
-  */
-  /*
-    if ((byte_order == BO_BE) || (byte_order == BO_BES))
-      value.ui32 = be32toh(_val32);
-    else if ((byte_order == BO_LE) || (byte_order == BO_LES))
-      value.ui32 = le32toh(_val32);
-  */
-
-  /*
-    if ((byte_order == BO_BE) || (byte_order == BO_BES))
-      _val32 = _u32.mb32; //be32toh(_u32.mb32);
-    else if ((byte_order == BO_LE) || (byte_order == BO_LES))
-      _val32 = le32toh(_u32.mb32);
-
-    if ((byte_order == BO_BES) || (byte_order == BO_LE))
-      value.ui32 = bswap_32(_val32);
-    else
-      value.ui32 = _val32;
-  */
-
-  if (byte_order == BO_LES) {
-    _val32 = le32toh(_u32.mb32);
-    value.ui32 = _val32;
+  if (byte_order == BO_BE)
+    value.ui32 = _u32.mb32;
+  else if (byte_order == BO_BES) {
+    _u32.mb2u[0] = bswap_16(_u32.mb2u[0]);
+    _u32.mb2u[1] = bswap_16(_u32.mb2u[1]);
+    value.ui32 = _u32.mb32;
   } else if (byte_order == BO_LE) {
-    _val32 = _u32.mb32;
-//    _val32 = le32toh(_u32.mb32);
-    value.ui32 = _val32;
-//    value.ui32 = bswap_32(_val32);
-  } else if (byte_order == BO_BE) {
-    _val32 = bswap_32(_u32.mb32);
-    value.ui32 = be32toh(_val32);
-//    _val32 = _u32.mb32;
-//    _val32 = be32toh(_u32.mb32);
-//    value.ui32 = bswap_32(_val32);
-//    value.ui32 = _val32;
-  } else if (byte_order == BO_BES) {
-//    _val32 = _u32.mb32;
-    _val32 = be32toh(_u32.mb32);
-    value.ui32 = bswap_32(_val32);
-//    value.ui32 = _val32;
+//    _val32 = le32toh(_u32.mb32);  // doing nothing on Intel/AMD64!
+    value.ui32 = bswap_32(_u32.mb32);
+  } else if (byte_order == BO_LES) {
+    //  value.ui32 = mb_words_swap32(_u32);
+    uint16_t _x16 = _u32.mb2u[0];
+    _u32.mb2u[0] = _u32.mb2u[1];
+    _u32.mb2u[1] = _x16;
+    value.ui32 =_u32.mb32;
   }
 
   return value;
@@ -126,6 +103,32 @@ value_u Reg_c::pull_plc_value64()
 
   return value;
 }
+
+
+/*
+  if ((byte_order == BO_BE) || (byte_order == BO_LE))
+    _val32 = bswap_32(_u32.mb32);
+  else
+    _val32 = _u32.mb32;
+*/
+/*
+  if ((byte_order == BO_BE) || (byte_order == BO_BES))
+    value.ui32 = be32toh(_val32);
+  else if ((byte_order == BO_LE) || (byte_order == BO_LES))
+    value.ui32 = le32toh(_val32);
+*/
+
+/*
+  if ((byte_order == BO_BE) || (byte_order == BO_BES))
+    _val32 = _u32.mb32; //be32toh(_u32.mb32);
+  else if ((byte_order == BO_LE) || (byte_order == BO_LES))
+    _val32 = le32toh(_u32.mb32);
+
+  if ((byte_order == BO_BES) || (byte_order == BO_LE))
+    value.ui32 = bswap_32(_val32);
+  else
+    value.ui32 = _val32;
+*/
 
 
 // eof

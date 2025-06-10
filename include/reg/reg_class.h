@@ -31,6 +31,11 @@
 using std::string;
 using std::vector;
 
+union ui32_u {
+  uint32_t mb32;
+  uint16_t mb2u[2] = {0};
+};
+
 struct regprop_t {
   int rtype;
   int rsize;
@@ -84,6 +89,9 @@ private:
   uint16_t get_plc_reg(reg_t* rptr);
   uint16_t get_plc_reg(int x = 0);
 
+  uint32_t mb_words_swap32(ui32_u);
+  uint64_t mb_words_swap64(uint64_t);
+
   void set_plc_reg(uint16_t _val, reg_t* rptr);
   void set_plc_reg(uint16_t _val, int x = 0);
 
@@ -98,7 +106,7 @@ private:
 
   value_u value;  // union of values (by type)
   badvalue_t bad_value;
-  reg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC reg
+  reg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs
 };
 
 // eof

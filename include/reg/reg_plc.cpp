@@ -77,7 +77,8 @@ value_u Reg_c::get_plc_value()
       val.i64 = (has_errors) ? bad_value.i64 : val.i64;
     else if (var_type == UA_TYPES_DOUBLE)
       val.dbl = (has_errors) ? bad_value.dbl : val.dbl;
-  }
+  } else
+    val.ui64 = 1111111;
 
   value = val;
 
