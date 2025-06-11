@@ -95,8 +95,9 @@ void Reg_c::set_plc_reg(uint16_t _val, reg_t* rptr)
     LOGE("Not Modbus set-reg: %s", str_fullname.c_str());
 }
 
-void Reg_c::set_plc_reg(uint16_t _val,
-                        int x)  // Set reg's local value != read PLC.
+
+// Set reg's local value != read PLC.
+void Reg_c::set_plc_reg(uint16_t _val, int x)
 {
   set_plc_reg(_val, ptr_reg[x]);
   return;
@@ -107,7 +108,7 @@ void Reg_c::set_plc_value(value_u v)
   // byte-order not supported yet :-(
   if (is_modbus || is_ref)
     for (int i = 0; i < var_size; i++)
-      set_plc_reg(v.dbl2u[i], i);
+      set_plc_reg(v.mb64u[i], i);
   else
     LOGE("Not Modbus set-value: %s", str_fullname.c_str());
 

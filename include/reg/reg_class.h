@@ -33,12 +33,12 @@ using std::vector;
 
 union ui32_u {
   uint32_t mb32;
-  uint16_t mb2u[2] = {0};
+  uint16_t mb32u[2] = {0};
 };
 
 union ui64_u {
   uint64_t mb64;
-  uint16_t mb2u[4] = {0};
+  uint16_t mb64u[4] = {0};
 };
 
 struct regprop_t {
@@ -93,10 +93,10 @@ public:
 private:
   uint16_t get_plc_reg(reg_t* rptr);
   uint16_t get_plc_reg(int x = 0);
-
-  uint32_t mb_words_swap32(ui32_u);
-  uint64_t mb_words_swap64(uint64_t);
-
+  /*
+    uint32_t mb_words_swap32(ui32_u);
+    uint64_t mb_words_swap64(uint64_t);
+  */
   void set_plc_reg(uint16_t _val, reg_t* rptr);
   void set_plc_reg(uint16_t _val, int x = 0);
 

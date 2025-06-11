@@ -24,9 +24,11 @@ union value_u {
   int64_t dt;
   float fl;
   double dbl;
-  uint16_t fl2u[2];
-  uint16_t dbl2u[4];
-  uint8_t byte2u[8];
+  uint16_t mb32u[2];
+  uint16_t mb64u[4];
+  /*   uint16_t fl2u[2];
+    uint16_t dbl2u[4];
+    uint8_t byte2u[8]; */
 };
 
 struct badvalue_t {
