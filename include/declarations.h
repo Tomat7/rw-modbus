@@ -26,6 +26,7 @@ struct opc_t {
   string ErrFolder = OPC_ERRORS_FOLDER;
   string ErrSuffix = OPC_ERRORS_SUFFIX;
   int polling_ms = OPC_POLLING_MS;
+  UA_LogLevel LogLevel = UA_LOGLEVEL_INFO;
 };
 
 struct mb_t {

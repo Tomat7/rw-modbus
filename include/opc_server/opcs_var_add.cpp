@@ -151,7 +151,7 @@ UA_NodeId OpcServer_c::add_FolderToParent(string str_path, UA_NodeId parentNodeI
   v.is_var = false;
   v.node_id.var = folderId;
   vars[str_path] = v;
-  LOGN("NewFolder: %s - %s", folder_path, UA_StatusCode_name(sc));
+  LOGI("NewFolder: %s - %s", folder_path, UA_StatusCode_name(sc));
 
   /*   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                       "NewFolder: %s, name: %s - %s", folder_path, display_name,
@@ -211,7 +211,7 @@ void OpcServer_c::add_Variable(var_t &v)
     UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE), attr, NULL, NULL);
 
   string d = get_StrVarDetails(v);
-  LOGN("NewVar: %s %s - %s", v.ua_keyname, d.c_str(), UA_StatusCode_name(rc));
+  LOGI("NewVar: %s %s - %s", v.ua_keyname, d.c_str(), UA_StatusCode_name(rc));
   /*   DEBUG(UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                       "NewVar: %s %s, path: %s - %s, type: %i", v.ua_varname, d.c_str(),
                       v.ua_keyname, UA_StatusCode_name(rc), v.ua_type);) */

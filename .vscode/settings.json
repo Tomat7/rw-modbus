@@ -90,6 +90,7 @@
         "source_location": "cpp",
         "latch": "cpp",
         "span": "cpp",
-        "spanstream": "cpp"
+        "spanstream": "cpp",
+        "queue": "cpp"
     }
 }

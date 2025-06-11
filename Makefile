@@ -23,7 +23,8 @@ SUBDIRS= include sources
 
 INCLUDES = -I.
 LIBS=libmodbus libconfig++ open62541
-LDLIBS= -lrt -lpthread -lmbedtls 
+LDLIBS= -lrt -lpthread
+# -lmbedtls 
 #-lmbedx509 -lmbedcrypto #OPEN62541_O= include/open62541/open62541.o
 OBJDIR =./tmp/obj
 CC=$(CXX)

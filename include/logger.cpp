@@ -14,6 +14,7 @@
 #include <unistd.h>
 
 #include <cstring>
+#include <string>
 #include <mutex>
 #include <queue>
 

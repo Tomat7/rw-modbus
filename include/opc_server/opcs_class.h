@@ -41,7 +41,9 @@ public:
   OpcServer_c(UA_UInt16 _port = 4840);
   ~OpcServer_c();
 
-  void init(UA_UInt16 _port = 0);  // Necessary init() before run()
+  void init(UA_UInt16 _port, UA_LogLevel _ll = UA_LOGLEVEL_INFO);
+  // Necessary init() before run()
+
   void run();
   void stop();
 
@@ -71,34 +73,22 @@ public:
   template <typename T>
   bool WriteNumber(string s, T &x, bool isOK);
 
-  /*
-    int getType(string s);
-    int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
-  */
-  /*
-    // ask OPC server for current value (refresh)
-    template <typename T>
-    T GetNumber(string s);
-  */
-  /*
-    // read value saved on previous/last correct getValue
-    template <typename T>
-    T ReadValue(string s);
-  */
-  /*
-    template <typename T>
-    bool ReadValue(string s, T &x);
-    //  Definition at the bottom of THIS file
-  */
-
 private:
   void init_config(UA_ServerConfig* conf);
+  void init_logger();
   bool isDebug = true;
+
   UA_UInt16 uaPort = 4840;
+  UA_ServerConfig* uaServerConfig = nullptr;
   UA_Server* uaServer = nullptr;
   UA_Variant* uaVariant = nullptr;
+
+  UA_Logger uaLogger;
+  UA_LogLevel uaLoglevel = UA_LOGLEVEL_DEBUG; // UA_LOGLEVEL_ERROR;
+
   mutex* uaSrvMux = nullptr;  // mutex* uaGetMux = nullptr;
   mutex* uaDataMux = nullptr;
+
   volatile UA_Boolean uaRunning = true;
   int rc = 0;
 
@@ -132,5 +122,24 @@ private:
 
 #include "opcs_templates.h"
 
+/*
+  int getType(string s);
+  int getStatus(string s);    // 0 - is OK, any other (1 or -1) is BAD
+*/
+/*
+  // ask OPC server for current value (refresh)
+  template <typename T>
+  T GetNumber(string s);
+*/
+/*
+  // read value saved on previous/last correct getValue
+  template <typename T>
+  T ReadValue(string s);
+*/
+/*
+  template <typename T>
+  bool ReadValue(string s, T &x);
+  //  Definition at the bottom of THIS file
+*/
 
 // eof

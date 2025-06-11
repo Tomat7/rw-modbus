@@ -70,7 +70,20 @@ bool opc_set_value(string s, value_u val, bool isOK)
 
 void opc_deinit() { OPCs.stop(); }
 
-void opc_init() { OPCs.init(Cfg.opc.SrvPort); }
+void opc_init()
+{
+
+  if (log_level >= LOG_DEBUG)
+    Cfg.opc.LogLevel = UA_LOGLEVEL_DEBUG;
+  else if (log_level == LOG_INFO)
+    Cfg.opc.LogLevel = UA_LOGLEVEL_INFO;
+  else if (log_level == LOG_NOTICE  || log_level == LOG_WARNING)
+    Cfg.opc.LogLevel = UA_LOGLEVEL_WARNING;
+  else
+    Cfg.opc.LogLevel = UA_LOGLEVEL_ERROR;
+
+  OPCs.init(Cfg.opc.SrvPort, Cfg.opc.LogLevel);
+}
 
 void opc_start()
 {
