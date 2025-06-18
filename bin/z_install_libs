@@ -28,8 +28,8 @@ then
     echo -e $YEB === Installing 'libconfig++-dev'. $NC
     sudo apt install libconfig++-dev
 
-    echo -e $YEB === Installing 'libopen62541-1.4'. $NC
-    sudo apt install libopen62541-1.4
+#    echo -e $YEB === Installing 'libopen62541-1.4'. $NC
+#    sudo apt install libopen62541-1.4
 
     echo -e $YEB === Installing 'libopen62541-1.4-dev'. $NC
     sudo apt install libopen62541-1.4-dev
