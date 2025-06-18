@@ -11,6 +11,10 @@ WHI='\033[0;97m'
 NC='\033[0m' # No Color
 # =======================
 
+APTCMD="sudo apt"
+#APTCMD="apt"
+
+
 NOW=`date '+%Y-%m-%d %H:%M'`
 echo $NOW
 
@@ -23,19 +27,19 @@ if [ "$ANS" == "Y" ]
 then
 #    echo -e $YEB
     echo -e $YEB === Installing 'libmodbus-dev'. $NC
-    sudo apt install libmodbus-dev
+    $APTCMD install libmodbus-dev
 
     echo -e $YEB === Installing 'libconfig++-dev'. $NC
-    sudo apt install libconfig++-dev
+    $APTCMD install libconfig++-dev
 
 #    echo -e $YEB === Installing 'libopen62541-1.4'. $NC
 #    sudo apt install libopen62541-1.4
 
     echo -e $YEB === Installing 'libopen62541-1.4-dev'. $NC
-    sudo apt install libopen62541-1.4-dev
+    $APTCMD install libopen62541-1.4-dev
 
     echo -e $YEB === Installing 'libopen62541-1.4-tools'. $NC
-    sudo apt install libopen62541-1.4-tools
+    $APTCMD install libopen62541-1.4-tools
 
     NOW=`date '+%Y-%m-%d %H:%M'`
     echo -e $GRE ==== Finished on $GRB$NOW $NC

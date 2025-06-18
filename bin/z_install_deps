@@ -11,6 +11,10 @@ WHI='\033[0;97m'
 NC='\033[0m' # No Color
 # =======================
 
+APTCMD="sudo apt"
+#APTCMD="apt"
+
+
 NOW=`date '+%Y-%m-%d %H:%M'`
 echo $NOW
 
@@ -23,13 +27,13 @@ if [ "$ANS" == "Y" ]
 then
 #    echo -e $YEB
     echo -e $YEB === Installing 'build-essential'. $NC
-    sudo apt install build-essential
+    $APTCMD install build-essential
 
     echo -e $YEB === Installing 'astyle'. $NC
-    sudo apt install astyle
+    $APTCMD install astyle
 
     echo -e $YEB === Installing 'clang-format'. $NC
-    sudo apt install clang-format
+    $APTCMD install clang-format
 
     NOW=`date '+%Y-%m-%d %H:%M'`
     echo -e $GRE ==== Finished on $GRB$NOW $NC
