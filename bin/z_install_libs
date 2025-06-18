@@ -11,16 +11,19 @@ WHI='\033[0;97m'
 NC='\033[0m' # No Color
 # =======================
 
-APTCMD="sudo apt"
-#APTCMD="apt"
-
-
 NOW=`date '+%Y-%m-%d %H:%M'`
 echo $NOW
 
-cd ..
+WHOISME=`whoami`
+if [ "$WHOISME" == "root" ]
+then
+    APTCMD="apt"
+    echo -e $WHI"Started with ROOT privileges!"$NC
+else
+    APTCMD="sudo apt"
+fi
 
-echo -e $RED
+cd .. && echo -e $RED
 read -p "Warning! Will add libraries: 'libmodbus-dev libconfig++-dev libopen62541-1.4-dev' (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
