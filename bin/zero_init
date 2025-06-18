@@ -4,7 +4,7 @@
 #echo Warning! Will drop all changes! Y/N
 cd ..
 CURDIR=${PWD##*/}
-read -p "Warning! Will crate remote REPO '$CURDIR' (Y/N): " ANS
+read -p "Warning! Will create remote REPO '$CURDIR' (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
 then
