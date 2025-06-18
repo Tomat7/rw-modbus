@@ -12,15 +12,15 @@ NC='\033[0m' # No Color
 # =======================
 
 NOW=`date '+%Y-%m-%d %H:%M'`
-echo $NOW
 
 WHOISME=`whoami`
 if [ "$WHOISME" == "root" ]
 then
     APTCMD="apt"
-    echo -e $WHI"Started with ROOT privileges!"$NC
+    echo -e $NOW $BLU"Started with ROOT privileges!"$NC
 else
     APTCMD="sudo apt"
+    echo $NOW
 fi
 
 cd .. && echo -e $RED
