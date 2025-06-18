@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# =======================
+#echo Warning! Will drop all changes! Y/N
+RED='\033[0;91m'
+GRE="\033[0;32m"
+YEL="\033[0;93m"
+YEB="\033[1;33m"
+BLU='\033[0;94m'
+WHI='\033[0;97m'
+NC='\033[0m' # No Color
+# =======================
+
+NOW=`date '+%Y-%m-%d %H:%M'`
+echo $NOW
+
+cd ..
+
+echo -e $RED
+read -p "Warning! Will add libraries: 'libmodbus-dev libconfig++-dev libopen62541-1.4-dev' (Y/N): " ANS
+
+if [ "$ANS" == "Y" ]
+then
+#    echo -e $YEB
+    echo -e $YEB === Installing 'libmodbus-dev'. $NC
+    sudo apt install libmodbus-dev
+
+    echo -e $YEB === Installing 'libconfig++-dev'. $NC
+    sudo apt install libconfig++-dev
+
+    echo -e $YEB === Installing 'libopen62541-1.4'. $NC
+    sudo apt install libopen62541-1.4
+
+    echo -e $YEB === Installing 'libopen62541-1.4-dev'. $NC
+    sudo apt install libopen62541-1.4-dev
+
+    echo -e $YEB === Installing 'libopen62541-1.4-tools'. $NC
+    sudo apt install libopen62541-1.4-tools
+
+    NOW=`date '+%Y-%m-%d %H:%M'`
+    echo -e $GRE ==== Finished on $GRB$NOW $NC
+    sleep 3
+
+else
+    echo Thanks. Bye.
+fi
+
+

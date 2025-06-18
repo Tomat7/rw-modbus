@@ -13,7 +13,7 @@
 
 .DEFAULT_GOAL := all
 $(info === The GOALS is: $(MAKECMDGOALS))
-MAKEFLAGS+= -j8
+MAKEFLAGS+= -j4
 
 # === COMMON: Version/standard & Directories & files & libraries ===
 CXX_VER=c++20
@@ -22,10 +22,10 @@ SRCDIRS= .
 SUBDIRS= include sources
 
 INCLUDES = -I.
-LIBS=libmodbus libconfig++ open62541
-LDLIBS= -lrt -lpthread
-# -lmbedtls 
-#-lmbedx509 -lmbedcrypto #OPEN62541_O= include/open62541/open62541.o
+LIBS=libmodbus libconfig++
+#open62541
+LDLIBS= -lrt -lpthread -lmbedtls -lmbedx509 -lmbedcrypto -lopen62541 
+#OPEN62541_O= include/open62541/open62541.o
 OBJDIR =./tmp/obj
 CC=$(CXX)
 

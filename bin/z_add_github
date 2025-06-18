@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# =======================
+#echo Warning! Will drop all changes! Y/N
+cd ..
+CURDIR=${PWD##*/}
+read -p "Warning! Will add remote REPO '$CURDIR' (Y/N): " ANS
+
+if [ "$ANS" == "Y" ]
+then
+    echo Add Github  REMOTE git.
+    git remote add github git@github.com:tomat7/$CURDIR.git
+#   git reset --hard HEAD
+else
+    echo Thanks. Bye.
+fi
+
+
