@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# =======================
+#echo Warning! Will drop all changes! Y/N
+RED='\033[0;91m'
+GRE="\033[0;32m"
+YEL="\033[0;93m"
+YEB="\033[1;33m"
+BLU='\033[0;94m'
+WHI='\033[0;97m'
+NC='\033[0m' # No Color
+# =======================
+
+NOW=`date '+%Y-%m-%d %H:%M'`
+echo $NOW
+
+cd ..
+
+echo -e $RED
+read -p "Warning! Will add dependss: 'build-essential,  astyle, clang-format' (Y/N): " ANS
+
+if [ "$ANS" == "Y" ]
+then
+#    echo -e $YEB
+    echo -e $YEB === Installing 'build-essential'. $NC
+    sudo apt install build-essential
+
+    echo -e $YEB === Installing 'astyle'. $NC
+    sudo apt install astyle
+
+    echo -e $YEB === Installing 'clang-format'. $NC
+    sudo apt install clang-format
+
+    NOW=`date '+%Y-%m-%d %H:%M'`
+    echo -e $GRE ==== Finished on $GRB$NOW $NC
+    sleep 3
+
+else
+    echo Thanks. Bye.
+fi
+
+
