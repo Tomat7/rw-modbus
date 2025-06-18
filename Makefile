@@ -16,7 +16,7 @@ $(info === The GOALS is: $(MAKECMDGOALS))
 MAKEFLAGS+= -j4
 
 # === COMMON: Version/standard & Directories & files & libraries ===
-CXX_VER=c++20
+CXX_VER=c++26
 EXEC_FILE=a.out
 SRCDIRS= .
 SUBDIRS= include sources
