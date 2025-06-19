@@ -24,6 +24,7 @@ else
 fi
 
 cd .. && echo -e $RED
+CONFDIR=${PWD}
 read -p "Warning! Will add dependss: 'build-essential,  astyle, clang-format' (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
@@ -37,6 +38,9 @@ then
 
     echo -e $YEB === Installing 'clang-format'. $NC
     $APTCMD install clang-format
+
+    echo -e $YEB === Setting SYMlink to config. $NC
+    ln -s $CONFDIR/conf /var/tmp
 
     NOW=`date '+%Y-%m-%d %H:%M'`
     echo -e $GRE ==== Finished on $GRB$NOW $NC
