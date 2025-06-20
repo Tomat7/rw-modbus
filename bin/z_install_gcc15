@@ -11,11 +11,6 @@ WHI='\033[0;97m'
 NC='\033[0m' # No Color
 # =======================
 
-BATVER=0.25.0
-BATDIR=v$BATVER
-BATFILE=bat_"$BATVER"_amd64.deb
-BATPATH=https://github.com/sharkdp/bat/releases/download/$BATDIR/$BATFILE
-
 NOW=`date '+%Y-%m-%d %H:%M'`
 
 WHOISME=`whoami`
@@ -27,21 +22,25 @@ else
     SUDO="sudo"
     echo $NOW
 fi
-
 cd .. && echo -e $RED
-read -p "Warning! Will add Bat(man): (Y/N): " ANS
+CONFDIR=${PWD}
+read -p "Warning! Will install GCC/G++ v.15 by default (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
 then
-    echo -e $YEB === Installing BAT/man v$BATVER $NC
-    mkdir ~/tmp
-    wget $BATPATH -O ~/tmp/$BATFILE
-    $SUDO dpkg -i ~/tmp/$BATFILE  # adapt version number and architecture
+#    echo -e $YEB
+    echo -e $YEB === Installing 'gcc-15 g++-15'. $NC
+    $SUDO apt install gcc-15 g++-15
+    sleep 3
 
-#    mkdir -p ~/.local/bin
-#    ln -s /usr/bin/batcat ~/.local/bin/bat
-    SED="'sed -u -e \\\"s/\\\x1B\[[0-9;]*m//g; s/.\\\x08//g\\\" | bat -p -lman'"
-    echo export MANPAGER=\"sh -c $SED\" >> ~/.bashrc
+    $SUDO update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 14 --slave /usr/bin/g++ g++ /usr/bin/g++-14
+    $SUDO update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 15 --slave /usr/bin/g++ g++ /usr/bin/g++-15
+    sleep 3
+
+    $SUDO ldconfig -v
+    $SUDO update-alternatives --display gcc
+    sleep 3
+
 
     NOW=`date '+%Y-%m-%d %H:%M'`
     echo -e $GRE ==== Finished on $GRB$NOW $NC
@@ -51,4 +50,3 @@ else
     echo Thanks. Bye.
 fi
 
-# eof
