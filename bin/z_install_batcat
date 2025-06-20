@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# =======================
+#echo Warning! Will drop all changes! Y/N
+RED='\033[0;91m'
+GRE="\033[0;32m"
+YEL="\033[0;93m"
+YEB="\033[1;33m"
+BLU='\033[0;94m'
+WHI='\033[0;97m'
+NC='\033[0m' # No Color
+# =======================
+
+NOW=`date '+%Y-%m-%d %H:%M'`
+
+WHOISME=`whoami`
+if [ "$WHOISME" == "root" ]
+then
+    SUDO=""
+    echo -e $NOW $BLU"Started with ROOT privileges!"$NC
+else
+    SUDO="sudo"
+    echo $NOW
+fi
+
+cd .. && echo -e $RED
+read -p "Warning! Will add Bat(man): (Y/N): " ANS
+
+if [ "$ANS" == "Y" ]
+then
+    echo -e $YEB === Installing BAT/man v0.25. $NC
+    wget https://github.com/sharkdp/bat/releases/download/v0.25.0/bat_0.25.0_amd64.deb
+    sudo dpkg -i bat_0.25.0_amd64.deb  # adapt version number and architecture
+
+#    mkdir -p ~/.local/bin
+#    ln -s /usr/bin/batcat ~/.local/bin/bat
+    SED="'sed -u -e \\\"s/\\\x1B\[[0-9;]*m//g; s/.\\\x08//g\\\" | bat -p -lman'"
+    echo export MANPAGER=\"sh -c $SED\" >> ~/.bashrc
+
+    NOW=`date '+%Y-%m-%d %H:%M'`
+    echo -e $GRE ==== Finished on $GRB$NOW $NC
+    sleep 3
+
+else
+    echo Thanks. Bye.
+fi
+
+# eof

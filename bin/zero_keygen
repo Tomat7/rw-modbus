@@ -9,6 +9,9 @@ read -p "Warning! Will create NEW SSH-key on '~/.ssh' (Y/N): " ANS
 
 if [ "$ANS" == "Y" ]
 then
+    echo Config GIT with 'istarkov@yandex.ru'.
+    git config --global user.name "tomat7"
+    git config --global user.email "istarkov@yandex.ru" 
     echo Creation of new SSH ed25519 key with 'istarkov@yandex.ru'.
     ssh-keygen -t ed25519 -C "istarkov@yandex.ru"
 else
