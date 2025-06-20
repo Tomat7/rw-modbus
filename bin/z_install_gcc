@@ -39,9 +39,6 @@ then
     echo -e $YEB === Installing 'clang-format'. $NC
     $APTCMD install clang-format
 
-    echo -e $YEB === Setting SYMlink to config. $NC
-    ln -s $CONFDIR/conf /var/tmp
-
     NOW=`date '+%Y-%m-%d %H:%M'`
     echo -e $GRE ==== Finished on $GRB$NOW $NC
     sleep 3

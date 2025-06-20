@@ -44,6 +44,9 @@ then
     echo -e $YEB === Installing 'libopen62541-1.4-tools'. $NC
     $APTCMD install libopen62541-1.4-tools
 
+    echo -e $YEB === Setting SYMlink to config. $NC
+    ln -s $CONFDIR/conf /var/tmp
+
     NOW=`date '+%Y-%m-%d %H:%M'`
     echo -e $GRE ==== Finished on $GRB$NOW $NC
     sleep 3
