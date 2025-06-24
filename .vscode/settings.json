@@ -91,6 +91,15 @@
         "latch": "cpp",
         "span": "cpp",
         "spanstream": "cpp",
-        "queue": "cpp"
-    }
+        "queue": "cpp",
+        "format": "cpp",
+        "text_encoding": "cpp"
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/star9999/src/rw-modbus",
+            "binaryPath": "/home/star9999/src/rw-modbus/a.out",
+            "binaryArgs": []
+        }
+    ]
 }

@@ -4,12 +4,11 @@
 
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
-
 //#include "include/open62541/open62541.h"
 
 #include <string>
-#include <variant>
 #include <vector>
+//#include <variant>
 
 using std::string;
 using std::mutex;

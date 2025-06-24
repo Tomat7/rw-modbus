@@ -46,6 +46,8 @@ int main(int argc, char** argv)
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   // log_level = 3;
 
+  std::cout << "dbl_fmt: " << std::format("{}", 2.235435435) << "\n";
+
   if (argc > 1) {
     if (Mode.count(string(argv[1])))
       mode = argv[1];
