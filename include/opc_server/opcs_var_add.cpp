@@ -19,26 +19,26 @@
 #define CHAR_P const_cast<char *>
 
 
-int OpcServer_c::add_VarName(string raw_name, int t, int m)
+int OpcServer_c::add_VarName(string raw_name_, int ua_type_, int acl_mode_)
 {
-  if (vars.count(raw_name)) {
-    LOGA("Add: Ignore existing variable: %s", raw_name.c_str());
+  if (vars.count(raw_name_)) {
+    LOGA("Add: Ignore existing variable: %s", raw_name_.c_str());
     return 0;
   }
 
-  if (raw_name.find("//") != std::string::npos) {
-    LOGA("Add: Ignore wrong name/path: %s", raw_name.c_str());
+  if (raw_name_.find("//") != std::string::npos) {
+    LOGA("Add: Ignore wrong name/path: %s", raw_name_.c_str());
     return 0;
   }
 
-  string str_name = raw_name;                // /PLC/Kub/Kub.Temp1
+  string str_name = raw_name_;                // /PLC/Kub/Kub.Temp1
   string str_path = get_PathName(str_name);  // /PLC/Kub/, str_name=Kub.Temp1
 
   var_t v;
   v.is_var = true;
-  v.ua_type = t;
-  v.rmode = m;
-  v.key_name = raw_name;  // KEY for map and OPC FQName - /PLC/Kub/Kub.Temp1
+  v.ua_type = ua_type_;
+  v.acl_mode = acl_mode_;
+  v.key_name = raw_name_;  // KEY for map and OPC FQName - /PLC/Kub/Kub.Temp1
   v.var_name = str_name;  // Kub.Temp1
   v.var_path = str_path;  // /PLC/Kub/
 //  v.str_pathname = str_path + str_name;  // /PLC/Kub/Kub.Temp1

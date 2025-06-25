@@ -4,6 +4,11 @@
 
 #include "opcs_class.h"
 
+#ifdef UA_TYPE
+#warning "UA_TYPE macros already defined!"
+#else
+#define UA_TYPE(XNUM) types[type_index(typeid(XNUM))]
+#endif
 
 // ======= Definition of add TEMPLATEs =========
 
@@ -12,6 +17,7 @@ int OpcServer_c::AddVar(std::string s, T Numeric, int rmode)
 {
   // LOGD("%s - 1", __func__);
   rc = add_VarName(s, types[type_index(typeid(Numeric))], rmode);
+  //rc = add_VarName(s, UA_TYPE(Numeric), rmode);
   if (rc == 0)
     return 0;
 

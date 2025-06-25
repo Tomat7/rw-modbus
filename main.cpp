@@ -35,7 +35,8 @@ static void close_sigint(int dummy)
   exit(dummy);
 }
 
-// int main(int argc, char **argv) {
+//  std::cout << "dbl_fmt: " << std::format("{}", 2.235435435) << "\n";
+//  The "std::format" and "std::print" is real BULLSHIT! Never use it!
 
 int main(int argc, char** argv)
 {
@@ -45,8 +46,6 @@ int main(int argc, char** argv)
   signal(SIGINT, close_sigint);
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   // log_level = 3;
-
-  std::cout << "dbl_fmt: " << std::format("{}", 2.235435435) << "\n";
 
   if (argc > 1) {
     if (Mode.count(string(argv[1])))
@@ -67,8 +66,6 @@ int main(int argc, char** argv)
   init_all();
 
   OPCclient.init("opc.tcp://localhost:4840");
-//  uint16_t cnt = 0;
-//  uint16_t ccc = 0;
 //  logger_set_queue(true);
 
   for (;;) {

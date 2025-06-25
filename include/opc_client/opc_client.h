@@ -11,13 +11,11 @@
 #include <open62541/client_config_default.h>
 #include <open62541/client_highlevel.h>
 #include <open62541/plugin/log_stdout.h>
-
-
 //#include "include/open62541/open62541.h"
+
 #include <string.h>
 
 //#include <iostream>
-
 #include <mutex>
 #include <map>
 #include <string>

@@ -5,12 +5,11 @@
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
-
 //#include "include/open62541/open62541.h"
+
 #include <string.h>
 
 //#include <iostream>
-
 #include <mutex>
 #include <map>
 #include <string>
@@ -99,7 +98,7 @@ private:
   string get_StrVarDetails(var_t &var);
   string get_PathByLevel(string Path, int level);
 
-  int add_VarName(string raw_name, int rtype, int rmode);
+  int add_VarName(string raw_name_, int ua_type_, int acl_mode_);
   void add_VarNodeId(var_t &v);
   void add_Variable(var_t &var);
 
