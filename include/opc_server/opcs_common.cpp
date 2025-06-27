@@ -28,14 +28,15 @@ bool operator!=(const value_u &v1, const value_u &v2) { return v1.ui64 != v2.ui6
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
   uaPort = _port;
-  types[type_index(typeid(int16_t))] = UA_TYPES_INT16;
-  types[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
-  types[type_index(typeid(int32_t))] = UA_TYPES_INT32;
-  types[type_index(typeid(uint32_t))] = UA_TYPES_UINT32;
-  types[type_index(typeid(int64_t))] = UA_TYPES_INT64;
-  types[type_index(typeid(uint64_t))] = UA_TYPES_UINT64;
-  types[type_index(typeid(float))] = UA_TYPES_FLOAT;
-  types[type_index(typeid(double))] = UA_TYPES_DOUBLE;
+  // Filling the type_map
+  type_map[type_index(typeid(int16_t))] = UA_TYPES_INT16;
+  type_map[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
+  type_map[type_index(typeid(int32_t))] = UA_TYPES_INT32;
+  type_map[type_index(typeid(uint32_t))] = UA_TYPES_UINT32;
+  type_map[type_index(typeid(int64_t))] = UA_TYPES_INT64;
+  type_map[type_index(typeid(uint64_t))] = UA_TYPES_UINT64;
+  type_map[type_index(typeid(float))] = UA_TYPES_FLOAT;
+  type_map[type_index(typeid(double))] = UA_TYPES_DOUBLE;
 }
 
 OpcServer_c::~OpcServer_c()
@@ -164,27 +165,6 @@ void OpcServer_c::DeleteVar(string s)
   LOGI("Deleted Var/Node: %s", s.c_str());
 }
 
-/*
-  int OpcServer_c::getType(string s)
-  {
-  if (vars.count(s))
-    return vars[s].type;
-  else
-    LOGW("Type: Ignore non-existing variable: %s", s.c_str());
-  return -1;
-  }
-*/
-/*
-  int OpcServer_c::getStatus(string s)
-  {
-  if (vars.count(s))
-    return vars[s].ua_status;  // 0 - is OK, any other (1 or -1) is BAD
-  else
-    LOGW("Status: Ignore non-existing variable: %s", s.c_str());
-  return -1;
-  }
-*/
-
 bool OpcServer_c::isGood(string s)
 {
   bool is_good = false;
@@ -267,5 +247,28 @@ string OpcServer_c::get_StrVarDetails(var_t &v)
 
   return ret;
 }
+
+
+/*
+  int OpcServer_c::getType(string s)
+  {
+  if (vars.count(s))
+    return vars[s].type;
+  else
+    LOGW("Type: Ignore non-existing variable: %s", s.c_str());
+  return -1;
+  }
+*/
+/*
+  int OpcServer_c::getStatus(string s)
+  {
+  if (vars.count(s))
+    return vars[s].ua_status;  // 0 - is OK, any other (1 or -1) is BAD
+  else
+    LOGW("Status: Ignore non-existing variable: %s", s.c_str());
+  return -1;
+  }
+*/
+
 
 // eof

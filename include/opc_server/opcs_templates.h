@@ -4,11 +4,18 @@
 
 #include "opcs_class.h"
 
-#ifdef UA_TYPE
+#ifdef _UA_TYPE
 #warning "UA_TYPE macros already defined!"
 #else
-#define UA_TYPE(XNUM) types[type_index(typeid(XNUM))]
+#define _UA_TYPE(_XNUM) type_map[type_index(typeid(_XNUM))]
 #endif
+
+#ifdef _TYPE_INDEX
+#warning "TYPE_INDEX macros already defined!"
+#else
+#define _TYPE_INDEX(_XTYPE) type_index(typeid(_XTYPE))
+#endif
+
 
 // ======= Definition of add TEMPLATEs =========
 
@@ -16,12 +23,12 @@ template <typename T>
 int OpcServer_c::AddVar(std::string s, T Numeric, int rmode)
 {
   // LOGD("%s - 1", __func__);
-  rc = add_VarName(s, types[type_index(typeid(Numeric))], rmode);
-  //rc = add_VarName(s, UA_TYPE(Numeric), rmode);
+  // rc = add_VarName(s, type_map[type_index(typeid(Numeric))], rmode);
+  // rc = add_VarName(s, type_map[_TYPE_INDEX(Numeric)], rmode);
+  rc = add_VarName(s, _UA_TYPE(Numeric), rmode);
+
   if (rc == 0)
     return 0;
-
-//  UA_Variant_hasScalarType(&value, &UA_TYPES[UA_TYPES_FLOAT];
 
   // LOGD("%s - 2", __func__);
   add_VarNodeId(vars[s]);

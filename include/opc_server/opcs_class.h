@@ -113,8 +113,22 @@ private:
   bool set_NumericValue(string s, T Numeric_set, bool isOK);
 
   badvalue_t bad_value;
-  map<string, var_t> vars;     // All regs here.
-  map<type_index, int> types;  // UA types coding (index is CPP type_index)
+  map<string, var_t> vars;        // All vars/regs here.
+  map<type_index, int> type_map;  // UA types coding (as CPP type_index)
+  /*
+    // This way INCREASE size of executable file :-(
+    map<type_index, int> type_m1 {
+      {type_index(typeid(int16_t)),  UA_TYPES_INT16 },
+      {type_index(typeid(uint16_t)), UA_TYPES_UINT16},
+      {type_index(typeid(int32_t)),  UA_TYPES_INT32 },
+      {type_index(typeid(uint32_t)), UA_TYPES_UINT32},
+      {type_index(typeid(int64_t)),  UA_TYPES_INT64 },
+      {type_index(typeid(uint64_t)), UA_TYPES_UINT64},
+      {type_index(typeid(float)),    UA_TYPES_FLOAT },
+      {type_index(typeid(double)),   UA_TYPES_DOUBLE}
+    };
+
+  */
 };
 
 // ======== Definition of TEMPLATEs =========

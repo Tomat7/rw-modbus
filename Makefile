@@ -34,7 +34,8 @@ CC=$(CXX)
 CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors
 #LDFLAGS = -Wall #-std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
-OPTFLAGS= -flto=auto -O2 #-Os -s -Wl,--as-needed
+OPTFLAGS= -flto=auto -O2 
+#-Os -s -Wl,--as-needed
 
 
 # ==== Folders processing ===
