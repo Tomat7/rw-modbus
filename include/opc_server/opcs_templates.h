@@ -5,16 +5,9 @@
 #include "opcs_class.h"
 
 #ifdef _UA_TYPE
-#warning "UA_TYPE macros already defined!"
-#else
-#define _UA_TYPE(_XNUM) type_map[type_index(typeid(_XNUM))]
+#undef _UA_TYPE
 #endif
-
-#ifdef _TYPE_INDEX
-#warning "TYPE_INDEX macros already defined!"
-#else
-#define _TYPE_INDEX(_XTYPE) type_index(typeid(_XTYPE))
-#endif
+#define _UA_TYPE(_XNUM) ua_types[type_index(typeid(_XNUM))]
 
 
 // ======= Definition of add TEMPLATEs =========

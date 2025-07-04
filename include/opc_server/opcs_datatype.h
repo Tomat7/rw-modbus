@@ -47,7 +47,7 @@ struct nodeid_t {
   UA_NodeId reference;
 };
 
-struct var_t {
+struct ua_var_t {
   string key_name;            // /PLC/Kub/Kub.Temp1
   char* ua_keyname = nullptr; // key_name.c_str()
   string var_name;            // Kub.Temp1

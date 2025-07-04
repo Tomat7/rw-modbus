@@ -95,14 +95,14 @@ private:
   UA_NodeId add_FolderToParent(string full_name, UA_NodeId parentNodeId);
   int count_Slash(string Path);
   string get_PathName(string &n);
-  string get_StrVarDetails(var_t &var);
+  string get_StrVarDetails(ua_var_t &var);
   string get_PathByLevel(string Path, int level);
 
   int add_VarName(string raw_name_, int ua_type_, int acl_mode_);
-  void add_VarNodeId(var_t &v);
-  void add_Variable(var_t &var);
+  void add_VarNodeId(ua_var_t &v);
+  void add_Variable(ua_var_t &var);
 
-  bool write_Variable(var_t &var, bool isOk);
+  bool write_Variable(ua_var_t &var, bool isOk);
   void* get_VariantDataPtr(string s);  // get pointer to UA_Variant.Data
   bool refresh_RawValue(string s);     // Reread value_u form server
 
@@ -113,8 +113,8 @@ private:
   bool set_NumericValue(string s, T Numeric_set, bool isOK);
 
   badvalue_t bad_value;
-  map<string, var_t> vars;        // All vars/regs here.
-  map<type_index, int> type_map;  // UA types coding (as CPP type_index)
+  map<string, ua_var_t> vars;        // All vars/regs here.
+  map<type_index, int> ua_types;  // UA types coding (as CPP type_index)
   /*
     // This way INCREASE size of executable file :-(
     map<type_index, int> type_m1 {

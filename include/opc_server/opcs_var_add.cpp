@@ -34,7 +34,7 @@ int OpcServer_c::add_VarName(string raw_name_, int ua_type_, int acl_mode_)
   string str_name = raw_name_;                // /PLC/Kub/Kub.Temp1
   string str_path = get_PathName(str_name);  // /PLC/Kub/, str_name=Kub.Temp1
 
-  var_t v;
+  ua_var_t v;
   v.is_var = true;
   v.ua_type = ua_type_;
   v.acl_mode = acl_mode_;
@@ -82,7 +82,7 @@ string OpcServer_c::get_PathName(string &name)
   return path;
 }
 
-void OpcServer_c::add_VarNodeId(var_t &v)
+void OpcServer_c::add_VarNodeId(ua_var_t &v)
 {
   v.node_id.var = UA_NODEID_STRING(1, v.ua_keyname);
 
@@ -146,7 +146,7 @@ UA_NodeId OpcServer_c::add_FolderToParent(string str_path, UA_NodeId parentNodeI
                        UA_NODEID_NUMERIC(0, UA_NS0ID_BASEOBJECTTYPE),
                        oAttr, NULL, &folderId);
 
-  var_t v;
+  ua_var_t v;
 //  v.str_pathname = str_path;
   v.is_var = false;
   v.node_id.var = folderId;
@@ -188,7 +188,7 @@ string OpcServer_c::get_PathByLevel(string Path, int level)
   return Path;
 }
 
-void OpcServer_c::add_Variable(var_t &v)
+void OpcServer_c::add_Variable(ua_var_t &v)
 {
   if (v.ptr_value == nullptr) {
     LOGA("Wrong ptr: %s", v.ua_varname);

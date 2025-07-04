@@ -25,14 +25,14 @@ namespace OPC
 OpcClient_c::OpcClient_c(const char* url_)
 {
   uaUrl = url_;
-  types[type_index(typeid(int16_t))] = UA_TYPES_INT16;
-  types[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
-  types[type_index(typeid(int32_t))] = UA_TYPES_INT32;
-  types[type_index(typeid(uint32_t))] = UA_TYPES_UINT32;
-  types[type_index(typeid(int64_t))] = UA_TYPES_INT64;
-  types[type_index(typeid(uint64_t))] = UA_TYPES_UINT64;
-  types[type_index(typeid(float))] = UA_TYPES_FLOAT;
-  types[type_index(typeid(double))] = UA_TYPES_DOUBLE;
+  ua_types[type_index(typeid(int16_t))] = UA_TYPES_INT16;
+  ua_types[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
+  ua_types[type_index(typeid(int32_t))] = UA_TYPES_INT32;
+  ua_types[type_index(typeid(uint32_t))] = UA_TYPES_UINT32;
+  ua_types[type_index(typeid(int64_t))] = UA_TYPES_INT64;
+  ua_types[type_index(typeid(uint64_t))] = UA_TYPES_UINT64;
+  ua_types[type_index(typeid(float))] = UA_TYPES_FLOAT;
+  ua_types[type_index(typeid(double))] = UA_TYPES_DOUBLE;
 }
 
 
@@ -80,6 +80,7 @@ bool OpcClient_c::connect()
     scConnect = UA_Client_connect(uaClient, uaUrl);
 
     if (scConnect != UA_STATUSCODE_GOOD) {
+      LOGA("The connection failed: %s", UA_StatusCode_name(scConnect));
       UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                   "The connection failed: %s", UA_StatusCode_name(scConnect));
       UA_Client_delete(uaClient);

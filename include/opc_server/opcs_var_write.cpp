@@ -28,7 +28,7 @@ bool OpcServer_c::WriteRawUnion(string s, value_u raw_vu, bool isOK)
   return ret;
 }
 
-bool OpcServer_c::write_Variable(var_t &v, bool isOk)
+bool OpcServer_c::write_Variable(ua_var_t &v, bool isOk)
 {
   if (isOk) {
     v.ua_status = UA_STATUSCODE_GOOD;

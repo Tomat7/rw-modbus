@@ -57,15 +57,14 @@ public:
 private:
   bool connect();
 
-  std::map<type_index, int> types;  // UA types coding (index is CPP type_index)
+  std::map<type_index, int> ua_types;  // UA types coding (index is CPP type_index)
   mutex* muxClient = nullptr;
   UA_Client* uaClient = nullptr;
   UA_StatusCode scConnect = UA_STATUSCODE_BAD;
-  UA_StatusCode scRead = UA_STATUSCODE_BAD;
   UA_StatusCode scWrite = UA_STATUSCODE_BAD;
+  UA_StatusCode scRead = UA_STATUSCODE_BAD;
   const char* uaUrl = nullptr;
 //  int rc = 0;
-
 };
 
 } // namespace OPC
