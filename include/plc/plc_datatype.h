@@ -3,9 +3,6 @@
 // reg_class.h ----------------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 //
-// Other (c)
-// https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
-//
 
 #include <modbus/modbus.h>
 #include <string.h>
@@ -32,6 +29,8 @@ struct mbdata_t {
 };
 
 struct regdata_t {
+//class reg_t {
+//public:
   uint16_t rvalue = 0;
   uint16_t rerrors = 0;  // number of errors on MB func (init/connect/read)
   int rupdate = 0;  // 1 - need to write/update remote register, 0 - no update
@@ -41,28 +40,32 @@ struct regdata_t {
   // see https://www.modbustools.com/poll_display_formats.html
   // and https://www.simplymodbus.ca/FAQ.htm#Order
   // also see ../reg/reg_datatype.h
-  int rtype;       // 0 - uint16_t (see reg_datatype.h)
-  int rsize;       // how much "connected " regs "in chain" (optional)
-  int rbyteorder;  // byte order "in chain" (Big-Endian, ABCD, etc)
+  int rtype = 0;       // see reg_datatype.h
+  int rsize = 0;       // how much "connected " regs "in chain" (optional)
+  int rbyteorder = 0;  // byte order "in chain" (Big-Endian, ABCD, etc)
 };
 
-struct reg_t {
+//struct reg_t {
+class reg_t
+{
+public:
   int raddr = 0;
   regdata_t data;
   reg_t* r_next = nullptr;  // keep pointer to next "connected" reg in chain
   string str_mode = "*";    // "rw", "r", "w" - (read from Config)
-  // all next params is optional for raw Modbus
-  // it's necessary for naming and good look
+  // all next params is optional for raw/pure Modbus
+  // Register name is necessary for naming and good look
   string str_rname = "-";         // reg_name
   string rfullname = "";          // PLC_name.reg_name
   const char* ch_name = nullptr;  // str_rname.c_str()
-  // OPC name of (optional) folder
-  // .../PLC_name/rfolder/PLC_name.reg_name (opt)
+  // OPC name of folder (optional)
+  // .../PLC_name/rfolder/PLC_name.reg_name (optional)
   string str_rfolder = "";
-  // for SCADA/OPC: reg which/where referenced/pointed to Modbus reg
-  // reference to external register (optional)
+  // For SCADA/OPC: reg which/where referenced/pointed to Modbus reg
+  // Reference to external register (optional)
   string str_source = "";
-  string str_type = "*";  // "i", "f", "u", "f100", see reg_init.cpp
+  // Type of variable "i", "f", "u", "f100", see "type_map" in reg_init.cpp
+  string str_type = "*";
 };
 
 // TODO:  !!!

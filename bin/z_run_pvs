@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+RED='\033[0;91m'
+GRE="\033[0;32m"
+YEL="\033[0;93m"
+YEB="\033[1;33m"
+BLU='\033[0;94m'
+WHI='\033[0;97m'
+NC='\033[0m' # No Color
+# =======================
+
+NOW=`date '+%Y-%m-%d %H:%M'`
+echo $NOW
+
+
+cd ../.pvs
+pwd
+
+~/venv/bin/compiledb -n make
+
+pvs-studio-analyzer analyze -o pvs.log -e /usr -j7
+
+plog-converter -a GA:1,2 -t tasklist -o project.tasks pvs.log

@@ -16,9 +16,9 @@
   #include <iostream>
   #include <map>
   #include <mutex>
-  #include <vector>
 */
-
+#include <map>
+#include <vector>
 #include <string>
 
 #include "include/opc_server/opcs_class.h"
@@ -30,16 +30,7 @@
 
 using std::string;
 using std::vector;
-
-union ui32_u {
-  uint32_t mb32;
-  uint16_t mb32u[2] = {0};
-};
-
-union ui64_u {
-  uint64_t mb64;
-  uint16_t mb64u[4] = {0};
-};
+using std::map;
 
 struct regprop_t {
   int rtype;
@@ -84,19 +75,19 @@ public:
   int var_mode = 0;                // 1 - "rw", 0 - "readonly"
   int var_type = UA_TYPES_UINT16;  // for OPC UA server (ex. UA_TYPES_FLOAT)
   int var_size = 1;  // for multiply Modbus registers (ex. 32-bit Float)
+
+  const char* var_format = nullptr;
   byteorder_t byte_order = BO_SNGL;// for 32/64-bit Modbus register
+
   bool visible = false;  // try to hide 2nd/3rd/4th word of multiply MB regs
-  bool is_modbus = false;
-  bool is_scada = false;
-  bool is_ref = false;  // variable Referenced to Modbus reg(s)
+  bool is_modbus = false; // Modebus register
+  bool is_scada = false;  // SCADA-only (local) var/reg
+  bool is_ref = false;    // Referenced to Modbus reg(s)
 
 private:
   uint16_t get_plc_reg(reg_t* rptr);
   uint16_t get_plc_reg(int x = 0);
-  /*
-    uint32_t mb_words_swap32(ui32_u);
-    uint64_t mb_words_swap64(uint64_t);
-  */
+
   void set_plc_reg(uint16_t _val, reg_t* rptr);
   void set_plc_reg(uint16_t _val, int x = 0);
 
@@ -112,6 +103,7 @@ private:
   value_u value;  // union of values (by type)
   badvalue_t bad_value;
   reg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs
+
 };
 
 // eof

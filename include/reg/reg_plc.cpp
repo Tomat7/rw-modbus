@@ -26,9 +26,7 @@ uint16_t Reg_c::get_plc_reg(reg_t* rptr)  // Set reg's local value != read PLC.
   uint16_t rval = bad_value.ui16;
   if ((is_modbus || is_ref) && (rptr != nullptr)) {
     var_errors = rptr->data.rerrors;
-    if (var_errors)
-      rval = bad_value.ui16;
-    else
+    if (!var_errors)
       rval = PLC_c::get_reg(rptr);
   } else
     LOGE("Not Modbus get-reg: %s", str_fullname.c_str());

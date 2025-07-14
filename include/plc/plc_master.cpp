@@ -1,9 +1,6 @@
 // plc_class.cpp ----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 //
-// timer & millis() (c)
-// https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
-//
 
 #include <errno.h>
 #include <math.h>

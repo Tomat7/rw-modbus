@@ -72,7 +72,7 @@ bool OpcClient_c::connect()
       UA_Client_disconnect(uaClient);
       UA_Client_delete(uaClient);
       uaClient = nullptr;
-      LOGA("Connect: uaClient deleted.");
+      LOGI("Connect: uaClient deleted.");
     }
 
     uaClient = UA_Client_new();

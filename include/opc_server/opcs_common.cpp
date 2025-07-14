@@ -53,37 +53,32 @@ void OpcServer_c::init(UA_UInt16 _port, UA_LogLevel _ll)
 
   uaSrvMux = new mutex;
   uaDataMux = new mutex;
-  // uaGetMux = new mutex;
-  // uaServer = UA_Server_new();
-  //  = UA_Server_getConfig(uaServer);
-  // UA_ServerConfig_setDefault(uaServerConfig);
-  // 10.06.2025
-  // UA_ServerConfig uaServerConfig;
 
   uaServerConfig = new UA_ServerConfig;
   memset(uaServerConfig, 0, sizeof(UA_ServerConfig)); // LOGI("Memset done");
   UA_ServerConfig_setMinimal(uaServerConfig, uaPort, NULL); // LOGI("SetMin");
-  wait_console(3);
+  // wait_console(3);
 
-  init_logger();
+  uaLogger = UA_Log_Stdout_new(uaLoglevel);
+  LOGD("uaLogger done new");
+  uaLogger->clear = uaServerConfig->logging->clear;
+  LOGD("uaLogger->clear done");
+  *uaServerConfig->logging = *uaLogger;
+  LOGD("uaLogger->logging done");
+
   init_config(uaServerConfig);
   LOGD("INIT done");
 
   uaServer = UA_Server_newWithConfig(uaServerConfig);
   uaVariant = UA_Variant_new();
-
   LOGN("Init: server ready to start on port:%d", uaPort);
 }
 
 void OpcServer_c::init_logger()
 {
   /* Exchange the logger */
-  uaLogger = UA_Log_Stdout_withLevel(uaLoglevel);
-  LOGD("uaLogger done");
-  uaLogger.clear = uaServerConfig->logging->clear;
-  LOGD("uaLogger->clear done");
-  *uaServerConfig->logging = uaLogger;
-  LOGD("uaLogger->logging done");
+  //uaLogger = UA_Log_Stdout_withLevel(uaLoglevel);
+  //  LOGD("uaLogger done");
 }
 
 

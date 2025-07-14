@@ -121,18 +121,37 @@ map<string, regprop_t> type_map {
 
 };
 
+map<int, const char*> format_map {
+  {UA_TYPES_INT16, "%i" },
+  {UA_TYPES_INT32, "%i" },
+  {UA_TYPES_INT64, "%i" },
+  {UA_TYPES_UINT16, "%u"},
+  {UA_TYPES_UINT32, "%u"},
+  {UA_TYPES_UINT64, "%u"},
+  {UA_TYPES_FLOAT, "%10.3f"},
+  {UA_TYPES_DOUBLE, "%14.4f"},
+  {NOTUA_TYPES_F100, "%7.2f"},
+  {NOTUA_TYPES_F10, "%7.1f"}
+};
+
+// ================================================================
+
 Reg_c::~Reg_c() { /* LOGD("DEstruct! %x %s", this, this->rn); */ }
 
 Reg_c::Reg_c() { /* LOGD("Construct! %x", this);  */ }
 
-Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)  // For Modbus regs only
+
+// ============================================================
+// For Modbus regs only
+
+Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)
 {
-  string st_ = to_lower(_reg->str_type);
-  st_ = "u16";
+  string st_ = "u16"; //to_lower(_reg->str_type);  //st_ = "u16";
   if (type_map.count(st_)) {
     var_mode = _reg->data.rmode;
     var_type = type_map[st_].rtype;
     var_size = type_map[st_].rsize;
+    var_format = format_map[var_type];
     byte_order = type_map[st_].rbyteorder;
   } else
     LOGE("Wrong type: %s, reg: %s", _reg->str_type.c_str(), rn);
@@ -160,13 +179,16 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)  // For Modbus regs only
        byte_order, var_mode, value.ui16, str_opcname.c_str());
 }
 
-Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base)  // For SCADA regs only
+// ============================================================
+// For SCADA & referenced registers
+
+Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base)
 {
   if (_reg->str_source == "" || _reg->str_source == "-") {
-    str_source = "-";  // flag of SCADA register/tag!
+    str_source = "-"; // flag of SCADA only (local) register/tag!
     is_scada = true;
   } else {
-    str_source = _reg->str_source;
+    str_source = _reg->str_source;  // referenced register
     is_ref = true;
   }
 
@@ -182,6 +204,7 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base)  // For SCADA regs only
     var_mode = (_reg->str_mode == "rw") ? 1 : 0;
     var_type = type_map[st_].rtype;
     var_size = type_map[st_].rsize;         // for SCADA ??
+    var_format = format_map[var_type];
     byte_order = type_map[st_].rbyteorder;  // for SCADA ??
     visible = true;
   } else

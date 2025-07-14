@@ -29,7 +29,7 @@ LDLIBS= -lrt -lpthread -lmbedtls -lmbedx509 -lmbedcrypto -lopen62541
 OBJDIR =./tmp/obj
 CC=$(CXX)
 
-# === C/CPP main flags configuration ===
+# === C/CPP flags configuration ===
 #CPPFLAGS= -std=$(CXX_VER)
 CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors
 #LDFLAGS = -Wall #-std=$(CXX_VER)
@@ -37,18 +37,188 @@ DEPFLAGS= -MD -MF $(OBJDIR)
 OPTFLAGS= -flto=auto -O2 
 #-Os -s -Wl,--as-needed
 
-include .mk/folders.mk
 
-include .mk/flags.mk
+# ==== Folders processing ===
+LDLIBS+=$(foreach lib,$(LIBS),$(shell pkg-config --libs --cflags $(lib)))
 
-include .mk/checks.mk
+ALLDIRS= $(foreach dir,$(SUBDIRS),$(shell find -L $(dir) -maxdepth 1 -type d))
+SRCDIRS+= $(ALLDIRS)
 
-include .mk/colors.mk
+$(shell mkdir $(OBJDIR) 2>/dev/null)
+$(foreach dir,$(SRCDIRS),$(shell mkdir $(OBJDIR)/$(dir) 2>/dev/null))
 
-include .mk/main.mk
+SRCFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
+HDRFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.h))
 
-include .mk/formatting.mk
+DEPFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.cpp.d))
 
+OBJLIST =$(patsubst %.cpp,$(OBJDIR)/%.o,$(SRCFILES)) 
+#OBJFILES=$(foreach dir,$(SRCDIRS),$(wildcard $(OBJDIR)/$(dir)/*.o))
+
+#OUTF=$(shell ls -Fog $(EXEC_FILE))
+
+
+# === Add more warning. "Stolen" here https://codeforces.com/blog/entry/15547
+WARN1_FLAGS= -Wshadow -Wformat=2 -Wfloat-equal -Wconversion
+WARN2_FLAGS= -Wcast-align -Wcast-qual
+WARN3_FLAGS= -Wduplicated-cond -Wlogical-op -Wshift-overflow=2
+CXXFLAGS+=$(WARN1_FLAGS) $(WARN2_FLAGS) $(WARN3_FLAGS)
+
+# === For debugging & "deep" research
+GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 
+SANIT_FLAGS= -fstack-protector -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
+DEBUG_FLAGS= -g -DDEBUG_FLAG
+#CXXFLAGS+= $(GLIBC_FLAGS)
+#CXXFLAGS+= $(SANIT_FLAGS)
+#CXXFLAGS+= -fanalyzer
+
+# === Check for DEBUG build ===
+MESSAGE_DEBUG="===+++===+++==="
+
+ifeq ("master","$(filter master,$(MAKECMDGOALS))")
+CPPFLAGS+= -DMB_MASTER
+MESSAGE=" MASTER"
+EXEC_FILE=mb_master
+$(info === MASTER mode activated! ===)
+endif
+
+ifeq ("slave","$(filter slave,$(MAKECMDGOALS))")
+CPPFLAGS+= -DMB_SLAVE
+MESSAGE=" SLAVE"
+EXEC_FILE=mb_slave
+$(info === SLAVE mode activated! ===)
+endif
+
+# === Debug & other tricks ===
+
+ifeq ("check","$(filter check,$(MAKECMDGOALS))")
+OPTFLAGS=
+CPPFLAGS+= $(GLIBC_FLAGS)
+CXXFLAGS+= $(SANIT_FLAGS)
+#LDFLAGS+= $(GLIBC_FLAGS)
+LDFLAGS+= $(SANIT_FLAGS)
+MESSAGE=" with CHECK"
+$(info === FULL CHECK options activated! ===)
+endif
+
+ifeq ("debug","$(filter debug,$(MAKECMDGOALS))")
+OPTFLAGS=
+CPPFLAGS+= $(DEBUG_FLAGS)
+#LDFLAGS+= $(DEBUG_FLAGS)
+DO_DEBUG=YES
+MESSAGE=" with DEBUG"
+MESSAGE_DEBUG="=== The size of executable file are REALLY BIG. ==="
+$(info === DEDUG options activated! ===)
+endif
+
+ifeq ("fulldebug","$(filter fulldebug,$(MAKECMDGOALS))")
+OPTFLAGS=
+CXXFLAGS+= $(GLIBC_FLAGS)
+CXXFLAGS+= $(SANIT_FLAGS)
+CPPFLAGS+= $(DEBUG_FLAGS)
+LDFLAGS+= $(SANIT_FLAGS)
+LDFLAGS+= $(DEBUG_FLAGS)
+DO_DEBUG=YES
+MESSAGE=" FULL DEBUG!"
+MESSAGE_DEBUG="=== The size of executable file are EXTREMELY BIG. ==="
+$(info === FULL Debug options activated! ===)
+endif
+
+# === Colors (just for fun) ===
+ifneq ("/usr/bin/dash","$(shell readlink -f /bin/sh)")
+E=-e
+endif
+RED='\033[0;91m'
+ECHO_RED=@echo $(E) '\033[0;91m'
+GRE='\033[0;32m'
+ECHO_GRE=@echo $(E) '\033[0;32m'
+YEL='\033[0;93m'
+ECHO_YEL=@echo $(E) '\033[0;93m'
+BLU='\033[0;94m'
+ECHO_BLU=@echo $(E) '\033[0;94m'
+WHI='\033[0;97m'
+NC='\033[0m'     # No Color
+
+# =====================================================================
+
+include $(DEPFILES)
+
+all: $(EXEC_FILE)
+master: $(EXEC_FILE)
+slave: $(EXEC_FILE)
+
+run: clean $(EXEC_FILE)
+check: clean $(EXEC_FILE)
+debug: clean $(EXEC_FILE)
+fulldebug: clean $(EXEC_FILE)
+
+# ================ Linking ================================
+$(EXEC_FILE): $(OBJLIST)
+	$(ECHO_GRE)"=== Linking$(MESSAGE): $@"$(NC)
+	$(LINK.o) $(OPTFLAGS) $^ $(LDLIBS) -o $@
+	$(ECHO_GRE)"=== Finished$(MESSAGE) ==="$(NC)
+	@ls -Fog --color $(EXEC_FILE)
+	$(ECHO_GRE)$(MESSAGE_DEBUG)$(NC)
+	sleep 2
+#	$(CXX) $(LDFLAGS) $(OPTFLAGS) $^ -o $(EXEC_FILE) $(LDLIBS)
+#	$(LINK.o) $(OPTFLAGS) $(OPEN62541_O) $^ $(LDLIBS) -o $@
+
+#================== Compiling ==============================
+$(OBJDIR)/%.o: %.cpp
+	$(ECHO_YEL)"=== Compiling$(MESSAGE): $<"$(NC)
+	$(COMPILE.cpp) $(INCLUDES) $(OPTFLAGS) $(DEPFLAGS)/$<.d -o $@ $<
+#	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(DEPFLAGS) $(CPPFLAGS) $(OBJDIR)/$<.d -o $@ $<
+
+# ================== Cleaning =============================
+clean: format
+	$(ECHO_BLU)"=== Cleaning UP with... $<"$(NC)
+	@rm -rfv $(EXEC_FILE)
+#	find test -maxdepth 5 -type f -name *.o -print -delete
+	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
+	find .pvs/ -type f \( -name "*.cpp" -or -name "*.h" \) -print -delete
+
+pvs:
+	$(foreach srcfile,$(SRCFILES),$(shell cat .pvs/pvs.inc $(srcfile) > .pvs/$(srcfile)))
+	$(foreach hfile,$(HDRFILES),$(shell cat .pvs/pvs.inc $(hfile) > .pvs/$(hfile)))
+
+# ================== Formatting ===========================
+# Simple format current directory only
+format: AStyle-linux
+
+kr: AStyle-KR
+
+clang: Clang-LLVM
+
+google: Clang-google
+
+ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
+ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
+CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
+
+# ================ Styling ALL SRC FILES recursively! ==================
+AStyle-linux:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+	astyle $(ASTYLEFLAGS) -n -s2 --style=linux $(ASTYLEFILES)
+
+AStyle-KR:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+	astyle $(ASTYLEFLAGS) -n --style=kr $(ASTYLEFILES)
+
+AStyle-allman:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+	astyle $(ASTYLEFLAGS) -n --style=allman $(ASTYLEFILES)
+
+AStyle-google:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+	astyle $(ASTYLEFLAGS) -n -s2 --style=google $(ASTYLEFILES)
+
+Clang-LLVM:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+	clang-format -i -style=LLVM --verbose $(CLANGFILES)
+
+Clang-google:
+	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
+	clang-format -i -style=google --verbose $(CLANGFILES)
 
 # === eof ===
 

@@ -35,10 +35,10 @@ struct badvalue_t {
   int32_t i32 = -99999;
   int64_t i64 = -99999999;
   uint16_t ui16 = 65333;
-  uint32_t ui32 = 99999;
-  uint64_t ui64 = 9999999;
-  float fl = -99.54f;
-  double dbl = -999.8765;
+  uint32_t ui32 = 123456789; //99999;
+  uint64_t ui64 = 1234567890123456789;// 9999999;
+  float fl = 123456.00f; //-99.54f;
+  double dbl = 123456789.00; //-999.8765;
 };
 
 struct nodeid_t {

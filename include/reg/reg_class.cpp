@@ -1,9 +1,6 @@
 // reg_class.cpp ----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 //
-// timer & millis() (c)
-// https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
-//
 
 #include "reg_class.h"
 
@@ -42,8 +39,43 @@ void Reg_c::set_local_value(value_u _val) { value = _val; }
 
 char* Reg_c::get_local_value_chars(char* retch)
 {
-  if (var_type == UA_TYPES_DOUBLE)
-    snprintf(retch, 49, "%14.4f", value.dbl);
+  if (var_format == nullptr)
+    LOGE("Type_format wrong: %s", var_format);
+  else if (var_type == UA_TYPES_DOUBLE)
+    snprintf(retch, 49, var_format, value.dbl);
+  else if (var_type == UA_TYPES_FLOAT)
+    snprintf(retch, 49, var_format, value.fl);
+  else if (var_type == NOTUA_TYPES_F100)
+    snprintf(retch, 49, var_format, value.fl);
+  else if (var_type == NOTUA_TYPES_F10)
+    snprintf(retch, 49, var_format, value.fl);
+  else if (var_type == UA_TYPES_UINT16)
+    snprintf(retch, 49, var_format, value.ui16);
+  else if (var_type == UA_TYPES_INT16)
+    snprintf(retch, 49, var_format, value.i16);
+  else if (var_type == UA_TYPES_UINT32)
+    snprintf(retch, 49, var_format, value.ui32);
+  else if (var_type == UA_TYPES_INT32)
+    snprintf(retch, 49, var_format, value.i32);
+  else if (var_type == UA_TYPES_UINT64)
+    snprintf(retch, 49, var_format, value.ui64);
+  else if (var_type == UA_TYPES_INT64)
+    snprintf(retch, 49, var_format, value.i64);
+  else
+    LOGE("Type not supported: %i", var_type);
+
+  return retch;
+}
+
+
+/*
+  char* Reg_c::get_local_value_chars(char* retch)
+  {
+
+  if (var_format == nullptr)
+    LOGE("Type_format wrong: %s", var_format);
+  else if (var_type == UA_TYPES_DOUBLE)
+    snprintf(retch, 49, var_format, value.dbl);
   else if (var_type == UA_TYPES_FLOAT)
     snprintf(retch, 49, "%10.3f", value.fl);
   else if (var_type == NOTUA_TYPES_F100)
@@ -55,18 +87,19 @@ char* Reg_c::get_local_value_chars(char* retch)
   else if (var_type == UA_TYPES_INT16)
     snprintf(retch, 49, "%i", value.i16);
   else if (var_type == UA_TYPES_UINT32)
-    snprintf(retch, 49, "%#x", value.ui32);
+    snprintf(retch, 49, "%#010x", value.ui32);
   else if (var_type == UA_TYPES_INT32)
-    snprintf(retch, 49, "%#x", value.i32);
+    snprintf(retch, 49, "%#010x", value.i32);
   else if (var_type == UA_TYPES_UINT64)
-    snprintf(retch, 49, "%#lx", value.ui64);
+    snprintf(retch, 49, "%#018lx", value.ui64);
   else if (var_type == UA_TYPES_INT64)
-    snprintf(retch, 49, "%#lx", value.i64);
+    snprintf(retch, 49, "%#018lx", value.i64);
   else
     LOGE("Type not supported: %i", var_type);
 
   return retch;
-}
+  }
+*/
 
 string Reg_c::to_lower(string str)
 {

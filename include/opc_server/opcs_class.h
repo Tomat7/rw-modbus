@@ -81,8 +81,7 @@ private:
   UA_ServerConfig* uaServerConfig = nullptr;
   UA_Server* uaServer = nullptr;
   UA_Variant* uaVariant = nullptr;
-
-  UA_Logger uaLogger;
+  UA_Logger* uaLogger = nullptr;
   UA_LogLevel uaLoglevel = UA_LOGLEVEL_DEBUG; // UA_LOGLEVEL_ERROR;
 
   mutex* uaSrvMux = nullptr;  // mutex* uaGetMux = nullptr;

@@ -43,7 +43,7 @@ struct cfg_t {
   int tasks_nb = TASKS_NB_MAX;
   int regs_refresh_ms = REGS_REFRESH_MS;
   int millis_heartbeat_ms = MILLIS_HEARTBEAT_MS;
-  cchar* mode;
+  cchar* mode = nullptr;
 };
 
 extern cfg_t Cfg;
