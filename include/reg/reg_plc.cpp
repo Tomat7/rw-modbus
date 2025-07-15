@@ -19,9 +19,9 @@
 #endif
 #define SYSLOG_NAME "REG-class"
 
-reg_t* Reg_c::get_ptr(int x) { return ptr_reg[x]; }
+mbreg_t* Reg_c::get_ptr(int x) { return ptr_reg[x]; }
 
-uint16_t Reg_c::get_plc_reg(reg_t* rptr)  // Set reg's local value != read PLC.
+uint16_t Reg_c::get_plc_reg(mbreg_t* rptr)  // Set reg's local value != read PLC.
 {
   uint16_t rval = bad_value.ui16;
   if ((is_modbus || is_ref) && (rptr != nullptr)) {
@@ -85,7 +85,7 @@ value_u Reg_c::get_plc_value()
 
 // =======================================
 
-void Reg_c::set_plc_reg(uint16_t _val, reg_t* rptr)
+void Reg_c::set_plc_reg(uint16_t _val, mbreg_t* rptr)
 {
   if ((is_modbus || is_ref) && (rptr != nullptr))
     PLC_c::set_reg(_val, rptr);

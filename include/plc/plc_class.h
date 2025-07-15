@@ -60,12 +60,12 @@ public:
   int update_slave();  // for Slave only. Copy raw to regs (map).
 
   // Set/Get local values. NO real update to PLC.
-  static uint16_t get_reg(reg_t* rptr);
+  static uint16_t get_reg(mbreg_t* rptr);
   uint16_t get_reg(int raddr);
   uint16_t get_reg_by_name(string rname);
   uint16_t get_reg_by_fullname(string rfname);
 
-  static int set_reg(uint16_t rval, reg_t* rptr);
+  static int set_reg(uint16_t rval, mbreg_t* rptr);
   int set_reg(uint16_t rval, int raddr);
   int set_reg_by_name(uint16_t rval, string rname);
   int set_reg_by_fullname(uint16_t rval, string rfname);
@@ -91,8 +91,8 @@ public:
   // Common properties
   bool Enabled = false;
   bool is_slave = false;
-  string str_desc;
-  string str_top_folder;
+  string str_dev_desc;
+  string str_dev_folder;
   string str_dev_name;
   string str_ip_addr;
   const char* dev_name = nullptr;
@@ -102,8 +102,8 @@ public:
   int reg_min = 0;   // minimal address of reg
   int reg_max = 0;   // maximal address of reg
   int reg_qty = 0;   // number of regs
-  mbdata_t mb;
-  std::map<int, reg_t> regs;  // All regs here.
+  plcdata_t mb;
+  std::map<int, mbreg_t> regs;  // All regs here.
 
 private:
   modbus_t* ctx = nullptr;
@@ -118,7 +118,7 @@ private:
   int mb_ctx();
   int mb_connect();
   int read_allregs();
-  int write_reg(reg_t &);
+  int write_reg(mbreg_t &);
   int set_timeout();
   //void init_type(reg_t &);
   //void init_str(reg_t &);

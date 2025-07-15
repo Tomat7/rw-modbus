@@ -163,8 +163,8 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
       if (isCheckName && !PLClst.count(_devname))
         continue;  // get out of current iteration if PLC not in list
 
-      PLCvec.emplace_back(_devname, _ip, _dfolder, _desc, _port, _att, _ms,
-                          _us);
+      PLCvec.emplace_back(_devname, _ip, _dfolder, _desc,
+                          _port, _att, _ms, _us);
       PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
       int nb_regs = cfg_init_plcregs(cfgPLC[i]["regs"], &PLCvec.back());
@@ -199,7 +199,7 @@ int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
 
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
-    reg_t r;
+    mbreg_t r;
 
     if (cfgREG[j].lookupValue("rname", r.str_rname) &&
         cfgREG[j].lookupValue("raddr", r.raddr)) {
@@ -216,17 +216,17 @@ int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
 
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
-           pn->str_top_folder.c_str(), pn->str_dev_name.c_str(), j);
+           pn->str_dev_folder.c_str(), pn->str_dev_name.c_str(), j);
       exit(EXIT_FAILURE);
       continue;
     }
 
     r.data.rvalue = 555;  // TODO: remove for production!
-    r.str_type = "u";     // Process ALL PLC regs as uint16_t!!
-    if (Reg_c::init_types(&r))
-      pn->regs[r.raddr] = r;
-    else
-      nb_errors++;
+    //r.str_type = "u";     // Process ALL PLC regs as uint16_t!!
+    //if (Reg_c::init_types(&r))
+    pn->regs[r.raddr] = r;
+    //else
+    // nb_errors++;
   }
   return nb_regs - nb_errors;
 }

@@ -109,7 +109,7 @@ variant_t Reg_c::get_local_variant()
 char* Reg_c::get_local_value_chars(char* retch)
 {
   if (var_format == nullptr)
-    LOGE("Type_format wrong: %s", var_format);
+    LOGE("Reg: %s, type_format wrong: %s", rn, var_format);
 
   else if (var_type == UA_TYPES_INT16)
     snprintf(retch, 49, var_format, value.i16);
@@ -133,7 +133,7 @@ char* Reg_c::get_local_value_chars(char* retch)
     snprintf(retch, 49, var_format, value.fl);
 
   else
-    LOGE("Type not supported: %i", var_type);
+    LOGE("Reg: %s, type not supported: %i", rn, var_type);
 
   return retch;
 }

@@ -87,15 +87,16 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
 
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
-    reg_t r;
+    mbreg_t r;
+    string s_source, s_type;
 
-    if (cfgREG[j].lookupValue("rsource", r.str_source) &&
+    if (cfgREG[j].lookupValue("rsource", s_source) &&
         cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
         cfgREG[j].lookupValue("rname", r.str_rname)) {
       // This is SCADA register/variable/tag
 
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
-            cfgREG[j].lookupValue("rtype", r.str_type))) {
+            cfgREG[j].lookupValue("rtype", s_type))) {
         LOGE("Error reading 'rmode'/'rtype' on %s/%s REG: %d\n", _dname.c_str(),
              r.str_rname.c_str(), j);
         // exit(EXIT_FAILURE);
@@ -123,22 +124,26 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
       r.rfullname = _dname + "." + r.str_rname;
 
     string str_opcbase = "/" + _dfolder + "/" + _dname + "/";
-    reg_t* ptr_source = nullptr;
+    mbreg_t* ptr_source = nullptr;
 
-    if (!(r.str_source == "") && !(r.str_source == "-")) {
-      if (reg_exist(r.str_source))
-        ptr_source = REGmap[r.str_source].get_ptr(0);
+    if (!(s_source == "") && !(s_source == "-")) {
+      if (reg_exist(s_source))
+        ptr_source = REGmap[s_source].get_ptr(0);
       else {
         LOGE("Wrong 'rsource': '%s' on reg: '%s' - IGNORED!",
-             r.str_source.c_str(), r.str_rname.c_str());
+             s_source.c_str(), r.str_rname.c_str());
         continue;
       }
     }
 
-    if (Reg_c::init_types(&r))
-      REGmap[r.rfullname] = {&r, ptr_source, str_opcbase};
-    else
+    if (Reg_c::check_type(s_type))
+      REGmap[r.rfullname] = {&r, ptr_source, s_source, s_type, str_opcbase};
+    else {
       nb_errors++;
+      LOGE("Wrong type: '%s', reg: '%s' - IGNORED!",
+           s_type.c_str(), r.str_rname.c_str());
+    }
+
   }
 
   return nb_regs - nb_errors;

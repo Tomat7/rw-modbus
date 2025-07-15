@@ -28,8 +28,8 @@ PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
   str_ip_addr = "0.0.0.0";  // Slave always listening on ALL addresses!
   tcp_port = _port;
   reg_max = _m;
-  str_desc = _name;
-  str_top_folder = _name;
+  str_dev_desc = _name;
+  str_dev_folder = _name;
   str_dev_name = _name;
   dev_name = str_dev_name.c_str();
   is_slave = true;

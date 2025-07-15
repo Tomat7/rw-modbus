@@ -37,8 +37,8 @@ PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
   str_ip_addr = _ip;
   ip_addr = str_ip_addr.c_str();
 
-  str_top_folder = _folder;
-  str_desc = _desc;
+  str_dev_folder = _folder;
+  str_dev_desc = _desc;
   tcp_port = _port;
   attempts = _att;
   mb.polling_ms = _ms;
@@ -50,7 +50,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
     Enabled = true;
 
   LOGN("+ New PLC created: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
-       str_top_folder.c_str(), str_desc.c_str());
+       str_dev_folder.c_str(), str_dev_desc.c_str());
   //  LOGI("+ New PLC created: %s:%i %s", ip_addr, tcp_port, dev_name);
   if (!Enabled)
     LOGA("- PLC will be ignored: %s:%i %s", ip_addr, tcp_port, dev_name);
@@ -103,7 +103,7 @@ int PLC_c::read_master()  // Master only. Read directly from PLC.
 
   for (auto &[a, R] : regs) {
     auto &rd = R.data;
-    rd.rstatus = rc;
+    // rd.rstatus = rc;
     rd.rerrors = mb.errors;
   }
 
@@ -175,7 +175,7 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
   return rc_write;
 }
 
-int PLC_c::write_reg(reg_t &R)  // Master only. Write (raw) reg directly to PLC.
+int PLC_c::write_reg(mbreg_t &R)  // Master only. Write (raw) reg directly to PLC.
 {
   auto &rd = R.data;
   rc = modbus_write_register(ctx, R.raddr, rd.rvalue);
@@ -188,7 +188,7 @@ int PLC_c::write_reg(reg_t &R)  // Master only. Write (raw) reg directly to PLC.
     rd.rupdate = 0;
   }
 
-  rd.rstatus = rc;
+  //rd.rstatus = rc;
   rd.rerrors = mb.errors;
 
   return rc;

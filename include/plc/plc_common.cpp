@@ -59,11 +59,11 @@ int PLC_c::mb_ctx()
   return rc;
 }
 
-int PLC_c::set_reg(uint16_t rval, reg_t* rptr)  // !! STATIC !!
+int PLC_c::set_reg(uint16_t rval, mbreg_t* rptr)  // !! STATIC !!
 {
   int ret = -1;
   if (rptr != nullptr) {
-    regdata_t &rd = rptr->data;
+    mbregdata_t &rd = rptr->data;
     if (rd.rmode == 1) {
       if (rd.rvalue != rval) {
         rd.rvalue = rval;
@@ -83,7 +83,7 @@ int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
 {
   rc = -1;
   if (raddr <= reg_max) {
-    regdata_t &rd = regs[raddr].data;
+    mbregdata_t &rd = regs[raddr].data;
     if (rd.rmode == 1) {
       if (rd.rvalue != rval) {
         rd.rvalue = rval;
@@ -129,7 +129,7 @@ int PLC_c::set_reg_by_fullname(uint16_t rval, string rname)
 
 // =============================================
 
-uint16_t PLC_c::get_reg(reg_t* rptr)  // !! STATIC !!
+uint16_t PLC_c::get_reg(mbreg_t* rptr)  // !! STATIC !!
 {
   uint16_t rval = 0;
   if (rptr != nullptr)

@@ -49,9 +49,10 @@ void PLC_c::init_regs()  // Master only
   for (auto &[a, r] : regs) {
     if (regs.count(r.raddr + 1))
       r.r_next = &regs[r.raddr + 1];
-    LOGI("+ REG init: %-9s %2d %2s %4d %2d %3d [%s]", r.ch_name, r.raddr,
-         r.str_mode.c_str(), regs[r.raddr].data.rtype, regs[r.raddr].data.rsize,
-         regs[r.raddr].data.rbyteorder, r.rfullname.c_str());
+    //  LOGI("+ REG init: %-9s %2d %2s %4d %2d %3d [%s]", r.ch_name, r.raddr,
+    LOGI("+ REG init: %-9s %2d %2s [%s]", r.ch_name, r.raddr,
+         r.str_mode.c_str(), /* regs[r.raddr].data.rtype, */ /* regs[r.raddr].data.rsize, */
+         /* regs[r.raddr].data.rbyteorder, */ r.rfullname.c_str());
   }
 }
 

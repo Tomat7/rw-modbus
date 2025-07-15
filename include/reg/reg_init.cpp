@@ -144,7 +144,7 @@ Reg_c::Reg_c() { /* LOGD("Construct! %x", this);  */ }
 // ============================================================
 // For Modbus regs only
 
-Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)
+Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
 {
   string st_ = "u16"; //to_lower(_reg->str_type);  //st_ = "u16";
   if (type_map.count(st_)) {
@@ -154,7 +154,7 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)
     var_format = format_map[var_type];
     byte_order = type_map[st_].rbyteorder;
   } else
-    LOGE("Wrong type: %s, reg: %s", _reg->str_type.c_str(), rn);
+    LOGE("Wrong type: %s, reg: %s", st_.c_str(), rn);
 
   ptr_reg[0] = _reg;
   //  for (int i = 0; i < var_size; i++)
@@ -165,7 +165,7 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)
   str_fullname = _reg->rfullname;
   rn = get_new_char(str_fullname.c_str());
 
-  str_opcname = "/" + _dev->str_top_folder + "/";
+  str_opcname = "/" + _dev->str_dev_folder + "/";
   str_opcname += _dev->str_dev_name + "/";
   str_opcname += _reg->str_rfolder + "/";
   str_opcname += _reg->rfullname;
@@ -182,13 +182,14 @@ Reg_c::Reg_c(reg_t* _reg, PLC_c* _dev)
 // ============================================================
 // For SCADA & referenced registers
 
-Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base)
+Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
+             string _str_type, string _opc_base)
 {
-  if (_reg->str_source == "" || _reg->str_source == "-") {
+  if (_str_source == "" || _str_source == "-") {
     str_source = "-"; // flag of SCADA only (local) register/tag!
     is_scada = true;
   } else {
-    str_source = _reg->str_source;  // referenced register
+    str_source = _str_source;  // referenced register
     is_ref = true;
   }
 
@@ -199,7 +200,7 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base)
   for (int i = 0; i < 4; i++)
     remove_dbl_slashes(str_opcname);
 
-  string st_ = to_lower(_reg->str_type);
+  string st_ = to_lower(_str_type);
   if (type_map.count(st_)) {
     var_mode = (_reg->str_mode == "rw") ? 1 : 0;
     var_type = type_map[st_].rtype;
@@ -208,7 +209,7 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base)
     byte_order = type_map[st_].rbyteorder;  // for SCADA ??
     visible = true;
   } else
-    LOGE("Wrong type: '%s', reg: '%s'", _reg->str_type.c_str(), rn);
+    LOGE("Wrong type: '%s', reg: '%s'", _str_type.c_str(), rn);
 
   if (is_ref) {
     if (_src != nullptr) {
@@ -231,24 +232,39 @@ Reg_c::Reg_c(reg_t* _reg, reg_t* _src, string _opc_base)
        str_opcname.c_str());
 }
 
-bool Reg_c::init_types(reg_t* _reg)  // !! STATIC FUNCTION !!
+bool Reg_c::init_types(mbreg_t* _reg)  // !! STATIC FUNCTION !!
 {
   bool isOK = false;
-  string st_ = _reg->str_type;
+  string st_; // = _reg->str_type;
   for (auto &c : st_)
     c = static_cast<char>(tolower(c));
 
   if (type_map.count(st_)) {
-    _reg->data.rtype = type_map[st_].rtype;
-    _reg->data.rsize = type_map[st_].rsize;
-    _reg->data.rbyteorder = type_map[st_].rbyteorder;
+    //_reg->data.rtype = type_map[st_].rtype;
+    //_reg->data.rsize = type_map[st_].rsize;
+    //_reg->data.rbyteorder = type_map[st_].rbyteorder;
     isOK = true;
   } else
-    LOGE("Wrong type: '%s', reg: '%s' - IGNORED!", st_.c_str(),
-         _reg->str_rname.c_str());
+    LOGE("Wrong type: '%s', reg: '%s' - IGNORED!",
+         st_.c_str(), _reg->str_rname.c_str());
 
   return isOK;
 }
+
+bool Reg_c::check_type(string st_)  // !! STATIC FUNCTION !!
+{
+  bool isOK = false;
+
+  for (auto &c : st_)
+    c = static_cast<char>(tolower(c));
+
+  if (type_map.count(st_))
+    isOK = true;
+
+  return isOK;
+}
+
+
 
 char* Reg_c::get_new_char(const char* _oldch)
 {

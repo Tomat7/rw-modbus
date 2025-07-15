@@ -53,7 +53,7 @@ void plc_print_details(int i)
 
 void plc_print_reg_details(int i, int j)
 {
-  reg_t &R = PLCvec[i].regs[j];
+  mbreg_t &R = PLCvec[i].regs[j];
   LOGI("   %-9s %2d %7d %-s", R.ch_name, R.raddr, R.data.rvalue,
        R.str_mode.c_str());
   /*

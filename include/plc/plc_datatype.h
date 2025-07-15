@@ -16,7 +16,7 @@
 
 using std::string;
 
-struct mbdata_t {
+struct plcdata_t {
   int status = 0;                 // rc value of last func (init/connect/read)
   uint64_t timestamp_try_ms = 0;  // milliseconds since the Epoch on last TRY
   uint64_t timestamp_ok_ms = 0;   // ms since the Epoch on last GOOD read
@@ -28,30 +28,32 @@ struct mbdata_t {
   uint16_t errors_cn = 0;         // counter of CONNECT errors (summ from start)
 };
 
-struct regdata_t {
+struct mbregdata_t {
 //class reg_t {
 //public:
   uint16_t rvalue = 0;
   uint16_t rerrors = 0;  // number of errors on MB func (init/connect/read)
   int rupdate = 0;  // 1 - need to write/update remote register, 0 - no update
-  int rstatus = 0;  // -1 mean ERROR, any positive - is OK
   int rmode = 0;    // 1 - mean RW, 0 - Read-only
+  // int rstatus = 0;  // -1 mean ERROR, any positive - is OK
   // the next vars is out of Modbus level, but necessary for correct displaying
+  // !!! removed on 15 july 2025 !!!
+  // !!! moved all to LocalReg_c !!
   // see https://www.modbustools.com/poll_display_formats.html
   // and https://www.simplymodbus.ca/FAQ.htm#Order
   // also see ../reg/reg_datatype.h
-  int rtype = 0;       // see reg_datatype.h
-  int rsize = 0;       // how much "connected " regs "in chain" (optional)
-  int rbyteorder = 0;  // byte order "in chain" (Big-Endian, ABCD, etc)
+  // int rtype = 0;       // see reg_datatype.h
+  // int rsize = 0;       // how much "connected " regs "in chain" (optional)
+  // int rbyteorder = 0;  // byte order "in chain" (Big-Endian, ABCD, etc)
 };
 
 //struct reg_t {
-class reg_t
+class mbreg_t
 {
 public:
   int raddr = 0;
-  regdata_t data;
-  reg_t* r_next = nullptr;  // keep pointer to next "connected" reg in chain
+  mbregdata_t data;
+  mbreg_t* r_next = nullptr;  // keep pointer to next "connected" reg in chain
   string str_mode = "*";    // "rw", "r", "w" - (read from Config)
   // all next params is optional for raw/pure Modbus
   // Register name is necessary for naming and good look
@@ -63,9 +65,9 @@ public:
   string str_rfolder = "";
   // For SCADA/OPC: reg which/where referenced/pointed to Modbus reg
   // Reference to external register (optional)
-  string str_source = "";
+  // string str_source = "";
   // Type of variable "i", "f", "u", "f100", see "type_map" in reg_init.cpp
-  string str_type = "*";
+  // string str_type = "*";
 };
 
 // TODO:  !!!

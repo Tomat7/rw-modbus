@@ -33,10 +33,11 @@ using std::string;
 using std::vector;
 using std::map;
 
-using variant_t = std::variant< int16_t, uint16_t,
-      int32_t, uint32_t,
-      int64_t, uint64_t,
-      double, float >;
+using variant_t = std::variant<
+                  int16_t, uint16_t,
+                  int32_t, uint32_t,
+                  int64_t, uint64_t,
+                  double, float >;
 
 struct regprop_t {
   int rtype;
@@ -44,22 +45,48 @@ struct regprop_t {
   byteorder_t rbyteorder;
 };
 
+//class localreg_t : public mbreg_t
+//{
+//public:
+//   int raddr = 0;
+//   mbregdata_t data;
+//   mbreg_t* r_next = nullptr;  // keep pointer to next "connected" reg in chain
+//   string str_mode = "*";    // "rw", "r", "w" - (read from Config)
+// all next params is optional for raw/pure Modbus
+// Register name is necessary for naming and good look
+//   string str_rname = "-";         // reg_name
+//   string rfullname = "";          // PLC_name.reg_name
+//   const char* ch_name = nullptr;  // str_rname.c_str()
+// OPC name of folder (optional)
+// .../PLC_name/rfolder/PLC_name.reg_name (optional)
+//   string str_rfolder = "";
+// For SCADA/OPC: reg which/where referenced/pointed to Modbus reg
+// Reference to external register (optional)
+// string str_source = "";
+// Type of variable "i", "f", "u", "f100", see "type_map" in reg_init.cpp
+//string str_type = "*";
+//};
 
-
-class Reg_c
+class Reg_c : public mbreg_t
 {
 public:
   //  Reg_c(int _fd, regdata_t* _shm, regdata_t* _plc, reg_t* _reg);
   //  Reg_c(const char* _rn, string src_ref);  // for Scada regs.
   //  Reg_c(string _rn, string src_ref);       // for Scada regs.
-  Reg_c(reg_t* _reg, PLC_c* _dev);                    // for PLC master
-  Reg_c(reg_t* _reg, reg_t* _src, string _opc_base);  // for Scada regs.
+  // for PLC master
+  Reg_c(mbreg_t* _reg, PLC_c* _dev);
+
+  // for Scada regs.
+  Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
+        string _str_type, string _opc_base);
+
   Reg_c();
   ~Reg_c();
 
-  static bool init_types(reg_t* _reg);
+  static bool init_types(mbreg_t* _reg);
+  static bool check_type(string _st);
 
-  reg_t* get_ptr(int x = 0);
+  mbreg_t* get_ptr(int x = 0);
 
   int get_plc_errors();
   value_u get_plc_value();
@@ -75,9 +102,13 @@ public:
   const char* rn = nullptr;  // copy from MB-reg
   string str_fullname = "";  // copy from MB-reg
   string str_opcname = "";   // /PLC/folder/PLC_name/rfolder/PLC_name.reg_name
-  string str_source = "";    // name of "referenced" MB-reg (ex. DEF.Temp3)
+  // str_source - name of "referenced" MB-reg (ex. DEF.Temp3)
   // "-" mean no reference - Scada calculated reg!
   // "" mean no reference - Modbus reg only!
+  string str_source = "";
+  // str_type - "name" of variable: "i", "f", "u", "f100"
+  // see "type_map" in reg_init.cpp
+  string str_type = "*";
 
   int var_errors = 0;              // regdata_t.rerrors
   int var_mode = 0;                // 1 - "rw", 0 - "readonly"
@@ -93,10 +124,10 @@ public:
   bool is_ref = false;    // Referenced to Modbus reg(s)
 
 private:
-  uint16_t get_plc_reg(reg_t* rptr);
+  uint16_t get_plc_reg(mbreg_t* rptr);
   uint16_t get_plc_reg(int x = 0);
 
-  void set_plc_reg(uint16_t _val, reg_t* rptr);
+  void set_plc_reg(uint16_t _val, mbreg_t* rptr);
   void set_plc_reg(uint16_t _val, int x = 0);
 
   value_u pull_plc_regs_by_order(byteorder_t _bo);
@@ -111,7 +142,7 @@ private:
   value_u value;  // union of values (by type)
   variant_t variant_value;
   badvalue_t bad_value;
-  reg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs
+  mbreg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs
 
 };
 

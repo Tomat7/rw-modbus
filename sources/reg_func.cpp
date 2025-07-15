@@ -23,7 +23,7 @@ struct regupd_t {
 static map<string, regupd_t> STRmap;
 static mutex regmap_mux;  // already defined in .h
 
-void reg_print(string, const regdata_t*);
+void reg_print(string, const mbregdata_t*);
 void reg_print(Reg_c);
 
 int task_regs_refresh_(void* params)

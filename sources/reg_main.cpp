@@ -19,11 +19,11 @@ void regs_create_from_plc()
 
   for (auto &D : PLCvec) {
     for (auto &[a, R] : D.regs) {
-      if (R.str_source == "" || R.str_source == "-") {
-        // LOGI("(Master) try to create %s, src: %s",
-        //     R.rfullname.c_str(), R.str_source.c_str());
-        REGmap[R.rfullname] = {&R, &D};
-      }
+      //if (R.str_source == "" || R.str_source == "-") {
+      // LOGI("(Master) try to create %s, src: %s",
+      //     R.rfullname.c_str(), R.str_source.c_str());
+      REGmap[R.rfullname] = {&R, &D};
+      //}
     }
   }
 
