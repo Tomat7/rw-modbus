@@ -51,14 +51,17 @@ int task_regs_refresh_(void* params)
       STRmap[n].err_plc = plc_err;
       isNew_Plc = (plc_val != old_val);
 
+      // Check the NewValue from PLC or errors change
       if (isNew_Plc || (plc_err != old_err)) {
         rm.set_local_value(plc_val);  // Save PLC value to REGmap
         rm.var_errors = plc_err;
         opc_set_value(rm.str_opcname, plc_val, !plc_err);
         if (!STRmap.count(n) || !STRmap[n].upd_plc)
           STRmap[n].upd_plc = true;
-      }
+      } else if (old_err && plc_err)
+        rm.var_errors++;
 
+      // Check the writable regs
       if (rm.var_mode && isNew_Opc && !plc_err && !opc_err) {
         x++;
         rm.set_plc_value(opc_val);
@@ -69,7 +72,7 @@ int task_regs_refresh_(void* params)
           STRmap[n].opc_value = opc_val;
         }
       }
-
+      // ++ is_Modbus or is_Referenced
     } else if (rm.is_scada) {
       STRmap[n].err_opc = opc_err;
       rm.var_errors = opc_err;
@@ -81,8 +84,9 @@ int task_regs_refresh_(void* params)
           STRmap[n].upd_opc = true;
           STRmap[n].opc_value = opc_val;
         }
-      }
-    }
+      } // ++ isNew_Opc
+
+    } // ++ is_Scada
   }
 
   regmap_mux.unlock();
@@ -137,7 +141,9 @@ void reg_print(Reg_c rm)
   const char* B = getBlynk(rm.var_errors == 0);
   char ch[50];
 
-  printf("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
+  //printf("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
+  printf("%s%-14s %i %s%14s", C, rm.rn, rm.var_errors,
+         B, rm.get_local_value_chars(ch));
 
   printf(C_NORM);
 

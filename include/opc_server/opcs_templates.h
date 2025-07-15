@@ -4,11 +4,8 @@
 
 #include "opcs_class.h"
 
-#ifdef _UA_TYPE
-#undef _UA_TYPE
-#endif
-#define _UA_TYPE(_XNUM) ua_types[type_index(typeid(_XNUM))]
-
+#define _TYPE_INDEX(_XNUM) type_index(typeid(_XNUM))
+#define _UA_TYPE(_XNUM) ua_types[_TYPE_INDEX(_XNUM)]
 
 // ======= Definition of add TEMPLATEs =========
 
@@ -17,8 +14,12 @@ int OpcServer_c::AddVar(std::string s, T Numeric, int rmode)
 {
   // LOGD("%s - 1", __func__);
   // rc = add_VarName(s, type_map[type_index(typeid(Numeric))], rmode);
-  // rc = add_VarName(s, type_map[_TYPE_INDEX(Numeric)], rmode);
-  rc = add_VarName(s, _UA_TYPE(Numeric), rmode);
+
+  rc = 0;
+  if (ua_types.count(_TYPE_INDEX(Numeric)))
+    rc = add_VarName(s, _UA_TYPE(Numeric), rmode);
+  else
+    LOGA("Add: Ignore wrong type: %s", s.c_str());
 
   if (rc == 0)
     return 0;

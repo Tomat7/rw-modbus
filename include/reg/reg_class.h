@@ -20,6 +20,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <variant>
 
 #include "include/opc_server/opcs_class.h"
 #include "include/plc/plc_class.h"
@@ -32,11 +33,17 @@ using std::string;
 using std::vector;
 using std::map;
 
+using variant_t = std::variant< int16_t, uint16_t,
+      int32_t, uint32_t,
+      int64_t, uint64_t,
+      double, float >;
+
 struct regprop_t {
   int rtype;
   int rsize;
   byteorder_t rbyteorder;
 };
+
 
 
 class Reg_c
@@ -61,8 +68,9 @@ public:
   value_u get_local_value();
   void set_local_value(value_u _value);
 
-  string get_local_value_string();
+  //string get_local_value_string();
   char* get_local_value_chars(char* retch);
+  variant_t get_local_variant();
 
   const char* rn = nullptr;  // copy from MB-reg
   string str_fullname = "";  // copy from MB-reg
@@ -101,6 +109,7 @@ private:
   string to_lower(string str);
 
   value_u value;  // union of values (by type)
+  variant_t variant_value;
   badvalue_t bad_value;
   reg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs
 
