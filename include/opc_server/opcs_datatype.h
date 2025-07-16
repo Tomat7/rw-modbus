@@ -34,9 +34,9 @@ struct badvalue_t {
   int16_t i16 = INT16_MIN; //-32000;
   int32_t i32 = INT32_MIN; //-99999;
   int64_t i64 = INT64_MIN; //-99999999;
-  uint16_t ui16 = INT16_MAX; //65333;
-  uint32_t ui32 = INT32_MAX; // 123456789; //99999;
-  uint64_t ui64 = INT64_MAX; // 1234567890123456789;// 9999999;
+  uint16_t ui16 = UINT16_MAX; //65333;
+  uint32_t ui32 = UINT32_MAX; // 123456789; //99999;
+  uint64_t ui64 = UINT64_MAX; // 1234567890123456789;// 9999999;
   float fl = FLT_MIN; // 123456.00f; //-99.54f;
   double dbl = DBL_MIN; //123456789.00; //-999.8765;
 };

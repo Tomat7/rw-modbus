@@ -43,9 +43,10 @@ int main(int argc, char** argv)
   Timer t;
 
   std::set<string> Mode{MODBUS_MODES};
-  signal(SIGINT, close_sigint);
+  log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging // log_level = 3;
+
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-  // log_level = 3;
+  signal(SIGINT, close_sigint);
 
   if (argc > 1) {
     if (Mode.count(string(argv[1])))
@@ -62,6 +63,15 @@ int main(int argc, char** argv)
     } else
       LOGA("Argument '%s' ignored.", argv[2]);
   }
+
+  uint16_t Ui16 = 12345;
+  float F = 3.1415f;
+  Value_c Ux = Ui16;
+  Value_c Fx = F;
+  printf("\n\n%i\n", (uint16_t)Ux);
+  printf("%f\n", (float)Fx);
+
+  wait_console(Cfg.timeout_sec * 3);
 
   init_all();
 
