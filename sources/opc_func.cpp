@@ -125,18 +125,21 @@ void opc_server_()
   OPCs.ReadNumber(s, fl);
   printf("T2: %5.2f", fl);
 
-  s = "Kub.Temp3";
+  s = "T49_100";
+  fl = 3.1415926f;
+  OPCs.WriteNumber(s, fl, true);
   float myfl = ReadValue(s);
   const char* C = getColor(OPCs.isVariable(s));
   const char* B = getBlynk(OPCs.isGood(s));
-  printf("%sT3a: %s%5.2f%s, ", C, B, myfl, NRM);
+  printf("%smyflT3a: %s%5.2f%s, ", C, B, myfl, NRM);
 
-  s = "Kub.Temp3";
-  myfl = ReadValue(s);
+  //s = "Kub.Temp3";
+  //myfl = ReadValue(s);
   C = getColor(OPCs.isVariable(s));
   B = getBlynk(OPCs.isGood(s));
   printf("%sT3b: %s%5.2f%s, ", C, B, myfl, NRM);
   // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
+  printf("(float)T44: %5.3f, ", (float)ReadValue(s));
   int16_t t16 = (int16_t)round(myfl * 100);
   myfl = t16 / 100;
 }

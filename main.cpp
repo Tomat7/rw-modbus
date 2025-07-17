@@ -64,12 +64,75 @@ int main(int argc, char** argv)
       LOGA("Argument '%s' ignored.", argv[2]);
   }
 
-  uint16_t Ui16 = 12345;
-  float F = 3.1415f;
-  Value_c Ux = Ui16;
-  Value_c Fx = F;
-  printf("\n\n%i\n", (uint16_t)Ux);
-  printf("%f\n", (float)Fx);
+
+  variant_t v;
+  v = 3.1415926f;
+  auto vv = v;
+  printf("%f\n", std::get<float>(v));
+  printf("%f\n", std::get<float>(vv));
+
+  uint16_t U1 = 12345;
+  float F1 = 3.1415926f;
+  double D1 = 3.1415926f;
+
+  printf("\nReady - 00 new myclass = typed_var\n");
+  Value_c Ux = U1;
+  Value_c Fx = F1;
+  Value_c Dx = D1;
+
+  printf("\nReady - 00 typed_var = myclass\n");
+  uint16_t U2 = Ux;
+  float F2 = Fx;
+  float D2 = Dx;
+
+  printf("\nReady - 00 new myclass = myclass\n");
+  Value_c Uz = Ux;
+  Value_c Fz = Fx;
+  Value_c Dz = Dx;
+
+
+  printf("\nReady - 00 myclass = myclass\n");
+  Uz = Ux;
+  Fz = Fx;
+  Dz = Dx;
+
+  printf("\nReady - 0 CPP typed var2\n");
+  printf("%i\n", U2);
+  printf("%f\n", F2);
+  printf("%f\n", D2);
+
+  printf("\nReady - 1 myclass\n");
+  printf("%i\n", Ux);
+  printf("%f\n", Fx);
+  printf("%i\n", Uz);
+  printf("%f\n", Fz);
+
+  printf("\nReady - 1 myclass.type\n");
+  printf("%i\n", Ux.ui16);
+  printf("%f\n", Fx.fl);
+  printf("%i\n", Uz.ui16);
+  printf("%f\n", Fz.fl);
+  printf("%f\n", Dz.dbl);
+
+  printf("\nReady - 2 (type)myclass\n");
+  printf("u-u %i\n", (uint16_t)Ux);
+  printf("f-f %f\n", (float)Fx);
+  printf("d-d %f\n", (double)Dz);
+  printf("u-u %i\n", (uint16_t)Uz);
+
+  printf("u-f %f\n", (float)Uz);
+  printf("f-i %i\n", (int16_t)Fz);
+  printf("d-i %i\n", (int32_t)Dz);
+
+  printf("\nReady - 3 myclass.c_str()\n");
+  printf("%s\n", Ux.c_str());
+  printf("%s\n", Fx.c_str());
+  printf("%s\n", Dx.c_str());
+
+  printf("\nReady - 4 (char*)myclass\n");
+  printf("%s\n", (char*)Ux);
+  printf("%s\n", (char*)Fx);
+  printf("%s\n", (char*)Dx);
 
   wait_console(Cfg.timeout_sec * 3);
 

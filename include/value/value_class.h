@@ -12,6 +12,19 @@
 #include <typeindex>
 #include <typeinfo>
 
+#define UA_TYPES_BOOLEAN 0
+#define UA_TYPES_SBYTE 1
+#define UA_TYPES_BYTE 2
+#define UA_TYPES_INT16 3
+#define UA_TYPES_UINT16 4
+#define UA_TYPES_INT32 5
+#define UA_TYPES_UINT32 6
+#define UA_TYPES_INT64 7
+#define UA_TYPES_UINT64 8
+#define UA_TYPES_FLOAT 9
+#define UA_TYPES_DOUBLE 10
+#define UA_TYPES_STRING 11
+
 union value_uu {
   int16_t i16;
   int32_t i32;
@@ -24,18 +37,6 @@ union value_uu {
   double dbl;
 };
 
-/*
-  struct badvalue_t {
-  int16_t i16 = INT16_MIN; //-32000;
-  int32_t i32 = INT32_MIN; //-99999;
-  int64_t i64 = INT64_MIN; //-99999999;
-  uint16_t ui16 = UINT16_MAX; //65333;
-  uint32_t ui32 = UINT32_MAX; // 123456789; //99999;
-  uint64_t ui64 = UINT64_MAX; // 1234567890123456789;// 9999999;
-  float fl = FLT_MIN; // 123456.00f; //-99.54f;
-  double dbl = DBL_MIN; //123456789.00; //-999.8765;
-  };
-*/
 using std::string;
 using std::mutex;
 using std::map;
@@ -46,60 +47,117 @@ using std::type_index;
 class Value_c
 {
 public:
-  Value_c(value_uu v) { _value.ui64 = v.ui64; LOG_("Value_C: value");};
-  Value_c(int16_t x) { _value.i16 = x; LOG_("Value_C: i16");};
-  Value_c(int32_t x) { _value.i32 = x; LOG_("Value_C: i32");};
-  Value_c(int64_t x) { _value.i64 = x; LOG_("Value_C: i64");};
-  Value_c(uint16_t x) { _value.ui16 = x; LOG_("Value_C: ui16");};
-  Value_c(uint32_t x) { _value.ui32 = x; LOG_("Value_C: ui32");};
-  Value_c(uint64_t x) { _value.ui64 = x; LOG_("Value_C: ui64");};
-  Value_c(float x) { _value.fl = x; LOG_("Value_C: float");};
-  Value_c(double x) { _value.dbl = x; LOG_("Value_C: double");};
 
-  Value_c(const Value_c &V) { _value.ui64 = V._value.ui64; LOG_("Value_C: COPY");};
-  Value_c &operator= (const Value_c &V)
+  template <typename T> Value_c(value_uu v, T x)
   {
-    _value.ui64 = V._value.ui64;
-    LOG_("Value_C: COPY");
-    return *this;
+    _value.ui64 = v.ui64;
+    _type_index = type_index(typeid(x));
+    LOG_("Value_C: value");
   };
-  //Value_c(const Value_c ©) : ui64(copy.ui64) {LOGD("Value_C: COPY");};
+
+  Value_c(const Value_c &V);
+  Value_c(int16_t x);
+  Value_c(int32_t x);
+  Value_c(int64_t x);
+  Value_c(uint16_t x);
+  Value_c(uint32_t x);
+  Value_c(uint64_t x);
+  Value_c(float x);
+  Value_c(double x);
+  Value_c& operator= (const Value_c &V);
 
   ~Value_c() {};
 
-  operator int16_t() { return _value.i16; }
-  operator int32_t() { return _value.i32; }
-  operator int64_t() { return _value.i64; }
-  operator uint16_t() { return _value.ui16; }
-  operator uint32_t() { return _value.ui32; }
-  operator uint64_t() { return _value.ui64; }
-  operator float() { return _value.fl; }
-  operator double() { return _value.dbl; }
-  /*
-    friend bool operator<(const Value_c &v1, const Value_c &v2) { return v1.ui64 < v2.ui64; }
-    friend bool operator>(const Value_c &v1, const Value_c &v2) { return v1.ui64 > v2.ui64; }
-    friend bool operator!=(const Value_c &v1, const Value_c &v2) { return v1.ui64 != v2.ui64; }
-    friend bool operator==(const Value_c &v1, const Value_c &v2) { return v1.ui64 == v2.ui64; }
-  */
+  char* c_str(char* retch);
+  char* c_str();
+
+  template <typename T> operator T() { return static_cast<T>(atof(c_str())); }
+
+  operator char*() { return c_str(); }
+  operator string() { return string(c_str()); }
+
+  friend bool operator<(const Value_c &v1, const Value_c &v2) { return v1.ui64 < v2.ui64; }
+  friend bool operator>(const Value_c &v1, const Value_c &v2) { return v1.ui64 > v2.ui64; }
+  friend bool operator!=(const Value_c &v1, const Value_c &v2) { return v1.ui64 != v2.ui64; }
+  friend bool operator==(const Value_c &v1, const Value_c &v2) { return v1.ui64 == v2.ui64; }
+
+  int16_t &i16 = _value.i16;
+  int32_t &i32 = _value.i32;
+  int64_t &i64 = _value.i64;
+  uint16_t &ui16 = _value.ui16;
+  uint32_t &ui32 = _value.ui32;
+  uint64_t &ui64 = _value.ui64;
+  float &fl = _value.fl;
+  double &dbl = _value.dbl;
+
 private:
   value_uu _value;
-  /*
-    int16_t &i16 = _value.i16;
-    int32_t &i32 = _value.i32;
-    int64_t &i64 = _value.i64;
-    uint16_t &ui16 = _value.ui16;
-    uint32_t &ui32 = _value.ui32;
-    uint64_t &ui64 = _value.ui64;
-    float &fl = _value.fl;
-    double &dbl = _value.dbl;
+  type_index _type_index = type_index(typeid(uint16_t));
+  int _type;
+  char _str[20];
 
-  */  int _type;
-//  type_index _type_idx = ;
-//  badvalue_t bad_value;
-//  map<type_index, int> ua_types;  // UA types coding (as CPP type_index)
+  map<type_index, int> type_map {
+    {type_index(typeid(int16_t)),  UA_TYPES_INT16 },
+    {type_index(typeid(uint16_t)), UA_TYPES_UINT16},
+    {type_index(typeid(int32_t)),  UA_TYPES_INT32 },
+    {type_index(typeid(uint32_t)), UA_TYPES_UINT32},
+    {type_index(typeid(int64_t)),  UA_TYPES_INT64 },
+    {type_index(typeid(uint64_t)), UA_TYPES_UINT64},
+    {type_index(typeid(float)),    UA_TYPES_FLOAT },
+    {type_index(typeid(double)),   UA_TYPES_DOUBLE}
+  };
+
+  map<int, const char*> format_map {
+    {type_map[type_index(typeid(int16_t))], "%i" },
+    {type_map[type_index(typeid(int32_t))], "%i" },
+    {type_map[type_index(typeid(int64_t))], "%i" },
+    {type_map[type_index(typeid(uint16_t))], "%u"},
+    {type_map[type_index(typeid(uint32_t))], "%u"},
+    {type_map[type_index(typeid(uint64_t))], "%u"},
+    {type_map[type_index(typeid(float))], "%-10.4f"},
+    {type_map[type_index(typeid(double))], "%-14.6f"}
+  };
+
 };
 
 // ======== Definition of TEMPLATEs =========
+
+/*
+  template <typename T>
+  operator T()
+  {
+    //T x;
+    //    if (type_map.count(type_index(typeid(T))))
+    //x = static_cast<T>(atof(c_str()));
+    return static_cast<T>(atof(c_str())); //x;
+  }; */
+/*
+    operator int16_t() { return _value.i16; }
+    operator int32_t() { return _value.i32; }
+    operator int64_t() { return _value.i64; }
+    operator uint16_t(); // { return _value.ui16; }
+    operator uint32_t() { return _value.ui32; }
+    operator uint64_t() { return _value.ui64; }
+    operator float(); // { return _value.fl; }
+    operator double() { return _value.dbl; }
+*/
+/*
+  struct ReadValue {
+    string _s;  // Full path to variable
+    ReadValue(string svar)
+    {
+      //_s = OPCs.GetVarFullName(svar);  // Try to find fullpath-name
+    }
+    template <typename T>
+    operator T()
+    {
+      T x;
+      // OPCs.ReadNumber(_s, x);
+      return x;
+    }
+  };
+*/
+
 
 //#include "opcs_templates.h"
 
