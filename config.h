@@ -4,6 +4,7 @@
 // https://31.44.7.12:55972/panel/
 // http://85.117.235.21:55971/
 // test!
+#define PI 3.1415926535897932384626433832795
 
 #define CFG_DIR "/var/tmp/conf"
 #define CFG_FILE "modbus.cfg"

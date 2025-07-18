@@ -45,6 +45,7 @@
 #define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)   // 7
 #define LOGX(...) logger(FILE_LINE, 8, __func__, __VA_ARGS__)           // 8
 #define LOGZ(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)           // 9
+#define LOG_(...) // no logging!
 
 #define LOGIFA(...) logif(rc, FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
 #define LOGIFC(...) logif(rc, FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)

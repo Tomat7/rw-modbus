@@ -71,14 +71,19 @@ int main(int argc, char** argv)
   printf("%f\n", std::get<float>(v));
   printf("%f\n", std::get<float>(vv));
 
-  uint16_t U1 = 12345;
+  uint64_t U1 = 1234567890;
   float F1 = 3.1415926f;
-  double D1 = 3.1415926f;
+  double D1 = PI; //3.1415926;
 
   printf("\nReady - 00 new myclass = typed_var\n");
   Value_c Ux = U1;
   Value_c Fx = F1;
   Value_c Dx = D1;
+
+  printf("\nReady - 00 existing myclass = typed_var\n");
+  Ux = U1;
+  Fx = F1;
+  Dx = D1;
 
   printf("\nReady - 00 typed_var = myclass\n");
   uint16_t U2 = Ux;
@@ -90,11 +95,15 @@ int main(int argc, char** argv)
   Value_c Fz = Fx;
   Value_c Dz = Dx;
 
-
   printf("\nReady - 00 myclass = myclass\n");
   Uz = Ux;
   Fz = Fx;
   Dz = Dx;
+
+  printf("\nReady - 00 existing myclass = MIXED typed_var\n");
+  Uz = D1;
+  Fz = Fx;
+  Dz = U1;
 
   printf("\nReady - 0 CPP typed var2\n");
   printf("%i\n", U2);
@@ -130,9 +139,50 @@ int main(int argc, char** argv)
   printf("%s\n", Dx.c_str());
 
   printf("\nReady - 4 (char*)myclass\n");
-  printf("%s\n", (char*)Ux);
-  printf("%s\n", (char*)Fx);
-  printf("%s\n", (char*)Dx);
+  printf("%s\n", (char*)Uz);
+  printf("%s\n", (char*)Fz);
+  printf("%s\n", (char*)Dz);
+
+
+  if (Dz == U1)
+    printf("Dz==U1 %s == %i\n", (char*)Dz, U1);
+  else
+    printf("Dz!=U1 %s != %i\n", (char*)Dz, U1);
+
+  if (Dz > U1)
+    printf("Dz>U1 %s > %i\n", (char*)Dz, U1);
+  else
+    printf("Dz<=U1 %s <= %i\n", (char*)Dz, U1);
+// =======================================================
+
+  if (Fx == F1)
+    printf("Fx==F1 %s == %f\n", (char*)Fx, F1);
+  else
+    printf("Fx!=F1 %s != %f\n", (char*)Fx, F1);
+
+  if (Fx > F1)
+    printf("Fx>F1 %s > %f\n", (char*)Fx, F1);
+  else
+    printf("Fx<=F1 %s <= %f\n", (char*)Fx, F1);
+
+// =======================================================
+
+  if (Dx == D1)
+    printf("Dx==D1 %s == %lf\n", (char*)Dx, D1);
+  else
+    printf("Dx!=D1 %s != %lf\n", (char*)Dx, D1);
+
+  if (Dx > D1)
+    printf("Dx>D1 %s > %lf\n", (char*)Dx, D1);
+  else
+    printf("Dx<=D1 %s <= %lf\n", (char*)Dx, D1);
+
+  if (Dx == D1)
+    printf("Dx==D1 %19.9lf == %19.9lf\n", (double)Dx, D1);
+  else
+    printf("Dx!=D1 %s != %lf\n", (char*)Dx, D1);
+
+// =======================================================
 
   wait_console(Cfg.timeout_sec * 3);
 

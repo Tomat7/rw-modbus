@@ -25,6 +25,8 @@
 #define UA_TYPES_DOUBLE 10
 #define UA_TYPES_STRING 11
 
+#define STR_SIZE 50
+
 union value_uu {
   int16_t i16;
   int32_t i32;
@@ -42,44 +44,103 @@ using std::mutex;
 using std::map;
 using std::type_index;
 
-#define LOG_ LOGA
+#define LOGx LOGA
 
 class Value_c
 {
 public:
 
-  template <typename T> Value_c(value_uu v, T x)
-  {
-    _value.ui64 = v.ui64;
-    _type_index = type_index(typeid(x));
-    LOG_("Value_C: value");
-  };
-
-  Value_c(const Value_c &V);
-  Value_c(int16_t x);
-  Value_c(int32_t x);
-  Value_c(int64_t x);
-  Value_c(uint16_t x);
-  Value_c(uint32_t x);
-  Value_c(uint64_t x);
-  Value_c(float x);
-  Value_c(double x);
-  Value_c& operator= (const Value_c &V);
-
+  Value_c(Value_c &V);
   ~Value_c() {};
 
-  char* c_str(char* retch);
-  char* c_str();
+// ======= Constructors Templates =======
 
-  template <typename T> operator T() { return static_cast<T>(atof(c_str())); }
+  template <typename T> Value_c(T x)
+  {
+    if (init_type(type_index(typeid(x))))
+      init_var(&x);
+    else
+      LOGA("Value_c: TYPE not supported");
+    LOGx("Value_C: type - %i", _type);
+  };
+
+  template <typename T> Value_c(value_uu v, T x)
+  {
+    if (init_type(type_index(typeid(x))))
+      init_var(&x);
+    else
+      LOGA("Value_c: VALUE not supported");
+    LOGx("Value_C: value_u ");
+  };
+
+// ======= TYPES() Operators Templates =======
 
   operator char*() { return c_str(); }
   operator string() { return string(c_str()); }
 
-  friend bool operator<(const Value_c &v1, const Value_c &v2) { return v1.ui64 < v2.ui64; }
-  friend bool operator>(const Value_c &v1, const Value_c &v2) { return v1.ui64 > v2.ui64; }
-  friend bool operator!=(const Value_c &v1, const Value_c &v2) { return v1.ui64 != v2.ui64; }
-  friend bool operator==(const Value_c &v1, const Value_c &v2) { return v1.ui64 == v2.ui64; }
+  template <typename T> operator T()
+  {
+    if (_type_index == type_index(typeid(T)))
+      return (*static_cast<T*>((void*)&_value));
+    else
+      return (static_cast<T>(atof(c_str())));
+  }
+
+// ======= COMPARE Operators Templates =======
+
+  bool operator<(Value_c &v2);
+  bool operator>(Value_c &v2);
+  bool operator==(Value_c &v2);
+  bool operator!=(Value_c &v2);
+
+  template <typename T> bool operator< (T x)
+  {
+    if (_type_index == type_index(typeid(T)))
+      return (*static_cast<T*>((void*)&_value) < x);
+    else
+      return (static_cast<T>(atof(c_str())) < x);
+  }
+
+  template <typename T> bool operator> (T x)
+  {
+    if (_type_index == type_index(typeid(T)))
+      return (*static_cast<T*>((void*)&_value) > x);
+    else
+      return (static_cast<T>(atof(c_str())) > x);
+  }
+
+  template <typename T> bool operator== (T x)
+  {
+    if (_type_index == type_index(typeid(T))) {
+      LOGA("CMP: %s _ %10.7lf _ %10.7lf", c_str(), *static_cast<T*>((void*)&_value), x);
+      return fabs(*static_cast<T*>((void*)&_value) - x) < DBL_EPSILON;
+    } else
+      return fabs(static_cast<T>(atof(c_str()))  - x) < DBL_EPSILON;
+  }
+
+  template <typename T> bool operator!= (T x)
+  {
+    if (_type_index == type_index(typeid(T)))
+      return fabs(*static_cast<T*>((void*)&_value) - x) > DBL_EPSILON;
+    else
+      return fabs(static_cast<T>(atof(c_str())) - x) > DBL_EPSILON;
+  }
+// ======================================
+
+  Value_c& operator= (Value_c &V);
+  template <typename T> Value_c& operator= (T x)
+  {
+    if (init_type(type_index(typeid(x))))
+      init_var(&x);
+    else
+      LOGA("Value_c: TYPE not supported");
+    LOGx("Value_C: new type - %i", _type);
+    return *this;
+  };
+
+// =======================================
+
+  char* c_str();
 
   int16_t &i16 = _value.i16;
   int32_t &i32 = _value.i32;
@@ -92,9 +153,14 @@ public:
 
 private:
   value_uu _value;
-  type_index _type_index = type_index(typeid(uint16_t));
-  int _type;
-  char _str[20];
+  type_index _type_index = type_index(typeid(bool));
+  int _type = 0;
+  char _str[STR_SIZE + 1];
+
+  char* _c_str(char* retch, const char* fmt);
+  char* _c_str();
+  bool init_type(type_index _ti = type_index(typeid(bool)));
+  void init_var(void* _p);
 
   map<type_index, int> type_map {
     {type_index(typeid(int16_t)),  UA_TYPES_INT16 },
@@ -110,17 +176,34 @@ private:
   map<int, const char*> format_map {
     {type_map[type_index(typeid(int16_t))], "%i" },
     {type_map[type_index(typeid(int32_t))], "%i" },
-    {type_map[type_index(typeid(int64_t))], "%i" },
+    {type_map[type_index(typeid(int64_t))], "%li" },
     {type_map[type_index(typeid(uint16_t))], "%u"},
     {type_map[type_index(typeid(uint32_t))], "%u"},
-    {type_map[type_index(typeid(uint64_t))], "%u"},
-    {type_map[type_index(typeid(float))], "%-10.4f"},
-    {type_map[type_index(typeid(double))], "%-14.6f"}
+    {type_map[type_index(typeid(uint64_t))], "%lu"},
+    {type_map[type_index(typeid(float))], "%f"}, //"%-10.4f"},
+    {type_map[type_index(typeid(double))], "%lf"} //"%-14.6f"}
   };
 
 };
 
 // ======== Definition of TEMPLATEs =========
+
+//friend bool operator<(const Value_c &v1, const Value_c &v2) { return v1.ui64 < v2.ui64; }
+//friend bool operator>(const Value_c &v1, const Value_c &v2) { return v1.ui64 > v2.ui64; }
+//friend bool operator!=(const Value_c &v1, const Value_c &v2) { return v1.ui64 != v2.ui64; }
+//friend bool operator==(const Value_c &v1, const Value_c &v2) { return v1.ui64 == v2.ui64; }
+
+/*
+  Value_c(int16_t x);
+  Value_c(int32_t x);
+  Value_c(int64_t x);
+  Value_c(uint16_t x);
+  Value_c(uint32_t x);
+  Value_c(uint64_t x);
+  Value_c(float x);
+  Value_c(double x);
+*/
+
 
 /*
   template <typename T>
