@@ -1,12 +1,11 @@
 #pragma once
-// var_class.cpp ----------------------------------
+// value_class.h ----------------------------
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include <float.h>
 #include <string.h>
 
-//#include <iostream>
-#include <mutex>
+//#include <mutex>
 #include <map>
 #include <string>
 #include <typeindex>
@@ -34,7 +33,6 @@ union value_uu {
   uint16_t ui16;
   uint32_t ui32;
   uint64_t ui64 = 0;
-  int64_t dt;
   float fl;
   double dbl;
 };
@@ -49,7 +47,6 @@ using std::type_index;
 class Value_c
 {
 public:
-
   Value_c(Value_c &V);
   ~Value_c() {};
 
@@ -57,16 +54,16 @@ public:
 
   template <typename T> Value_c(T x)
   {
-    if (init_type(type_index(typeid(x))))
+    if (init_type(type_index(typeid(x)), sizeof(x)))
       init_var(&x);
     else
       LOGA("Value_c: TYPE not supported");
-    LOGx("Value_C: type - %i", _type);
+    LOGx("Value_C: type - %i", _type_ua);
   };
 
   template <typename T> Value_c(value_uu v, T x)
   {
-    if (init_type(type_index(typeid(x))))
+    if (init_type(type_index(typeid(x)), sizeof(x)))
       init_var(&x);
     else
       LOGA("Value_c: VALUE not supported");
@@ -81,9 +78,11 @@ public:
   template <typename T> operator T()
   {
     if (_type_index == type_index(typeid(T)))
-      return (*static_cast<T*>((void*)&_value));
+      //return (*static_cast<T*>((void*)&_value));
+      return (*static_cast<T*>(_ptr));
     else
-      return (static_cast<T>(atof(c_str())));
+      //return (static_cast<T>(atof(c_str())));
+      return (static_cast<T>(_to_dbl()));
   }
 
 // ======= COMPARE Operators Templates =======
@@ -96,51 +95,54 @@ public:
   template <typename T> bool operator< (T x)
   {
     if (_type_index == type_index(typeid(T)))
-      return (*static_cast<T*>((void*)&_value) < x);
+      //return (*static_cast<T*>((void*)&_value) < x);
+      return (*static_cast<T*>(_ptr) < x);
     else
-      return (static_cast<T>(atof(c_str())) < x);
+      return (static_cast<T>(_to_dbl()) < x);
   }
 
   template <typename T> bool operator> (T x)
   {
     if (_type_index == type_index(typeid(T)))
-      return (*static_cast<T*>((void*)&_value) > x);
+      //return (*static_cast<T*>((void*)&_value) > x);
+      return (*static_cast<T*>(_ptr) > x);
     else
-      return (static_cast<T>(atof(c_str())) > x);
+      return (static_cast<T>(_to_dbl()) > x);
   }
 
   template <typename T> bool operator== (T x)
   {
     if (_type_index == type_index(typeid(T))) {
-      LOGA("CMP: %s _ %10.7lf _ %10.7lf", c_str(), *static_cast<T*>((void*)&_value), x);
-      return fabs(*static_cast<T*>((void*)&_value) - x) < DBL_EPSILON;
+      LOGA("CMP==: %s _ %10.7lf _ %10.7lf", c_str(), *static_cast<T*>((void*)&_value), x);
+      //return fabs(*static_cast<T*>((void*)&_value) - x) < DBL_EPSILON;
+      return fabs(*static_cast<T*>(_ptr) - x) < DBL_EPSILON;
     } else
-      return fabs(static_cast<T>(atof(c_str()))  - x) < DBL_EPSILON;
+      return fabs(static_cast<T>(_to_dbl())  - x) < DBL_EPSILON;
   }
 
   template <typename T> bool operator!= (T x)
   {
     if (_type_index == type_index(typeid(T)))
-      return fabs(*static_cast<T*>((void*)&_value) - x) > DBL_EPSILON;
+      return fabs(*static_cast<T*>(_ptr) - x) > DBL_EPSILON;
     else
-      return fabs(static_cast<T>(atof(c_str())) - x) > DBL_EPSILON;
+      return fabs(static_cast<T>(_to_dbl()) - x) > DBL_EPSILON;
   }
 // ======================================
 
   Value_c& operator= (Value_c &V);
   template <typename T> Value_c& operator= (T x)
   {
-    if (init_type(type_index(typeid(x))))
+    if (init_type(type_index(typeid(x)), sizeof(x)))
       init_var(&x);
     else
       LOGA("Value_c: TYPE not supported");
-    LOGx("Value_C: new type - %i", _type);
+    LOGx("Value_C: new type - %i", _type_ua);
     return *this;
   };
 
 // =======================================
 
-  char* c_str();
+  char* c_str(const char* fmt = nullptr);
 
   int16_t &i16 = _value.i16;
   int32_t &i32 = _value.i32;
@@ -153,16 +155,22 @@ public:
 
 private:
   value_uu _value;
+  void* _ptr = &_value;
+
   type_index _type_index = type_index(typeid(bool));
-  int _type = 0;
+  int _type_ua = 0;
+  size_t _type_size = 0;
+  const char* _type_fmt = nullptr;
   char _str[STR_SIZE + 1];
 
-  char* _c_str(char* retch, const char* fmt);
-  char* _c_str();
-  bool init_type(type_index _ti = type_index(typeid(bool)));
-  void init_var(void* _p);
+  bool init_type(type_index _ti, size_t _sz);
+  void init_var(void* _psrc);
 
-  map<type_index, int> type_map {
+  char* _c_str(const char* fmt);
+  double _to_dbl();
+
+  static map<type_index, int> type_map;
+  /*  {
     {type_index(typeid(int16_t)),  UA_TYPES_INT16 },
     {type_index(typeid(uint16_t)), UA_TYPES_UINT16},
     {type_index(typeid(int32_t)),  UA_TYPES_INT32 },
@@ -171,9 +179,10 @@ private:
     {type_index(typeid(uint64_t)), UA_TYPES_UINT64},
     {type_index(typeid(float)),    UA_TYPES_FLOAT },
     {type_index(typeid(double)),   UA_TYPES_DOUBLE}
-  };
+    }; */
 
-  map<int, const char*> format_map {
+  static map<const int, const char*> format_map;
+  /* {
     {type_map[type_index(typeid(int16_t))], "%i" },
     {type_map[type_index(typeid(int32_t))], "%i" },
     {type_map[type_index(typeid(int64_t))], "%li" },
@@ -182,7 +191,7 @@ private:
     {type_map[type_index(typeid(uint64_t))], "%lu"},
     {type_map[type_index(typeid(float))], "%f"}, //"%-10.4f"},
     {type_map[type_index(typeid(double))], "%lf"} //"%-14.6f"}
-  };
+    }; */
 
 };
 

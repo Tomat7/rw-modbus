@@ -1,79 +1,101 @@
-// value_ops.cpp ---------------------------------
-// Copyright 2024 Tomat7 (star0413@gmail.com)
+// value_ops.cpp ----------------------------
+// Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include <math.h>
 
 #include <map>
-#include <mutex>
-#include <set>
-#include <thread>
+//#include <mutex>
+//#include <set>
+//#include <thread>
 #include <typeindex>
 #include <typeinfo>
 
-#include "include/console.h"
+//#include "include/console.h"
 #include "include/logger.h"
 #include "value_class.h"
 
 #define DEBUG(a) if(isDebug){a}
 
-using std::set;
+//using std::set;
 using std::to_string;
+/*
+  bool Value_c::operator<(Value_c &v2)
+  {
+  if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
+    return this->ui64 < v2.ui64;
+  else
+    return (this->_to_dbl() < v2._to_dbl());
+  }
+*/
+/*
+  bool Value_c::operator>(Value_c &v2)
+  {
+  if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
+    return this->ui64 > v2.ui64;
+  else
+    return (this->_to_dbl() > v2._to_dbl());
+  }
+*/
 
 bool Value_c::operator<(Value_c &v2)
 {
-  if ((this->_type == v2._type) && (_type < 9))
-    return this->ui64 < v2.ui64;
-  else
-    return (atof(this->c_str()) < atof(v2.c_str()));
+  return ((double)*this < (double)v2);
 }
+
 
 bool Value_c::operator>(Value_c &v2)
 {
-  if ((this->_type == v2._type) && (_type < 9))
-    return this->ui64 > v2.ui64;
-  else
-    return (atof(this->c_str()) > atof(v2.c_str()));
+  return ((double)*this > (double)v2);
 }
+
+/*
+  bool Value_c::operator==(Value_c &v2)
+  {
+  if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
+    return this->ui64 == v2.ui64;
+  else
+    return fabs(this->_to_dbl() - v2._to_dbl()) < DBL_EPSILON;
+  }
+*/
+/*
+  bool Value_c::operator!=(Value_c &v2)
+  {
+  if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
+    return this->ui64 != v2.ui64;
+  else
+    return fabs(this->_to_dbl() - v2._to_dbl()) > DBL_EPSILON;
+  }
+*/
 
 bool Value_c::operator==(Value_c &v2)
 {
-  if (this->_type == v2._type)
-    return this->ui64 == v2.ui64;
-  else
-    return fabs(atof(this->c_str()) - atof(v2.c_str())) < DBL_EPSILON;
+  return fabs((double)*this - (double)v2) <= DBL_EPSILON;
 }
 
 bool Value_c::operator!=(Value_c &v2)
 {
-  if (this->_type == v2._type)
-    return this->ui64 != v2.ui64;
-  else
-    return fabs(atof(this->c_str()) - atof(v2.c_str())) > DBL_EPSILON;
+  return fabs((double)*this - (double)v2) > DBL_EPSILON;
 }
 
 
-char* Value_c::c_str()
+char* Value_c::c_str(const char* _fmt)
 {
-  return _c_str(_str, format_map[_type]);
+  if (_fmt != nullptr)
+    _type_fmt = _fmt; // Will remember format for next use!
+  return _c_str(_type_fmt);
 }
 
-
-char* Value_c::_c_str()
+double Value_c::_to_dbl()
 {
-  const char* fmt = nullptr;
-  if (format_map.count(_type)) {
-    if (_type == UA_TYPES_FLOAT)
-      fmt = "%20.6f";
-    else if (_type == UA_TYPES_DOUBLE)
-      fmt = "%35.15f";
-    else
-      fmt = format_map[_type];
-    return _c_str(_str, fmt);
-  } else {
-    LOGE("Type_format wrong - %i", _type);
-    return nullptr;
-  }
+  const char* _fmt = _type_fmt;
+  if (_type_ua == UA_TYPES_FLOAT)
+    _fmt = "%.6f";
+  else if (_type_ua == UA_TYPES_DOUBLE)
+    _fmt = "%.15f";
+
+  return atof(_c_str(_fmt));
 }
+
 
 // ===============================================================
 #pragma GCC diagnostic push // Save current diagnostic warning set
@@ -82,47 +104,39 @@ char* Value_c::_c_str()
 
 #define NB_CHARS STR_SIZE
 
-char* Value_c::_c_str(char* retch, const char* fmt)
+char* Value_c::_c_str(const char* fmt)
 {
-  switch (_type) {
+  switch (_type_ua) {
   case UA_TYPES_INT16:
-    snprintf(retch, NB_CHARS, format_map[_type], i16);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, i16);
     break;
   case UA_TYPES_INT32:
-    snprintf(retch, NB_CHARS, format_map[_type], i32);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, i32);
     break;
   case UA_TYPES_INT64:
-    snprintf(retch, NB_CHARS, format_map[_type], i64);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, i64);
     break;
   case UA_TYPES_UINT16:
-    snprintf(retch, NB_CHARS, format_map[_type], ui16);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, ui16);
     break;
   case UA_TYPES_UINT32:
-    snprintf(retch, NB_CHARS, format_map[_type], ui32);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, ui32);
     break;
   case UA_TYPES_UINT64:
-    snprintf(retch, NB_CHARS, format_map[_type], ui64);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, ui64);
     break;
   case UA_TYPES_FLOAT:
-    snprintf(retch, NB_CHARS, format_map[_type], fl);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, fl);
     break;
   case UA_TYPES_DOUBLE:
-    snprintf(retch, NB_CHARS, format_map[_type], dbl);
-    return retch;
+    snprintf(_str, NB_CHARS, fmt, dbl);
     break;
   default:
-    LOGE("Type: %i not supported", _type);
+    LOGE("Type: %i not supported", _type_ua);
   }
 
 
-  return retch;
+  return _str;
 }
 #pragma GCC diagnostic pop  // Restore diagnostic warning set
 // ==========================================================
