@@ -45,45 +45,57 @@ map<const int, const char*> Value_c::format_map {
 
 Value_c::Value_c(Value_c &V)
 {
-  if (init_type(V._type_index, V._type_size))
-    init_var(&V._value.ui64);
-  else
+  if (!init(V._type_index, V._type_size, &V._value.ui64))
     LOGA("Value_c: TYPE& not supported");
-  LOGx("Value_C: COPY %u", ui64);
+  LOGx("xValue_C: new COPY %u", ui64);
 };
-
 
 Value_c& Value_c::operator= (Value_c &V)
 {
-  if (init_type(V._type_index, V._type_size))
-    init_var(&V._value.ui64);
-  else
-    LOGA("Value_c: TYPE= not supported");
-  LOGx("Value_C: op=V %s", c_str());
+  if (!init(V._type_index, V._type_size, &V._value.ui64))
+    LOGA("Value_c: = TYPE not supported");
+  LOGx("xValue_C: = Value_c %s", c_str());
   return *this;
 }
 
+bool Value_c::same_type(const type_index &_ti)
+{
+  return (_type_index == _ti);
+}
 
-bool Value_c::init_type(type_index _ti, size_t _sz)
+bool Value_c::init(const type_index &_ti, const size_t &_sz, void* _psrc)
 {
   bool rc = false;
   if (type_map.count(_ti)) {
+    _type_size = _sz;
     _type_index = _ti;
     _type_ua = type_map[_ti];
     _type_fmt = format_map[_type_ua];
-    _type_size = _sz;
+    _type_is_int = (_type_ua < UA_TYPES_FLOAT);
+    _value.ui64 = 0;
+    memcpy(_ptr, _psrc, _type_size);
     rc = true;
-  } else
-    LOGA("Value_C: wrong TYPE used!");
+  } else {
+    _type_size = 0;
+    _type_index = type_index(typeid(bool));
+    _type_ua = 0;
+    _type_fmt = "Value_c: TYPE not supported";
+    _type_is_int = false;
+    _value.ui64 = 0;
+    LOGx("Value_C::init wrong TYPE!");
+  }
   return rc;
 }
 
+// ======================================================================
 
-void Value_c::init_var(void* _psrc)
-{
+/*
+  void Value_c::init_var(void* _psrc)
+  {
+  _value.ui64 = 0;
   memcpy(_ptr, _psrc, _type_size);
-}
-
+  }
+*/
 /*
   void Value_c::init_var(void* _psrc)
   {

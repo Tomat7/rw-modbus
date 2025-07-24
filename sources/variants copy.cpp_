@@ -1,0 +1,297 @@
+// mb_func.cpp ------------------------------
+// Copyright 2024 Tomat7 (star0413@gmail.com)
+// https://www.bogotobogo.com/cplusplus/C11/1_C11_creating_thread.php
+// https://stackoverflow.com/questions/266168/simple-example-of-threading-in-c
+#include <cmath>
+#include <map>
+#include <set>
+#include <string>
+#include <variant>
+#include <vector>
+
+#include "./config.h"
+#include "./libs.h"
+
+  variant_t v = 3.1415926f;
+  auto vv = v;
+  uint64_t U1 = UINT64_MAX - 15; //1234567890;
+  int32_t I1 = INT32_MIN;
+  float F1 = 3.1415926f;
+  double D1 = PI;
+
+void var_test0()
+{
+  printf("\n======= var_test0 =======\n");
+
+  LOGA("\n Variant_t === ");
+  printf("%f\n", std::get<float>(v));
+  printf("%f\n", std::get<float>(vv));
+
+  printf("\nReady - 00 new myclass = typed_var\n");
+/*   
+  Value_c Ix = I1;
+  Value_c Fx = F1;
+  Value_c Dx = D1;
+  Value_c Sx = "qwertyui"; */
+  Value_c Dx = D1;
+  Value_c Ux = U1;
+
+  printf("\nReady - 00 existing myclass = typed_var \n");
+  
+  printf("\n======= Ready - 01 IF Fx vs U64 typed_var =======\n");
+  #define Vx Fx
+  #define VV "Fx"
+  #define X1 U1
+  #define XX "U1"
+  Value_c Vx = X1;
+  Vx = X1;
+
+  if (Vx == X1)
+    printf("%s==%s %s == %lu\n", VV, XX, (char*)Vx, X1);
+  else
+    printf("Fx!=%s %s == %lu\n", VV, XX, (char*)Vx, X1);
+
+  if (Vx != X1)
+    printf("Fx!=%s %s != %lu\n", VV, XX, (char*)Vx, X1);
+  else
+    printf("Fx==%s %s != %lu\n", VV, XX, (char*)Vx, X1);
+
+  if (Vx > X1)
+    printf("Fx>%s %s > %lu\n", VV, XX, (char*)Vx, X1);
+  else
+    printf("Fx<=%s %s <= %lu\n", VV, XX, (char*)Vx, X1);
+
+  if (Vx < X1)
+    printf("Fx<%s %s < %lu\n", VV, XX, (char*)Vx, X1);
+  else
+    printf("Fx>=%s %s >= %lu\n", VV, XX, (char*)Vx, X1);
+/* 
+  Ix = I1;
+  Vx = F1;
+  Dx = D1;
+  Sx = F1;
+ */
+
+  if (Vx == F1) printf("Fx==F1");
+    printf("Fx==F1 %s == %f\n", (char*)Vx, F1);
+  if (Vx == D1) printf("Fx==D1");
+  
+  printf("\nReady - 01 IF F == Value_c \n");
+  if (Vx == Vx) printf("Fx==Fx");
+  if (Vx == Dx) printf("Fx==Dx");
+
+  printf("\nReady - 01 IF D == typed_var \n");
+  if (Dx == X1) printf("Dx==U1");
+  if (Dx == F1) printf("Dx==F1");
+  if (Dx == D1) printf("Dx==D1");
+
+  if (Dx == Dx) printf("Dx==Dx");
+  if (Dx == Vx) printf("Dx==Fx");
+  
+  printf("\n===================================\n");
+
+  Vx = D1;
+  Dx = F1;
+
+  printf("\nReady - 00 typed_var = myclass\n");
+  uint16_t U2 = U1;
+  float F2 = Vx;
+  float D2 = Dx;
+
+  printf("\nReady - 00 new myclass = myclass\n");
+  Value_c Uz = U1;
+  Value_c Fz = Vx;
+  Value_c Dz = Dx;
+
+  printf("\nReady - 00 myclass = myclass\n");
+  Uz = U1;
+  Fz = Vx;
+  Dz = Dx;
+
+  printf("\nReady - 00 existing myclass = MIXED typed_var\n");
+  Uz = D1;
+  Fz = Vx;
+  // Dz = U1;
+
+  printf("\nReady - 0 CPP typed var2\n");
+  printf("%i\n", U2);
+  printf("%f\n", F2);
+  printf("%f\n", D2);
+  /*
+    printf("\nReady - 1 myclass\n");
+    printf("%i\n", Ux);
+    printf("%f\n", Fx);
+    printf("%i\n", Uz);
+    printf("%f\n", Fz);
+  */
+  printf("\nReady - 1 myclass.type\n");
+  printf("%i\n", Vx.ui16);
+  printf("%f\n", Vx.fl);
+  printf("%i\n", Uz.ui16);
+  printf("%f\n", Fz.fl);
+  printf("%lf\n", Dz.dbl);
+
+  printf("\nReady - 2 (type)myclass\n");
+  printf("u-u %i\n", (uint16_t)U1);
+  printf("f-f %f\n", (float)Vx);
+  printf("d-d %lf\n", (double)Dx);
+  // printf("u-u %lf\n", (double)Uz);
+
+  // printf("u-f %f\n", (float)Uz);
+  // printf("f-i %i\n", (int16_t)Fz);
+  // printf("d-i %i\n", (int32_t)Dz);
+
+  printf("\nReady - 3 myclass.c_str()\n");
+  printf("%s\n", Vx.c_str());
+  printf("%s\n", Vx.c_str());
+  printf("%s\n", Dx.c_str());
+
+  printf("\nReady - 4 (char*)myclass\n");
+  printf("%s\n", (char*)Uz);
+  printf("%s\n", (char*)Fz);
+  printf("%s\n", (char*)Dz);
+
+/* 
+  printf("\nCompare -  myclass == UINT, print myclass\n");
+  if (Dz == U1)
+    printf("Dz==U1 %lf == %lu\n", Dz, U1);
+  else
+    printf("Dz!=U1 %lf != %lu\n", Dz, U1);
+ */
+
+/*  
+  printf("\nCompare -  myclass > UINT, print (char*)myclass\n");
+  if (Dz > U1)
+    printf("Dz>U1 %s > %lu\n", (char*)Dz, U1);
+  else
+    printf("Dz<=U1 %s <= %lu\n", (char*)Dz, U1);
+ */
+
+// =======================================================
+
+  printf("\nCompare -  myclass == myclass, print (char*)myclass\n");
+  if (Vx == F1)
+    printf("Fx==F1 %s == %f\n", (char*)Vx, F1);
+  else
+    printf("Fx!=F1 %s != %f\n", (char*)Vx, F1);
+
+  if (Vx > F1)
+    printf("Fx>F1 %s > %f\n", (char*)Vx, F1);
+  else
+    printf("Fx<=F1 %s <= %f\n", (char*)Vx, F1);
+
+// =======================================================
+
+  if (Dx == D1)
+    printf("Dx==D1 %s == %lf\n", (char*)Dx, D1);
+  else
+    printf("Dx!=D1 %s != %lf\n", (char*)Dx, D1);
+
+  if (Dx > D1)
+    printf("Dx>D1 %s > %lf\n", (char*)Dx, D1);
+  else
+    printf("Dx<=D1 %s <= %lf\n", (char*)Dx, D1);
+
+  if (Dx == D1)
+    printf("Dx==D1 %.15lf == %.15lf\n", (double)Dx, D1);
+  else
+    printf("Dx!=D1 %s != %lf\n", (char*)Dx, D1);
+
+
+  printf("=======================================================\n");
+  uint64_t U3 = INT64_MAX - 4775807;
+  uint32_t I3 = UINT32_MAX;
+  double D3 = PI;
+  float F3 = 3.1415926f;
+
+  printf("=======================================================\n");
+  // D3 = F3;
+  Dx = D3;
+  Vx = F3;
+
+/* 
+  printf("\nCompare -  CPP_var == CPP_var, print CPP_var\n");
+  if (F3 == D3)
+    printf("F3==D3 %f == %lf\n", F3, D3);
+  else if (F3 > D3)
+    printf("F3>D3 %f > %lf\n", F3, D3);
+  else
+    printf("F3<D3 %f < %lf\n", F3, D3);
+ */
+
+ 
+
+  printf("\nCompare -  myclass == mayclass, print (char*)myclass\n");
+  if (Dx == Ux)
+    printf("Dx==Ux %s == %s\n", (char*)Dx, (char*)Ux);
+  else if (Dx < Ux)
+    printf("Dx<Ux %s < %s\n", (char*)Dx, (char*)Ux);
+  else
+    printf("Dx>Ux %s > %s\n", (char*)Dx, (char*)Ux);
+
+  printf("================================================================\n");
+
+  U3 = I3;
+  Dx = U3;
+  Ux = Dx;
+/* 
+  printf("\nCompare -  CPP_var == CPP_var, print CPP_var\n");
+  if (I3 == U3)
+    printf("I3==U3 %u == %lu\n", I3, U3);
+  else
+    printf("I3!=U3 %u != %lu\n", I3, U3);
+ */
+  printf("\nCompare -  myclass == mayclass, print (char*)myclass\n");
+  if (Dx == Ux)
+    printf("Dx==Ux %s == %s\n", (char*)Dx, (char*)Ux);
+  else
+    printf("Dx!=Ux %s != %s\n", (char*)Dx, (char*)Ux);
+
+
+  printf("===========================\n");
+
+
+  D3 = U3;
+  Dx = D3;
+  Ux = Dx;
+/* 
+  printf("\nCompare -  CPP_var == CPP_var, print CPP_var\n");
+  if (D3 == U3)
+    printf("D3==U3 %.15lf == %lu\n", D3, U3);
+  else
+    printf("D3!=U3 %.15lf != %lu\n", D3, U3);
+
+  printf("===========================\n");
+ */
+
+  printf("\nCompare -  myclass == mayclass, print (type)myclass\n");
+
+  if (Dx == Ux)
+    printf("Dx==Ux %.15lf == %lu\n", (double)Dx, (uint64_t)Ux);
+  else
+    printf("Dx!=Ux %.15lf != %lu\n", (double)Dx, (uint64_t)Ux);
+
+  printf("===========================\n");
+
+  printf("\nCompare -  myclass == mayclass, print myclass.type\n");
+  if (Dx == Ux)
+    printf("Dx==Ux %.15lf == %u\n", Dx.dbl, Ux.ui32);
+  else
+    printf("Dx!=Ux %.15lf != %u\n", Dx.dbl, Ux.ui32);
+
+  printf("\nCompare -  myclass == mayclass, print (char*)myclass\n");
+  if (Dx == Ux)
+    printf("Dx==Ux %s == %s\n", (char*)Dx, (char*)Ux);
+  else
+    printf("Dx!=Ux %s != %s\n", (char*)Dx, (char*)Ux);
+
+  printf("===========================\n");
+
+  printf("\nCompare -  myclass == CPP_var, print myclass.type\n");
+  if (Dx == Ux)
+    printf("Dx==Ux %.15lf == %lu\n", Dx.dbl, U3);
+  else
+    printf("Dx!=Ux %.15lf != %lu\n", Dx.dbl, U3);
+
+}
+
