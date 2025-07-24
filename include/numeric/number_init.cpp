@@ -2,25 +2,23 @@
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include <map>
-//#include <mutex>
-#include <set>
-//#include <thread>
 #include <typeindex>
 #include <typeinfo>
-
+//#include <set>
+//#include <mutex>
+//#include <thread>
 //#include "include/console.h"
+
 #include "include/logger.h"
-#include "value_class.h"
+#include "number_class.h"
 
 #define _TYPE_INDEX(_XNUM) type_index(typeid(_XNUM))
 #define _UA_TYPE(_XNUM) ua_types[_TYPE_INDEX(_XNUM)]
 
 #define DEBUG(a) if(isDebug){a}
 
-using std::set;
-using std::to_string;
 
-map<type_index, int> Value_c::type_map {
+map<type_index, int> Number_c::type_map {
   {type_index(typeid(int16_t)),  UA_TYPES_INT16 },
   {type_index(typeid(uint16_t)), UA_TYPES_UINT16},
   {type_index(typeid(int32_t)),  UA_TYPES_INT32 },
@@ -31,26 +29,26 @@ map<type_index, int> Value_c::type_map {
   {type_index(typeid(double)),   UA_TYPES_DOUBLE}
 };
 
-map<const int, const char*> Value_c::format_map {
+map<const int, const char*> Number_c::format_map {
   {UA_TYPES_INT16, "%i" },
   {UA_TYPES_INT32, "%i" },
   {UA_TYPES_INT64, "%li" },
   {UA_TYPES_UINT16, "%u"},
   {UA_TYPES_UINT32, "%u"},
   {UA_TYPES_UINT64, "%lu"},
-  {UA_TYPES_FLOAT, "%.8f"}, //"%-10.4f"},
-  {UA_TYPES_DOUBLE, "%.10lf"} //"%-14.6f"}
+  {UA_TYPES_FLOAT, "%.7f"},
+  {UA_TYPES_DOUBLE, "%.10lf"}
 };
 
 
-Value_c::Value_c(Value_c &V)
+Number_c::Number_c(Number_c &V)
 {
   if (!init(V._type_index, V._type_size, &V._value.ui64))
     LOGA("Value_c: TYPE& not supported");
   LOGx("xValue_C: new COPY %u", ui64);
 };
 
-Value_c& Value_c::operator= (Value_c &V)
+Number_c& Number_c::operator= (Number_c &V)
 {
   if (!init(V._type_index, V._type_size, &V._value.ui64))
     LOGA("Value_c: = TYPE not supported");
@@ -58,12 +56,12 @@ Value_c& Value_c::operator= (Value_c &V)
   return *this;
 }
 
-bool Value_c::same_type(const type_index &_ti)
+bool Number_c::same_type(const type_index &_ti)
 {
   return (_type_index == _ti);
 }
 
-bool Value_c::init(const type_index &_ti, const size_t &_sz, void* _psrc)
+bool Number_c::init(const type_index &_ti, const size_t &_sz, void* _psrc)
 {
   bool rc = false;
   if (type_map.count(_ti)) {

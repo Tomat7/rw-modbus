@@ -28,7 +28,7 @@
 #include "include/opc_server/opcs_class.h"
 #include "include/opc_client/opc_client.h"
 #include "include/plc/plc_class.h"
-#include "include/value/value_class.h"
+#include "include/numeric/number_class.h"
 #include "include/timer.h"
 //#include "include/scheduler/scheduler.h"
 

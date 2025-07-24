@@ -13,56 +13,80 @@
 
 //#include "include/console.h"
 #include "include/logger.h"
-#include "value_class.h"
+#include "number_class.h"
 
 #define DEBUG(a) if(isDebug){a}
 
 //using std::set;
 using std::to_string;
-
-bool Value_c::operator==(float &x) { return (fabs(_dbl() - x) <= DBL_EPSILON); }
-bool Value_c::operator==(double &x) { return (fabs(_dbl() - x) <= DBL_EPSILON); }
-
-bool Value_c::operator!=(float &x) { return (fabs(_dbl() - x) > DBL_EPSILON); }
-bool Value_c::operator!=(double &x) { return (fabs(_dbl() - x) > DBL_EPSILON); }
-
+/*
+  bool Value_c::operator==(float &x) { return (fabs(_as_dbl() - x) <= FLT_EPSILON); }
+  bool Value_c::operator==(double &x) { return (fabs(_as_dbl() - x) <= DBL_EPSILON); }
+  bool Value_c::operator!=(float &x) { return (fabs(_as_dbl() - x) > FLT_EPSILON); }
+  bool Value_c::operator!=(double &x) { return (fabs(_as_dbl() - x) > DBL_EPSILON); }
+*/
 // ==========================================================================
 
-bool Value_c::operator<(Value_c &v2) { return ((double)*this < (double)v2); }
+// The next is very bad with (u)int64_t - already good with 'long double'
+bool Number_c::operator<(Number_c &v2) { return ((float128)*this < (float128)v2); }
+bool Number_c::operator>(Number_c &v2) { return ((float128)*this > (float128)v2); }
 
-bool Value_c::operator>(Value_c &v2) { return ((double)*this > (double)v2); }
-
-bool Value_c::operator==(Value_c &v2)
+bool Number_c::operator==(Number_c &v2)
 {
   if ((this->_type_ua == v2._type_ua) && _type_is_int)
     return this->ui64 == v2.ui64;
   else
-    return fabs((double)*this - (double)v2) <= DBL_EPSILON;
+    return fabsl((float128)*this - (float128)v2) <= DBL_EPSILON;
 }
 
-bool Value_c::operator!=(Value_c &v2)
+bool Number_c::operator!=(Number_c &v2)
 {
   if ((this->_type_ua == v2._type_ua) && _type_is_int)
     return this->ui64 != v2.ui64;
   else
-    return fabs((double)*this - (double)v2) > DBL_EPSILON;
+    return fabsl((float128)*this - (float128)v2) > DBL_EPSILON;
 }
 
 // =============================================================
 
-char* Value_c::c_str(const char* _fmt)
+char* Number_c::c_str(const char* _fmt)
 {
-  if (_fmt != nullptr)
-    _type_fmt = _fmt; // Will remember format for next use!
-  return _c_str(_type_fmt);
+  if (_fmt == nullptr)
+    return _c_str(_type_fmt);
+  else
+    return _c_str(_fmt);
 }
 
-double Value_c::_fabs(double &x) { return fabs(*(double*)(_ptr) - x); }
+// double Number_c::_fabs(double &x) { return fabs(*(double*)(_ptr) - x); }
 
-double Value_c::_dbl() { return *(double*)_ptr; }
-
-double Value_c::_to_dbl()
+float128 Number_c::_as_f128()
 {
+  switch (_type_ua) {
+  case UA_TYPES_INT16:
+    return (float128)_value.i16; // ok
+  case UA_TYPES_INT32:
+    return (float128)_value.i32; // ok
+  case UA_TYPES_INT64:
+    return (float128)_value.i64; // bad! - good with float128
+  case UA_TYPES_UINT16:
+    return (float128)_value.ui16; // ok
+  case UA_TYPES_UINT32:
+    return (float128)_value.ui32; // ok
+  case UA_TYPES_UINT64:
+    return (float128)_value.ui64; // bad! - good with float128
+  case UA_TYPES_FLOAT:
+    return (float128)_value.fl; // ok
+  case UA_TYPES_DOUBLE:
+    return (float128)_value.dbl;        // ok, but useless
+  default:
+    LOGE("Type: %i not supported", _type_ua);
+    return (float128)_value.ui16;
+  }
+}
+
+/*
+  double Number_c::_as_chars_to_dbl()
+  {
   const char* _fmt = _type_fmt;
   if (_type_ua == UA_TYPES_FLOAT)
     _fmt = "%.6f";
@@ -70,28 +94,18 @@ double Value_c::_to_dbl()
     _fmt = "%.15f";
 
   return atof(_c_str(_fmt));
-}
-
-double Value_c::_to_dbl(size_t _sz)
-{
-//  assert(_sz < 8);
-  const char* _fmt = _type_fmt;
-  if (_type_ua == UA_TYPES_FLOAT)
-    _fmt = "%.6f";
-  else if (_type_ua == UA_TYPES_DOUBLE)
-    _fmt = "%.15f";
-
-  return atof(_c_str(_fmt));
-}
+  }
+*/
 
 // ===============================================================
+
+// Suppress GCC warnings on "fmt" which is nonliteral
 #pragma GCC diagnostic push // Save current diagnostic warning set
-// Suppress GCC warnings on "var_format" which is nonliteral
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#pragma GCC diagnostic ignored "-Wformat-nonliteral" // Suppressed here
 
 #define NB_CHARS STR_SIZE
 
-char* Value_c::_c_str(const char* fmt)
+char* Number_c::_c_str(const char* fmt)
 {
   switch (_type_ua) {
   case UA_TYPES_INT16:
@@ -122,11 +136,41 @@ char* Value_c::_c_str(const char* fmt)
     LOGE("Type: %i not supported", _type_ua);
   }
 
-
   return _str;
 }
 #pragma GCC diagnostic pop  // Restore diagnostic warning set
+
 // ==========================================================
+
+/*
+  double Number_c::_as_dbl()
+  {
+  switch (_type_ua) {
+  case UA_TYPES_INT16:
+    return (double)_value.i16; // ok
+  case UA_TYPES_INT32:
+    return (double)_value.i32; // ok
+  case UA_TYPES_INT64:
+    LOGA("Conversation from 'int64_t' to ANY other impossible");
+    return (double)_value.i64; // bad!
+  case UA_TYPES_UINT16:
+    return (double)_value.ui16; // ok
+  case UA_TYPES_UINT32:
+    return (double)_value.ui32; // ok
+  case UA_TYPES_UINT64:
+    LOGA("Conversation from 'uint64_t' to ANY other impossible");
+    return (double)_value.ui64; // bad!
+  case UA_TYPES_FLOAT:
+    return (double)_value.fl; // ok
+  case UA_TYPES_DOUBLE:
+    return _value.dbl;        // ok, but useless
+  default:
+    LOGE("Type: %i not supported", _type_ua);
+    return _value.ui16;
+  }
+  }
+*/
+
 
 /*
   bool Value_c::operator==(Value_c &v2)
@@ -190,6 +234,20 @@ char* Value_c::_c_str(const char* fmt)
   return x;
   };
 
+*/
+
+/*
+  double Value_c::_to_dbl(size_t _sz)
+  {
+  //  assert(_sz < 8);
+  const char* _fmt = _type_fmt;
+  if (_type_ua == UA_TYPES_FLOAT)
+    _fmt = "%.6f";
+  else if (_type_ua == UA_TYPES_DOUBLE)
+    _fmt = "%.15f";
+
+  return atof(_c_str(_fmt));
+  }
 */
 
 // eof

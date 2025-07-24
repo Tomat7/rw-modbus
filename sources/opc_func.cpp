@@ -105,6 +105,7 @@ void opc_server_()
 {
   using OPC_server::ReadValue;
   using OPC_server::WriteValue;
+  static float f = 1.2345f;
   /*
           i++;
           string s;
@@ -115,29 +116,46 @@ void opc_server_()
   */
 
   string s = "/PLC/Kub/Kub.millis";
-  printf("Kub.millis: %d, ", OPCs.ReadRawUnion(s).ui16);
+  printf("%s %d, ", s.c_str(), OPCs.ReadRawUnion(s).ui16);
 
   s = "/PLC/Kub/Kub.Temp1";
-  printf("T1: %5.2f, ", OPCs.ReadRawUnion(s).fl);
+  printf("%s %5.2f, ", s.c_str(), OPCs.ReadRawUnion(s).fl);
 
   s = "/PLC/Kub/Kub.Temp2";
   float fl;
   OPCs.ReadNumber(s, fl);
-  printf("T2: %5.2f", fl);
+  printf("%s %5.2f\n", s.c_str(), fl);
 
-  s = "T49_100";
+// ==========================================================
+
+  s = OPCs.GetVarFullName("T49_100");
   fl = 3.1415926f;
   OPCs.WriteNumber(s, fl, true);
+
   float myfl = ReadValue(s);
   const char* C = getColor(OPCs.isVariable(s));
   const char* B = getBlynk(OPCs.isGood(s));
-  printf("%smyflT3a: %s%5.2f%s, ", C, B, myfl, NRM);
+  printf("%s%s %s%5.2f%s, ", C, s.c_str(), B, myfl, NRM);
+
+  s = OPCs.GetVarFullName("Millis");
+  uint16_t m = ReadValue(s);
+  C = getColor(OPCs.isVariable(s));
+  B = getBlynk(OPCs.isGood(s));
+  printf("%s%s %s%u%s, ", C, s.c_str(), B, (uint16_t)ReadValue(s) /*m*/, NRM);
+
+  s = OPCs.GetVarFullName("Double");
+  f += 0.1111f;
+  OPCs.WriteNumber(s, f, true);
+  myfl = ReadValue(s);
+  C = getColor(OPCs.isVariable(s));
+  B = getBlynk(OPCs.isGood(s));
+  printf("%s%s %s%5.4f%s\n ", C, s.c_str(), B, (float)ReadValue(s) /*myfl*/, NRM);
 
   //s = "Kub.Temp3";
   //myfl = ReadValue(s);
   C = getColor(OPCs.isVariable(s));
   B = getBlynk(OPCs.isGood(s));
-  printf("%sT3b: %s%5.2f%s, ", C, B, myfl, NRM);
+  printf("%sT3c: %s%5.2f%s, ", C, B, myfl, NRM);
   // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
   printf("(float)T44: %5.3f, ", (float)ReadValue(s));
   int16_t t16 = (int16_t)round(myfl * 100);

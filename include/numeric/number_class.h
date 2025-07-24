@@ -38,22 +38,28 @@ union value_uu {
 };
 
 using std::string;
-using std::mutex;
 using std::map;
 using std::type_index;
 
-#define LOGx LOGA
+using float32=float;
+using float64=double;
+using float128=long double;
+//using float128=__float128;
 
-class Value_c
+//#define LOGx LOGA
+#define LOGx LOG_
+
+class Number_c
 {
 public:
-  Value_c(Value_c &V);
-  ~Value_c() {};
+  Number_c(Number_c &V);
+  ~Number_c() {};
 
 // ======= Constructors Templates =======
-  Value_c& operator= (Value_c &V);
 
-  template <typename T> Value_c& operator= (T x)
+  Number_c& operator= (Number_c &V);
+
+  template <typename T> Number_c& operator= (T x)
   {
     if (!init(type_index(typeid(x)), sizeof(x), &x))
       LOGA("Value_c: = TYPE not supported");
@@ -61,17 +67,16 @@ public:
     return *this;
   };
 
-  template <typename T> Value_c(T x)
+  template <typename T> Number_c(T x)
   {
     if (!init(type_index(typeid(x)), sizeof(x), &x))
       LOGA("Value_c: new TYPE not supported");
     LOGx("xValue_C: new Tx type - %i", _type_ua);
   };
 
-  template <typename T> Value_c(value_uu v, T x)
+  template <typename T> Number_c(value_uu v, T x)
   {
-    if (!init(type_index(typeid(x)), sizeof(x), &x));
-    else
+    if (!init(type_index(typeid(x)), sizeof(x), &x))
       LOGA("Value_c: new VALUE not supported");
     LOGx("xValue_C: new value_u ");
   };
@@ -80,27 +85,26 @@ public:
 
   operator char*() { return c_str(); }
   operator string() { return string(c_str()); }
+
   template <typename T> operator T()
   {
     if (same_type(type_index(typeid(T))))
       return (*static_cast<T*>(_ptr));
-    else {
-      // static_assert(sizeof(T) < 8);
-      return (static_cast<T>(_to_dbl(sizeof(T))));
-    }
+    else
+      return (static_cast<T>(_as_f128()));
   }
 
-// ======= COMPARE Operators =================
+// ======= COMPARE Operators =======
 
-  bool operator<(Value_c &v2);
-  bool operator>(Value_c &v2);
-  bool operator==(Value_c &v2);
-  bool operator!=(Value_c &v2);
+  bool operator<(Number_c &v2);
+  bool operator>(Number_c &v2);
+  bool operator==(Number_c &v2);
+  bool operator!=(Number_c &v2);
 
-  bool operator==(float &x);
-  bool operator==(double &x);
-  bool operator!=(float &x);
-  bool operator!=(double &x);
+//  bool operator==(float &x);
+//  bool operator==(double &x);
+//  bool operator!=(float &x);
+//  bool operator!=(double &x);
 
 // ======= COMPARE Operators Templates =======
 
@@ -109,7 +113,7 @@ public:
     if (same_type(type_index(typeid(T))) && _type_is_int)
       return (*static_cast<T*>(_ptr) == x);
     else
-      return fabs(*(double*)(_ptr) - x) <= DBL_EPSILON;
+      return fabsl(_as_f128() - x) <= DBL_EPSILON;
   }
 
   template <typename T> bool operator!= (T x)
@@ -117,7 +121,7 @@ public:
     if (same_type(type_index(typeid(T))) && _type_is_int)
       return (*static_cast<T*>(_ptr) != x);
     else
-      return fabs(*(double*)(_ptr) - x) > DBL_EPSILON;
+      return fabsl(_as_f128() - x) > DBL_EPSILON;
   }
 
   template <typename T> bool operator< (T x)
@@ -125,7 +129,7 @@ public:
     if (same_type(type_index(typeid(T))))
       return (*static_cast<T*>(_ptr) < x);
     else
-      return (*(double*)(_ptr) < x);
+      return (_as_f128() < x);
   }
 
   template <typename T> bool operator> (T x)
@@ -133,7 +137,7 @@ public:
     if (same_type(type_index(typeid(T))))
       return (*static_cast<T*>(_ptr) > x);
     else
-      return (*(double*)(_ptr) > x);
+      return (_as_f128() > x);
   }
 
 // =======================================
@@ -150,7 +154,7 @@ public:
   double &dbl = _value.dbl;
 
 // =======================================
-// =======================================
+
 
 private:
   value_uu _value;
@@ -162,16 +166,17 @@ private:
   bool _type_is_int = false;
   const char* _type_fmt = nullptr;
   char _str[STR_SIZE + 1];
+  // float128 f128 = 0.0;
 
   bool same_type(const type_index &_ti);
   bool init(const type_index &_ti, const size_t &_sz, void* _psrc);
-  // void init_var(void* _psrc);
 
   char* _c_str(const char* fmt);
-  double _dbl();
-  double _to_dbl();
-  double _to_dbl(size_t _sz);
-  double _fabs(double &x);
+  float128 _as_f128();
+
+  //double _as_chars_to_dbl();
+  //double _fabs(double &x);
+  //double _as_dbl();
 
   static map<type_index, int> type_map;
   static map<const int, const char*> format_map;

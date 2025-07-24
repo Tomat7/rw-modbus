@@ -33,8 +33,8 @@ void var_test0()
   Value_c Fx = F1;
   Value_c Dx = D1;
   Value_c Sx = "qwertyui"; */
-  Value_c Dx = D1;
-  Value_c Ux = U1;
+  NumericValue_c Dx = D1;
+  NumericValue_c Ux = U1;
 
   printf("\nReady - 00 existing myclass = typed_var \n");
   
@@ -43,7 +43,7 @@ void var_test0()
   #define VV "Fx"
   #define X1 U1
   #define XX "U1"
-  Value_c Vx = X1;
+  NumericValue_c Vx = X1;
   Vx = X1;
 
   if (Vx == X1)
@@ -99,9 +99,9 @@ void var_test0()
   float D2 = Dx;
 
   printf("\nReady - 00 new myclass = myclass\n");
-  Value_c Uz = U1;
-  Value_c Fz = Vx;
-  Value_c Dz = Dx;
+  NumericValue_c Uz = U1;
+  NumericValue_c Fz = Vx;
+  NumericValue_c Dz = Dx;
 
   printf("\nReady - 00 myclass = myclass\n");
   Uz = U1;
