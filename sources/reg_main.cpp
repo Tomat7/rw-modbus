@@ -18,11 +18,12 @@ void regs_create_from_plc()
   printf("\n======= %s =======\n", __func__);
 
   for (auto &D : PLCvec) {
-    for (auto &[a, R] : D.regs) {
+    for (auto &[a, r] : D.regs) {
       //if (R.str_source == "" || R.str_source == "-") {
       // LOGI("(Master) try to create %s, src: %s",
       //     R.rfullname.c_str(), R.str_source.c_str());
-      REGmap[R.rfullname] = {&R, &D};
+      //Reg_c R = {&r, &D};
+      REGmap[r.rfullname] = {&r, &D};
       //}
     }
   }

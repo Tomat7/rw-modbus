@@ -20,10 +20,10 @@
 //using std::set;
 using std::to_string;
 /*
-  bool Value_c::operator==(float &x) { return (fabs(_as_dbl() - x) <= FLT_EPSILON); }
-  bool Value_c::operator==(double &x) { return (fabs(_as_dbl() - x) <= DBL_EPSILON); }
-  bool Value_c::operator!=(float &x) { return (fabs(_as_dbl() - x) > FLT_EPSILON); }
-  bool Value_c::operator!=(double &x) { return (fabs(_as_dbl() - x) > DBL_EPSILON); }
+  bool Number_c::operator==(float &x) { return (fabs(_as_dbl() - x) <= FLT_EPSILON); }
+  bool Number_c::operator==(double &x) { return (fabs(_as_dbl() - x) <= DBL_EPSILON); }
+  bool Number_c::operator!=(float &x) { return (fabs(_as_dbl() - x) > FLT_EPSILON); }
+  bool Number_c::operator!=(double &x) { return (fabs(_as_dbl() - x) > DBL_EPSILON); }
 */
 // ==========================================================================
 
@@ -63,39 +63,30 @@ float128 Number_c::_as_f128()
 {
   switch (_type_ua) {
   case UA_TYPES_INT16:
-    return (float128)_value.i16; // ok
+    return (float128)value.i16; // ok
   case UA_TYPES_INT32:
-    return (float128)_value.i32; // ok
+    return (float128)value.i32; // ok
   case UA_TYPES_INT64:
-    return (float128)_value.i64; // bad! - good with float128
+    return (float128)value.i64; // bad! - good with float128
   case UA_TYPES_UINT16:
-    return (float128)_value.ui16; // ok
+    return (float128)value.ui16; // ok
   case UA_TYPES_UINT32:
-    return (float128)_value.ui32; // ok
+    return (float128)value.ui32; // ok
   case UA_TYPES_UINT64:
-    return (float128)_value.ui64; // bad! - good with float128
+    return (float128)value.ui64; // bad! - good with float128
   case UA_TYPES_FLOAT:
-    return (float128)_value.fl; // ok
+    return (float128)value.fl; // ok
   case UA_TYPES_DOUBLE:
-    return (float128)_value.dbl;        // ok, but useless
+    return (float128)value.dbl; // ok, but useless
+  case NOTUA_TYPES_F10:
+    return (float128)value.fl; // ok
+  case NOTUA_TYPES_F100:
+    return (float128)value.fl; // ok
   default:
     LOGE("Type: %i not supported", _type_ua);
-    return (float128)_value.ui16;
+    return (float128)value.ui16;
   }
 }
-
-/*
-  double Number_c::_as_chars_to_dbl()
-  {
-  const char* _fmt = _type_fmt;
-  if (_type_ua == UA_TYPES_FLOAT)
-    _fmt = "%.6f";
-  else if (_type_ua == UA_TYPES_DOUBLE)
-    _fmt = "%.15f";
-
-  return atof(_c_str(_fmt));
-  }
-*/
 
 // ===============================================================
 
@@ -143,6 +134,19 @@ char* Number_c::_c_str(const char* fmt)
 // ==========================================================
 
 /*
+  double Number_c::_as_chars_to_dbl()
+  {
+  const char* _fmt = _type_fmt;
+  if (_type_ua == UA_TYPES_FLOAT)
+    _fmt = "%.6f";
+  else if (_type_ua == UA_TYPES_DOUBLE)
+    _fmt = "%.15f";
+
+  return atof(_c_str(_fmt));
+  }
+*/
+
+/*
   double Number_c::_as_dbl()
   {
   switch (_type_ua) {
@@ -173,7 +177,7 @@ char* Number_c::_c_str(const char* fmt)
 
 
 /*
-  bool Value_c::operator==(Value_c &v2)
+  bool Number_c::operator==(Number_c &v2)
   {
   if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
     return this->ui64 == v2.ui64;
@@ -182,7 +186,7 @@ char* Number_c::_c_str(const char* fmt)
   }
 */
 /*
-  bool Value_c::operator!=(Value_c &v2)
+  bool Number_c::operator!=(Number_c &v2)
   {
   if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
     return this->ui64 != v2.ui64;
@@ -193,7 +197,7 @@ char* Number_c::_c_str(const char* fmt)
 
 
 /*
-  bool Value_c::operator<(Value_c &v2)
+  bool Number_c::operator<(Number_c &v2)
   {
   if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
     return this->ui64 < v2.ui64;
@@ -202,7 +206,7 @@ char* Number_c::_c_str(const char* fmt)
   }
 */
 /*
-  bool Value_c::operator>(Value_c &v2)
+  bool Number_c::operator>(Number_c &v2)
   {
   if ((this->_type_ua == v2._type_ua) && (_type_ua < UA_TYPES_FLOAT))
     return this->ui64 > v2.ui64;
@@ -213,7 +217,7 @@ char* Number_c::_c_str(const char* fmt)
 
 
 /*
-  Value_c::operator uint16_t()
+  Number_c::operator uint16_t()
   {
   uint16_t x;
   if (_type == type_map[type_index(typeid(x))])
@@ -224,7 +228,7 @@ char* Number_c::_c_str(const char* fmt)
   };
 
 
-  Value_c::operator float()
+  Number_c::operator float()
   {
   float x;
   if (_type == type_map[type_index(typeid(x))])
@@ -237,7 +241,7 @@ char* Number_c::_c_str(const char* fmt)
 */
 
 /*
-  double Value_c::_to_dbl(size_t _sz)
+  double Number_c::_to_dbl(size_t _sz)
   {
   //  assert(_sz < 8);
   const char* _fmt = _type_fmt;

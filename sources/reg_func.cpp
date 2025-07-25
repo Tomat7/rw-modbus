@@ -15,9 +15,9 @@
 struct regupd_t {
   bool upd_plc = false;  // need print ">"
   bool upd_opc = false;  // need print "<"
-  bool err_plc = false;  // need print ">"
-  bool err_opc = false;  // need print "<"
-  value_u opc_value;     // value to print
+  bool err_plc = false;  // need blynk
+  bool err_opc = false;  // need ...
+  numeric_u opc_value;     // value to print
 };
 
 static map<string, regupd_t> STRmap;
@@ -34,11 +34,11 @@ int task_regs_refresh_(void* params)
   int x = 0;
 
   for (auto& [n, rm] : REGmap) {
-    value_u plc_val;  // Value from PLC
+    numeric_u plc_val;  // Value from PLC
     bool plc_err = false;
-    value_u opc_val = opc_get_value(rm.str_opcname);  // from OPC
+    numeric_u opc_val = opc_get_value(rm.str_opcname);  // from OPC
     bool opc_err = !OPCs.isGood(rm.str_opcname);
-    value_u old_val = rm.get_local_value();  // Value in memory (in REGmap)
+    numeric_u old_val = rm.get_local_value();  // Value in memory (in REGmap)
     bool old_err = rm.var_errors;
 
     bool isNew_Plc = false;                 // Got new value from PLC

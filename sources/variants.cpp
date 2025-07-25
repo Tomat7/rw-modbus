@@ -6,7 +6,6 @@
 #include <map>
 #include <set>
 #include <string>
-//#include <variant>
 #include <vector>
 #include <cassert>
 
@@ -26,13 +25,13 @@ Number_c get_val()
 {
   return fx;
 }
-
-variant_t get_var()
-{
+/*
+  variant_t get_var()
+  {
   return fx;
-}
+  }
 
-
+*/
 void var_test0()
 {
   printf("\n======= var_test0 =======\n");
@@ -54,7 +53,7 @@ void var_test0()
   Uf128++;
   printf("\nf128 size is: %lu, U1=%lu, F128=%lu \n\n\n", sizeof(F128), U1, Uf128);
 
-  value_u v;
+  numeric_u v;
   void* p = &v;
   v.i32 = INT32_MIN;
   float f = *(float*)p;

@@ -31,7 +31,7 @@ bool OpcServer_c::refresh_RawValue(string s)
   void* vardata_ = get_VariantDataPtr(s);
 
   if (vardata_ != nullptr) {
-    vars[s].raw_value = *static_cast<value_u*>(vardata_);
+    vars[s].raw_value = *static_cast<numeric_u*>(vardata_);
     vars[s].ptr_value = &vars[s].raw_value;
     is_fresh = true;
   }
@@ -39,9 +39,9 @@ bool OpcServer_c::refresh_RawValue(string s)
   return is_fresh;
 }
 
-value_u OpcServer_c::ReadRawUnion(string s)
+numeric_u OpcServer_c::ReadRawUnion(string s)
 {
-  value_u raw_vu;
+  numeric_u raw_vu;
 
   if (isVariable(s))
     raw_vu = vars[s].raw_value;  // set old (last good) value

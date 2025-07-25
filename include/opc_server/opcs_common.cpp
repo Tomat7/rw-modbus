@@ -21,9 +21,9 @@
 using std::set;
 using std::to_string;
 
-bool operator<(const value_u &v1, const value_u &v2) { return v1.ui64 < v2.ui64; }
-bool operator>(const value_u &v1, const value_u &v2) { return v1.ui64 > v2.ui64; }
-bool operator!=(const value_u &v1, const value_u &v2) { return v1.ui64 != v2.ui64; }
+bool operator<(const numeric_u &v1, const numeric_u &v2) { return v1.ui64 < v2.ui64; }
+bool operator>(const numeric_u &v1, const numeric_u &v2) { return v1.ui64 > v2.ui64; }
+bool operator!=(const numeric_u &v1, const numeric_u &v2) { return v1.ui64 != v2.ui64; }
 
 OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {

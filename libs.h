@@ -23,6 +23,7 @@
 //#include "include/shmem/shmem.h"
 #include "include/console.h"
 #include "include/declarations.h"
+#include "include/numeric.h"
 #include "include/logger.h"
 #include "include/macros.h"
 #include "include/opc_server/opcs_class.h"

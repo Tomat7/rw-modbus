@@ -38,9 +38,9 @@ uint16_t Reg_c::get_plc_reg(int x)  // Get reg's local value != read PLC.
   return get_plc_reg(ptr_reg[x]);
 }
 
-value_u Reg_c::get_plc_value()
+numeric_u Reg_c::get_plc_value()
 {
-  value_u val;
+  numeric_u val;
   if (is_scada) {
     LOGE("Not Modbus get-value: %s", str_fullname.c_str());
     return val;
@@ -101,7 +101,7 @@ void Reg_c::set_plc_reg(uint16_t _val, int x)
   return;
 }
 
-void Reg_c::set_plc_value(value_u v)
+void Reg_c::set_plc_value(numeric_u v)
 {
   // byte-order not supported yet :-(
   if (is_modbus || is_ref)

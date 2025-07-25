@@ -28,7 +28,7 @@
 
 /* map<string, pair<regtype_t, byteorder_t>> type_map { */
 
-map<string, regprop_t> type_map {
+map<string, regprop_t> regprop_map {
   // See reg_datatype.h for details & comments
   {"*", TYPE_REFERENCED},  // "Referenced" registers
   {"-", TYPE_NOTHING},     // ??
@@ -79,7 +79,6 @@ map<string, regprop_t> type_map {
   {"float_bs", TYPE_FLOAT_BS},
   {"float_badc", TYPE_FLOAT_BS},
 
-
   {"fll", TYPE_FLOAT_LE}, // Little-endian
   {"fle", TYPE_FLOAT_LE},
   {"float_le", TYPE_FLOAT_LE},
@@ -89,7 +88,6 @@ map<string, regprop_t> type_map {
   {"fls", TYPE_FLOAT_LS},
   {"float_ls", TYPE_FLOAT_LS},
   {"float_cdab", TYPE_FLOAT_LS},
-
 
   {"f_abcd", TYPE_FLOAT_BE},
   {"f_badc", TYPE_FLOAT_BS},
@@ -121,38 +119,39 @@ map<string, regprop_t> type_map {
 
 };
 
-map<int, const char*> format_map {
+map<int, const char*> printfmt_map {
   {UA_TYPES_INT16, "%i" },
   {UA_TYPES_INT32, "%i" },
   {UA_TYPES_INT64, "%i" },
   {UA_TYPES_UINT16, "%u"},
   {UA_TYPES_UINT32, "%u"},
   {UA_TYPES_UINT64, "%u"},
-  {UA_TYPES_FLOAT, "%10.3f"},
-  {UA_TYPES_DOUBLE, "%14.4f"},
-  {NOTUA_TYPES_F100, "%7.2f"},
-  {NOTUA_TYPES_F10, "%7.1f"}
+  {UA_TYPES_FLOAT, "%.3f"},
+  {UA_TYPES_DOUBLE, "%.4f"},
+  {NOTUA_TYPES_F100, "%.2f"},
+  {NOTUA_TYPES_F10, "%.1f"}
 };
 
 // ================================================================
 
 Reg_c::~Reg_c() { /* LOGD("DEstruct! %x %s", this, this->rn); */ }
 
-Reg_c::Reg_c() { /* LOGD("Construct! %x", this);  */ }
+Reg_c::Reg_c() : Number_c(2, UA_TYPES_INT16) { /* LOGD("Construct! %x", this);  */ }
 
 
 // ============================================================
 // For Modbus regs only
 
-Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
+Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev) : Number_c(2, UA_TYPES_INT16)
 {
   string st_ = "u16"; //to_lower(_reg->str_type);  //st_ = "u16";
-  if (type_map.count(st_)) {
+  if (regprop_map.count(st_)) {
     var_mode = _reg->data.rmode;
-    var_type = type_map[st_].rtype;
-    var_size = type_map[st_].rsize;
-    var_format = format_map[var_type];
-    byte_order = type_map[st_].rbyteorder;
+    var_type = regprop_map[st_].rtype;
+    var_size = regprop_map[st_].rsize;
+    _type_size = var_size;
+    var_format = printfmt_map[var_type];
+    byte_order = regprop_map[st_].rbyteorder;
   } else
     LOGE("Wrong type: %s, reg: %s", st_.c_str(), rn);
 
@@ -183,8 +182,11 @@ Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
 // For SCADA & referenced registers
 
 Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
-             string _str_type, string _opc_base)
+             string _str_type, string _opc_base) :
+  Number_c(regprop_map[to_lower(_str_type)].rsize,
+           regprop_map[to_lower(_str_type)].rtype)
 {
+
   if (_str_source == "" || _str_source == "-") {
     str_source = "-"; // flag of SCADA only (local) register/tag!
     is_scada = true;
@@ -201,12 +203,13 @@ Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
     remove_dbl_slashes(str_opcname);
 
   string st_ = to_lower(_str_type);
-  if (type_map.count(st_)) {
+  if (regprop_map.count(st_)) {
     var_mode = (_reg->str_mode == "rw") ? 1 : 0;
-    var_type = type_map[st_].rtype;
-    var_size = type_map[st_].rsize;         // for SCADA ??
-    var_format = format_map[var_type];
-    byte_order = type_map[st_].rbyteorder;  // for SCADA ??
+    var_type = regprop_map[st_].rtype;
+    var_size = regprop_map[st_].rsize;         // for SCADA ??
+    _type_size = var_size;
+    var_format = printfmt_map[var_type];
+    byte_order = regprop_map[st_].rbyteorder;  // for SCADA ??
     visible = true;
   } else
     LOGE("Wrong type: '%s', reg: '%s'", _str_type.c_str(), rn);
@@ -239,7 +242,7 @@ bool Reg_c::init_types(mbreg_t* _reg)  // !! STATIC FUNCTION !!
   for (auto &c : st_)
     c = static_cast<char>(tolower(c));
 
-  if (type_map.count(st_)) {
+  if (regprop_map.count(st_)) {
     //_reg->data.rtype = type_map[st_].rtype;
     //_reg->data.rsize = type_map[st_].rsize;
     //_reg->data.rbyteorder = type_map[st_].rbyteorder;
@@ -258,7 +261,7 @@ bool Reg_c::check_type(string st_)  // !! STATIC FUNCTION !!
   for (auto &c : st_)
     c = static_cast<char>(tolower(c));
 
-  if (type_map.count(st_))
+  if (regprop_map.count(st_))
     isOK = true;
 
   return isOK;

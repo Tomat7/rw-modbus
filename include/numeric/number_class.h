@@ -1,5 +1,5 @@
 #pragma once
-// value_class.h ----------------------------
+// Number_class.h ----------------------------
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include <float.h>
@@ -11,22 +11,13 @@
 #include <typeindex>
 #include <typeinfo>
 
-#define UA_TYPES_BOOLEAN 0
-#define UA_TYPES_SBYTE 1
-#define UA_TYPES_BYTE 2
-#define UA_TYPES_INT16 3
-#define UA_TYPES_UINT16 4
-#define UA_TYPES_INT32 5
-#define UA_TYPES_UINT32 6
-#define UA_TYPES_INT64 7
-#define UA_TYPES_UINT64 8
-#define UA_TYPES_FLOAT 9
-#define UA_TYPES_DOUBLE 10
-#define UA_TYPES_STRING 11
+#include "include/numeric.h"
+#include "include/logger.h"
 
 #define STR_SIZE 50
 
-union value_uu {
+/*
+  union numeric_u {
   int16_t i16;
   int32_t i32;
   int64_t i64;
@@ -35,7 +26,8 @@ union value_uu {
   uint64_t ui64 = 0;
   float fl;
   double dbl;
-};
+  };
+*/
 
 using std::string;
 using std::map;
@@ -52,6 +44,9 @@ using float128=long double;
 class Number_c
 {
 public:
+  numeric_u value;
+
+  Number_c(int _sz, int _uatype);
   Number_c(Number_c &V);
   ~Number_c() {};
 
@@ -62,23 +57,23 @@ public:
   template <typename T> Number_c& operator= (T x)
   {
     if (!init(type_index(typeid(x)), sizeof(x), &x))
-      LOGA("Value_c: = TYPE not supported");
-    LOGx("xValue_C: = Tx type %i", _type_ua);
+      LOGA("Number_c: = TYPE not supported");
+    LOGx("xNumber_c: = Tx type %i", _type_ua);
     return *this;
   };
 
   template <typename T> Number_c(T x)
   {
     if (!init(type_index(typeid(x)), sizeof(x), &x))
-      LOGA("Value_c: new TYPE not supported");
-    LOGx("xValue_C: new Tx type - %i", _type_ua);
+      LOGA("Number_c: new TYPE not supported");
+    LOGx("xNumber_c: new Tx type - %i", _type_ua);
   };
 
-  template <typename T> Number_c(value_uu v, T x)
+  template <typename T> Number_c(numeric_u v, T x)
   {
     if (!init(type_index(typeid(x)), sizeof(x), &x))
-      LOGA("Value_c: new VALUE not supported");
-    LOGx("xValue_C: new value_u ");
+      LOGA("Number_c: new VALUE not supported");
+    LOGx("xNumber_c: new value_u ");
   };
 
 // ======= TYPE() Templates =======
@@ -144,45 +139,45 @@ public:
 
   char* c_str(const char* fmt = nullptr);
 
-  int16_t &i16 = _value.i16;
-  int32_t &i32 = _value.i32;
-  int64_t &i64 = _value.i64;
-  uint16_t &ui16 = _value.ui16;
-  uint32_t &ui32 = _value.ui32;
-  uint64_t &ui64 = _value.ui64;
-  float &fl = _value.fl;
-  double &dbl = _value.dbl;
+  int16_t &i16 = value.i16;
+  int32_t &i32 = value.i32;
+  int64_t &i64 = value.i64;
+  uint16_t &ui16 = value.ui16;
+  uint32_t &ui32 = value.ui32;
+  uint64_t &ui64 = value.ui64;
+  float &fl = value.fl;
+  double &dbl = value.dbl;
 
 // =======================================
-
-
-private:
-  value_uu _value;
-  void* _ptr = &_value;
-
-  type_index _type_index = type_index(typeid(bool));
+protected:
   int _type_ua = 0;
   size_t _type_size = 0;
+  type_index _type_index = type_index(typeid(bool));
   bool _type_is_int = false;
-  const char* _type_fmt = nullptr;
-  char _str[STR_SIZE + 1];
-  // float128 f128 = 0.0;
 
+private:
+
+  const char* _type_fmt = nullptr;
+  void* _ptr = &value;
+  char _str[STR_SIZE + 1];
+
+  float128 _as_f128();
   bool same_type(const type_index &_ti);
   bool init(const type_index &_ti, const size_t &_sz, void* _psrc);
-
   char* _c_str(const char* fmt);
-  float128 _as_f128();
+
 
   //double _as_chars_to_dbl();
   //double _fabs(double &x);
   //double _as_dbl();
 
-  static map<type_index, int> type_map;
+  static map<type_index, int> typeidx_ua_map;
+  static map<int, type_index> ua_typeidx_map;
   static map<const int, const char*> format_map;
 
 };
 
+// =================================================================
 
 /*
   template <typename T> operator T()
@@ -259,20 +254,20 @@ private:
 
 // ======== Definition of TEMPLATEs =========
 
-//friend bool operator<(const Value_c &v1, const Value_c &v2) { return v1.ui64 < v2.ui64; }
-//friend bool operator>(const Value_c &v1, const Value_c &v2) { return v1.ui64 > v2.ui64; }
-//friend bool operator!=(const Value_c &v1, const Value_c &v2) { return v1.ui64 != v2.ui64; }
-//friend bool operator==(const Value_c &v1, const Value_c &v2) { return v1.ui64 == v2.ui64; }
+//friend bool operator<(const Number_c &v1, const Number_c &v2) { return v1.ui64 < v2.ui64; }
+//friend bool operator>(const Number_c &v1, const Number_c &v2) { return v1.ui64 > v2.ui64; }
+//friend bool operator!=(const Number_c &v1, const Number_c &v2) { return v1.ui64 != v2.ui64; }
+//friend bool operator==(const Number_c &v1, const Number_c &v2) { return v1.ui64 == v2.ui64; }
 
 /*
-  Value_c(int16_t x);
-  Value_c(int32_t x);
-  Value_c(int64_t x);
-  Value_c(uint16_t x);
-  Value_c(uint32_t x);
-  Value_c(uint64_t x);
-  Value_c(float x);
-  Value_c(double x);
+  Number_c(int16_t x);
+  Number_c(int32_t x);
+  Number_c(int64_t x);
+  Number_c(uint16_t x);
+  Number_c(uint32_t x);
+  Number_c(uint64_t x);
+  Number_c(float x);
+  Number_c(double x);
 */
 
 

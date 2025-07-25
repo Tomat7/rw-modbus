@@ -1,4 +1,4 @@
-// value_class.cpp --------------------------
+// Number_class.cpp --------------------------
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include <map>
@@ -18,7 +18,7 @@
 #define DEBUG(a) if(isDebug){a}
 
 
-map<type_index, int> Number_c::type_map {
+map<type_index, int> Number_c::typeidx_ua_map {
   {type_index(typeid(int16_t)),  UA_TYPES_INT16 },
   {type_index(typeid(uint16_t)), UA_TYPES_UINT16},
   {type_index(typeid(int32_t)),  UA_TYPES_INT32 },
@@ -29,6 +29,20 @@ map<type_index, int> Number_c::type_map {
   {type_index(typeid(double)),   UA_TYPES_DOUBLE}
 };
 
+map<int, type_index> Number_c::ua_typeidx_map {
+  {UA_TYPES_INT16,  type_index(typeid(int16_t)) },
+  {UA_TYPES_INT32,  type_index(typeid(int32_t))},
+  {UA_TYPES_INT64,  type_index(typeid(int64_t)) },
+  {UA_TYPES_UINT16, type_index(typeid(uint16_t))},
+  {UA_TYPES_UINT32, type_index(typeid(uint32_t)) },
+  {UA_TYPES_UINT64, type_index(typeid(uint64_t))},
+  {UA_TYPES_FLOAT,  type_index(typeid(float))   },
+  {UA_TYPES_DOUBLE, type_index(typeid(double))  },
+  {NOTUA_TYPES_F100, type_index(typeid(float))   },
+  {NOTUA_TYPES_F10, type_index(typeid(float))   }
+};
+
+
 map<const int, const char*> Number_c::format_map {
   {UA_TYPES_INT16, "%i" },
   {UA_TYPES_INT32, "%i" },
@@ -37,22 +51,37 @@ map<const int, const char*> Number_c::format_map {
   {UA_TYPES_UINT32, "%u"},
   {UA_TYPES_UINT64, "%lu"},
   {UA_TYPES_FLOAT, "%.7f"},
-  {UA_TYPES_DOUBLE, "%.10lf"}
+  {UA_TYPES_DOUBLE, "%.10lf"},
+  {NOTUA_TYPES_F100, "%.2f"},
+  {NOTUA_TYPES_F10, "%.1f"}
 };
 
+Number_c::Number_c(int _sz, int _uatype)
+{
+  if (ua_typeidx_map.count(_uatype)) {
+    _type_size = _sz;
+    _type_ua = _uatype;
+    _type_index = ua_typeidx_map[_type_ua];
+    _type_fmt = format_map[_type_ua];
+    _type_is_int = (_type_ua < UA_TYPES_FLOAT);
+    value.ui64 = 0;
+  } else
+    LOGA("Number_c: _uatype %i not supported", _uatype);
+  LOGx("xNumber_c: size %i type %i", _type_sz, _type_ua);
+};
 
 Number_c::Number_c(Number_c &V)
 {
-  if (!init(V._type_index, V._type_size, &V._value.ui64))
-    LOGA("Value_c: TYPE& not supported");
-  LOGx("xValue_C: new COPY %u", ui64);
+  if (!init(V._type_index, V._type_size, &V.value.ui64))
+    LOGA("Number_c: TYPE& not supported");
+  LOGx("xNumber_c: new COPY %u", ui64);
 };
 
 Number_c& Number_c::operator= (Number_c &V)
 {
-  if (!init(V._type_index, V._type_size, &V._value.ui64))
-    LOGA("Value_c: = TYPE not supported");
-  LOGx("xValue_C: = Value_c %s", c_str());
+  if (!init(V._type_index, V._type_size, &V.value.ui64))
+    LOGA("Number_c: = TYPE not supported");
+  LOGx("xNumber_c: = Number_c %s", c_str());
   return *this;
 }
 
@@ -64,23 +93,23 @@ bool Number_c::same_type(const type_index &_ti)
 bool Number_c::init(const type_index &_ti, const size_t &_sz, void* _psrc)
 {
   bool rc = false;
-  if (type_map.count(_ti)) {
+  if (typeidx_ua_map.count(_ti)) {
     _type_size = _sz;
     _type_index = _ti;
-    _type_ua = type_map[_ti];
+    _type_ua = typeidx_ua_map[_ti];
     _type_fmt = format_map[_type_ua];
     _type_is_int = (_type_ua < UA_TYPES_FLOAT);
-    _value.ui64 = 0;
+    value.ui64 = 0;
     memcpy(_ptr, _psrc, _type_size);
     rc = true;
   } else {
     _type_size = 0;
     _type_index = type_index(typeid(bool));
     _type_ua = 0;
-    _type_fmt = "Value_c: TYPE not supported";
+    _type_fmt = "Number_c: TYPE not supported";
     _type_is_int = false;
-    _value.ui64 = 0;
-    LOGx("Value_C::init wrong TYPE!");
+    value.ui64 = 0;
+    LOGx("Number_c::init wrong TYPE!");
   }
   return rc;
 }
@@ -88,14 +117,14 @@ bool Number_c::init(const type_index &_ti, const size_t &_sz, void* _psrc)
 // ======================================================================
 
 /*
-  void Value_c::init_var(void* _psrc)
+  void Number_c::init_var(void* _psrc)
   {
   _value.ui64 = 0;
   memcpy(_ptr, _psrc, _type_size);
   }
 */
 /*
-  void Value_c::init_var(void* _psrc)
+  void Number_c::init_var(void* _psrc)
   {
 
   switch (_type_ua) {
@@ -131,65 +160,65 @@ bool Number_c::init(const type_index &_ti, const size_t &_sz, void* _psrc)
 */
 
 /*
-  Value_c::Value_c(int16_t x)
+  Number_c::Number_c(int16_t x)
   {
   _value.i16 = x;
   _type_index = type_index(typeid(x));
   _type = type_map[type_index(typeid(x))];
-  LOGx("Value_C: i16 %i", i16);
+  LOGx("Number_c: i16 %i", i16);
   };
 
-  Value_c::Value_c(int32_t x)
+  Number_c::Number_c(int32_t x)
   {
   _value.i32 = x;
   _type_index = type_index(typeid(x));
   _type = type_map[type_index(typeid(x))];
-  LOGx("Value_C: i32 %i", i32);
+  LOGx("Number_c: i32 %i", i32);
   };
 
-  Value_c::Value_c(int64_t x)
+  Number_c::Number_c(int64_t x)
   {
   _value.i64 = x;
   _type_index = type_index(typeid(x));
   _type = type_map[type_index(typeid(x))];
-  LOGx("Value_C: i64 %i", i64);
+  LOGx("Number_c: i64 %i", i64);
   };
 
-  Value_c::Value_c(uint16_t x)
+  Number_c::Number_c(uint16_t x)
   {
   _value.ui16 = x;
   _type_index = type_index(typeid(x));
   _type = type_map[type_index(typeid(x))];
-  LOGx("Value_C: ui16 %u %i", ui16, _type);
+  LOGx("Number_c: ui16 %u %i", ui16, _type);
   };
 
-  Value_c::Value_c(uint32_t x)
+  Number_c::Number_c(uint32_t x)
   {
   _value.ui32 = x;
   _type_index = type_index(typeid(x));
   _type = type_map[type_index(typeid(x))];
-  LOGx("Value_C: ui32 %u", ui32);
+  LOGx("Number_c: ui32 %u", ui32);
   };
 
-  Value_c::Value_c(uint64_t x)
+  Number_c::Number_c(uint64_t x)
   {
   _value.ui64 = x;
   init_type(type_index(typeid(x)));
-  LOGx("Value_C: ui64 %u", ui64);
+  LOGx("Number_c: ui64 %u", ui64);
   };
 
-  Value_c::Value_c(float x)
+  Number_c::Number_c(float x)
   {
   _value.fl = x;
   init_type(type_index(typeid(x)));
-  LOGx("Value_C: float %f %s", fl, format_map[_type]);
+  LOGx("Number_c: float %f %s", fl, format_map[_type]);
   };
 
-  Value_c::Value_c(double x)
+  Number_c::Number_c(double x)
   {
   _value.dbl = x;
   init_type(type_index(typeid(x)));
-  LOGx("Value_C: double %f", dbl);
+  LOGx("Number_c: double %f", dbl);
   };
 */
 

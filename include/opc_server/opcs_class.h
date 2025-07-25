@@ -53,8 +53,8 @@ public:
   string GetVarFullName(string s);
   void DeleteVar(string s);
 
-  value_u ReadRawUnion(string s);  // returns saved value_union
-  bool WriteRawUnion(string s, value_u raw_val, bool isOK);  // write value_u
+  numeric_u ReadRawUnion(string s);  // returns saved value_union
+  bool WriteRawUnion(string s, numeric_u raw_val, bool isOK);  // write value_u
 
   int RefreshAllValues();  // getVar for ALL variables, returns - qty of vars
 

@@ -61,9 +61,9 @@ void opc_regs_init()
   }
 }
 
-value_u opc_get_value(string s) { return OPCs.ReadRawUnion(OPCs.GetVarFullName(s)); }
+numeric_u opc_get_value(string s) { return OPCs.ReadRawUnion(OPCs.GetVarFullName(s)); }
 
-bool opc_set_value(string s, value_u val, bool isOK)
+bool opc_set_value(string s, numeric_u val, bool isOK)
 {
   return OPCs.WriteRawUnion(OPCs.GetVarFullName(s), val, isOK);
 }

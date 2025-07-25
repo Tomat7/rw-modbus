@@ -11,7 +11,7 @@
 #define DEBUG(a) if(isDebug){a}
 
 
-bool OpcServer_c::WriteRawUnion(string s, value_u raw_vu, bool isOK)
+bool OpcServer_c::WriteRawUnion(string s, numeric_u raw_vu, bool isOK)
 {
   bool ret = false;
   uaDataMux->lock();

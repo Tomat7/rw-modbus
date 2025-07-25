@@ -10,25 +10,10 @@
 #include <vector>
 //#include <variant>
 
+#include "include/numeric.h"
+
 using std::string;
 using std::mutex;
-
-union value_u {
-  int16_t i16;
-  int32_t i32;
-  int64_t i64;
-  uint16_t ui16;
-  uint32_t ui32;
-  uint64_t ui64 = 0;
-  int64_t dt;
-  float fl;
-  double dbl;
-  uint16_t mb32u[2];
-  uint16_t mb64u[4];
-  /*   uint16_t fl2u[2];
-    uint16_t dbl2u[4];
-    uint8_t byte2u[8]; */
-};
 
 struct badvalue_t {
   int16_t i16 = INT16_MIN; //-32000;
@@ -55,7 +40,7 @@ struct ua_var_t {
   string var_path;            // /PLC/Kub/
   char* ua_varpath = nullptr; // var_path.c_str()
   nodeid_t node_id;           // UA_NodeId (var, parent, reference)
-  value_u raw_value;          // value_u
+  numeric_u raw_value;          // value_u
   void* ptr_value;            // ptr to "correct" value_u
   int acl_mode;               // 1 - mean RW
   int ua_type;                // UA_DataTypes

@@ -61,9 +61,9 @@ extern Schedule_c Task;
 // extern string SCADA_folder;
 
 #define MODBUS_MODES "master", "slave", "scada"
-bool operator<(const value_u &v1, const value_u &v2);
-bool operator>(const value_u &v1, const value_u &v2);
-bool operator!=(const value_u &v1, const value_u &v2);
+bool operator<(const numeric_u &v1, const numeric_u &v2);
+bool operator>(const numeric_u &v1, const numeric_u &v2);
+bool operator!=(const numeric_u &v1, const numeric_u &v2);
 
 bool isdebug();
 void init_all();
@@ -110,8 +110,8 @@ void opc_run_thread();
 void opc_init();
 void opc_deinit();
 void opc_start();
-value_u opc_get_value(string s);
-bool opc_set_value(string s, value_u val, bool isOK);
+numeric_u opc_get_value(string s);
+bool opc_set_value(string s, numeric_u val, bool isOK);
 void opc_client_();
 void opc_server_();
 // uint16_t opc_update_uint16(string name, regdata_t* rd);

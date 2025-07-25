@@ -27,9 +27,9 @@
 
 // ===============================================================
 
-value_u Reg_c::get_local_value() { return value; }
+numeric_u Reg_c::get_local_value() { return value; }
 
-void Reg_c::set_local_value(value_u _val) { value = _val; }
+void Reg_c::set_local_value(numeric_u _val) { value = _val; }
 
 string Reg_c::to_lower(string str)
 {
@@ -49,9 +49,9 @@ bool Reg_c::has_Str(string SS, string fs)
 {
   return SS.find(fs) != std::string::npos;
 }
-
-variant_t Reg_c::get_local_variant()
-{
+/*
+  variant_t Reg_c::get_local_variant()
+  {
   switch (var_type) {
   case UA_TYPES_INT16:
     return value.i16;
@@ -88,26 +88,28 @@ variant_t Reg_c::get_local_variant()
   }
 
   return value.i16;
-}
+  }
+*/
 
-char* Reg_c::get_local_value_chars(char* retch)
-{
+/*
+  char* Reg_c::get_local_value_chars(char* retch)
+  {
   if (var_format == nullptr)
     LOGE("Type_format wrong: %s", var_format);
   else
     snprintf(retch, 49, var_format, get_local_variant());
 
   return retch;
-}
+  }
+*/
 
-/*
-  // ===============================================================
-  #pragma GCC diagnostic push // Save current diagnostic warning set
-  // Suppress GCC warnings on "var_format" which is nonliteral
-  #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+// ===============================================================
+// Suppress GCC warnings on "var_format" which is nonliteral
+#pragma GCC diagnostic push // Save current diagnostic warning set
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 
-  char* Reg_c::get_local_value_chars(char* retch)
-  {
+char* Reg_c::get_local_value_chars(char* retch)
+{
   if (var_format == nullptr)
     LOGE("Reg: %s, type_format wrong: %s", rn, var_format);
 
@@ -136,10 +138,10 @@ char* Reg_c::get_local_value_chars(char* retch)
     LOGE("Reg: %s, type not supported: %i", rn, var_type);
 
   return retch;
-  }
-  #pragma GCC diagnostic pop  // Restore diagnostic warning set
-  // ==========================================================
-*/
+}
+#pragma GCC diagnostic pop  // Restore diagnostic warning set
+// ==========================================================
+
 
 /*
   char* Reg_c::get_local_value_chars(char* retch)

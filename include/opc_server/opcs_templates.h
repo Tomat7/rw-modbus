@@ -100,7 +100,7 @@ bool OpcServer_c::set_NumericValue(std::string s, T Numeric_set, bool isOK)
 
   if (vars.count(s)) {
     vars[s].ptr_value = static_cast<T*>(&Numeric_set);
-    vars[s].raw_value = *static_cast<value_u*>(vars[s].ptr_value);
+    vars[s].raw_value = *static_cast<numeric_u*>(vars[s].ptr_value);
     is_write_ok = write_Variable(vars[s], isOK);
   } else
     LOGA("Set: Ignore non-existing variable: %s", s.c_str());
