@@ -83,6 +83,7 @@ public:
 
   //string get_local_value_string();
   char* get_local_value_chars(char* retch);
+  char* c_str();
   //variant_t get_local_variant();
 
   const char* rn = nullptr;  // copy from MB-reg

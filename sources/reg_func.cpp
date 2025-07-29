@@ -143,7 +143,7 @@ void reg_print(Reg_c &rm)
 
   //printf("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
   printf("%s%-14s %i %s%14s", C, rm.rn, rm.var_errors,
-         B, rm.get_local_value_chars(ch));
+         B, rm.c_str() /* rm.get_local_value_chars(ch) */);
 
   printf(C_NORM);
 

@@ -49,6 +49,50 @@ bool Reg_c::has_Str(string SS, string fs)
 {
   return SS.find(fs) != std::string::npos;
 }
+
+char* Reg_c::c_str() { return Number.c_str(); }
+
+// ===============================================================
+// Suppress GCC warnings on "var_format" which is nonliteral
+#pragma GCC diagnostic push // Save current diagnostic warning set
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+
+char* Reg_c::get_local_value_chars(char* retch)
+{
+  numeric_u value = *_value;
+
+  if (var_format == nullptr)
+    LOGE("Reg: %s, type_format wrong: %s", rn, var_format);
+
+  else if (var_type_ua == UA_TYPES_INT16)
+    snprintf(retch, 49, var_format, value.i16);
+  else if (var_type_ua == UA_TYPES_UINT16)
+    snprintf(retch, 49, var_format, value.ui16);
+  else if (var_type_ua == UA_TYPES_INT32)
+    snprintf(retch, 49, var_format, value.i32);
+  else if (var_type_ua == UA_TYPES_UINT32)
+    snprintf(retch, 49, var_format, value.ui32);
+  else if (var_type_ua == UA_TYPES_INT64)
+    snprintf(retch, 49, var_format, value.i64);
+  else if (var_type_ua == UA_TYPES_UINT64)
+    snprintf(retch, 49, var_format, value.ui64);
+  else if (var_type_ua == UA_TYPES_FLOAT)
+    snprintf(retch, 49, var_format, value.fl);
+  else if (var_type_ua == UA_TYPES_DOUBLE)
+    snprintf(retch, 49, var_format, value.dbl);
+  else if (var_type_ua == NOTUA_TYPES_F100)
+    snprintf(retch, 49, var_format, value.fl);
+  else if (var_type_ua == NOTUA_TYPES_F10)
+    snprintf(retch, 49, var_format, value.fl);
+
+  else
+    LOGE("Reg: %s, type not supported: %i", rn, var_type_ua);
+
+  return retch;
+}
+#pragma GCC diagnostic pop  // Restore diagnostic warning set
+// ==========================================================
+
 /*
   variant_t Reg_c::get_local_variant()
   {
@@ -102,47 +146,6 @@ bool Reg_c::has_Str(string SS, string fs)
   return retch;
   }
 */
-
-// ===============================================================
-// Suppress GCC warnings on "var_format" which is nonliteral
-#pragma GCC diagnostic push // Save current diagnostic warning set
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
-
-char* Reg_c::get_local_value_chars(char* retch)
-{
-  numeric_u value = *_value;
-
-  if (var_format == nullptr)
-    LOGE("Reg: %s, type_format wrong: %s", rn, var_format);
-
-  else if (var_type_ua == UA_TYPES_INT16)
-    snprintf(retch, 49, var_format, value.i16);
-  else if (var_type_ua == UA_TYPES_UINT16)
-    snprintf(retch, 49, var_format, value.ui16);
-  else if (var_type_ua == UA_TYPES_INT32)
-    snprintf(retch, 49, var_format, value.i32);
-  else if (var_type_ua == UA_TYPES_UINT32)
-    snprintf(retch, 49, var_format, value.ui32);
-  else if (var_type_ua == UA_TYPES_INT64)
-    snprintf(retch, 49, var_format, value.i64);
-  else if (var_type_ua == UA_TYPES_UINT64)
-    snprintf(retch, 49, var_format, value.ui64);
-  else if (var_type_ua == UA_TYPES_FLOAT)
-    snprintf(retch, 49, var_format, value.fl);
-  else if (var_type_ua == UA_TYPES_DOUBLE)
-    snprintf(retch, 49, var_format, value.dbl);
-  else if (var_type_ua == NOTUA_TYPES_F100)
-    snprintf(retch, 49, var_format, value.fl);
-  else if (var_type_ua == NOTUA_TYPES_F10)
-    snprintf(retch, 49, var_format, value.fl);
-
-  else
-    LOGE("Reg: %s, type not supported: %i", rn, var_type_ua);
-
-  return retch;
-}
-#pragma GCC diagnostic pop  // Restore diagnostic warning set
-// ==========================================================
 
 
 /*
