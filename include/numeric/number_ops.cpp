@@ -133,6 +133,74 @@ char* Number_c::_c_str(const char* fmt)
 
 // ==========================================================
 
+type_index Number_c::_get_typeidx()
+{
+  switch (_type_ua) {
+  case UA_TYPES_INT16:
+    return type_index(typeid(int16_t));
+  case UA_TYPES_INT32:
+    return type_index(typeid(int32_t));
+  case UA_TYPES_INT64:
+    return type_index(typeid(int64_t));
+  case UA_TYPES_UINT16:
+    return type_index(typeid(uint16_t));
+  case UA_TYPES_UINT32:
+    return type_index(typeid(uint32_t));
+  case UA_TYPES_UINT64:
+    return type_index(typeid(uint64_t));
+  case UA_TYPES_FLOAT:
+    return type_index(typeid(float));
+  case UA_TYPES_DOUBLE:
+    return type_index(typeid(double));
+  case NOTUA_TYPES_F10:
+    return type_index(typeid(float));
+  case NOTUA_TYPES_F100:
+    return type_index(typeid(float));
+  default:
+    LOGE("Type: %i not supported", _type_ua);
+    return type_index(typeid(bool));
+  }
+}
+
+bool Number_c::set_value(float128 f128)
+{
+  switch (_type_ua) {
+  case UA_TYPES_INT16:
+    i16 = (int16_t)f128;
+    return true;
+  case UA_TYPES_INT32:
+    i32 = (int32_t)f128;
+    return true;
+  case UA_TYPES_INT64:
+    i64 = (int64_t)f128;
+    return true;
+  case UA_TYPES_UINT16:
+    ui16 = (uint16_t)f128;
+    return true;
+  case UA_TYPES_UINT32:
+    ui32 = (uint32_t)f128;
+    return true;
+  case UA_TYPES_UINT64:
+    ui64 = (uint64_t)f128;
+    return true;
+  case UA_TYPES_FLOAT:
+    fl = (float)f128;
+    return true;
+  case UA_TYPES_DOUBLE:
+    dbl = (double)f128;
+    return true;
+  case NOTUA_TYPES_F10:
+    fl = (float)f128;
+    return true;
+  case NOTUA_TYPES_F100:
+    fl = (float)f128;
+    return true;
+  default:
+    LOGE("Type: %i not supported", _type_ua);
+    return false;
+  }
+}
+
 /*
   double Number_c::_as_chars_to_dbl()
   {

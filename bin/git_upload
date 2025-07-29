@@ -24,7 +24,7 @@ echo -e $YEB ==== COMMIT ==== $NC
 git commit -a
 ##### -m $1
 
-echo -e $YEB ==== PUSH to GitFlick ==== $NC
+echo -e $YEB ==== PUSH to GitFlic ==== $NC
 git push -v -f -u origin --all
 
 echo -e $YEB ==== PUSH to GitHub ==== $NC

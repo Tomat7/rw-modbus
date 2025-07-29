@@ -38,26 +38,43 @@ using float64=double;
 using float128=long double;
 //using float128=__float128;
 
-//#define LOGx LOGA
-#define LOGx LOG_
+#define LOGx LOGA
+//#define LOGx LOG_
 
 class Number_c
 {
 public:
   numeric_u value;
+  int &var_type = _type_ua;   // for OPC UA server (ex. UA_TYPES_FLOAT)
+  size_t &var_size = _type_size; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
+  //int _type_ua = 0;
+  //size_t _type_size = 0;
 
-  Number_c(int _sz, int _uatype);
-  Number_c(Number_c &V);
+  Number_c(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
+  Number_c(const Number_c &V);
   ~Number_c() {};
 
 // ======= Constructors Templates =======
 
-  Number_c& operator= (Number_c &V);
+  Number_c& operator= (const Number_c &V);
+  /*
+    template <typename T> Number_c& operator= (T x)
+    {
+      if (!init(type_index(typeid(x)), sizeof(x), &x))
+        LOGA("Number_c: = TYPE not supported");
+      LOGx("xNumber_c: = Tx type %i", _type_ua);
+      return *this;
+    };
+  */
 
   template <typename T> Number_c& operator= (T x)
   {
-    if (!init(type_index(typeid(x)), sizeof(x), &x))
-      LOGA("Number_c: = TYPE not supported");
+    if ((_type_size == 0) || (_type_ua == 0)) {
+      if (!init(type_index(typeid(x)), sizeof(x), &x))
+        LOGA("Number_c: new= TYPE not supported");
+    } else
+      set_value((float128)x);
+
     LOGx("xNumber_c: = Tx type %i", _type_ua);
     return *this;
   };
@@ -96,11 +113,6 @@ public:
   bool operator==(Number_c &v2);
   bool operator!=(Number_c &v2);
 
-//  bool operator==(float &x);
-//  bool operator==(double &x);
-//  bool operator!=(float &x);
-//  bool operator!=(double &x);
-
 // ======= COMPARE Operators Templates =======
 
   template <typename T> bool operator== (T x)
@@ -137,6 +149,7 @@ public:
 
 // =======================================
 
+  void set_type(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
   char* c_str(const char* fmt = nullptr);
 
   int16_t &i16 = value.i16;
@@ -162,14 +175,12 @@ private:
   char _str[STR_SIZE + 1];
 
   float128 _as_f128();
+  bool set_value(float128 f128);
   bool same_type(const type_index &_ti);
-  bool init(const type_index &_ti, const size_t &_sz, void* _psrc);
+  bool init(const type_index &_ti, const size_t &_sz, const void* _psrc);
   char* _c_str(const char* fmt);
 
-
-  //double _as_chars_to_dbl();
-  //double _fabs(double &x);
-  //double _as_dbl();
+  type_index _get_typeidx();
 
   static map<type_index, int> typeidx_ua_map;
   static map<int, type_index> ua_typeidx_map;
@@ -178,6 +189,30 @@ private:
 };
 
 // =================================================================
+
+//double _as_chars_to_dbl();
+//double _fabs(double &x);
+//double _as_dbl();
+
+//  bool operator==(float &x);
+//  bool operator==(double &x);
+//  bool operator!=(float &x);
+//  bool operator!=(double &x);
+
+
+/*
+  template <typename T> Number_c& operator= (T x)
+  {
+    if ((_type_size != 0) && typeidx_ua_map.count(type_index(typeid(x)))) {
+      printf("Number_c: size != 0, TYPE is OK\n");
+       this = x;
+    }
+    else
+      LOGA("Number_c: = TYPE not supported");
+    LOGx("xNumber_c: = Tx type %i", _type_ua);
+    return *this;
+  };
+*/
 
 /*
   template <typename T> operator T()

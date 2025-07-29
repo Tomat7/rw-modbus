@@ -24,7 +24,7 @@ static map<string, regupd_t> STRmap;
 static mutex regmap_mux;  // already defined in .h
 
 void reg_print(string, const mbregdata_t*);
-void reg_print(Reg_c);
+void reg_print(Reg_c&);
 
 int task_regs_refresh_(void* params)
 {
@@ -62,7 +62,7 @@ int task_regs_refresh_(void* params)
         rm.var_errors++;
 
       // Check the writable regs
-      if (rm.var_mode && isNew_Opc && !plc_err && !opc_err) {
+      if (rm.var_mode_rw && isNew_Opc && !plc_err && !opc_err) {
         x++;
         rm.set_plc_value(opc_val);
         rm.set_local_value(opc_val);
@@ -134,7 +134,7 @@ void regs_update()
 }
 
 
-void reg_print(Reg_c rm)
+void reg_print(Reg_c &rm)
 {
   // printf("\n===== regs_print =====\n");
   const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;

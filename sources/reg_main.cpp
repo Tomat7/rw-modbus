@@ -24,6 +24,7 @@ void regs_create_from_plc()
       //     R.rfullname.c_str(), R.str_source.c_str());
       //Reg_c R = {&r, &D};
       REGmap[r.rfullname] = {&r, &D};
+      //REGmap[r.rfullname] = (uint16_t)16;
       //}
     }
   }

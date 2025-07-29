@@ -48,39 +48,39 @@ numeric_u Reg_c::get_plc_value()
 
   bool has_errors = get_plc_errors();
 
-  if (var_size == 1) {
-    if (var_type == UA_TYPES_UINT16)
+  if (var_size_word == 1) {
+    if (var_type_ua == UA_TYPES_UINT16)
       val.ui16 = (has_errors) ? bad_value.ui16 : (uint16_t)get_plc_reg();
-    else if (var_type == UA_TYPES_INT16)
+    else if (var_type_ua == UA_TYPES_INT16)
       val.i16 = (has_errors) ? bad_value.i16 : (int16_t)get_plc_reg();
     else if (byte_order == BO_F100)
       val.fl = (has_errors) ? bad_value.fl : (int16_t)get_plc_reg() * 0.01f;
     else if (byte_order == BO_F10)
       val.fl = (has_errors) ? bad_value.fl : (int16_t)get_plc_reg() * 0.1f;
-  } else if (var_size == 2) {
+  } else if (var_size_word == 2) {
     //val = pull_plc_regs_by_order(byte_order);
     val = pull_plc_value32();
-    if (var_type == UA_TYPES_UINT32)
+    if (var_type_ua == UA_TYPES_UINT32)
       val.ui32 = (has_errors) ? bad_value.ui32 : val.ui32;
-    else if (var_type == UA_TYPES_INT32)
+    else if (var_type_ua == UA_TYPES_INT32)
       val.i32 = (has_errors) ? bad_value.i32 : val.i32;
-    else if (var_type == UA_TYPES_FLOAT)
+    else if (var_type_ua == UA_TYPES_FLOAT)
       val.fl = (has_errors) ? bad_value.fl : val.fl;
-  } else if (var_size == 4) {
+  } else if (var_size_word == 4) {
     //val = pull_plc_regs_by_order(byte_order);
     val = pull_plc_value64();
-    if (var_type == UA_TYPES_UINT64)
+    if (var_type_ua == UA_TYPES_UINT64)
       val.ui64 = (has_errors) ? bad_value.ui64 : val.ui64;
-    else if (var_type == UA_TYPES_INT64)
+    else if (var_type_ua == UA_TYPES_INT64)
       val.i64 = (has_errors) ? bad_value.i64 : val.i64;
-    else if (var_type == UA_TYPES_DOUBLE)
+    else if (var_type_ua == UA_TYPES_DOUBLE)
       val.dbl = (has_errors) ? bad_value.dbl : val.dbl;
   } else
-    val.ui64 = 1111111111;
+    val.ui64 = 1234567890;
 
-  value = val;
+  *_value = val;
 
-  return value;
+  return val;
 }
 
 // =======================================
@@ -105,7 +105,7 @@ void Reg_c::set_plc_value(numeric_u v)
 {
   // byte-order not supported yet :-(
   if (is_modbus || is_ref)
-    for (int i = 0; i < var_size; i++)
+    for (int i = 0; i < var_size_word; i++)
       set_plc_reg(v.mb64u[i], i);
   else
     LOGE("Not Modbus set-value: %s", str_fullname.c_str());
@@ -119,7 +119,7 @@ int Reg_c::get_plc_errors()  // Get reg's local value != read PLC.
 {
   int err = 0;
 
-  for (int i = 0; i < var_size; i++) {
+  for (int i = 0; i < var_size_word; i++) {
     if ((ptr_reg[i] != nullptr) && !is_scada)
       err += ptr_reg[i]->data.rerrors;
     else

@@ -53,7 +53,7 @@ struct regprop_t : typeprop_t {
   byteorder_t rbyteorder;
 };
 
-class Reg_c : public mbreg_t, public Number_c
+class Reg_c : public mbreg_t /* , public Number_c */
 {
 public:
   Reg_c();
@@ -96,10 +96,13 @@ public:
   // see "type_map" in reg_init.cpp
   string str_type = "*";
 
-  int var_errors = 0;             // regdata_t.rerrors
-  int var_mode = 0;               // 1 - "rw", 0 - "readonly"
-  int &var_type = _type_ua;       // for OPC UA server (ex. UA_TYPES_FLOAT)
-  int var_size = 1;  // for multiply Modbus registers (ex. 32-bit Float)
+  int var_errors = 0;    // regdata_t.rerrors
+  int var_mode_rw = 0;   // 1 - "rw", 0 - "readonly"
+  int var_type_ua = 0;   // = Number._type_ua; // for OPC UA server (ex. UA_TYPES_FLOAT)
+  int var_size_word = 0; // 1 word = 2 bytes for multiply Modbus registers (ex. 32-bit Float)
+
+//  int var_type = Number._type_ua;   // for OPC UA server (ex. UA_TYPES_FLOAT)
+//  size_t &var_size = Number._type_size; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
 
   const char* var_format = nullptr;
   byteorder_t byte_order = BO_SNGL;// for 32/64-bit Modbus register
@@ -109,7 +112,17 @@ public:
   bool is_scada = false;  // SCADA-only (local) var/reg
   bool is_ref = false;    // Referenced to Modbus reg(s)
 
+
 private:
+
+  Number_c Number = (uint16_t)0;
+//  numeric_u value; // = *_value; // = Number.value;  // union of values (by type)
+  numeric_u* _value = nullptr; //&Number.value;
+//  variant_t variant_value;
+  badvalue_t bad_value;
+  mbreg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs
+
+  //void init_mbreg(mbreg_t* _reg, PLC_c* _dev);
   uint16_t get_plc_reg(mbreg_t* rptr);
   uint16_t get_plc_reg(int x = 0);
 
@@ -124,11 +137,6 @@ private:
   char* get_new_char(const char* _oldch);
   void remove_dbl_slashes(string &str);
   string to_lower(string str);
-
-  numeric_u value;  // union of values (by type)
-//  variant_t variant_value;
-  badvalue_t bad_value;
-  mbreg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs
 
 };
 

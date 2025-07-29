@@ -22,8 +22,10 @@
 
 numeric_u Reg_c::pull_plc_value32()
 {
-  for (int i = 0; i < var_size; i++)
-    value.mb32u[i] = get_plc_reg(var_size - i - 1);  // Big-endian now!
+  numeric_u value = *_value;
+
+  for (int i = 0; i < var_size_word; i++)
+    value.mb32u[i] = get_plc_reg(var_size_word - i - 1);  // Big-endian now!
 
   if ((byte_order == BO_LE) || (byte_order == BO_LS)) // to Less-endian
     value.ui32 = be32toh(value.ui32);
@@ -33,14 +35,16 @@ numeric_u Reg_c::pull_plc_value32()
     value.mb32u[1] = bswap_16(value.mb32u[1]);
   }
 
+  *_value = value;
+
   return value;
 }
 
 numeric_u Reg_c::pull_plc_value64()
 {
-
-  for (int i = 0; i < var_size; i++)
-    value.mb64u[i] = get_plc_reg(var_size - i - 1); // Big-endian now!
+  numeric_u value = *_value;
+  for (int i = 0; i < var_size_word; i++)
+    value.mb64u[i] = get_plc_reg(var_size_word - i - 1); // Big-endian now!
 
   if ((byte_order == BO_LE) || (byte_order == BO_LS)) // to Less-endian
     value.ui64 = be64toh(value.ui64);
@@ -51,6 +55,8 @@ numeric_u Reg_c::pull_plc_value64()
     value.mb64u[2] = bswap_16(value.mb64u[2]);
     value.mb64u[3] = bswap_16(value.mb64u[3]);
   }
+
+  *_value = value;
 
   return value;
 }

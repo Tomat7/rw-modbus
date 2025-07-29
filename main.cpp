@@ -44,7 +44,7 @@ int main(int argc, char** argv)
   Timer t;
 
   std::set<string> Mode{MODBUS_MODES};
-  log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging // log_level = 3;
+  //log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging // log_level = 3;
 
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   signal(SIGINT, close_sigint);

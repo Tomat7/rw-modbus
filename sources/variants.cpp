@@ -43,15 +43,15 @@ void var_test0()
   printf("\n\nDBL size= %lu, LongDBL size= %lu\n\n\n", sizeof(d), sizeof(ld));
 
   uint16_t u16 = 12345;
-  int16_t i16 = INT16_MIN;
+  //int16_t i16 = INT16_MIN;
   void* _p = &u16;
 
   printf("u16 as u64 = %u\n", *(uint16_t*)_p);
   __float128 F128 = U1;
   F128 +=2;
-  uint64_t Uf128 = F128;
-  Uf128++;
-  printf("\nf128 size is: %lu, U1=%lu, F128=%lu \n\n\n", sizeof(F128), U1, Uf128);
+  //uint64_t Uf128 = F128;
+  //Uf128++;
+  //printf("\nf128 size is: %lu, U1=%lu, F128=%lu \n\n\n", sizeof(F128), U1, Uf128);
 
   numeric_u v;
   void* p = &v;
@@ -75,14 +75,14 @@ void var_test0()
   Number_c Ix = I1;
   Number_c Fx = F1;
   Number_c Dx = D1;
-  Number_c Sx = "qwertyui";
+  //Number_c Sx = "qwertyui";
 
   printf("\nReady - 00 existing myclassES = typed_varS \n");
   Ux = U1;
   Ix = I1;
   Fx = F1;
   Dx = D1;
-  Sx = "qwertyui";
+  //Sx = "qwertyui";
 
 
   printf("\n======= Ready - 01 IF Fx vs U64 typed_var =======\n");

@@ -139,10 +139,8 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
     }
 
     if (Reg_c::check_type(s_type)) {
-      Reg_c R(&r, ptr_source, s_source, s_type, str_opcbase);
-      REGmap[r.rfullname] = R;
-      //REGmap.emplace(std::make_pair(r.rfullname, R));
-      //REGmap.emplace(std::make_pair(r.rfullname, R));
+      //Reg_c R(&r, ptr_source, s_source, s_type, str_opcbase);
+      //REGmap[r.rfullname] = R;
       REGmap[r.rfullname] = { &r, ptr_source, s_source, s_type, str_opcbase };
     } else {
       nb_errors++;

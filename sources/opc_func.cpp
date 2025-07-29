@@ -32,30 +32,32 @@ void opc_regs_init()
 
     //  value_u v;
     //  v.ui64 = 0;
-    int t = rm.var_type;
+    int t = rm.var_type_ua;
     if (rm.is_modbus)
       t = UA_TYPES_UINT16;
 
+    printf("Ready to add Var type %i\n", t);
+
     if (t == UA_TYPES_UINT16)
-      OPCs.AddVar(n, rm.get_local_value().ui16, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().ui16, rm.var_mode_rw);
     else if (t == UA_TYPES_INT16)
-      OPCs.AddVar(n, rm.get_local_value().i16, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().i16, rm.var_mode_rw);
     else if (t == UA_TYPES_UINT32)
-      OPCs.AddVar(n, rm.get_local_value().ui32, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().ui32, rm.var_mode_rw);
     else if (t == UA_TYPES_INT32)
-      OPCs.AddVar(n, rm.get_local_value().i32, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().i32, rm.var_mode_rw);
     else if (t == UA_TYPES_UINT64)
-      OPCs.AddVar(n, rm.get_local_value().ui64, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().ui64, rm.var_mode_rw);
     else if (t == UA_TYPES_INT64)
-      OPCs.AddVar(n, rm.get_local_value().i64, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().i64, rm.var_mode_rw);
     else if (t == NOTUA_TYPES_F100)
-      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode_rw);
     else if (t == NOTUA_TYPES_F10)
-      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode_rw);
     else if (t == UA_TYPES_FLOAT)
-      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode_rw);
     else if (t == UA_TYPES_DOUBLE)
-      OPCs.AddVar(n, rm.get_local_value().dbl, rm.var_mode);
+      OPCs.AddVar(n, rm.get_local_value().dbl, rm.var_mode_rw);
     else
       LOGE("Wrong type: %d, Var: %s", t, n.c_str());
   }

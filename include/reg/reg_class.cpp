@@ -27,9 +27,9 @@
 
 // ===============================================================
 
-numeric_u Reg_c::get_local_value() { return value; }
+numeric_u Reg_c::get_local_value() { return *_value; }
 
-void Reg_c::set_local_value(numeric_u _val) { value = _val; }
+void Reg_c::set_local_value(numeric_u _val) { *_value = _val; }
 
 string Reg_c::to_lower(string str)
 {
@@ -110,32 +110,34 @@ bool Reg_c::has_Str(string SS, string fs)
 
 char* Reg_c::get_local_value_chars(char* retch)
 {
+  numeric_u value = *_value;
+
   if (var_format == nullptr)
     LOGE("Reg: %s, type_format wrong: %s", rn, var_format);
 
-  else if (var_type == UA_TYPES_INT16)
+  else if (var_type_ua == UA_TYPES_INT16)
     snprintf(retch, 49, var_format, value.i16);
-  else if (var_type == UA_TYPES_UINT16)
+  else if (var_type_ua == UA_TYPES_UINT16)
     snprintf(retch, 49, var_format, value.ui16);
-  else if (var_type == UA_TYPES_INT32)
+  else if (var_type_ua == UA_TYPES_INT32)
     snprintf(retch, 49, var_format, value.i32);
-  else if (var_type == UA_TYPES_UINT32)
+  else if (var_type_ua == UA_TYPES_UINT32)
     snprintf(retch, 49, var_format, value.ui32);
-  else if (var_type == UA_TYPES_INT64)
+  else if (var_type_ua == UA_TYPES_INT64)
     snprintf(retch, 49, var_format, value.i64);
-  else if (var_type == UA_TYPES_UINT64)
+  else if (var_type_ua == UA_TYPES_UINT64)
     snprintf(retch, 49, var_format, value.ui64);
-  else if (var_type == UA_TYPES_FLOAT)
+  else if (var_type_ua == UA_TYPES_FLOAT)
     snprintf(retch, 49, var_format, value.fl);
-  else if (var_type == UA_TYPES_DOUBLE)
+  else if (var_type_ua == UA_TYPES_DOUBLE)
     snprintf(retch, 49, var_format, value.dbl);
-  else if (var_type == NOTUA_TYPES_F100)
+  else if (var_type_ua == NOTUA_TYPES_F100)
     snprintf(retch, 49, var_format, value.fl);
-  else if (var_type == NOTUA_TYPES_F10)
+  else if (var_type_ua == NOTUA_TYPES_F10)
     snprintf(retch, 49, var_format, value.fl);
 
   else
-    LOGE("Reg: %s, type not supported: %i", rn, var_type);
+    LOGE("Reg: %s, type not supported: %i", rn, var_type_ua);
 
   return retch;
 }
