@@ -27,9 +27,16 @@
 
 // ===============================================================
 
-numeric_u Reg_c::get_local_value() { return *_value; }
+numeric_u Reg_c::get_local_value() { return Number.value; }
 
-void Reg_c::set_local_value(numeric_u _val) { *_value = _val; }
+void Reg_c::set_local_value(numeric_u _val)
+{
+  Number.value = _val;
+  /*
+    LOGD("RN: %s, val: %u, Number: %s", rn, _val.ui16, Number.c_str());
+    LOGD("RN: %s, val: %u, (&)Number: %x", rn, _val.ui16, &Number.value);
+  */
+}
 
 string Reg_c::to_lower(string str)
 {
@@ -56,9 +63,9 @@ char* Reg_c::c_str() { return Number.c_str(); }
 // Suppress GCC warnings on "var_format" which is nonliteral
 #pragma GCC diagnostic push // Save current diagnostic warning set
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
-
-char* Reg_c::get_local_value_chars(char* retch)
-{
+/*
+  char* Reg_c::get_local_value_chars(char* retch)
+  {
   numeric_u value = *_value;
 
   if (var_format == nullptr)
@@ -89,7 +96,7 @@ char* Reg_c::get_local_value_chars(char* retch)
     LOGE("Reg: %s, type not supported: %i", rn, var_type_ua);
 
   return retch;
-}
+  } */
 #pragma GCC diagnostic pop  // Restore diagnostic warning set
 // ==========================================================
 

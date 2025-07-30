@@ -24,12 +24,12 @@ static map<string, regupd_t> STRmap;
 static mutex regmap_mux;  // already defined in .h
 
 void reg_print(string, const mbregdata_t*);
-void reg_print(Reg_c&);
+void reg_print(Reg_c &);
 
 int task_regs_refresh_(void* params)
 {
   UNUSED(params);
-  LOGX(" ===== %s =====", __func__);
+  LOGXB(" ===== %s =====", __func__);
   regmap_mux.lock();
   int x = 0;
 
@@ -139,10 +139,10 @@ void reg_print(Reg_c &rm)
   // printf("\n===== regs_print =====\n");
   const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rm.var_errors == 0);
-  char ch[50];
+  // char ch[50];
 
   //printf("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
-  printf("%s%-14s %i %s%14s", C, rm.rn, rm.var_errors,
+  printf("%s%-16s %i %s%16s", C, rm.rn, rm.var_errors,
          B, rm.c_str() /* rm.get_local_value_chars(ch) */);
 
   printf(C_NORM);

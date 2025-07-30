@@ -31,7 +31,8 @@ using std_clock_t = std::chrono::steady_clock;            // just to save here
 
 using cclock_t = std_clock_t;  // make a choise - what clock to use now?!
 
-class Timer {
+class Timer
+{
 private:
   std::chrono::time_point<cclock_t> begin;
   std::chrono::time_point<cclock_t> end;

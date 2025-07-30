@@ -82,7 +82,7 @@ public:
   void set_local_value(numeric_u _value);
 
   //string get_local_value_string();
-  char* get_local_value_chars(char* retch);
+  //char* get_local_value_chars(char* retch);
   char* c_str();
   //variant_t get_local_variant();
 
@@ -105,7 +105,7 @@ public:
 //  int var_type = Number._type_ua;   // for OPC UA server (ex. UA_TYPES_FLOAT)
 //  size_t &var_size = Number._type_size; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
 
-  const char* var_format = nullptr;
+//  const char* var_format = nullptr;
   byteorder_t byte_order = BO_SNGL;// for 32/64-bit Modbus register
 
   bool visible = false;  // try to hide 2nd/3rd/4th word of multiply MB regs
@@ -118,7 +118,7 @@ private:
 
   Number_c Number = (uint16_t)0;
 //  numeric_u value; // = *_value; // = Number.value;  // union of values (by type)
-  numeric_u* _value = nullptr; //&Number.value;
+//  numeric_u* _value = nullptr; //&Number.value;
 //  variant_t variant_value;
   badvalue_t bad_value;
   mbreg_t* ptr_reg[4] = {nullptr};  // ptr to Modbus PLC regs

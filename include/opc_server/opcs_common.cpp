@@ -203,7 +203,7 @@ string OpcServer_c::GetVarFullName(string s)
 
 int OpcServer_c::RefreshAllValues()
 {
-  LOGX("%s: onStart.", __func__);
+  LOG_BLU("%s: onStart.", __func__);
   int x = 0;
   uaDataMux->lock();
   for (auto [_s, v] : vars) {
@@ -211,7 +211,7 @@ int OpcServer_c::RefreshAllValues()
     x++;
   }
   uaDataMux->unlock();
-  LOGX("%s: onFinish.", __func__);
+  LOG_BLU("%s: onFinish.", __func__);
   return x;
 }
 

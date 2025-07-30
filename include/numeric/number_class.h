@@ -16,19 +16,6 @@
 
 #define STR_SIZE 50
 
-/*
-  union numeric_u {
-  int16_t i16;
-  int32_t i32;
-  int64_t i64;
-  uint16_t ui16;
-  uint32_t ui32;
-  uint64_t ui64 = 0;
-  float fl;
-  double dbl;
-  };
-*/
-
 using std::string;
 using std::map;
 using std::type_index;
@@ -38,25 +25,36 @@ using float64=double;
 using float128=long double;
 //using float128=__float128;
 
-#define LOGx LOGA
-//#define LOGx LOG_
+#define DEBUG_NUMBER
+
+#ifdef DEBUG_NUMBER
+#define LOGb LOG_BLU
+#define LOGr LOG_RED
+#define LOGg LOG_GRN
+#define LOGx LOG_CYN
+#else
+#define LOGb
+#define LOGr
+#define LOGg
+#define LOGx
+#endif // DEBUG_NUMBER
 
 class Number_c
 {
 public:
   numeric_u value;
   int &var_type = _type_ua;   // for OPC UA server (ex. UA_TYPES_FLOAT)
-  size_t &var_size = _type_size; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
+  size_t &var_size = _type_size_bytes; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
   //int _type_ua = 0;
   //size_t _type_size = 0;
 
   Number_c(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
   Number_c(const Number_c &V);
-  ~Number_c() {};
+  ~Number_c() {LOGD("--Number_c! %x ", this);}
 
 // ======= Constructors Templates =======
 
-  Number_c& operator= (const Number_c &V);
+  Number_c &operator= (const Number_c &V);
   /*
     template <typename T> Number_c& operator= (T x)
     {
@@ -67,15 +65,15 @@ public:
     };
   */
 
-  template <typename T> Number_c& operator= (T x)
+  template <typename T> Number_c &operator= (T x)
   {
-    if ((_type_size == 0) || (_type_ua == 0)) {
+    if ((_type_size_bytes == 0) || (_type_ua == 0)) {
       if (!init(type_index(typeid(x)), sizeof(x), &x))
         LOGA("Number_c: new= TYPE not supported");
     } else
       set_value((float128)x);
 
-    LOGx("xNumber_c: = Tx type %i", _type_ua);
+    LOGx("+Number_c: %x (= Tx) type %i", this, _type_ua);
     return *this;
   };
 
@@ -83,19 +81,19 @@ public:
   {
     if (!init(type_index(typeid(x)), sizeof(x), &x))
       LOGA("Number_c: new TYPE not supported");
-    LOGx("xNumber_c: new Tx type - %i", _type_ua);
+    LOGx("+Number_c: %x new (Tx) type - %i", this, _type_ua);
   };
 
   template <typename T> Number_c(numeric_u v, T x)
   {
     if (!init(type_index(typeid(x)), sizeof(x), &x))
       LOGA("Number_c: new VALUE not supported");
-    LOGx("xNumber_c: new value_u ");
+    LOGx("+Number_c: %x new (value_u) ", this);
   };
 
 // ======= TYPE() Templates =======
 
-  operator char*() { return c_str(); }
+  operator char* () { return c_str(); }
   operator string() { return string(c_str()); }
 
   template <typename T> operator T()
@@ -149,7 +147,7 @@ public:
 
 // =======================================
 
-  void set_type(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
+  bool set_type(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
   char* c_str(const char* fmt = nullptr);
 
   int16_t &i16 = value.i16;
@@ -164,7 +162,7 @@ public:
 // =======================================
 protected:
   int _type_ua = 0;
-  size_t _type_size = 0;
+  size_t _type_size_bytes = 0;
   type_index _type_index = type_index(typeid(bool));
   bool _type_is_int = false;
 
@@ -183,8 +181,8 @@ private:
   type_index _get_typeidx();
 
   static map<type_index, int> typeidx_ua_map;
-  static map<int, type_index> ua_typeidx_map;
   static map<const int, const char*> format_map;
+//  static map<int, type_index> ua_typeidx_map;
 
 };
 

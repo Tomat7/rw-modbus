@@ -36,7 +36,7 @@ void opc_regs_init()
     if (rm.is_modbus)
       t = UA_TYPES_UINT16;
 
-    printf("Ready to add Var type %i\n", t);
+//    printf("Ready to add Var type %i\n", t);
 
     if (t == UA_TYPES_UINT16)
       OPCs.AddVar(n, rm.get_local_value().ui16, rm.var_mode_rw);
@@ -140,7 +140,7 @@ void opc_server_()
   printf("%s%s %s%5.2f%s, ", C, s.c_str(), B, myfl, NRM);
 
   s = OPCs.GetVarFullName("Millis");
-  uint16_t m = ReadValue(s);
+  // uint16_t m = ReadValue(s);
   C = getColor(OPCs.isVariable(s));
   B = getBlynk(OPCs.isGood(s));
   printf("%s%s %s%u%s, ", C, s.c_str(), B, (uint16_t)ReadValue(s) /*m*/, NRM);

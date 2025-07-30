@@ -123,6 +123,12 @@ char* Number_c::_c_str(const char* fmt)
   case UA_TYPES_DOUBLE:
     snprintf(_str, NB_CHARS, fmt, dbl);
     break;
+  case NOTUA_TYPES_F10:
+    snprintf(_str, NB_CHARS, fmt, fl);
+    break;
+  case NOTUA_TYPES_F100:
+    snprintf(_str, NB_CHARS, fmt, fl);
+    break;
   default:
     LOGE("Type: %i not supported", _type_ua);
   }

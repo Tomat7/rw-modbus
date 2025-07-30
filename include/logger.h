@@ -36,16 +36,32 @@
 #define LOGFORCE(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)       // 0 
 #define LOGBROADCAST(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)   // 0 
 
-#define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)   // 1
-#define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)    // 2
-#define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)     // 3
-#define LOGW(...) logger(FILE_LINE, LOG_WARNING, __func__, __VA_ARGS__) // 4
-#define LOGN(...) logger(FILE_LINE, LOG_NOTICE, __func__, __VA_ARGS__)  // 5
-#define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)    // 6
-#define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)   // 7
-#define LOGX(...) logger(FILE_LINE, 8, __func__, __VA_ARGS__)           // 8
-#define LOGZ(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)           // 9
+#define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, 0, __VA_ARGS__)   // 1
+#define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, 0, __VA_ARGS__)    // 2
+#define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, 0, __VA_ARGS__)     // 3
+#define LOGW(...) logger(FILE_LINE, LOG_WARNING, __func__, 0, __VA_ARGS__) // 4
+#define LOGN(...) logger(FILE_LINE, LOG_NOTICE, __func__, 0, __VA_ARGS__)  // 5
+#define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, 0, __VA_ARGS__)    // 6
+#define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, 0, __VA_ARGS__)   // 7
+//#define LOGX(...) logger(FILE_LINE, 8, __func__, __VA_ARGS__)           // 8
+//#define LOGZ(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)           // 9
 #define LOG_(...) // no logging!
+
+// DEBUG logging (color printing only!)
+#ifndef NDEBUG
+#define LOG_RED(...) logger(FILE_LINE, 9, __func__, 3, __VA_ARGS__)  // red  
+#define LOG_YEL(...) logger(FILE_LINE, 9, __func__, 4, __VA_ARGS__)  // yellow
+#define LOG_GRN(...) logger(FILE_LINE, 9, __func__, 5, __VA_ARGS__)  // green
+#define LOG_CYN(...) logger(FILE_LINE, 9, __func__, 7, __VA_ARGS__)  // cyan
+#define LOG_BLU(...) logger(FILE_LINE, 9, __func__, 8, __VA_ARGS__)  // blue
+#else // no DEBUG logging
+#define LOGXR(...)
+#define LOGXY(...)
+#define LOGXG(...)
+#define LOGXC(...)
+#define LOGXB(...)
+#endif // NDEBUG
+
 
 #define LOGIFA(...) logif(rc, FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
 #define LOGIFC(...) logif(rc, FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
@@ -65,11 +81,11 @@
 extern int log_level;  // 0 - no messages at all, 9 - all on screen
 // static mutex logger_mux;
 
+// void logdebug(const char* logname, int prio, const char* format, ...);
 // void logger(int prio, const char* format, ...);
 // void logger(const char* logname, int prio, const char* format, ...);
-void logger(const char* logname, int prio, const char* _func, const char* _fmt,
-            ...);
-void logdebug(const char* logname, int prio, const char* format, ...);
+void logger(const char* logname, int prio, const char* _func, int _rgb,
+            const char* _fmt, ...);
 
 void logger_set_queue(bool to_queue);
 void logger_flush();

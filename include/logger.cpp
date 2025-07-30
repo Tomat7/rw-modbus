@@ -27,25 +27,32 @@ static std::queue<std::string> Print_queue;
 static bool print_to_queue = false;
 
 static const char* ch_color[10] = {
-//  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7  X-8    Z-9
-  C_MAGB, C_RED, C_MAGB, C_REDB, C_YELB, C_GRN,  C_BLUB, C_CYN, C_STD, C_STD
+//  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7   X-8    Z-9
+  C_MAGB, C_RED, C_MAGB, C_REDB, C_YELB, C_GRN,  C_BLUB, C_CYN, C_GRNB, C_STD
 };
 
 
-void logger(const char* _logname, int _prio, const char* _func,
+void logger(const char* _logname, int _prio, const char* _func, int _rgb,
             const char* _fmt, ...)
 {
   LOCK_GUARD(logger_mux);
 
+  // prio 8 and 9 is acceptable
   _prio = (_prio > 7) ? 7 : _prio;
+  // 9 - log everything! otherwise - only up to WARNINGs
   bool no_syslog = (_prio > 4 && log_level < 9);
+  // silent if LEVEL lower then prio
   bool no_print = (_prio > log_level);
 
+  // get out if nothing to do
   if (no_syslog && no_print)
     return;
 
+  // print filename if DEBUG prio or LEVEL 8 and 9
   bool no_filename = !(_prio == 7 || log_level > 7);
+  // print function() & fullpath to file & line number only on LEVEL 9
   bool no_funcname = (log_level < 9);
+
   const char* format = _fmt;
   const char* fname = _logname;
   const char* color = C_NORM;
@@ -55,8 +62,12 @@ void logger(const char* _logname, int _prio, const char* _func,
 
   std::string fmt = (std::string)_func + "(): " + (std::string)_fmt;
 
-  if (!no_print) {
+  if (!_rgb)
     color = ch_color[_prio];
+  else
+    color = ch_color[_rgb];
+
+  if (!no_print) {
 
     if (no_filename && no_funcname)
       fname = "";

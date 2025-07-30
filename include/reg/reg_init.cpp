@@ -118,8 +118,8 @@ map<string, regprop_t> regprop_map {
   {"4", TYPE_4TH},
 
 };
-
-map<int, const char*> printfmt_map {
+/*
+  map<int, const char*> printfmt_map {
   {UA_TYPES_INT16, "%i" },
   {UA_TYPES_INT32, "%i" },
   {UA_TYPES_INT64, "%i" },
@@ -130,26 +130,27 @@ map<int, const char*> printfmt_map {
   {UA_TYPES_DOUBLE, "%.4f"},
   {NOTUA_TYPES_F100, "%.2f"},
   {NOTUA_TYPES_F10, "%.1f"}
-};
-
+  };
+*/
 // ================================================================
 
-Reg_c::~Reg_c() { /* LOGD("DEstruct! %x %s", this, this->rn); */ }
+Reg_c::~Reg_c() { /* LOGD("-DEstruct! %x %s", this, this->rn); */ }
 
-Reg_c::Reg_c() { /* LOGD("Construct! %x", this);  */ }
+Reg_c::Reg_c() { /* LOGD("+Construct()! %x", this); */ }
 
 // ============================================================
 // For Modbus regs only
 
 Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
 {
+  LOGD("+Construct(_reg, _dev): %x", this);
   string st_ = "u16";
   if (regprop_map.count(st_)) {
     var_mode_rw = _reg->data.rmode;
     var_type_ua = regprop_map[st_].rtype;
     var_size_word = regprop_map[st_].rsize;
 //    _type_size = var_size;
-    var_format = printfmt_map[var_type_ua];
+//    var_format = printfmt_map[var_type_ua];
     byte_order = regprop_map[st_].rbyteorder;
     Number.set_type(var_size_word * 2, var_type_ua);
   } else
@@ -172,18 +173,18 @@ Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
   for (int i = 0; i < 4; i++)
     remove_dbl_slashes(str_opcname);
 
-  _value = &Number.value;
+//  LOGC("RN: %s, (&)_value: %x, (&)Number: %x", rn, _value, &Number.value);
   set_local_value(get_plc_value());
 
   LOGI("MB: %-15s type:%4d sz:%2d bo:%3d rw:%d val: %u [%s]", rn, var_type_ua, var_size_word,
-       byte_order, var_mode_rw, _value->ui16, str_opcname.c_str());
+       byte_order, var_mode_rw, Number.ui16, str_opcname.c_str());
 }
 
 // ============================================================
 // For SCADA & referenced registers
 
 Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
-             string _str_type, string _opc_base) : Number(2, 4)
+             string _str_type, string _opc_base) /* : Number(2, 4) */
 {
 
   if (_str_source == "" || _str_source == "-") {
@@ -207,7 +208,7 @@ Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
     var_type_ua = regprop_map[st_].rtype;
     var_size_word = regprop_map[st_].rsize;         // for SCADA ??
 //    _type_size = var_size;
-    var_format = printfmt_map[var_type_ua];
+//    var_format = printfmt_map[var_type_ua];
     byte_order = regprop_map[st_].rbyteorder;  // for SCADA ??
     visible = true;
     Number.set_type(var_size_word * 2, var_type_ua);
@@ -224,7 +225,6 @@ Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
       LOGE("Wrong pointer to 'source' on REF reg: %s", rn);
   }
 
-  _value = &Number.value;
   /*
     if (is_ref)
       set_local_value(get_plc_value());
@@ -232,7 +232,7 @@ Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
 //    _value->ui16 = _reg->data.rvalue;
   Number = _reg->data.rvalue;
 
-  char ch[50];
+//  char ch[50];
   LOGI("SCADA: %-17s type:%4d sz:%2d bo:%3d rw:%d val: %14s [%s]", rn, var_type_ua,
        var_size_word, byte_order, var_mode_rw, Number.c_str()/* get_local_value_chars(ch) */,
        str_opcname.c_str());

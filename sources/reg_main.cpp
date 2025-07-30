@@ -24,6 +24,10 @@ void regs_create_from_plc()
       //     R.rfullname.c_str(), R.str_source.c_str());
       //Reg_c R = {&r, &D};
       REGmap[r.rfullname] = {&r, &D};
+      //REGmap.emplace(r.rfullname, &r, &D);
+      /*  LOGC("RN: %s, get_local_value: %u, Number: %s ============",
+          REGmap[r.rfullname].rn, REGmap[r.rfullname].get_local_value().ui16,
+          REGmap[r.rfullname].c_str()); */
       //REGmap[r.rfullname] = (uint16_t)16;
       //}
     }

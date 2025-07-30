@@ -22,7 +22,7 @@
 
 numeric_u Reg_c::pull_plc_value32()
 {
-  numeric_u value = *_value;
+  numeric_u value = Number.value;
 
   for (int i = 0; i < var_size_word; i++)
     value.mb32u[i] = get_plc_reg(var_size_word - i - 1);  // Big-endian now!
@@ -35,14 +35,14 @@ numeric_u Reg_c::pull_plc_value32()
     value.mb32u[1] = bswap_16(value.mb32u[1]);
   }
 
-  *_value = value;
+  Number.value = value;
 
   return value;
 }
 
 numeric_u Reg_c::pull_plc_value64()
 {
-  numeric_u value = *_value;
+  numeric_u value = Number.value;
   for (int i = 0; i < var_size_word; i++)
     value.mb64u[i] = get_plc_reg(var_size_word - i - 1); // Big-endian now!
 
@@ -56,7 +56,7 @@ numeric_u Reg_c::pull_plc_value64()
     value.mb64u[3] = bswap_16(value.mb64u[3]);
   }
 
-  *_value = value;
+  Number.value = value;
 
   return value;
 }

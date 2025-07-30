@@ -41,6 +41,7 @@ uint16_t Reg_c::get_plc_reg(int x)  // Get reg's local value != read PLC.
 numeric_u Reg_c::get_plc_value()
 {
   numeric_u val;
+
   if (is_scada) {
     LOGE("Not Modbus get-value: %s", str_fullname.c_str());
     return val;
@@ -78,7 +79,7 @@ numeric_u Reg_c::get_plc_value()
   } else
     val.ui64 = 1234567890;
 
-  *_value = val;
+  Number.value = val;
 
   return val;
 }
