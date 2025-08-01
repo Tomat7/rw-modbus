@@ -70,7 +70,6 @@ int mb_print_summary()
   return (int)nb_plcs;
 }
 
-
 void mb_deinit()
 {
   //  printf("mb_deinit READY to clear\n");

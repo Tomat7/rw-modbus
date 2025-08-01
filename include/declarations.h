@@ -39,6 +39,7 @@ struct cfg_t {
   opc_t opc;
   mb_t mb;
   //  int log_level;
+  bool show_mb_regs = true;
   int timeout_sec = TIMEOUT_SEC;
   int tasks_nb = TASKS_NB_MAX;
   int regs_refresh_ms = REGS_REFRESH_MS;
@@ -89,6 +90,7 @@ void mb_deinit();
 
 int mb_add_refresh_tasks();
 int mb_print_summary();
+void mb_print_help();
 // int mb_read();
 // int mb_write();
 // int mb_update();

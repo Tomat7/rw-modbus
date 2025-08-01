@@ -23,7 +23,7 @@ struct regupd_t {
 static map<string, regupd_t> STRmap;
 static mutex regmap_mux;  // already defined in .h
 
-void reg_print(string, const mbregdata_t*);
+// void reg_print(string, const mbregdata_t*);
 void reg_print(Reg_c &);
 
 int task_regs_refresh_(void* params)
@@ -105,23 +105,26 @@ void regs_update()
 
   for (auto& [n, rm] : REGmap) {
     //  reg_print(n, &rm.ptr_reg[0]->data);
-    reg_print(rm);
+    if (!rm.is_modbus || Cfg.show_mb_regs) {
 
-    X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
-    X += (STRmap[n].upd_opc) ? "<" : " ";  // If new value got from OPC
-    printf("%s", X.c_str());
+      reg_print(rm);
 
-    if (STRmap[n].upd_opc)
-      printf("%7d", STRmap[n].opc_value.ui16);
-    else
-      printf("%7s", "       ");
+      X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
+      X += (STRmap[n].upd_opc) ? "<" : " ";  // If new value got from OPC
+      printf("%s", X.c_str());
 
-    if (is_eol)
-      printf(" + %s\n", NRM);
-    else
-      printf(" +     %s", NRM);
+      if (STRmap[n].upd_opc)
+        printf("%7d", STRmap[n].opc_value.ui16);
+      else
+        printf("%7s", "       ");
 
-    is_eol = !is_eol;
+      if (is_eol)
+        printf(" + %s\n", NRM);
+      else
+        printf(" +     %s", NRM);
+
+      is_eol = !is_eol;
+    }
   }
 
   if (is_eol)
@@ -150,12 +153,19 @@ void reg_print(Reg_c &rm)
   return;
 }
 
+
+void mb_print_help()
+{
+  printf("%s 'f'/'s' - fast/slow refresh, 'h' - (un)hide Modbus regs", C_BOLD);
+  printf("%s 'r' - reread config, %s'q'||'e' - exit, 1..7 - set loglevel,%s\n",
+         C_HIGH, C_HIGH2, C_NORM);
+}
+
+// BOLD or Dark grey if error
 const char* getColor(bool noErrors) { return noErrors ? C_BOLD : C_DARK; }
 
-const char* getBlynk(bool noErrors)
-{
-  return noErrors ? C_NORM : ESC_BLINK;  // Dark grey blym-blym
-}
+// NORN or blym-blym if error
+const char* getBlynk(bool noErrors) { return noErrors ? C_NORM : ESC_BLINK; }
 
 
 /*

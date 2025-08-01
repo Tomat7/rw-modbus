@@ -74,11 +74,6 @@ void init_all()
 
 void reinit()
 {
-  /*   if (isdebug())
-      Cfg.timeout_sec = TIMEOUT_SEC;
-    else
-      Cfg.timeout_sec = 1; */
-
   deinit_all();
   LOGW("+++++++++++++++++++++++++++++++++");
   wait_console(Cfg.timeout_sec);
@@ -124,6 +119,10 @@ void parse_char(int ch)
   } else if ((char)ch == 's') {
     Cfg.timeout_sec = 5;
     LOGA("Char 's' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
+    wait_console(Cfg.timeout_sec);
+  } else if ((char)ch == 'h') {
+    Cfg.show_mb_regs = !Cfg.show_mb_regs;
+    LOGA("Char 'h' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
     wait_console(Cfg.timeout_sec);
   } else if ((char)ch == 'o') {
     LOGA("Char 'o' pressed. Start OPC_refresh_.\n");

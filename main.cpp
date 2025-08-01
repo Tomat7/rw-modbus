@@ -101,6 +101,7 @@ int main(int argc, char** argv)
     // LOGD("P array size: %d", sizeof(P));
     t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
+    mb_print_help();
     logger_set_queue(false);
     logger_flush();
 
