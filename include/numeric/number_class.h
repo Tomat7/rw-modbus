@@ -43,8 +43,8 @@ class Number_c
 {
 public:
   numeric_u value;
-  int &var_type = _type_ua;   // for OPC UA server (ex. UA_TYPES_FLOAT)
-  size_t &var_size = _type_size_bytes; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
+  //int &var_type = _type_ua;   // for OPC UA server (ex. UA_TYPES_FLOAT)
+  //size_t &var_size = _type_size_bytes; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
   //int _type_ua = 0;
   //size_t _type_size = 0;
 
@@ -70,8 +70,10 @@ public:
     if ((_type_size_bytes == 0) || (_type_ua == 0)) {
       if (!init(type_index(typeid(x)), sizeof(x), &x))
         LOGA("Number_c: new= TYPE not supported");
-    } else
-      set_value((float128)x);
+    } else {
+      if (!set_value((float128)x))
+        LOGA("Number_c: set= TYPE not supported");
+    }
 
     LOGx("+Number_c: %x (= Tx) type %i", this, _type_ua);
     return *this;

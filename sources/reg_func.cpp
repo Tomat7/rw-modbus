@@ -29,7 +29,7 @@ void reg_print(Reg_c &);
 int task_regs_refresh_(void* params)
 {
   UNUSED(params);
-  LOGXB(" ===== %s =====", __func__);
+  LOG_BLU(" ===== %s =====", __func__);
   regmap_mux.lock();
   int x = 0;
 

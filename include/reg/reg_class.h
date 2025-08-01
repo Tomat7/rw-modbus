@@ -28,8 +28,21 @@
 #include "include/plc/plc_class.h"
 #include "reg_datatype.h"
 
-#define MB_SLAVE_CONN_MAX 5
 //#define USE_SYSLOG
+
+#define DEBUG_REGCLASS
+
+#ifdef DEBUG_REGCLASS
+#define LOGb LOG_BLU
+#define LOGr LOG_RED
+#define LOGg LOG_GRN
+#define LOGx LOG_CYN
+#else
+#define LOGb
+#define LOGr
+#define LOGg
+#define LOGx
+#endif // DEBUG_REGCLASS
 
 using std::string;
 using std::vector;
