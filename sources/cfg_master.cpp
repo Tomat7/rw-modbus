@@ -30,7 +30,7 @@ using cchar = const char;
 int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
 {
   // Read the file. If there is an error, report it and exit.
-  printf("\n======= cfg_read_Master =======\n");
+  printf("\n======= %s %s =======\n", __FILE__, __func__);
 
   int _log = log_level;           // log_level = 0 at start (no logging)
   log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging
@@ -165,16 +165,19 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
 
       PLCvec.emplace_back(_devname, _ip, _dfolder, _desc,
                           _port, _att, _ms, _us);
-      PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
 
+      PLCvec.back().reg_qty = cfgPLC[i]["regs"].getLength();
       int nb_regs = cfg_init_plcregs(cfgPLC[i]["regs"], &PLCvec.back());
+      if (nb_regs != PLCvec.back().reg_qty)
+        LOGA("-- Wrong REGs quantity! Expect: %i, configured: %i",
+             PLCvec.back().reg_qty, nb_regs);
+
       PLCvec.back().init_regs();  // Necessary to copy str to char* and others
 
       nb_plc_ready++;
       total_regs += nb_regs;
 
-      LOGN("Configured PLC: %s, with: %d regs", PLCvec.back().dev_name,
-           nb_regs);
+      LOGI("Configured PLC: %s: %d regs", PLCvec.back().dev_name, nb_regs);
       // ===== End PLC filling  =====
     } else {
       LOGA("Error reading PLC configuration: %d\n", i);

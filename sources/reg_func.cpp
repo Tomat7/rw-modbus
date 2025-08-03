@@ -153,12 +153,11 @@ void reg_print(Reg_c &rm)
   return;
 }
 
-
+// Print help message
 void mb_print_help()
 {
-  printf("%s 'f'/'s' - fast/slow refresh, 'h' - (un)hide Modbus regs", C_BOLD);
-  printf("%s 'r' - reread config, %s'q'||'e' - exit, 1..7 - set loglevel,%s\n",
-         C_HIGH, C_HIGH2, C_NORM);
+  printf("%s'F'/'S' - fast/slow refresh, 'H' - (un)hide Modbus regs%s\n", C_BOLD, C_NORM);
+  printf("%s1..7 - set loglevel, 'R' - reread config, 'Q'- exit%s\n", C_BOLD, C_NORM);
 }
 
 // BOLD or Dark grey if error

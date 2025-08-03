@@ -49,9 +49,9 @@ PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
   else
     Enabled = true;
 
-  LOGN("+ New PLC created: %s:%i %-7s %-7s %-20s", ip_addr, tcp_port, dev_name,
+  LOGN("+ New PLC created: %-7s %s:%i %-7s %-20s", dev_name, ip_addr, tcp_port,
        str_dev_folder.c_str(), str_dev_desc.c_str());
-  //  LOGI("+ New PLC created: %s:%i %s", ip_addr, tcp_port, dev_name);
+
   if (!Enabled)
     LOGA("- PLC will be ignored: %s:%i %s", ip_addr, tcp_port, dev_name);
 }

@@ -99,16 +99,15 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
 
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
             cfgREG[j].lookupValue("rtype", s_type))) {
-        LOGE("Error reading 'rmode'/'rtype' on %s/%s REG: %d\n", _dname.c_str(),
-             r.str_rname.c_str(), j);
-        // exit(EXIT_FAILURE);
+
+        LOGE("Error reading 'rmode'/'rtype' on %s/%s REG: %d\n",
+             _dname.c_str(), r.str_rname.c_str(), j);
         continue;
       }
 
       r.raddr = j;
-      // LOGI("Read 'rsource'/'rfolder' on %s: %s/%s REG: %d",
-      //     r.str_rname.c_str(), r.str_source.c_str(), r.str_rfolder.c_str(),
-      //     j);
+      // LOGI("Read 'rsource'/'rfolder' on %s: %s/%s REG: %d", r.str_rname.c_str(),
+      // r.str_source.c_str(), r.str_rfolder.c_str(), j);
     } else {
       LOGE("Error reading 'rname' on %s: %s REG: %d\n",
            _dfolder.c_str(), _dname.c_str(), j);
@@ -116,11 +115,9 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
       continue;
     }
 
-    //  r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
-    //  r.ch_name = r.str_rname.c_str();
     r.data.rvalue = 888;  // TODO: remove for production!
 
-    if (_dname == "-" || _dname == "." || _dname == "")  // Scada!
+    if (_dname == "-" || _dname == "." || _dname == "")  // No prefix.name?
       r.rfullname = r.str_rname;
     else
       r.rfullname = _dname + "." + r.str_rname;

@@ -88,7 +88,7 @@ bool Number_c::set_type(int _sz_byte, int _uatype)
     value.ui64 = 0;
     LOGx("Number_c: _uatype %i not supported", _uatype);
   }
-  LOGA("xNumber_c: size %i type %i", _type_size_bytes, _type_ua);
+  LOGb("xNumber_c: size %i type %i", _type_size_bytes, _type_ua);
   return rc;
 };
 

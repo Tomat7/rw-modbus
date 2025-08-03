@@ -30,6 +30,8 @@ PLC_c::~PLC_c()
 
 void PLC_c::init_regs()  // Master only
 {
+  int nb_regs = 0;
+
   for (auto &[a, r] : regs) {
     r.ch_name = r.str_rname.c_str();
     r.data.rmode = (r.str_mode == "rw") ? 1 : 0;
@@ -43,17 +45,18 @@ void PLC_c::init_regs()  // Master only
       reg_max = r.raddr;
 
     r.data.rvalue = 777;  // TODO: remove for production
+    nb_regs++;
   }
 
   // add pointer to next reg (for each!)
   for (auto &[a, r] : regs) {
     if (regs.count(r.raddr + 1))
       r.r_next = &regs[r.raddr + 1];
-    //  LOGI("+ REG init: %-9s %2d %2s %4d %2d %3d [%s]", r.ch_name, r.raddr,
     LOGI("+ REG init: %-9s %2d %2s [%s]", r.ch_name, r.raddr,
-         r.str_mode.c_str(), /* regs[r.raddr].data.rtype, */ /* regs[r.raddr].data.rsize, */
-         /* regs[r.raddr].data.rbyteorder, */ r.rfullname.c_str());
+         r.str_mode.c_str(), r.rfullname.c_str());
   }
+
+  LOGI("+ PLC: %s, configured: %d regs", dev_name, nb_regs);
 }
 
 /*

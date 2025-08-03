@@ -30,6 +30,11 @@
 
 //#define USE_SYSLOG
 
+#undef LOGb
+#undef LOGr
+#undef LOGg
+#undef LOGx
+
 #define DEBUG_REGCLASS
 
 #ifdef DEBUG_REGCLASS

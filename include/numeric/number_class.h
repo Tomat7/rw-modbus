@@ -25,18 +25,23 @@ using float64=double;
 using float128=long double;
 //using float128=__float128;
 
-#define DEBUG_NUMBER
+#undef LOGb
+#undef LOGr
+#undef LOGg
+#undef LOGx
+
+//#define DEBUG_NUMBER
 
 #ifdef DEBUG_NUMBER
-#define LOGb LOG_BLU
 #define LOGr LOG_RED
+#define LOGb LOG_BLU
 #define LOGg LOG_GRN
 #define LOGx LOG_CYN
 #else
-#define LOGb
-#define LOGr
-#define LOGg
-#define LOGx
+#define LOGr(...)
+#define LOGb(...)
+#define LOGg(...)
+#define LOGx(...)
 #endif // DEBUG_NUMBER
 
 class Number_c
