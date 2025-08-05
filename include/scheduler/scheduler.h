@@ -29,8 +29,8 @@ class Task_c
 public:
   Task_c(std::function<int(void*)> _func, uint64_t _ms, std::string _name, void* _ptr);
   ~Task_c();
-  // static void run(Task_c*);
-  void run();
+  void run(); // way3
+  // static void run(Task_c*);  // way 1&2
 
   std::function<int(void*)> func;
   volatile bool taskRunning = false;
@@ -59,14 +59,14 @@ public:
 
 private:
   static std::vector<Task_c> tasks;
-  // vector<thread> threads;
   volatile static bool isRunning;
   static std::mutex scheduler_mux;
-  /* static  int nb_max; */
+  // vector<thread> threads;
+  // static  int nb_max;
 
   static void scheduler_cycle_();
-  static void run_task_(/* function<int()> task, */ uint64_t i);  //* isRun);
   static void clear();
+  // static void run_task_(/* function<int()> task, */ uint64_t i);  //* isRun);
 };
 
 // eof

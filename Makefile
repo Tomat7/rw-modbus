@@ -175,7 +175,7 @@ clean: format
 	@rm -rfv $(EXEC_FILE)
 #	find test -maxdepth 5 -type f -name *.o -print -delete
 	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
-	find .pvs/ -type f \( -name "*.cpp" -or -name "*.h" \) -print -delete
+#	find .pvs/ -type f \( -name "*.cpp" -or -name "*.h" \) -print -delete
 
 pvs:
 	$(foreach srcfile,$(SRCFILES),$(shell cat .pvs/pvs.inc $(srcfile) > .pvs/$(srcfile)))

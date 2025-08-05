@@ -97,7 +97,9 @@ void Task_c::run()  // for way 3&4
   LOGD("Task-done: %s %d", t->task_name.c_str(), t->rc);
   }
 */
-// ======= Scheduler ===============================================
+
+
+// ======= Scheduler class methods =======
 
 Schedule_c::Schedule_c(int nb_)
 {
@@ -174,17 +176,18 @@ void Schedule_c::scheduler_cycle_()
 
     for (uint64_t i = 0; i < nb_tasks; i++) {
       Task_c &t = tasks[i];
-      // f = tasks[i].run; // for other way1
-      fn_task = std::bind_front(&Task_c::run, &tasks[i]); // for other way3
+
       if ((millis() - t.millis_last_run) > t.interval_ms) {
         if ((!t.taskRunning) && isRunning) {
           // LOGD("Task-ready: %s \n", t.task_name.c_str());
-          // threads[i] = thread(f, &tasks[i]); // way 1
+          // threads[i] = thread(run_task_, i); // classic & stupid but works!
+          // f = tasks[i].run;                  // way1
+          // threads[i] = thread(f, &tasks[i]); // way1
           // threads[i] = thread(t.run, &tasks[i]); // way2
-          threads[i] = thread(fn_task); // way3
-          // threads[i] = thread(std::bind(&Task_c::run, &tasks[i])); // way 4a
+          fn_task = std::bind_front(&Task_c::run, &tasks[i]); // way3
+          threads[i] = thread(fn_task);                       // way3
+          // threads[i] = thread(std::bind(&Task_c::run, &tasks[i]));   // way 4a
           // threads[i] = thread(std::bind_front(&Task_c::run, &tasks[i])); // 4b
-          // threads[i] = thread(run_task_, i);  // classic & stupid
           threads[i].detach();
         } else {
           LOGC("Task-error: %s still running!", t.task_name.c_str());
@@ -232,8 +235,11 @@ void Schedule_c::stop()
 
 void Schedule_c::clear() { tasks.clear(); }
 
-void Schedule_c::run_task_(uint64_t i)
-{
+
+// Classic way to run task. Works ok
+/*
+  void Schedule_c::run_task_(uint64_t i)
+  {
   LOGD("Task-run: %s", tasks[i].task_name.c_str());
   tasks[i].task_mux->lock();
   prctl(PR_SET_NAME, tasks[i].task_name.c_str());
@@ -245,6 +251,7 @@ void Schedule_c::run_task_(uint64_t i)
   tasks[i].taskRunning = false;
   tasks[i].task_mux->unlock();
   LOGD("Task-done: %s %d", tasks[i].task_name.c_str(), tasks[i].rc);
-}
+  }
+*/
 
 // eof
