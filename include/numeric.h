@@ -24,14 +24,11 @@ union numeric_u {
   uint16_t ui16;
   uint32_t ui32;
   uint64_t ui64 = 0;
-  int64_t dt;
+//  int64_t dt;
   float fl;
   double dbl;
   uint16_t mb32u[2];
   uint16_t mb64u[4];
-  /*   uint16_t fl2u[2];
-    uint16_t dbl2u[4];
-    uint8_t byte2u[8]; */
 };
 
 struct typeprop_t {

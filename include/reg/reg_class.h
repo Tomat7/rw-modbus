@@ -30,23 +30,23 @@
 
 //#define USE_SYSLOG
 
+#define DEBUG_REGCLASS
+
 #undef LOGb
 #undef LOGr
 #undef LOGg
 #undef LOGx
 
-#define DEBUG_REGCLASS
-
 #ifdef DEBUG_REGCLASS
-#define LOGb LOG_BLU
 #define LOGr LOG_RED
+#define LOGb LOG_BLU
 #define LOGg LOG_GRN
 #define LOGx LOG_CYN
 #else
-#define LOGb
-#define LOGr
-#define LOGg
-#define LOGx
+#define LOGr(...)
+#define LOGb(...)
+#define LOGg(...)
+#define LOGx(...)
 #endif // DEBUG_REGCLASS
 
 using std::string;
@@ -60,6 +60,7 @@ using std::map;
                   int64_t, uint64_t,
                   double, float >;
 */
+
 /*
   struct regprop_t {
   int rtype;

@@ -139,18 +139,12 @@ void regs_update()
 
 void reg_print(Reg_c &rm)
 {
-  // printf("\n===== regs_print =====\n");
   const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rm.var_errors == 0);
+  printf("%s%-12s %4i %s%9s%s", C, rm.rn, rm.var_errors, B, rm.c_str(), C_NORM);
+
   // char ch[50];
-
   //printf("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
-  printf("%s%-16s %i %s%16s", C, rm.rn, rm.var_errors,
-         B, rm.c_str() /* rm.get_local_value_chars(ch) */);
-
-  printf(C_NORM);
-
-  return;
 }
 
 // Print help message

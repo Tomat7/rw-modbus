@@ -25,12 +25,11 @@ using float64=double;
 using float128=long double;
 //using float128=__float128;
 
+//#define DEBUG_NUMBER
 #undef LOGb
 #undef LOGr
 #undef LOGg
 #undef LOGx
-
-//#define DEBUG_NUMBER
 
 #ifdef DEBUG_NUMBER
 #define LOGr LOG_RED
@@ -48,10 +47,6 @@ class Number_c
 {
 public:
   numeric_u value;
-  //int &var_type = _type_ua;   // for OPC UA server (ex. UA_TYPES_FLOAT)
-  //size_t &var_size = _type_size_bytes; // 1;  // for multiply Modbus registers (ex. 32-bit Float)
-  //int _type_ua = 0;
-  //size_t _type_size = 0;
 
   Number_c(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
   Number_c(const Number_c &V);
