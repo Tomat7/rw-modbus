@@ -94,7 +94,12 @@
         "queue": "cpp",
         "format": "cpp",
         "text_encoding": "cpp",
-        "*.hxxx": "cpp"
+        "*.hxxx": "cpp",
+        "flat_map": "cpp",
+        "flat_set": "cpp",
+        "generator": "cpp",
+        "print": "cpp",
+        "stdfloat": "cpp"
     },
     "makefile.launchConfigurations": [
         {
