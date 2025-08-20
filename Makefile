@@ -34,7 +34,7 @@ CC=$(CXX)
 CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors
 #LDFLAGS = -Wall #-std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
-OPTFLAGS= -flto=auto -O2 
+OPTFLAGS= -flto=auto -O2 -march=native
 #-Os -s -Wl,--as-needed
 
 
@@ -65,7 +65,7 @@ WARN3_FLAGS= -Wduplicated-cond -Wlogical-op -Wshift-overflow=2
 CXXFLAGS+=$(WARN1_FLAGS) $(WARN2_FLAGS) $(WARN3_FLAGS)
 
 # === For debugging & "deep" research
-GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 
+GLIBC_FLAGS= -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2
 SANIT_FLAGS= -fstack-protector -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
 DEBUG_FLAGS= -g -DDEBUG_FLAG
 #CXXFLAGS+= $(GLIBC_FLAGS)
