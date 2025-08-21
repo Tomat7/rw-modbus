@@ -4,6 +4,13 @@
 
 //#define ef(a) else if (a)
 
+#ifdef USE_NCURSES
+#define PRINTF(...) printw(__VA_ARGS__)
+#else
+#define PRINTF(...) printf(__VA_ARGS__)
+#endif
+
+
 #ifndef XSTR
 #define XSTR(x) #x
 #endif

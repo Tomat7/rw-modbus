@@ -31,7 +31,7 @@ static void close_sigint(int dummy)
 {
   LOGC("Exit by Ctrl-C. Bye.\n");
   deinit_all();
-  restore_console();
+  console_restore();
   closelog();
   exit(dummy);
 }
@@ -69,51 +69,75 @@ int main(int argc, char** argv)
 
 // =======================================================
 
-  wait_console(Cfg.timeout_sec * 3);
+  console_wait(Cfg.timeout_sec * 3);
 
   init_all();
 
   OPCclient.init("opc.tcp://localhost:4840");
 //  logger_set_queue(true);
-
 //  float f = 1.2345;
 
+  init_ncurses();
+  refresh_ncurses();
+
+// =========================================================
   for (;;) {
     logger_set_queue(true);
+
+#ifdef USE_NCURSES
+    //refresh_ncurses();
+    clear();
+#else
     printf("%s", ESC_CLS);
     printf("%s", ESC_HOME);
     fflush(stdout);
+#endif
 
     opc_client_();
     opc_server_();
 
-    printf("\n");
+    PRINTF("\n");
 
-    t.start();
+    //t.start();
     regs_update();
-    t.spent_auto("============ REG print finished in: ");
+    //t.spent_auto("============ REG print finished in: ");
 
-    const char* x = nullptr;
-    t.start(x);
+    //const char* x = nullptr;
+    //t.start(x);
     mb_print_summary();
     // mb_update();
     // LOGD("regdata_t size: %d", sizeof(regdata_t));
     // LOGD("P array size: %d", sizeof(P));
-    t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
+    //t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     mb_print_help();
+
     logger_set_queue(false);
-    logger_flush();
+    flush_logger();
 
     // Slave.handle_slave(timeout_sec * 1000000);
 
-    int ch = read_console(0, Cfg.timeout_sec * 1000000);
-    if (ch != -1)
-      parse_char(ch);
-    else
-      printf("!\n");
+    /*
+        int ch = console_read(0, Cfg.timeout_sec * 1000000);
+        if (ch != -1)
+          parse_char(ch);
+        else
+          PRINTF("!\n");
+    */
+    int nb_cycles = Cfg.timeout_sec * 1000 / CONSOLE_WAIT_MS;
 
-    fflush(stdout);
+    for (int i = 0; i < nb_cycles; i++) {
+      int ch = console_read(0, CONSOLE_WAIT_MS * 1000);
+      flush_logger();
+      if (ch != -1) {
+        parse_char(ch);
+//        flush_logger();
+//        console_wait(Cfg.timeout_sec);
+        break;
+      }
+    }
+
+    PRINTF("!\n");
 
     //    wait_console(TIMEOUT_SEC);
     //    t.start(x);

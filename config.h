@@ -3,7 +3,10 @@
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 // https://31.44.7.12:55972/panel/
 // http://85.117.235.21:55971/
-// test!
+//
+
+#define USE_NCURSES
+
 #define PI 3.1415926535897932384626433832795
 
 #define CFG_DIR "/var/tmp/conf"
@@ -30,6 +33,7 @@
 #define TASKS_NB_MAX 500
 #define REGS_REFRESH_MS 900
 #define MILLIS_HEARTBEAT_MS 2900
+#define CONSOLE_WAIT_MS 100
 
 #define USE_SYSLOG
 

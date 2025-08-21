@@ -91,7 +91,7 @@ void opc_start()
 {
   std::thread opc_thread(opc_run_thread);
   opc_thread.detach();
-  wait_console(Cfg.timeout_sec);
+  console_wait(Cfg.timeout_sec);
 }
 
 void opc_run_thread()
@@ -118,15 +118,15 @@ void opc_server_()
   */
 
   string s = "/PLC/Kub/Kub.millis";
-  printf("%s %d, ", s.c_str(), OPCs.ReadRawUnion(s).ui16);
+  PRINTF("%s %d, ", s.c_str(), OPCs.ReadRawUnion(s).ui16);
 
   s = "/PLC/Kub/Kub.Temp1";
-  printf("%s %5.2f, ", s.c_str(), OPCs.ReadRawUnion(s).fl);
+  PRINTF("%s %5.2f, ", s.c_str(), OPCs.ReadRawUnion(s).fl);
 
   s = "/PLC/Kub/Kub.Temp2";
   float fl;
   OPCs.ReadNumber(s, fl);
-  printf("%s %5.2f\n", s.c_str(), fl);
+  PRINTF("%s %5.2f\n", s.c_str(), fl);
 
 // ==========================================================
 
@@ -137,13 +137,13 @@ void opc_server_()
   float myfl = ReadValue(s);
   const char* C = getColor(OPCs.isVariable(s));
   const char* B = getBlynk(OPCs.isGood(s));
-  printf("%s%s %s%5.2f%s, ", C, s.c_str(), B, myfl, NRM);
+  PRINTF("%s%s %s%5.2f%s, ", C, s.c_str(), B, myfl, NRM);
 
   s = OPCs.GetVarFullName("Millis");
   // uint16_t m = ReadValue(s);
   C = getColor(OPCs.isVariable(s));
   B = getBlynk(OPCs.isGood(s));
-  printf("%s%s %s%u%s, ", C, s.c_str(), B, (uint16_t)ReadValue(s) /*m*/, NRM);
+  PRINTF("%s%s %s%u%s, ", C, s.c_str(), B, (uint16_t)ReadValue(s) /*m*/, NRM);
 
   s = OPCs.GetVarFullName("Double");
   f += 0.1111f;
@@ -151,15 +151,15 @@ void opc_server_()
   myfl = ReadValue(s);
   C = getColor(OPCs.isVariable(s));
   B = getBlynk(OPCs.isGood(s));
-  printf("%s%s %s%5.4f%s\n ", C, s.c_str(), B, (float)ReadValue(s) /*myfl*/, NRM);
+  PRINTF("%s%s %s%5.4f%s\n ", C, s.c_str(), B, (float)ReadValue(s) /*myfl*/, NRM);
 
   //s = "Kub.Temp3";
   //myfl = ReadValue(s);
   C = getColor(OPCs.isVariable(s));
   B = getBlynk(OPCs.isGood(s));
-  printf("%sT3c: %s%5.2f%s, ", C, B, myfl, NRM);
+  PRINTF("%sT3c: %s%5.2f%s, ", C, B, myfl, NRM);
   // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
-  printf("(float)T44: %5.3f, ", (float)ReadValue(s));
+  PRINTF("(float)T44: %5.3f, ", (float)ReadValue(s));
   int16_t t16 = (int16_t)round(myfl * 100);
   myfl = t16 / 100;
 }
@@ -171,14 +171,14 @@ void opc_client_()
   using OPC_client::WriteValue;
 
   static uint16_t cnt = 0;
-  static uint16_t ccc = 0;
+  static uint16_t val = 0;
 
   cnt++;
   string s = OPCs.GetVarFullName("Millis");
 
 //    t.start();
 //  OPCclient.ReadNumber(s, ccc);
-  ccc = ReadValue(s);
+  val = ReadValue(s);
 //    t.spent_auto("OPC Client read ONE reg in: ");
 
   /*
@@ -191,20 +191,20 @@ void opc_client_()
   */
   if (OPCclient.WriteNumber(s, cnt)) {
     // OPCclient.ReadNumber(s, ccc);
-    ccc = ReadValue(s);
+    val = ReadValue(s);
     OPCs.RefreshAllValues();
-    printf("%s: %d %d %d\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+    PRINTF("%s: %d %d %d\n", s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
   } else
-    printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
+    PRINTF("%s: %d %d %d error!\n", s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
 // ======= Read CLIENT =======
 
   float t1 = 0;
   s = OPCs.GetVarFullName("Tkub1");
 
   if (OPCclient.ReadNumber(s, t1))
-    printf("%s: %f %f\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+    PRINTF("%s: %f %f\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
   else
-    printf("%s: %f %f error!\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+    PRINTF("%s: %f %f error!\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
 }
 
 // eof

@@ -9,9 +9,9 @@
 #include <termios.h>
 #include <unistd.h>
 
-static struct termios old_term;
+static struct termios old_term, save_term;
 
-int read_console(time_t _sec, suseconds_t _usec)  // считываем с консоли
+int console_read(time_t _sec, suseconds_t _usec)  // считываем с консоли
 {
   int rb = -1;
   int retval;
@@ -40,11 +40,13 @@ int read_console(time_t _sec, suseconds_t _usec)  // считываем с ко�
   return rb;
 }
 
-void wait_console(int _s, int _us)
+void console_wait(int _s, int _us)
 {
-  read_console((time_t)_s, (suseconds_t)_us);
+  console_read((time_t)_s, (suseconds_t)_us);
 }
 
-void restore_console() { tcsetattr(STDIN_FILENO, TCSANOW, &old_term); }
+void console_save() { tcgetattr(STDIN_FILENO, &save_term); }
+
+void console_restore() { tcsetattr(STDIN_FILENO, TCSANOW, &save_term); }
 
 // eof

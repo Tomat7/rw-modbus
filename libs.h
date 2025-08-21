@@ -33,4 +33,8 @@
 #include "include/timer.h"
 //#include "include/scheduler/scheduler.h"
 
+#ifdef USE_NCURSES
+#include <ncurses.h>
+#endif
+
 // eof

@@ -93,10 +93,10 @@ void logger(const char* _logname, int _prio, const char* _func, int _rgb,
   if (!no_print) {
     snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NORM);
 
-    if (print_to_queue)
-      Print_queue.emplace(std::string(buffer));
-    else
-      printf("%s", buffer);
+    //  if (print_to_queue)
+    Print_queue.emplace(std::string(buffer));
+    //  else
+    //    printf("%s", buffer);
   }
 
   return;
@@ -104,13 +104,24 @@ void logger(const char* _logname, int _prio, const char* _func, int _rgb,
 
 void logger_set_queue(bool to_queue) { print_to_queue = to_queue; }
 
-void logger_flush()
+void logger_flush_printf()
 {
   LOCK_GUARD(logger_mux);
   while (!Print_queue.empty()) {
     printf("%s", Print_queue.front().c_str());
     Print_queue.pop();
   }
+}
+
+bool logger_get_string(std::string& logged_string)
+{
+  LOCK_GUARD(logger_mux);
+  if (!Print_queue.empty()) {
+    logged_string = Print_queue.front();
+    Print_queue.pop();
+    return true;
+  } else
+    return false;
 }
 
 /*

@@ -99,7 +99,8 @@
         "flat_set": "cpp",
         "generator": "cpp",
         "print": "cpp",
-        "stdfloat": "cpp"
+        "stdfloat": "cpp",
+        "*.cpp_": "cpp"
     },
     "makefile.launchConfigurations": [
         {

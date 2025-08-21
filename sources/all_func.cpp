@@ -17,12 +17,14 @@ void init_all()
   Timer t;
   int ret = 0;
 
-  t.start(TIMER_START_MSG);
+  console_save();
+
+  //t.start(TIMER_START_MSG);
   ret = cfg_master(CFG_DIR, CFG_FILE, Cfg.mode);
-  t.spent_auto("============ Cfg Master finished in: ");
+  //t.spent_auto("============ Cfg Master finished in: ");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
-  wait_console(Cfg.timeout_sec);
+  console_wait(Cfg.timeout_sec);
   // ==================================
 
   /*   t.start(TIMER_START_MSG);
@@ -34,17 +36,17 @@ void init_all()
   // ==================================
 
   if (log_level > 5) {
-    t.start(TIMER_START_MSG);
+    //t.start(TIMER_START_MSG);
     plc_show2();
-    wait_console(Cfg.timeout_sec);
-    t.spent_auto("=== PLC2 show finished in: ");
+    console_wait(Cfg.timeout_sec);
+    //t.spent_auto("=== PLC2 show finished in: ");
   }
 
   if (log_level > 3) {
-    t.start(TIMER_START_MSG);
+    //t.start(TIMER_START_MSG);
     plc_show1();
-    t.spent_auto("=== PLC1 show finished in: ");
-    wait_console(Cfg.timeout_sec);
+    //t.spent_auto("=== PLC1 show finished in: ");
+    console_wait(Cfg.timeout_sec);
   }
 
   /*   t.start(TIMER_START_MSG);
@@ -53,16 +55,16 @@ void init_all()
     wait_console(Cfg.timeout_sec);
     //  t.sleep_ms(TMOUT); */
 
-  t.start(TIMER_START_MSG);
+  //t.start(TIMER_START_MSG);
   opc_init();
   opc_regs_init();
-  t.spent_auto("=== OPC init finished in: ");
-  wait_console(Cfg.timeout_sec);
+  //t.spent_auto("=== OPC init finished in: ");
+  console_wait(Cfg.timeout_sec);
 
-  t.start(TIMER_START_MSG);
+  //t.start(TIMER_START_MSG);
   tasks_init();
-  t.spent_auto("=== TASKS init finished in: ");
-  wait_console(Cfg.timeout_sec);
+  //t.spent_auto("=== TASKS init finished in: ");
+  console_wait(Cfg.timeout_sec);
 
   tasks_start();
 
@@ -76,7 +78,7 @@ void reinit()
 {
   deinit_all();
   LOGW("+++++++++++++++++++++++++++++++++");
-  wait_console(Cfg.timeout_sec);
+  console_wait(Cfg.timeout_sec);
   init_all();
 
   //  Cfg.timeout_sec = TIMEOUT_SEC;
@@ -93,6 +95,10 @@ void deinit_all()
   LOGD("regs_deinit() - done");
   mb_deinit();
   LOGD("mb_deinit() - done");
+#ifdef USE_NCURSES
+  endwin();
+#endif
+  console_restore();
 }
 
 void parse_char(int ch)
@@ -101,25 +107,30 @@ void parse_char(int ch)
 
   if ((char)ch == 'Q') {
     LOGA("Char 'Q' pressed. Correct exit. Bye.\n");
-    wait_console(Cfg.timeout_sec);
+    flush_logger();
+    console_wait(Cfg.timeout_sec);
     deinit_all();
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'R') {
     LOGA("Char 'R' pressed. Full reconfiguration.\n");
-    wait_console(Cfg.timeout_sec);
+    flush_logger();
+    console_wait(Cfg.timeout_sec);
     reinit();
   } else if (((char)ch == 'F') || ((char)ch == 'f')) {
     Cfg.timeout_sec = 1;
     LOGA("Char 'F' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
-    wait_console(Cfg.timeout_sec);
+    flush_logger();
+    console_wait(Cfg.timeout_sec);
   } else if (((char)ch == 'S') || ((char)ch == 's')) {
     Cfg.timeout_sec = 5;
     LOGA("Char 'S' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
-    wait_console(Cfg.timeout_sec);
+    flush_logger();
+    console_wait(Cfg.timeout_sec);
   } else if ((char)ch == 'H') {
     Cfg.show_mb_regs = !Cfg.show_mb_regs;
     LOGA("Char 'H' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
-    wait_console(Cfg.timeout_sec);
+    flush_logger();
+    console_wait(Cfg.timeout_sec);
     /*   } else if ((char)ch == 'o') {
         LOGA("Char 'o' pressed. Start OPC_refresh_.\n");
         task_opc_refresh_(nullptr);
@@ -132,14 +143,48 @@ void parse_char(int ch)
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;
     LOGA("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
+    flush_logger();
     log_level = loglvl;
-    wait_console(Cfg.timeout_sec);
-  } else if ((char)ch == ' ')
-    printf("%s %s %s \n", C_GRN, "=============================", C_NORM);
-  else {
-    printf("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NORM);
-    wait_console(Cfg.timeout_sec * 2);
+    console_wait(Cfg.timeout_sec);
+  } else if ((char)ch == ' ') {
+    PRINTF("%s %s %s \n", C_GRN, "=============================", C_NORM);
+    flush_logger();
+  } else {
+    PRINTF("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NORM);
+    flush_logger();
+    console_wait(Cfg.timeout_sec * 2);
   }
+}
+
+void init_ncurses()
+{
+#ifdef USE_NCURSES
+  initscr();  // Start curses mode
+  start_color();
+  scrollok(stdscr, TRUE);
+  cbreak();   // Line buffering disabled, Pass on everty thing to me
+#endif
+}
+
+void refresh_ncurses()
+{
+#ifdef USE_NCURSES
+  refresh();
+//    wrefresh(win_data);
+#endif
+}
+
+void flush_logger()
+{
+#ifdef USE_NCURSES
+  string logged_;
+  while (logger_get_string(logged_))
+    PRINTF("%s", logged_.c_str());
+  refresh_ncurses();
+#else
+  logger_flush_printf();
+  fflush(stdout);
+#endif
 }
 
 /* int write_shm(string rn, uint16_t val)

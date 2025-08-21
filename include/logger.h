@@ -11,8 +11,10 @@
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <string.h>
 
 #include <mutex>
+#include <string>
 
 #include "config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
 #include "include/macros.h"
@@ -29,6 +31,10 @@
   #define STRINGIFY_IMPL(x) #x
   #define STRINGIFY(x) STRINGIFY_IMPL(x)
 */
+
+void logger_set_queue(bool to_queue);
+void logger_flush_printf();
+bool logger_get_string(std::string& logged_string);
 
 #define FILE_LINE __FILE__ ":" STR(__LINE__)
 #define _FL_ FILE_LINE
@@ -62,7 +68,6 @@
 #define LOGXB(...)
 #endif // NDEBUG
 
-
 #define LOGIFA(...) logif(rc, FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
 #define LOGIFC(...) logif(rc, FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
 #define LOGIFE(...) logif(rc, FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)
@@ -86,9 +91,6 @@ extern int log_level;  // 0 - no messages at all, 9 - all on screen
 // void logger(const char* logname, int prio, const char* format, ...);
 void logger(const char* logname, int prio, const char* _func, int _rgb,
             const char* _fmt, ...);
-
-void logger_set_queue(bool to_queue);
-void logger_flush();
 
 char* get_new_char(const char*);
 
