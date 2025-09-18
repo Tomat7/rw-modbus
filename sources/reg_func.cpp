@@ -201,7 +201,7 @@ void reg_print(Reg_c &rm)
 {
   const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rm.var_errors == 0);
-  PRINTF("%s%-12s %4i %s%9s%s", C, rm.rn, rm.var_errors, B, rm.c_str(), C_NORM);
+  PRINTF("%s%-14s %4i %s%9s%s", C, rm.rn, rm.var_errors, B, rm.c_str(), C_NORM);
 
   // char ch[50];
   //PRINTF("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));

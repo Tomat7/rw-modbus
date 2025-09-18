@@ -91,7 +91,7 @@ void opc_start()
 {
   std::thread opc_thread(opc_run_thread);
   opc_thread.detach();
-  console_wait(Cfg.timeout_sec);
+  console_wait_sec(Cfg.timeout_sec);
 }
 
 void opc_run_thread()

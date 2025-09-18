@@ -5,7 +5,7 @@
 // http://85.117.235.21:55971/
 //
 
-#define USE_NCURSES
+//#define USE_NCURSES
 
 #define PI 3.1415926535897932384626433832795
 

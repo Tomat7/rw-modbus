@@ -17,14 +17,13 @@ void init_all()
   Timer t;
   int ret = 0;
 
-  console_save();
-
+  //  Console::save();
   //t.start(TIMER_START_MSG);
   ret = cfg_master(CFG_DIR, CFG_FILE, Cfg.mode);
   //t.spent_auto("============ Cfg Master finished in: ");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
-  console_wait(Cfg.timeout_sec);
+  console_wait_sec(Cfg.timeout_sec);
   // ==================================
 
   /*   t.start(TIMER_START_MSG);
@@ -38,7 +37,7 @@ void init_all()
   if (log_level > 5) {
     //t.start(TIMER_START_MSG);
     plc_show2();
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
     //t.spent_auto("=== PLC2 show finished in: ");
   }
 
@@ -46,7 +45,7 @@ void init_all()
     //t.start(TIMER_START_MSG);
     plc_show1();
     //t.spent_auto("=== PLC1 show finished in: ");
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
   }
 
   /*   t.start(TIMER_START_MSG);
@@ -58,13 +57,11 @@ void init_all()
   //t.start(TIMER_START_MSG);
   opc_init();
   opc_regs_init();
-  //t.spent_auto("=== OPC init finished in: ");
-  console_wait(Cfg.timeout_sec);
+  //t.spent_auto("=== OPC init finished in: ");   Console_c::c::wait(Cfg.timeout_sec);
 
   //t.start(TIMER_START_MSG);
   tasks_init();
-  //t.spent_auto("=== TASKS init finished in: ");
-  console_wait(Cfg.timeout_sec);
+  //t.spent_auto("=== TASKS init finished in: ");   Console_c::c::wait(Cfg.timeout_sec);
 
   tasks_start();
 
@@ -78,7 +75,7 @@ void reinit()
 {
   deinit_all();
   LOGW("+++++++++++++++++++++++++++++++++");
-  console_wait(Cfg.timeout_sec);
+  console_wait_sec(Cfg.timeout_sec);
   init_all();
 
   //  Cfg.timeout_sec = TIMEOUT_SEC;
@@ -95,10 +92,13 @@ void deinit_all()
   LOGD("regs_deinit() - done");
   mb_deinit();
   LOGD("mb_deinit() - done");
+
 #ifdef USE_NCURSES
   endwin();
 #endif
-  console_restore();
+
+  Console::restore();
+
 }
 
 void parse_char(int ch)
@@ -108,29 +108,29 @@ void parse_char(int ch)
   if ((char)ch == 'Q') {
     LOGA("Char 'Q' pressed. Correct exit. Bye.\n");
     flush_logger();
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
     deinit_all();
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'R') {
     LOGA("Char 'R' pressed. Full reconfiguration.\n");
     flush_logger();
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
     reinit();
   } else if (((char)ch == 'F') || ((char)ch == 'f')) {
     Cfg.timeout_sec = 1;
     LOGA("Char 'F' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     flush_logger();
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
   } else if (((char)ch == 'S') || ((char)ch == 's')) {
     Cfg.timeout_sec = 5;
     LOGA("Char 'S' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     flush_logger();
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
   } else if ((char)ch == 'H') {
     Cfg.show_mb_regs = !Cfg.show_mb_regs;
     LOGA("Char 'H' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
     flush_logger();
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
     /*   } else if ((char)ch == 'o') {
         LOGA("Char 'o' pressed. Start OPC_refresh_.\n");
         task_opc_refresh_(nullptr);
@@ -145,14 +145,14 @@ void parse_char(int ch)
     LOGA("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
     flush_logger();
     log_level = loglvl;
-    console_wait(Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
   } else if ((char)ch == ' ') {
     PRINTF("%s %s %s \n", C_GRN, "=============================", C_NORM);
     flush_logger();
   } else {
     PRINTF("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NORM);
     flush_logger();
-    console_wait(Cfg.timeout_sec * 2);
+    console_wait_sec(Cfg.timeout_sec * 2);
   }
 }
 
@@ -186,6 +186,8 @@ void flush_logger()
   fflush(stdout);
 #endif
 }
+
+void console_wait_sec(int _sec) { Console::read_sec(_sec); }
 
 /* int write_shm(string rn, uint16_t val)
   {

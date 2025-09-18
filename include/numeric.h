@@ -24,7 +24,6 @@ union numeric_u {
   uint16_t ui16;
   uint32_t ui32;
   uint64_t ui64 = 0;
-//  int64_t dt;
   float fl;
   double dbl;
   uint16_t mb32u[2];

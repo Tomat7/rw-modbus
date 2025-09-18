@@ -31,7 +31,7 @@ static void close_sigint(int dummy)
 {
   LOGC("Exit by Ctrl-C. Bye.\n");
   deinit_all();
-  console_restore();
+  Console::restore();
   closelog();
   exit(dummy);
 }
@@ -41,13 +41,16 @@ static void close_sigint(int dummy)
 
 int main(int argc, char** argv)
 {
-  Timer t;
-
-  std::set<string> Mode{MODBUS_MODES};
-  //log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging // log_level = 3;
-
-  openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
+  Console::save();
+  log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging
+//  openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
+  LOGA("Log 'Modbus' ready.");
+  LOGC("Log 'Modbus' ready.");
+  LOGE("Log 'Modbus' ready.");
   signal(SIGINT, close_sigint);
+
+  Timer t;
+  std::set<string> Mode{MODBUS_MODES};
 
   if (argc > 1) {
     if (Mode.count(string(argv[1])))
@@ -68,8 +71,10 @@ int main(int argc, char** argv)
   var_test0();
 
 // =======================================================
-
-  console_wait(Cfg.timeout_sec * 3);
+  int R, C;
+  Console::get_size(&R, &C);
+  LOGA("TTY window size: %d rows, %d columns.", R, C);
+  console_wait_sec(Cfg.timeout_sec * 3);
 
   init_all();
 
@@ -80,7 +85,10 @@ int main(int argc, char** argv)
   init_ncurses();
   refresh_ncurses();
 
-// =========================================================
+// ==================================================================
+// ==================================================================
+// ==================================================================
+
   for (;;) {
     logger_set_queue(true);
 
@@ -127,7 +135,7 @@ int main(int argc, char** argv)
     int nb_cycles = Cfg.timeout_sec * 1000 / CONSOLE_WAIT_MS;
 
     for (int i = 0; i < nb_cycles; i++) {
-      int ch = console_read(0, CONSOLE_WAIT_MS * 1000);
+      int ch = Console::read_ms(CONSOLE_WAIT_MS);
       flush_logger();
       if (ch != -1) {
         parse_char(ch);

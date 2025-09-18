@@ -21,11 +21,12 @@
 */
 //#include "include/inotify/in_class.h"
 //#include "include/shmem/shmem.h"
-#include "include/console.h"
 #include "include/declarations.h"
 #include "include/numeric.h"
 #include "include/logger.h"
 #include "include/macros.h"
+
+#include "include/console/console.h"
 #include "include/opc_server/opcs_class.h"
 #include "include/opc_client/opc_client.h"
 #include "include/plc/plc_class.h"

@@ -18,7 +18,7 @@
 #include <mutex>
 #include <queue>
 
-int log_level = 0;
+int log_level = LOG_LEVEL_MINIMAL;
 // 0 - no messages at all - will get from Config
 // 9 - all messages on screen
 
@@ -32,8 +32,8 @@ static const char* ch_color[10] = {
 };
 
 
-void logger(const char* _logname, int _prio, const char* _func, int _rgb,
-            const char* _fmt, ...)
+void logger(const char* _logname, int _prio, const char* _func,
+            int _rgb, const char* _fmt, ...)
 {
   LOCK_GUARD(logger_mux);
 
@@ -93,10 +93,10 @@ void logger(const char* _logname, int _prio, const char* _func, int _rgb,
   if (!no_print) {
     snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NORM);
 
-    //  if (print_to_queue)
-    Print_queue.emplace(std::string(buffer));
-    //  else
-    //    printf("%s", buffer);
+    if (print_to_queue)
+      Print_queue.emplace(std::string(buffer));
+    else
+      printf("%s", buffer);
   }
 
   return;

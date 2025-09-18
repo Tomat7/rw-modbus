@@ -21,6 +21,7 @@
 
 #define MESSAGE_MAX_LEN 254
 #define LOG_LEVEL_DEFAULT 4
+#define LOG_LEVEL_MINIMAL 1 // Log ALERTS only
 
 #ifdef SYSLOG_NAME
 #undef SYSLOG_NAME
@@ -39,8 +40,8 @@ bool logger_get_string(std::string& logged_string);
 #define FILE_LINE __FILE__ ":" STR(__LINE__)
 #define _FL_ FILE_LINE
 
-#define LOGFORCE(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)       // 0 
-#define LOGBROADCAST(...) logger(FILE_LINE, 0, __func__, __VA_ARGS__)   // 0 
+//#define LOGFORCE(...) logger(FILE_LINE, 0, __func__, 0, __VA_ARGS__)       // 0
+#define LOGBROADCAST(...) logger(FILE_LINE, 0, __func__, 0, __VA_ARGS__)   // 0 
 
 #define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, 0, __VA_ARGS__)   // 1
 #define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, 0, __VA_ARGS__)    // 2

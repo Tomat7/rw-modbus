@@ -32,10 +32,10 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   // Read the file. If there is an error, report it and exit.
   printf("\n======= %s %s =======\n", __FILE__, __func__);
 
-  int _log = log_level;           // log_level = 0 at start (no logging)
-  log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging
+
+//  openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
+
   Config cfg;
-  openlog("PLC_cfg", LOG_NDELAY, LOG_LOCAL1);
   LOGC("Mode: '%s'.", cfg_mode);
 
   // Set Include Directory for CFG files and full pathname
@@ -64,18 +64,19 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
+  static int saved_level = 0;
   // Read/Set LogLevel from CFG file.
-  log_level = _log;
-  if (log_level == 0) {
+  if (saved_level == log_level) {
     try {
       log_level = cfg.lookup("loglevel");
+      saved_level = log_level;
       LOGC("Set LOG_LEVEL to: %d.", log_level);
     } catch (const SettingNotFoundException &nfex) {
-      log_level = LOG_LEVEL_DEFAULT;
-      LOGA("No LOG_LEVEL configured. Set to LOG_LEVEL_DEFAULT: %d.", log_level);
+      //log_level = LOG_LEVEL_DEFAULT;
+      LOGA("No LOG_LEVEL configured. Current LOG_LEVEL is: %d.", log_level);
     }
   } else
-    LOGC("LOG_LEVEL is: %d.", log_level);
+    LOGC("LOG_LEVEL not read, now is: %d.", log_level);
 
   // Get list of PLC for configuration
   Setting* DEVlist;
