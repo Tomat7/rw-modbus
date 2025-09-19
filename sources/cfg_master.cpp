@@ -64,7 +64,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
     return (EXIT_FAILURE);
   }
 
-  static int saved_level = 0;
+  static int saved_level = LOG_LEVEL_DEFAULT;
   // Read/Set LogLevel from CFG file.
   if (saved_level == log_level) {
     try {

@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <deque>
 
 #include "./config.h"
 #include "./libs.h"
@@ -43,11 +44,23 @@ int main(int argc, char** argv)
 {
   Console::save();
   log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging
-//  openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
-  LOGA("Log 'Modbus' ready.");
-  LOGC("Log 'Modbus' ready.");
-  LOGE("Log 'Modbus' ready.");
+  LOGA("Log 'Modbus' started.");
   signal(SIGINT, close_sigint);
+
+//======================================================
+  var_test0();
+  int R, C;
+  Console::get_size(&R, &C);
+  LOGA("TTY window size: %d rows, %d columns.", R, C);
+  console_wait_sec(Cfg.timeout_sec * 3);
+
+  std::deque<int> numbers { 1, 2, 3, 4, 5 };
+  int first = numbers.front();    // 1
+  int last = numbers.back();      // 5
+  int second = numbers[1];        // 2
+  int third = numbers.at(2);      // 3
+  std::cout << first << second << third << last << std::endl; // 1235
+// =====================================================
 
   Timer t;
   std::set<string> Mode{MODBUS_MODES};
@@ -68,13 +81,7 @@ int main(int argc, char** argv)
       LOGA("Argument '%s' ignored.", argv[2]);
   }
 
-  var_test0();
-
 // =======================================================
-  int R, C;
-  Console::get_size(&R, &C);
-  LOGA("TTY window size: %d rows, %d columns.", R, C);
-  console_wait_sec(Cfg.timeout_sec * 3);
 
   init_all();
 
@@ -96,8 +103,8 @@ int main(int argc, char** argv)
     //refresh_ncurses();
     clear();
 #else
-    printf("%s", ESC_CLS);
-    printf("%s", ESC_HOME);
+//    Console::clear();
+    Console::home();
     fflush(stdout);
 #endif
 
@@ -124,7 +131,6 @@ int main(int argc, char** argv)
     flush_logger();
 
     // Slave.handle_slave(timeout_sec * 1000000);
-
     /*
         int ch = console_read(0, Cfg.timeout_sec * 1000000);
         if (ch != -1)
@@ -132,6 +138,7 @@ int main(int argc, char** argv)
         else
           PRINTF("!\n");
     */
+
     int nb_cycles = Cfg.timeout_sec * 1000 / CONSOLE_WAIT_MS;
 
     for (int i = 0; i < nb_cycles; i++) {
@@ -139,13 +146,11 @@ int main(int argc, char** argv)
       flush_logger();
       if (ch != -1) {
         parse_char(ch);
-//        flush_logger();
-//        console_wait(Cfg.timeout_sec);
         break;
       }
     }
 
-    PRINTF("!\n");
+    PRINTF("\n");
 
     //    wait_console(TIMEOUT_SEC);
     //    t.start(x);

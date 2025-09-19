@@ -55,9 +55,11 @@
 
 // ANSI Escape Sequences
 #define ESC_ "\033["
-#define ESC_CLS ESC_ "2J"
+#define ESC_CLEAR ESC_ "2J"
 #define ESC_HOME ESC_ "H"
 #define ESC_BLINK ESC_ "5m"
+#define ESC_CURSOR_WHERE ESC_ "6n"
+#define ESC_CURSOR_GOTO ESC_ "%d;%dH" // 1st %d - row, 2nd %d - column
 
 // ANSI color codes
 #define NRM "\033[0m"

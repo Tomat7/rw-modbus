@@ -14,6 +14,8 @@ class Console
 public:
   static void save();
   static void restore();
+  static void clear();
+  static void home();
 
   static int read_us(int _us = 1);
   static int read_ms(int _ms = 1);

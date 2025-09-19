@@ -9,23 +9,32 @@
 #include <termios.h>
 #include <unistd.h>    // For STDOUT_FILENO
 
+#include <cstdint>
 #include <iostream>
 #include <sys/ioctl.h> // For ioctl and winsize
 
-#include <cstdint>
+// ANSI Escape Sequences
+#define ESC_ "\033["
+#define ESC_CLEAR "\033[2J"
+#define ESC_HOME "\033[H"
+#define ESC_BLINK "\033[5m"
+#define ESC_CURSOR_WHERE "\033[6n"
+#define ESC_CURSOR_GOTO "\033[%d;%dH" // 1st %d - row, 2nd %d - column
 
 struct termios Console::saved_termios;
 saved_t Console::saved;
 
 void Console::save() { tcgetattr(STDIN_FILENO, &saved_termios); }
 void Console::restore() { tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios); }
+void Console::clear() { printf("%s", ESC_CLEAR); }
+void Console::home() { printf("%s", ESC_HOME); }
 
 int Console::read_us(int _us) { return read_char(0, (suseconds_t)_us); }
 int Console::read_ms(int _ms) { return read_char(0, (suseconds_t)(_ms * 1000)); }
 int Console::read_sec(int _s) { return read_char((time_t)_s, 0); }
 
-void Console::moveRW(int _row, int _col) { printf("\033[%d;%dH", _row, _col); }
-void Console::gotoXY(int _x, int _y) { printf("\033[%d;%dH", _y, _x); }
+void Console::moveRW(int _row, int _col) { printf(ESC_CURSOR_GOTO, _row, _col); }
+void Console::gotoXY(int _x, int _y) { printf(ESC_CURSOR_GOTO, _y, _x); }
 
 int Console::read_char(time_t _sec, suseconds_t _usec)  // считываем с консоли
 {
@@ -81,7 +90,7 @@ int Console::get_cursor(int* row, int* col)
   tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
 
   // Send ANSI escape sequence to query cursor position ESC[6n
-  write(STDOUT_FILENO, "\033[6n", 4);
+  write(STDOUT_FILENO, ESC_CURSOR_WHERE, 4);
 
   // Read response from terminal
   while (i < sizeof(buffer) - 1) {

@@ -126,11 +126,18 @@ void parse_char(int ch)
     LOGA("Char 'S' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     flush_logger();
     console_wait_sec(Cfg.timeout_sec);
+  } else if (((char)ch == 'r') || ((char)ch == 'c')) {
+    LOGA("Clear/refresh screena.");
+    console_wait_sec(1);
+    Console::clear();
+    fflush(stdout);
   } else if ((char)ch == 'H') {
     Cfg.show_mb_regs = !Cfg.show_mb_regs;
     LOGA("Char 'H' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
     flush_logger();
     console_wait_sec(Cfg.timeout_sec);
+    Console::clear();
+    fflush(stdout);
     /*   } else if ((char)ch == 'o') {
         LOGA("Char 'o' pressed. Start OPC_refresh_.\n");
         task_opc_refresh_(nullptr);
