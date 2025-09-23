@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <deque>
 #include <sys/ioctl.h> // For ioctl and winsize
 
 // ANSI Escape Sequences
@@ -23,6 +24,7 @@
 
 struct termios Console::saved_termios;
 saved_t Console::saved;
+saved_t Console::scroll;
 
 void Console::save() { tcgetattr(STDIN_FILENO, &saved_termios); }
 void Console::restore() { tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios); }
@@ -35,6 +37,7 @@ int Console::read_sec(int _s) { return read_char((time_t)_s, 0); }
 
 void Console::moveRW(int _row, int _col) { printf(ESC_CURSOR_GOTO, _row, _col); }
 void Console::gotoXY(int _x, int _y) { printf(ESC_CURSOR_GOTO, _y, _x); }
+
 
 int Console::read_char(time_t _sec, suseconds_t _usec)  // считываем с консоли
 {
