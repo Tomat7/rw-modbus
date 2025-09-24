@@ -7,10 +7,12 @@
 struct saved_t {
   int row;
   int col;
+  int work_row;
+  int work_col;
   int max_row;
   int max_col;
-  int scroll_row;
-  int scroll_col;
+  int start_row;
+  int start_col;
 };
 
 class Console
@@ -33,17 +35,21 @@ public:
   static void moveRW(int _row, int _col);
   static void gotoXY(int _x, int _y);
 
-  void scrolling_refresh();
-  void lines_add(std::string _str);
-  void lines_flush();
+  static void scrolling_start();
+  static void lines_add(std::string _str);
+
+  //static void lines_flush();
+  static void lines_reprint();
+  static bool update_size();
+  static bool update_scroll_pos();
 
 private:
   static int read_char(time_t _sec, suseconds_t _usec);
-  static bool lines_trim(int _scrolling_size);
+  static bool lines_trim(size_t _scrolling_size);
 
   static struct termios saved_termios;
 
-  static saved_t saved, scroll;
+  static saved_t scroll;
   static std::deque<std::string> lines;
 
 };

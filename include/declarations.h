@@ -70,9 +70,9 @@ bool isdebug();
 void init_all();
 void deinit_all();
 void reinit();
-void init_ncurses();
-void refresh_ncurses();
-void flush_logger();
+//void init_ncurses();
+//void refresh_ncurses();
+//void flush_logger();
 void parse_char(int ch);
 string to_lower(string str);
 

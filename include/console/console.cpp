@@ -23,8 +23,6 @@
 #define ESC_CURSOR_GOTO "\033[%d;%dH" // 1st %d - row, 2nd %d - column
 
 struct termios Console::saved_termios;
-saved_t Console::saved;
-saved_t Console::scroll;
 
 void Console::save() { tcgetattr(STDIN_FILENO, &saved_termios); }
 void Console::restore() { tcsetattr(STDIN_FILENO, TCSANOW, &saved_termios); }
@@ -70,7 +68,7 @@ int Console::read_char(time_t _sec, suseconds_t _usec)  // считываем с
 
 int Console::save_cursor()
 {
-  return get_cursor(&saved.row, &saved.col);
+  return get_cursor(&scroll.row, &scroll.col);
 }
 
 void Console::set_cursor(int row, int col)
@@ -125,8 +123,8 @@ int Console::get_size(int* maxrow, int* maxcol)
   // TIOCGWINSZ is the command to get window size
   // &w is a pointer to the winsize struct where the information will be stored
   if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &win_size) == 0) {
-    saved.max_row = win_size.ws_row;
-    saved.max_col = win_size.ws_col;
+    scroll.max_row = win_size.ws_row;
+    scroll.max_col = win_size.ws_col;
     *maxrow = win_size.ws_row;
     *maxcol = win_size.ws_col;
   } else

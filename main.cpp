@@ -89,8 +89,8 @@ int main(int argc, char** argv)
 //  logger_set_queue(true);
 //  float f = 1.2345;
 
-  init_ncurses();
-  refresh_ncurses();
+//  init_ncurses();
+//  refresh_ncurses();
 
 // ==================================================================
 // ==================================================================
@@ -98,15 +98,9 @@ int main(int argc, char** argv)
 
   for (;;) {
     logger_set_queue(true);
-
-#ifdef USE_NCURSES
-    //refresh_ncurses();
-    clear();
-#else
 //    Console::clear();
     Console::home();
     fflush(stdout);
-#endif
 
     opc_client_();
     opc_server_();
@@ -126,10 +120,10 @@ int main(int argc, char** argv)
     //t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
 
     mb_print_help();
-
-    logger_set_queue(false);
-    flush_logger();
-
+    /*
+        logger_set_queue(false);
+        flush_logger();
+    */
     // Slave.handle_slave(timeout_sec * 1000000);
     /*
         int ch = console_read(0, Cfg.timeout_sec * 1000000);
@@ -139,12 +133,17 @@ int main(int argc, char** argv)
           PRINTF("!\n");
     */
 
+    Console::scrolling_start();
     int nb_cycles = Cfg.timeout_sec * 1000 / CONSOLE_WAIT_MS;
+    string logged_;
 
     for (int i = 0; i < nb_cycles; i++) {
       int ch = Console::read_ms(CONSOLE_WAIT_MS);
-      flush_logger();
+      while (logger_get_string(logged_))
+        Console::lines_add(logged_);
+      //flush_logger();
       if (ch != -1) {
+        logger_set_queue(false);
         parse_char(ch);
         break;
       }

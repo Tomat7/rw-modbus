@@ -107,24 +107,24 @@ void parse_char(int ch)
 
   if ((char)ch == 'Q') {
     LOGA("Char 'Q' pressed. Correct exit. Bye.\n");
-    flush_logger();
+//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
     deinit_all();
     exit(EXIT_SUCCESS);
   } else if ((char)ch == 'R') {
     LOGA("Char 'R' pressed. Full reconfiguration.\n");
-    flush_logger();
+//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
     reinit();
   } else if (((char)ch == 'F') || ((char)ch == 'f')) {
     Cfg.timeout_sec = 1;
     LOGA("Char 'F' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
-    flush_logger();
+//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
   } else if (((char)ch == 'S') || ((char)ch == 's')) {
     Cfg.timeout_sec = 5;
     LOGA("Char 'S' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
-    flush_logger();
+//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
   } else if (((char)ch == 'r') || ((char)ch == 'c')) {
     LOGA("Clear/refresh screena.");
@@ -134,7 +134,7 @@ void parse_char(int ch)
   } else if ((char)ch == 'H') {
     Cfg.show_mb_regs = !Cfg.show_mb_regs;
     LOGA("Char 'H' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
-    flush_logger();
+//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
     Console::clear();
     fflush(stdout);
@@ -150,49 +150,30 @@ void parse_char(int ch)
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;
     LOGA("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
-    flush_logger();
+//    flush_logger();
     log_level = loglvl;
     console_wait_sec(Cfg.timeout_sec);
   } else if ((char)ch == ' ') {
     PRINTF("%s %s %s \n", C_GRN, "=============================", C_NORM);
-    flush_logger();
+//    flush_logger();
   } else {
     PRINTF("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NORM);
-    flush_logger();
+//    flush_logger();
     console_wait_sec(Cfg.timeout_sec * 2);
   }
 }
 
-void init_ncurses()
-{
-#ifdef USE_NCURSES
-  initscr();  // Start curses mode
-  start_color();
-  scrollok(stdscr, TRUE);
-  cbreak();   // Line buffering disabled, Pass on everty thing to me
-#endif
-}
-
-void refresh_ncurses()
-{
-#ifdef USE_NCURSES
-  refresh();
-//    wrefresh(win_data);
-#endif
-}
-
-void flush_logger()
-{
-#ifdef USE_NCURSES
+/*
+  void flush_logger()
+  {
   string logged_;
   while (logger_get_string(logged_))
-    PRINTF("%s", logged_.c_str());
-  refresh_ncurses();
-#else
-  logger_flush_printf();
-  fflush(stdout);
-#endif
-}
+    Console::lines_add(logged_);
+
+  //  logger_flush_printf();
+  //  fflush(stdout);
+  }
+*/
 
 void console_wait_sec(int _sec) { Console::read_sec(_sec); }
 
