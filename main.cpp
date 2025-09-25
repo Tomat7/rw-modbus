@@ -30,9 +30,9 @@ void var_test0();
 
 static void close_sigint(int dummy)
 {
+  logger_set_queue(false);
   LOGC("Exit by Ctrl-C. Bye.\n");
   deinit_all();
-  Console::restore();
   closelog();
   exit(dummy);
 }
@@ -139,12 +139,11 @@ int main(int argc, char** argv)
 
     for (int i = 0; i < nb_cycles; i++) {
       int ch = Console::read_ms(CONSOLE_WAIT_MS);
-      while (logger_get_string(logged_))
-        Console::lines_add(logged_);
-      //flush_logger();
+      flush_logger();
       if (ch != -1) {
         logger_set_queue(false);
         parse_char(ch);
+        Console::clear();
         break;
       }
     }

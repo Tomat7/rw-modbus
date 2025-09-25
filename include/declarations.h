@@ -40,6 +40,7 @@ struct cfg_t {
   mb_t mb;
   //  int log_level;
   bool show_mb_regs = true;
+  bool show_regs = true;
   int timeout_sec = TIMEOUT_SEC;
   int tasks_nb = TASKS_NB_MAX;
   int regs_refresh_ms = REGS_REFRESH_MS;
@@ -72,7 +73,7 @@ void deinit_all();
 void reinit();
 //void init_ncurses();
 //void refresh_ncurses();
-//void flush_logger();
+void flush_logger();
 void parse_char(int ch);
 string to_lower(string str);
 

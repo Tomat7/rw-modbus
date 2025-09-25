@@ -158,6 +158,11 @@ void mb_print_help()
 #else
 void regs_update()
 {
+  if (!Cfg.show_regs) {
+    STRmap.clear();
+    return;
+  }
+
   PRINTF("\n===== regs_update =====\n");
   // task_regs_refresh_();
   regmap_mux.lock();
@@ -210,8 +215,9 @@ void reg_print(Reg_c &rm)
 // Print help message
 void mb_print_help()
 {
-  PRINTF("%s'F'/'S' - fast/slow refresh, 'H' - (un)hide Modbus regs%s\n", C_BOLD, C_NORM);
-  PRINTF("%s1..7 - set loglevel, 'R' - reread config, 'Q'- exit%s\n", C_BOLD, C_NORM);
+  PRINTF("%s'F'/'S' - fast/slow refresh, 'M'/'R' - (un)hide Modbus/ANY regs%s\n", C_BOLD, C_NORM);
+  PRINTF("%s1..7 - set loglevel, 'C' - reread config, 'Q'- exit%s\n", C_BOLD, C_NORM);
+  PRINTF("===================================================================================\n");
 }
 
 #endif

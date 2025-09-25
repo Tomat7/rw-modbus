@@ -9,6 +9,9 @@
 saved_t Console::scroll;
 std::deque<std::string> Console::lines;
 
+int Console::max_row() { return scroll.max_row; }
+int Console::max_col() { return scroll.max_col; }
+
 void Console::scrolling_start()
 {
   if (update_size() || update_scroll_pos()) {
@@ -46,7 +49,7 @@ void Console::lines_add(std::string _str)
   if (lines_trim(scroll.max_row - scroll.start_row))
     lines_reprint();
   else {
-    printf("= %li %s", lines.size(), lines.back().c_str());
+    printf("%s", lines.back().c_str());
     get_cursor(&scroll.work_row, &scroll.work_col);
   }
 }
@@ -55,8 +58,8 @@ void Console::lines_reprint()
 {
   set_cursor(scroll.start_row, scroll.start_col);
   for (size_t i=0; i < lines.size(); i++)
-    //  printf("%s", lines[i].c_str());
-    printf(": %li %s", lines.size(), lines[i].c_str());
+    printf("%s", lines[i].c_str());
+  //printf(": %li %s", lines.size(), lines[i].c_str());
   get_cursor(&scroll.work_row, &scroll.work_col);
 }
 

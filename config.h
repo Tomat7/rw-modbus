@@ -36,6 +36,7 @@
 #define CONSOLE_WAIT_MS 100
 
 #define USE_SYSLOG
+#define LOG_STR_LEN 75
 
 #ifndef SYSLOG_NAME
 #define SYSLOG_NAME "RW-modbus"

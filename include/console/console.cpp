@@ -36,7 +36,6 @@ int Console::read_sec(int _s) { return read_char((time_t)_s, 0); }
 void Console::moveRW(int _row, int _col) { printf(ESC_CURSOR_GOTO, _row, _col); }
 void Console::gotoXY(int _x, int _y) { printf(ESC_CURSOR_GOTO, _y, _x); }
 
-
 int Console::read_char(time_t _sec, suseconds_t _usec)  // считываем с консоли
 {
   int rb = -1;

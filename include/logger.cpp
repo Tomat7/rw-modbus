@@ -76,7 +76,8 @@ void logger(const char* _logname, int _prio, const char* _func,
     else
       format = fmt.c_str();
 
-    snprintf(buff_fn, MESSAGE_MAX_LEN, "%s%s%s ", C_BLU, fname, color);
+    if (!no_filename)
+      snprintf(buff_fn, MESSAGE_MAX_LEN, "%s%s ", C_BLU, fname);
   }
 
   va_list arg1;
@@ -91,7 +92,7 @@ void logger(const char* _logname, int _prio, const char* _func,
   }
 
   if (!no_print) {
-    snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s\n", buff_fn, buff_va, C_NORM);
+    snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s%s\n", buff_fn, color, buff_va, C_NORM);
 
     if (print_to_queue)
       Print_queue.emplace(std::string(buffer));

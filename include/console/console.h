@@ -31,6 +31,8 @@ public:
   static int get_size(int* maxrow, int* maxcol);
   static int get_cursor(int* row, int* col);
   static void set_cursor(int row, int col);
+  static int max_row();
+  static int max_col();
 
   static void moveRW(int _row, int _col);
   static void gotoXY(int _x, int _y);

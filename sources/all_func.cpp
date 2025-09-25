@@ -5,6 +5,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <ctime>
+#include <chrono>
+#include <iostream>
 
 #include "config.h"
 #include "libs.h"
@@ -92,13 +95,7 @@ void deinit_all()
   LOGD("regs_deinit() - done");
   mb_deinit();
   LOGD("mb_deinit() - done");
-
-#ifdef USE_NCURSES
-  endwin();
-#endif
-
   Console::restore();
-
 }
 
 void parse_char(int ch)
@@ -106,38 +103,39 @@ void parse_char(int ch)
   int loglvl;
 
   if ((char)ch == 'Q') {
+    logger_set_queue(false);
     LOGA("Char 'Q' pressed. Correct exit. Bye.\n");
-//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
     deinit_all();
     exit(EXIT_SUCCESS);
-  } else if ((char)ch == 'R') {
-    LOGA("Char 'R' pressed. Full reconfiguration.\n");
-//    flush_logger();
+  } else if ((char)ch == 'C') {
+    LOGA("Char 'C' pressed. Full reconfiguration.\n");
     console_wait_sec(Cfg.timeout_sec);
     reinit();
   } else if (((char)ch == 'F') || ((char)ch == 'f')) {
     Cfg.timeout_sec = 1;
     LOGA("Char 'F' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
-//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
   } else if (((char)ch == 'S') || ((char)ch == 's')) {
     Cfg.timeout_sec = 5;
     LOGA("Char 'S' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
-//    flush_logger();
     console_wait_sec(Cfg.timeout_sec);
-  } else if (((char)ch == 'r') || ((char)ch == 'c')) {
-    LOGA("Clear/refresh screena.");
-    console_wait_sec(1);
-    Console::clear();
-    fflush(stdout);
-  } else if ((char)ch == 'H') {
+    /*   } else if ((char)ch == 'c') {
+        LOGA("Clear/refresh screena.");
+        console_wait_sec(1);
+        Console::clear();
+        fflush(stdout); */
+  } else if ((char)ch == 'M') {
     Cfg.show_mb_regs = !Cfg.show_mb_regs;
-    LOGA("Char 'H' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
-//    flush_logger();
+    LOGA("Char 'M' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
     console_wait_sec(Cfg.timeout_sec);
-    Console::clear();
     fflush(stdout);
+  } else if ((char)ch == 'R') {
+    Cfg.show_regs = !Cfg.show_regs;
+    LOGA("Char 'R' pressed. Hide/unhide ANY registers.\n", Cfg.timeout_sec);
+    console_wait_sec(Cfg.timeout_sec);
+    fflush(stdout);
+
     /*   } else if ((char)ch == 'o') {
         LOGA("Char 'o' pressed. Start OPC_refresh_.\n");
         task_opc_refresh_(nullptr);
@@ -150,16 +148,41 @@ void parse_char(int ch)
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;
     LOGA("Digit pressed. Logging Level changed to '%d'.\n", loglvl);
-//    flush_logger();
     log_level = loglvl;
     console_wait_sec(Cfg.timeout_sec);
-  } else if ((char)ch == ' ') {
+  } else if ((char)ch == ' ')
     PRINTF("%s %s %s \n", C_GRN, "=============================", C_NORM);
-//    flush_logger();
-  } else {
+  else {
     PRINTF("Wow! What to do with: %s '%c'? %s \n", C_BLU, (char)ch, C_NORM);
-//    flush_logger();
     console_wait_sec(Cfg.timeout_sec * 2);
+  }
+}
+
+void flush_logger()
+{
+  static size_t max_len;
+  string logger_str;
+
+  while (logger_get_string(logger_str)) {
+    time_t timestamp = time(NULL);
+    struct tm *local_tm = localtime(&timestamp);
+    char time_str[22];
+    strftime(time_str, 22, "%d.%m.%Y %H:%M:%S ", local_tm);
+
+    string print_str = C_DARK;
+    print_str.append(time_str);
+    print_str.append(logger_str);
+
+    size_t _len = print_str.length();
+
+    if (_len < max_len) {
+      print_str.pop_back();
+      print_str.append(max_len - _len, ' ');
+      print_str.append("\n");
+    } else
+      max_len = _len;
+
+    Console::lines_add(print_str);
   }
 }
 
