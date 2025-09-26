@@ -143,7 +143,7 @@ int main(int argc, char** argv)
       if (ch != -1) {
         logger_set_queue(false);
         parse_char(ch);
-        Console::clear();
+        Console::refresh();
         break;
       }
     }

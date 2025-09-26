@@ -21,6 +21,7 @@ public:
   static void save();
   static void restore();
   static void clear();
+  static void refresh();
   static void home();
 
   static int read_us(int _us = 1);
@@ -41,9 +42,9 @@ public:
   static void lines_add(std::string _str);
 
   //static void lines_flush();
-  static void lines_reprint();
+  static void lines_print();
   static bool update_size();
-  static bool update_scroll_pos();
+  static bool update_scroll_position();
 
 private:
   static int read_char(time_t _sec, suseconds_t _usec);
