@@ -43,12 +43,12 @@ public:
 
   //static void lines_flush();
   static void lines_print();
-  static bool update_size();
-  static bool update_scroll_position();
+  static bool size_changed();
 
 private:
   static int read_char(time_t _sec, suseconds_t _usec);
   static bool lines_trim(size_t _scrolling_size);
+  static bool scroll_position_changed();
 
   static struct termios saved_termios;
 

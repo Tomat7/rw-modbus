@@ -14,8 +14,8 @@ int Console::max_col() { return scroll.max_col; }
 
 void Console::scrolling_start()
 {
-  if (update_size() || update_scroll_position()) {
-    clear();
+  if (size_changed() || scroll_position_changed()) {
+//    clear();
     lines_trim(scroll.max_row - scroll.start_row);
     lines_print();
   } else {
@@ -58,7 +58,7 @@ void Console::lines_print()
   get_cursor(&scroll.work_row, &scroll.work_col);
 }
 
-bool Console::update_size()
+bool Console::size_changed()
 {
   int old_max_row = scroll.max_row;
   int old_max_col = scroll.max_col;
@@ -70,7 +70,7 @@ bool Console::update_size()
     return false;
 }
 
-bool Console::update_scroll_position()
+bool Console::scroll_position_changed()
 {
   int old_row = scroll.start_row;
   int old_col = scroll.start_col;

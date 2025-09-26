@@ -17,7 +17,7 @@ struct regupd_t {
   bool upd_opc = false;  // need print "<"
   bool err_plc = false;  // need blynk
   bool err_opc = false;  // need ...
-  numeric_u opc_value;     // value to print
+  numeric_u opc_value;   // value to print
 };
 
 static map<string, regupd_t> STRmap;
@@ -95,67 +95,6 @@ int task_regs_refresh_(void* params)
   return x;
 }
 
-
-#ifdef USE_NCURSES
-void regs_update()
-{
-  PRINTF("\n===== regs_update =====\n");
-  // task_regs_refresh_();
-  regmap_mux.lock();
-  bool is_eol = false;
-  string X;
-
-  for (auto& [n, rm] : REGmap) {
-    //  reg_print(n, &rm.ptr_reg[0]->data);
-    if (!rm.is_modbus || Cfg.show_mb_regs) {
-
-      reg_print(rm);
-
-      X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
-      X += (STRmap[n].upd_opc) ? "<" : " ";  // If new value got from OPC
-      PRINTF("%s", X.c_str());
-
-      if (STRmap[n].upd_opc)
-        PRINTF("%7d", STRmap[n].opc_value.ui16);
-      else
-        PRINTF("%7s", "       ");
-
-      if (is_eol)
-        PRINTF(" + %s\n", ""/* NRM */);
-      else
-        PRINTF(" +     %s", ""/* NRM */);
-
-      is_eol = !is_eol;
-    }
-  }
-
-  if (is_eol)
-    PRINTF("\n");
-
-  STRmap.clear();
-  regmap_mux.unlock();
-
-  return;
-}
-
-void reg_print(Reg_c &rm)
-{
-  const char* C = ""; /* getColor(rm.var_errors == 0); */  // C_WHIB;  // NRM;
-  const char* B = ""; /* getBlynk(rm.var_errors == 0); */
-  PRINTF("%s%-12s %4i %s%9s%s", C, rm.rn, rm.var_errors, B, rm.c_str(), "");
-
-  // char ch[50];
-  //PRINTF("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
-}
-
-// Print help message
-void mb_print_help()
-{
-  PRINTF("'F'/'S' - fast/slow refresh, 'H' - (un)hide Modbus regs%s\n", "");
-  PRINTF("1..7 - set loglevel, 'R' - reread config, 'Q'- exit%s\n", "");
-}
-
-#else
 void regs_update()
 {
   if (!Cfg.show_regs) {
@@ -170,9 +109,7 @@ void regs_update()
   string X;
 
   for (auto& [n, rm] : REGmap) {
-    //  reg_print(n, &rm.ptr_reg[0]->data);
     if (!rm.is_modbus || Cfg.show_mb_regs) {
-
       reg_print(rm);
 
       X = (STRmap[n].upd_plc) ? ">" : " ";   // If new value got from PLC
@@ -207,9 +144,6 @@ void reg_print(Reg_c &rm)
   const char* C = getColor(rm.var_errors == 0);  // C_WHIB;  // NRM;
   const char* B = getBlynk(rm.var_errors == 0);
   PRINTF("%s%-14s %4i %s%9s%s", C, rm.rn, rm.var_errors, B, rm.c_str(), C_NORM);
-
-  // char ch[50];
-  //PRINTF("%s%-14s %s%14s", C, rm.rn, B, rm.get_local_value_chars(ch));
 }
 
 // Print help message
@@ -220,35 +154,11 @@ void mb_print_help()
   PRINTF("===================================================================================\n");
 }
 
-#endif
 // BOLD or Dark grey if error
 const char* getColor(bool noErrors) { return noErrors ? C_BOLD : C_DARK; }
 
-// NORN or blym-blym if error
+// NORM or blym-blym if error
 const char* getBlynk(bool noErrors) { return noErrors ? C_NORM : ESC_BLINK; }
-
-
-/*
-  void reg_print(string rn, const regdata_t* rd)
-  {
-  // PRINTF("\n===== regs_print =====\n");
-  const char* C = getColor(rd->rerrors == 0);  // C_WHIB;  // NRM;
-  const char* B = getBlynk(rd->rerrors == 0);
-
-  // TODO: full recode with new TYPE_*
-
-  if (rd->rtype == UA_TYPES_UINT16)
-    PRINTF("%s%-14s %s%7d", C, rn.c_str(), B, (uint16_t)rd->rvalue);
-  else if (rd->rtype == UA_TYPES_INT16)
-    PRINTF("%s%-14s %s%7d", C, rn.c_str(), B, (int16_t)rd->rvalue);
-  else if (rd->rtype == NOTUA_TYPES_F100)
-    PRINTF("%s%-14s %s%7.2f", C, rn.c_str(), B, (int16_t)rd->rvalue * 0.01);
-
-  PRINTF(C_NORM);
-
-  return;
-  }
-*/
 
 
 // eof

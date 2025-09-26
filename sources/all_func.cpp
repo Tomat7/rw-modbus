@@ -103,7 +103,6 @@ void parse_char(int ch)
   int loglvl;
 
   if ((char)ch == 'Q') {
-    logger_set_queue(false);
     LOGA("Char 'Q' pressed. Correct exit. Bye.\n");
     console_wait_sec(Cfg.timeout_sec);
     deinit_all();
@@ -120,11 +119,6 @@ void parse_char(int ch)
     Cfg.timeout_sec = 5;
     LOGA("Char 'S' pressed. Timeout set to: %d sec.\n", Cfg.timeout_sec);
     console_wait_sec(Cfg.timeout_sec);
-    /*   } else if ((char)ch == 'c') {
-        LOGA("Clear/refresh screena.");
-        console_wait_sec(1);
-        Console::clear();
-        fflush(stdout); */
   } else if ((char)ch == 'M') {
     Cfg.show_mb_regs = !Cfg.show_mb_regs;
     LOGA("Char 'M' pressed. Hide/unhide Modbus registers.\n", Cfg.timeout_sec);
@@ -135,15 +129,6 @@ void parse_char(int ch)
     LOGA("Char 'R' pressed. Hide/unhide ANY registers.\n", Cfg.timeout_sec);
     console_wait_sec(Cfg.timeout_sec);
     fflush(stdout);
-
-    /*   } else if ((char)ch == 'o') {
-        LOGA("Char 'o' pressed. Start OPC_refresh_.\n");
-        task_opc_refresh_(nullptr);
-        wait_console(Cfg.timeout_sec);
-      } else if ((char)ch == 'g') {
-        LOGA("Char 'g' pressed. Start REGS_refresh_.\n");
-        task_regs_refresh_(nullptr);
-        wait_console(Cfg.timeout_sec); */
   } else if (isdigit((char)ch)) {
     loglvl = (char)ch - '0';  // new loglevel
     log_level = 2;

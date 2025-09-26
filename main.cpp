@@ -89,16 +89,14 @@ int main(int argc, char** argv)
 //  logger_set_queue(true);
 //  float f = 1.2345;
 
-//  init_ncurses();
-//  refresh_ncurses();
-
 // ==================================================================
 // ==================================================================
 // ==================================================================
 
   for (;;) {
     logger_set_queue(true);
-//    Console::clear();
+    if (Console::size_changed())
+      Console::clear();
     Console::home();
     fflush(stdout);
 
@@ -106,32 +104,11 @@ int main(int argc, char** argv)
     opc_server_();
 
     PRINTF("\n");
-
-    //t.start();
     regs_update();
-    //t.spent_auto("============ REG print finished in: ");
-
-    //const char* x = nullptr;
-    //t.start(x);
     mb_print_summary();
-    // mb_update();
-    // LOGD("regdata_t size: %d", sizeof(regdata_t));
-    // LOGD("P array size: %d", sizeof(P));
-    //t.spent_auto("============ MB update: spent on ALL PLCs by TCP: ");
-
     mb_print_help();
-    /*
-        logger_set_queue(false);
-        flush_logger();
-    */
-    // Slave.handle_slave(timeout_sec * 1000000);
-    /*
-        int ch = console_read(0, Cfg.timeout_sec * 1000000);
-        if (ch != -1)
-          parse_char(ch);
-        else
-          PRINTF("!\n");
-    */
+    fflush(stdout);
+    //Console::read_ms(3000);
 
     Console::scrolling_start();
     int nb_cycles = Cfg.timeout_sec * 1000 / CONSOLE_WAIT_MS;
@@ -150,10 +127,6 @@ int main(int argc, char** argv)
 
     PRINTF("\n");
 
-    //    wait_console(TIMEOUT_SEC);
-    //    t.start(x);
-    //    t.sleep_ms(TMOUT);
-    //    t.spent();
   }
 
   return (EXIT_SUCCESS);
