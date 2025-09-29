@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 
   for (;;) {
     logger_set_queue(true);
-    if (Console::size_changed())
+    if (Console::resized())
       Console::clear();
     Console::home();
     fflush(stdout);

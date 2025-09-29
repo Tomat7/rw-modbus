@@ -43,7 +43,7 @@ public:
 
   //static void lines_flush();
   static void lines_print();
-  static bool size_changed();
+  static bool resized();
 
 private:
   static int read_char(time_t _sec, suseconds_t _usec);
