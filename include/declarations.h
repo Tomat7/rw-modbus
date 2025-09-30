@@ -174,7 +174,7 @@ namespace OPC_client
 template <typename T>
 void WriteValue(string s_, T val_)
 {
-  OPCclient.WriteNumber(s_, val_);
+  OPCclient.Write(s_, val_);
 }
 
 struct ReadValue {
@@ -187,7 +187,7 @@ struct ReadValue {
   operator T()
   {
     T x;
-    OPCclient.ReadNumber(_s, x);
+    OPCclient.Read(_s, x);
     return x;
   }
 };

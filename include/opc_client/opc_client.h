@@ -51,19 +51,29 @@ public:
   void init();
   void stop();
 
-  template <typename T> bool ReadNumber(string varname, T &x);
-  template <typename T> bool WriteNumber(string varname, T &x);
+  int getUAtype(string varname);
+
+  template <typename T> bool Read(string varname, T &x);
+  template <typename T> bool Write(string varname, T &x);
 
 private:
-  bool connect();
+  bool _connect();
+  void _variant_init();
+  void _variant_clean();
+  void _nodeid_init(string s);
+  int _get_type(UA_Variant *v);
 
-  std::map<type_index, int> ua_types;  // UA types coding (index is CPP type_index)
+  std::map<type_index, int> ua_types_map;  // UA types coding (index is CPP type_index)
   mutex* muxClient = nullptr;
   UA_Client* uaClient = nullptr;
+  UA_Variant* uaVariant = nullptr;
+  UA_NodeId uaNodeId;
+
   UA_StatusCode scConnect = UA_STATUSCODE_BAD;
   UA_StatusCode scWrite = UA_STATUSCODE_BAD;
   UA_StatusCode scRead = UA_STATUSCODE_BAD;
   const char* uaUrl = nullptr;
+  string uaUrlString;
 //  int rc = 0;
 };
 

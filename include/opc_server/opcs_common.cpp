@@ -29,14 +29,14 @@ OpcServer_c::OpcServer_c(UA_UInt16 _port)
 {
   uaPort = _port;
   // Filling the type_map
-  ua_types[type_index(typeid(int16_t))] = UA_TYPES_INT16;
-  ua_types[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
-  ua_types[type_index(typeid(int32_t))] = UA_TYPES_INT32;
-  ua_types[type_index(typeid(uint32_t))] = UA_TYPES_UINT32;
-  ua_types[type_index(typeid(int64_t))] = UA_TYPES_INT64;
-  ua_types[type_index(typeid(uint64_t))] = UA_TYPES_UINT64;
-  ua_types[type_index(typeid(float))] = UA_TYPES_FLOAT;
-  ua_types[type_index(typeid(double))] = UA_TYPES_DOUBLE;
+  ua_types_map[type_index(typeid(int16_t))] = UA_TYPES_INT16;
+  ua_types_map[type_index(typeid(uint16_t))] = UA_TYPES_UINT16;
+  ua_types_map[type_index(typeid(int32_t))] = UA_TYPES_INT32;
+  ua_types_map[type_index(typeid(uint32_t))] = UA_TYPES_UINT32;
+  ua_types_map[type_index(typeid(int64_t))] = UA_TYPES_INT64;
+  ua_types_map[type_index(typeid(uint64_t))] = UA_TYPES_UINT64;
+  ua_types_map[type_index(typeid(float))] = UA_TYPES_FLOAT;
+  ua_types_map[type_index(typeid(double))] = UA_TYPES_DOUBLE;
 }
 
 OpcServer_c::~OpcServer_c()

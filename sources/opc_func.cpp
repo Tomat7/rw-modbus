@@ -108,6 +108,7 @@ void opc_server_()
   using OPC_server::ReadValue;
   using OPC_server::WriteValue;
   static float f = 1.2345f;
+  //uint16_t n = 3;
   /*
           i++;
           string s;
@@ -172,6 +173,7 @@ void opc_client_()
 
   static uint16_t cnt = 0;
   static uint16_t val = 0;
+  uint16_t n = 1;
 
   cnt++;
   string s = OPCs.GetVarFullName("Millis");
@@ -179,6 +181,8 @@ void opc_client_()
 //    t.start();
 //  OPCclient.ReadNumber(s, ccc);
   val = ReadValue(s);
+  int ua_t = OPCclient.getUAtype(s);
+//  Number_c v = ReadValue(s);
 //    t.spent_auto("OPC Client read ONE reg in: ");
 
   /*
@@ -189,22 +193,24 @@ void opc_client_()
     } else
       printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
   */
-  if (OPCclient.WriteNumber(s, cnt)) {
+  if (OPCclient.Write(s, cnt)) {
     // OPCclient.ReadNumber(s, ccc);
     val = ReadValue(s);
     OPCs.RefreshAllValues();
-    PRINTF("%s: %d %d %d\n", s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
+    PRINTF("%d. ua_type: %d %s: %d %d %d\n", n, ua_t, s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
   } else
-    PRINTF("%s: %d %d %d error!\n", s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
+    PRINTF("%d. ua_type: %d %s: %d %d %d error!\n", n, ua_t, s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
 // ======= Read CLIENT =======
 
+  n++;
   float t1 = 0;
   s = OPCs.GetVarFullName("Tkub1");
+  ua_t = OPCclient.getUAtype(s);
 
-  if (OPCclient.ReadNumber(s, t1))
-    PRINTF("%s: %f %f\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+  if (OPCclient.Read(s, t1))
+    PRINTF("%d. ua_type: %d %s: %f %f\n", n, ua_t, s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
   else
-    PRINTF("%s: %f %f error!\n", s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+    PRINTF("%d. ua_type: %d %s: %f %f error!\n", n, ua_t, s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
 }
 
 // eof

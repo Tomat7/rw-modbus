@@ -86,8 +86,7 @@ int main(int argc, char** argv)
   init_all();
 
   OPCclient.init("opc.tcp://localhost:4840");
-//  logger_set_queue(true);
-//  float f = 1.2345;
+  opc_client_();
 
 // ==================================================================
 // ==================================================================

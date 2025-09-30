@@ -113,7 +113,7 @@ private:
 
   badvalue_t bad_value;
   map<string, ua_var_t> vars;        // All vars/regs here.
-  map<type_index, int> ua_types;  // UA types coding (as CPP type_index)
+  map<type_index, int> ua_types_map;  // UA types coding (as CPP type_index)
   /*
     // This way INCREASE size of executable file :-(
     map<type_index, int> type_m1 {

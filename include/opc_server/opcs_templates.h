@@ -5,7 +5,7 @@
 #include "opcs_class.h"
 
 #define _TYPE_INDEX(_XNUM) type_index(typeid(_XNUM))
-#define _UA_TYPE(_XNUM) ua_types[_TYPE_INDEX(_XNUM)]
+#define _UA_TYPE(_XNUM) ua_types_map[_TYPE_INDEX(_XNUM)]
 
 // ======= Definition of add TEMPLATEs =========
 
@@ -16,7 +16,7 @@ int OpcServer_c::AddVar(std::string s, T Numeric, int rmode)
   // rc = add_VarName(s, type_map[type_index(typeid(Numeric))], rmode);
 
   rc = 0;
-  if (ua_types.count(_TYPE_INDEX(Numeric)))
+  if (ua_types_map.count(_TYPE_INDEX(Numeric)))
     rc = add_VarName(s, _UA_TYPE(Numeric), rmode);
   else
     LOGA("Add: Ignore wrong type: %s", s.c_str());

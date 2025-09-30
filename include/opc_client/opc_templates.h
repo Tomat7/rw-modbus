@@ -7,7 +7,7 @@
 #ifdef _UA_TYPE
 #undef _UA_TYPE
 #endif
-#define _UA_TYPE(_XNUM) ua_types[type_index(typeid(_XNUM))]
+#define _UA_TYPE(_XNUM) ua_types_map[type_index(typeid(_XNUM))]
 
 
 namespace OPC
@@ -16,32 +16,29 @@ namespace OPC
 // ======= Definition of __READ__ TEMPLATE =========
 
 template <typename T>
-bool OpcClient_c::ReadNumber(string varname, T &x)
+bool OpcClient_c::Read(string varname, T &x)
 {
   muxClient->lock();
   bool rc = false;
 
-  if (connect()) {
+  if (_connect()) {
     /* Read the value attribute of the node. UA_Client_readValueAttribute is a
        wrapper for the raw read service available as UA_Client_Service_read. */
     /* Variants can hold scalar values and arrays of any type */
-    UA_Variant* uaVariant = UA_Variant_new();
-    UA_Variant_clear(uaVariant);
-    UA_Variant_init(uaVariant);
-
     /* NodeId of the variable holding the current time */
+    _variant_init();
+
     const UA_NodeId nodeId = UA_NODEID_STRING(1, const_cast<char*>(varname.c_str()));
     scRead = UA_Client_readValueAttribute(uaClient, nodeId, uaVariant);
-    bool hasScalar = UA_Variant_hasScalarType(uaVariant, &UA_TYPES[_UA_TYPE(x)]);
+    bool isSameType = UA_Variant_hasScalarType(uaVariant, &UA_TYPES[_UA_TYPE(x)]);
 
-    if (scRead == UA_STATUSCODE_GOOD && hasScalar) {
+    if (scRead == UA_STATUSCODE_GOOD && isSameType) {
       x = *(T*)uaVariant->data;
       rc = true;
     } else
       LOGE("%s reading: %s", varname.c_str(), UA_StatusCode_name(scRead));
 
-    UA_Variant_clear(uaVariant);
-    UA_Variant_delete(uaVariant);
+    _variant_clean();
   }
 
   muxClient->unlock();
@@ -50,18 +47,15 @@ bool OpcClient_c::ReadNumber(string varname, T &x)
 }
 
 template <typename T>
-bool OpcClient_c::WriteNumber(string varname, T &x)
+bool OpcClient_c::Write(string varname, T &x)
 {
   muxClient->lock();
   bool rc = false;
 
-  if (connect()) {
-
+  if (_connect()) {
+//  Init & Write & Clean
+    _variant_init();
     T value = x;
-    UA_Variant* uaVariant = UA_Variant_new();
-    UA_Variant_clear(uaVariant);
-    UA_Variant_init(uaVariant);
-
     const UA_NodeId nodeId = UA_NODEID_STRING(1, const_cast<char*>(varname.c_str()));
     scWrite = UA_Variant_setScalarCopy(uaVariant, &value, &UA_TYPES[_UA_TYPE(x)]);
 //  int uaType = ua_types[type_index(typeid(x))];
@@ -77,8 +71,7 @@ bool OpcClient_c::WriteNumber(string varname, T &x)
         rc = true;
     }
 
-    UA_Variant_clear(uaVariant);
-    UA_Variant_delete(uaVariant);
+    _variant_clean();
   }
 
   muxClient->unlock();
