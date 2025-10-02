@@ -19,7 +19,7 @@ MAKEFLAGS+= -j8
 CXX_VER=c++20
 EXEC_FILE=a.out
 SRCDIRS= .
-SUBDIRS= include sources
+SUBDIRS= include sources libs
 
 INCLUDES = -I.
 LIBS=libmodbus libconfig++
@@ -33,9 +33,11 @@ CC=$(CXX)
 # === C/CPP flags configuration ===
 #CPPFLAGS= -std=$(CXX_VER)
 CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors
+#CPPFLAGS= -Weffc++
 #LDFLAGS = -Wall #-std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)
-OPTFLAGS= -flto=auto -O2 -march=native
+OPTFLAGS= -flto=auto -O2
+TARGET_ARCH= -march=native
 #-Os -s -Wl,--as-needed
 
 
@@ -153,6 +155,13 @@ check: clean $(EXEC_FILE)
 debug: clean $(EXEC_FILE)
 fulldebug: clean $(EXEC_FILE)
 
+# To view defaults (implicit variables): make -p
+# or https://runebook.dev/ru/docs/gnu_make/-index-
+# Default:
+# COMPILE.cpp = $(COMPILE.cc)
+# COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+# LINK.o = $(CC) $(LDFLAGS) $(TARGET_ARCH)
+
 # ================ Linking ================================
 $(EXEC_FILE): $(OBJLIST)
 	$(ECHO_GRE)"=== Linking$(MESSAGE): $@"$(NC)
@@ -192,8 +201,10 @@ clang: Clang-LLVM
 
 google: Clang-google
 
+#ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
+ASTYLEFILES= -r "*.cpp,*.h" -i --exclude="test" --exclude="tmp" --exclude="bin" --exclude="conf"
 ASTYLEFLAGS= -k1 -W3 -xg -xb -xj -xp -c -O -H
-ASTYLEFILES=$(foreach dir,$(SRCDIRS),$(dir)/*.cpp,*.h)
+
 CLANGFILES =$(foreach dir,$(SRCDIRS),$(dir)/*.cpp $(dir)/*.h)
 
 # ================ Styling ALL SRC FILES recursively! ==================

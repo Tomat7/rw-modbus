@@ -5,11 +5,11 @@
 #include <iomanip>
 #include <iostream>
 
-#include "include/opc_server/opcs_class.h"
-#include "include/opc_client/opc_client.h"
-#include "include/plc/plc_class.h"
-#include "include/reg/reg_class.h"
-#include "include/scheduler/scheduler.h"
+#include "libs/opc_server/opcs_class.h"
+#include "libs/opc_client/opc_client.h"
+#include "libs/plc/plc_class.h"
+#include "libs/reg/reg_class.h"
+#include "libs/scheduler/scheduler.h"
 
 using cchar = const char;
 

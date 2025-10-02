@@ -5,6 +5,8 @@
 // https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
 //
 
+#include "reg_class.h"
+
 #include <fcntl.h>
 #include <stdarg.h>
 #include <sys/mman.h>
@@ -17,8 +19,7 @@
 #include <string>
 
 #include "include/logger.h"
-#include "include/plc/plc_class.h"
-#include "reg_class.h"
+//#include "include/plc/plc_class.h"
 //#include "include/shmem/shmem.h"
 
 #ifdef SYSLOG_NAME

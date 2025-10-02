@@ -34,21 +34,21 @@ int main(int argc, char** argv)
 
   openlog("Modbus", LOG_NDELAY, LOG_LOCAL1);
   signal(SIGINT, close_sigint);
-/* 
-  float ff = PI;
-  void* _p = nullptr;
-  _p = &ff;
-  variant_t va;
-  va = ff;
-  char buff[50];
-  snprintf(buff, STR_SIZE, "PI=%f, *_p=%f, v=%f", ff, *static_cast<float*>(_p), va);
-  LOGx("buff= %s", buff);
-  exit(EXIT_SUCCESS);
- */
+  /*
+    float ff = PI;
+    void* _p = nullptr;
+    _p = &ff;
+    variant_t va;
+    va = ff;
+    char buff[50];
+    snprintf(buff, STR_SIZE, "PI=%f, *_p=%f, v=%f", ff, *static_cast<float*>(_p), va);
+    LOGx("buff= %s", buff);
+    exit(EXIT_SUCCESS);
+  */
   // ==============================================================
   // ==============================================================
   // ==============================================================
-  
+
   variant_t v;
   v = 3.1415926f;
   auto vv = v;
@@ -61,10 +61,10 @@ int main(int argc, char** argv)
   int32_t I32 = INT32_MAX; // 18446744073709551615; //1234567890;
 
 
-  long long LLX = 0; 
-  unsigned long long uLLX = 0; 
-  long LX = 0; 
-  unsigned long uLX = 0; 
+  long long LLX = 0;
+  unsigned long long uLLX = 0;
+  long LX = 0;
+  unsigned long uLX = 0;
   printf("LLX size = %i, uLLX size = %i\n", sizeof(LLX), sizeof(uLLX));
   printf("LX size = %i, uLX size = %i\n", sizeof(LX), sizeof(uLX));
 

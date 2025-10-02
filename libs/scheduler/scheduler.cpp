@@ -18,7 +18,7 @@
 #include <thread>
 
 #include "include/logger.h"
-#include "include/plc/plc_class.h"
+//#include "../plc/plc_class.h"
 //#include "include/shmem/shmem.h"
 
 #ifdef SYSLOG_NAME

@@ -3,8 +3,8 @@
 // reg_datatype.h ----------------------------------
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
-#include "include/opc_server/opcs_class.h"
-#include "include/plc/plc_class.h"
+//#include "../opc_server/opcs_class.h"
+//#include "../plc/plc_class.h"
 
 /*
   Defines of data types. (incuding TWO and FOUR words types)
@@ -33,7 +33,6 @@ enum byteorder_t {
   BO_REF = 200,
   BO_NOTHING = 255,
 };
-
 
 
 #define NOTUA_TYPES_1ST 1001  // first reg of "long" (32/64 bits) word

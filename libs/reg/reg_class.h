@@ -23,9 +23,14 @@
 #include <string>
 
 //#include "include/opc_server/opcs_class.h"
+//#include "include/numeric.h"
+//#include "include/number/number_class.h"
+//#include "include/plc/plc_class.h"
 #include "include/numeric.h"
-#include "include/numeric/number_class.h"
-#include "include/plc/plc_class.h"
+#include "../number/number_class.h"
+//#include "../opc_server/opcs_class.h"
+#include "../plc/plc_class.h"
+
 #include "reg_datatype.h"
 
 //#define USE_SYSLOG
@@ -53,21 +58,6 @@ using std::string;
 using std::vector;
 using std::map;
 
-/*
-  using variant_t = std::variant<
-                  int16_t, uint16_t,
-                  int32_t, uint32_t,
-                  int64_t, uint64_t,
-                  double, float >;
-*/
-
-/*
-  struct regprop_t {
-  int rtype;
-  int rsize;
-  byteorder_t rbyteorder;
-  };
-*/
 struct regprop_t : typeprop_t {
   byteorder_t rbyteorder;
 };

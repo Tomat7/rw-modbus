@@ -25,13 +25,13 @@
 #include "include/numeric.h"
 #include "include/logger.h"
 #include "include/macros.h"
-
-#include "include/console/console.h"
-#include "include/opc_server/opcs_class.h"
-#include "include/opc_client/opc_client.h"
-#include "include/plc/plc_class.h"
-#include "include/numeric/number_class.h"
 #include "include/timer.h"
+
+#include "libs/console/console.h"
+#include "libs/opc_server/opcs_class.h"
+#include "libs/opc_client/opc_client.h"
+#include "libs/plc/plc_class.h"
+#include "libs/number/number_class.h"
 //#include "include/scheduler/scheduler.h"
 
 #ifdef USE_NCURSES
