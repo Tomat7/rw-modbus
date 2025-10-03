@@ -153,7 +153,7 @@ Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
 //    _type_size = var_size;
 //    var_format = printfmt_map[var_type_ua];
     byte_order = regprop_map[st_].rbyteorder;
-    Number.set_type(var_size_word * 2, var_type_ua);
+    Number.set_type(var_type_ua);
   } else
     LOGE("Wrong type: %s, reg: %s", st_.c_str(), rn);
 
@@ -212,7 +212,7 @@ Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
 //    var_format = printfmt_map[var_type_ua];
     byte_order = regprop_map[st_].rbyteorder;  // for SCADA ??
     visible = true;
-    Number.set_type(var_size_word * 2, var_type_ua);
+    Number.set_type(var_type_ua);
   } else
     LOGE("Wrong type: '%s', reg: '%s'", _str_type.c_str(), rn);
 

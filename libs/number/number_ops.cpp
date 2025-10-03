@@ -163,8 +163,37 @@ type_index Number_c::_get_typeidx()
   case NOTUA_TYPES_F100:
     return type_index(typeid(float));
   default:
-    LOGE("Type: %i not supported", _type_ua);
+    LOGE("Type_index: %i not supported", _type_ua);
     return type_index(typeid(bool));
+  }
+}
+
+int Number_c::_get_typesize()
+{
+  switch (_type_ua) {
+  case UA_TYPES_INT16:
+    return 2;
+  case UA_TYPES_INT32:
+    return 4;
+  case UA_TYPES_INT64:
+    return 8;
+  case UA_TYPES_UINT16:
+    return 2;
+  case UA_TYPES_UINT32:
+    return 4;
+  case UA_TYPES_UINT64:
+    return 8;
+  case UA_TYPES_FLOAT:
+    return 4;
+  case UA_TYPES_DOUBLE:
+    return 8;
+  case NOTUA_TYPES_F10:
+    return 2;
+  case NOTUA_TYPES_F100:
+    return 2;
+  default:
+    LOGE("Type_size: %i not supported", _type_ua);
+    return 0;
   }
 }
 

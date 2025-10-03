@@ -48,7 +48,8 @@ class Number_c
 public:
   numeric_u value;
 
-  Number_c(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
+  //Number_c(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
+  Number_c(int _uatype = UA_TYPES_UINT16);
   Number_c(const Number_c &V);
   ~Number_c() {LOGD("--Number_c! %x ", this);}
 
@@ -148,9 +149,12 @@ public:
   }
 
 // =======================================
-
-  bool set_type(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
+//  bool set_type(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
+  bool set_type(int _uatype);
+  bool set(int _uatype, void* _ptr, bool _status = true);
   char* c_str(const char* fmt = nullptr);
+
+  bool status = true; // false if something wrong with value/type or other
 
   int16_t &i16 = value.i16;
   int32_t &i32 = value.i32;
@@ -181,6 +185,7 @@ private:
   char* _c_str(const char* fmt);
 
   type_index _get_typeidx();
+  int _get_typesize();
 
   static map<type_index, int> typeidx_ua_map;
   static map<const int, const char*> format_map;

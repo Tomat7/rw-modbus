@@ -42,49 +42,33 @@ map<const int, const char*> Number_c::format_map {
   {NOTUA_TYPES_F10, "%.1f" }
 };
 
-
-/*
-  map<int, type_index> Number_c::ua_typeidx_map {
-  {UA_TYPES_INT16,  type_index(typeid(int16_t)) },
-  {UA_TYPES_INT32,  type_index(typeid(int32_t)) },
-  {UA_TYPES_INT64,  type_index(typeid(int64_t)) },
-  {UA_TYPES_UINT16, type_index(typeid(uint16_t))},
-  {UA_TYPES_UINT32, type_index(typeid(uint32_t))},
-  {UA_TYPES_UINT64, type_index(typeid(uint64_t))},
-  {UA_TYPES_FLOAT,  type_index(typeid(float))   },
-  {UA_TYPES_DOUBLE, type_index(typeid(double))  },
-  {NOTUA_TYPES_F100, type_index(typeid(float))  },
-  {NOTUA_TYPES_F10, type_index(typeid(float))   }
-  };
-*/
 // ===============================================================
-
-Number_c::Number_c(int _sz_byte, int _uatype)
+//Number_c::Number_c(int _sz_byte, int _uatype)
+Number_c::Number_c(int _uatype)
 {
-  if (!set_type(_sz_byte, _uatype))
-    LOGA("Number_c: set_type() TYPE: %i not supported, _uatype");
+  if (!set_type(_uatype))
+    LOGA("Number_c: set_type() TYPE: %i not supported", _uatype);
   LOGx("+Number_c: %x new (_sz_byte, _uatype) %u", this, ui64);
 }
 
-bool Number_c::set_type(int _sz_byte, int _uatype)
+bool Number_c::set_type(int _uatype)
 {
   bool rc = false;
   _type_ua = _uatype;
   _type_index = _get_typeidx(); //   ua_typeidx_map[_type_ua];
-  if ((_sz_byte != 0) && (_type_index != type_index(typeid(bool))) /* ua_typeidx_map.count(_uatype) */) {
-    _type_size_bytes = _sz_byte;
-    //  _type_ua = _uatype;
-    //  _type_index = _get_typeidx(); //   ua_typeidx_map[_type_ua];
+  _type_size_bytes = _get_typesize();
+  if (_type_size_bytes != 0) {
     _type_fmt = format_map[_type_ua];
     _type_is_int = (_type_ua < UA_TYPES_FLOAT);
+    status = true;
     value.ui64 = 0;
     rc = true;
   } else {
-    _type_size_bytes = 0;
-    _type_index = type_index(typeid(bool));
     _type_ua = 0;
+    _type_index = type_index(typeid(bool));
     _type_fmt = "Number_c: TYPE not supported";
     _type_is_int = false;
+    status = false;
     value.ui64 = 0;
     LOGx("Number_c: _uatype %i not supported", _uatype);
   }
@@ -92,9 +76,23 @@ bool Number_c::set_type(int _sz_byte, int _uatype)
   return rc;
 };
 
+bool Number_c::set(int _uatype, void* _psrc, bool _status)
+{
+  bool rc = set_type(_uatype);
+
+  if (rc) {
+    status = _status;
+    value.ui64 = 0;
+    memcpy(_ptr, _psrc, _type_size_bytes);
+  } else
+    LOGA("Number_c: set() TYPE: %i not supported", _uatype);
+
+  return rc;
+};
+
 Number_c::Number_c(const Number_c &V)
 {
-  if (!set_type((int)V._type_size_bytes, V._type_ua)) //init(V._type_index, V._type_size_bytes, &V.value.ui64))
+  if (!set_type(V._type_ua)) //init(V._type_index, V._type_size_bytes, &V.value.ui64))
     LOGA("Number_c: TYPE& not supported");
   else
     ui64 = V.ui64;
@@ -103,33 +101,13 @@ Number_c::Number_c(const Number_c &V)
 
 Number_c &Number_c::operator= (const Number_c &V)
 {
-  if (!set_type((int)V._type_size_bytes, V._type_ua)) //(!init(V._type_index, V._type_size_bytes, &V.value.ui64))
+  if (!set_type(V._type_ua)) //(!init(V._type_index, V._type_size_bytes, &V.value.ui64))
     LOGA("Number_c: = TYPE not supported");
   else
     ui64 = V.ui64;
   LOGx("+Number_c: %x (= V) Number_c %s", this, c_str());
   return *this;
 }
-
-/*
-  Number_c::Number_c(const Number_c &V)
-  {
-  if (!init(V._type_index, V._type_size_bytes, &V.value.ui64))
-    LOGA("Number_c: TYPE& not supported");
-  LOGx("xNumber_c: new COPY %u", ui64);
-  };
-*/
-
-/*
-  Number_c &Number_c::operator= (const Number_c &V)
-  {
-  if (!init(V._type_index, V._type_size_bytes, &V.value.ui64))
-    LOGA("Number_c: = TYPE not supported");
-  LOGx("+Number_c: %x (= V) Number_c %s", this, c_str());
-  return *this;
-  }
-*/
-
 
 bool Number_c::same_type(const type_index &_ti)
 {
@@ -145,6 +123,7 @@ bool Number_c::init(const type_index &_ti, const size_t &_sz, const void* _psrc)
     _type_ua = typeidx_ua_map[_ti];
     _type_fmt = format_map[_type_ua];
     _type_is_int = (_type_ua < UA_TYPES_FLOAT);
+    status = true;
     value.ui64 = 0;
     memcpy(_ptr, _psrc, _type_size_bytes);
     rc = true;
@@ -154,6 +133,7 @@ bool Number_c::init(const type_index &_ti, const size_t &_sz, const void* _psrc)
     _type_ua = 0;
     _type_fmt = "Number_c: TYPE not supported";
     _type_is_int = false;
+    status = false;
     value.ui64 = 0;
     LOGx("Number_c::init wrong TYPE!");
   }
@@ -265,6 +245,43 @@ bool Number_c::init(const type_index &_ti, const size_t &_sz, const void* _psrc)
   _value.dbl = x;
   init_type(type_index(typeid(x)));
   LOGx("Number_c: double %f", dbl);
+  };
+*/
+
+
+/*
+  Number_c::Number_c(const Number_c &V)
+  {
+  if (!init(V._type_index, V._type_size_bytes, &V.value.ui64))
+    LOGA("Number_c: TYPE& not supported");
+  LOGx("xNumber_c: new COPY %u", ui64);
+  };
+*/
+
+/*
+  Number_c &Number_c::operator= (const Number_c &V)
+  {
+  if (!init(V._type_index, V._type_size_bytes, &V.value.ui64))
+    LOGA("Number_c: = TYPE not supported");
+  LOGx("+Number_c: %x (= V) Number_c %s", this, c_str());
+  return *this;
+  }
+*/
+
+
+
+/*
+  map<int, type_index> Number_c::ua_typeidx_map {
+  {UA_TYPES_INT16,  type_index(typeid(int16_t)) },
+  {UA_TYPES_INT32,  type_index(typeid(int32_t)) },
+  {UA_TYPES_INT64,  type_index(typeid(int64_t)) },
+  {UA_TYPES_UINT16, type_index(typeid(uint16_t))},
+  {UA_TYPES_UINT32, type_index(typeid(uint32_t))},
+  {UA_TYPES_UINT64, type_index(typeid(uint64_t))},
+  {UA_TYPES_FLOAT,  type_index(typeid(float))   },
+  {UA_TYPES_DOUBLE, type_index(typeid(double))  },
+  {NOTUA_TYPES_F100, type_index(typeid(float))  },
+  {NOTUA_TYPES_F10, type_index(typeid(float))   }
   };
 */
 

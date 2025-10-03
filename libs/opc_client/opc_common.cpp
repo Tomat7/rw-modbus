@@ -94,7 +94,7 @@ void OpcClient_c::stop()
 }
 
 
-int OpcClient_c::getUAtype(string varname)
+int OpcClient_c::get_uatype(string varname)
 {
   muxClient->lock();
   int rc = -2;
@@ -104,7 +104,7 @@ int OpcClient_c::getUAtype(string varname)
     scRead = UA_Client_readValueAttribute(uaClient, _NODEID(varname), uaVariant);
 
     if (scRead == UA_STATUSCODE_GOOD)
-      rc = _get_type(uaVariant);
+      rc = _variant_get_uatype(uaVariant);
 
     _variant_clean();
   }

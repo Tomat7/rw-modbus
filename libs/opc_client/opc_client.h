@@ -23,6 +23,7 @@
 #include <typeinfo>
 
 #include "include/logger.h"
+#include "libs/number/number_class.h"
 
 #ifndef MANUFACTURER_NAME
 #define MANUFACTURER_NAME "tomat7@vm32.ru"
@@ -51,17 +52,20 @@ public:
   void init();
   void stop();
 
-  int getUAtype(string varname);
+  int get_uatype(string varname);
 
   template <typename T> bool Read(string varname, T &x);
   template <typename T> bool Write(string varname, T &x);
+
+  Number_c ReadNumber(string varname);
+//  bool WriteNumber(string varname, Number_c &x);
 
 private:
   bool _connect();
   void _variant_init();
   void _variant_clean();
-  void _nodeid_init(string s);
-  int _get_type(UA_Variant *v);
+  //void _nodeid_init(string s);
+  int _variant_get_uatype(UA_Variant *v);
 
   std::map<type_index, int> ua_types_map;  // UA types coding (index is CPP type_index)
   mutex* muxClient = nullptr;

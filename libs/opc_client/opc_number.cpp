@@ -1,5 +1,4 @@
-#pragma once
-// opc_templates.h ----------------------------------
+// opc_number.cpp ----------------------------------
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include "opc_client.h"
@@ -15,11 +14,13 @@ namespace OPC
 
 // ======= Definition of __READ__ TEMPLATE =========
 
-template <typename T>
-bool OpcClient_c::Read(string varname, T &x)
+Number_c OpcClient_c::ReadNumber(string varname)
 {
   muxClient->lock();
-  bool rc = false;
+//  bool rc = false;
+  int _type = 0;
+  Number_c Numx;
+  Numx.status = false;
 
   if (_connect()) {
     /* Read the value attribute of the node. UA_Client_readValueAttribute is a
@@ -30,11 +31,11 @@ bool OpcClient_c::Read(string varname, T &x)
 
     const UA_NodeId nodeId = UA_NODEID_STRING(1, const_cast<char*>(varname.c_str()));
     scRead = UA_Client_readValueAttribute(uaClient, nodeId, uaVariant);
-    bool isSameType = UA_Variant_hasScalarType(uaVariant, &UA_TYPES[_UA_TYPE(x)]);
 
-    if (scRead == UA_STATUSCODE_GOOD && isSameType) {
-      x = *(T*)uaVariant->data;
-      rc = true;
+    if (scRead == UA_STATUSCODE_GOOD) {
+      _type = _variant_get_uatype(uaVariant);
+      Numx.set(_type, uaVariant->data);
+//      rc = true;
     } else
       LOGE("%s reading: %s", varname.c_str(), UA_StatusCode_name(scRead));
 
@@ -43,23 +44,24 @@ bool OpcClient_c::Read(string varname, T &x)
 
   muxClient->unlock();
 
-  return rc;
+  return Numx;
 }
 
-template <typename T>
-bool OpcClient_c::Write(string varname, T &x)
-{
+/*
+  template <typename T>
+  bool OpcClient_c::Write(string varname, T &x)
+  {
   muxClient->lock();
   bool rc = false;
 
   if (_connect()) {
-//  Init & Write & Clean
+  //  Init & Write & Clean
     _variant_init();
     T value = x;
     const UA_NodeId nodeId = UA_NODEID_STRING(1, const_cast<char*>(varname.c_str()));
     scWrite = UA_Variant_setScalarCopy(uaVariant, &value, &UA_TYPES[_UA_TYPE(x)]);
-//  int uaType = ua_types[type_index(typeid(x))];
-//  scWrite = UA_Variant_setScalarCopy(uaVariant, &value, &UA_TYPES[uaType]);
+  //  int uaType = ua_types[type_index(typeid(x))];
+  //  scWrite = UA_Variant_setScalarCopy(uaVariant, &value, &UA_TYPES[uaType]);
 
     if (scWrite != UA_STATUSCODE_GOOD)
       LOGE("Variant/Scalar: %s", UA_StatusCode_name(scWrite));
@@ -77,7 +79,9 @@ bool OpcClient_c::Write(string varname, T &x)
   muxClient->unlock();
 
   return rc;
-}
+  }
+*/
+
 
 } // namespace OPC
 

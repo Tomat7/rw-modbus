@@ -80,7 +80,7 @@ void OpcClient_c::_variant_clean()
   UA_Variant_delete(uaVariant);
 }
 
-int OpcClient_c::_get_type(UA_Variant *v)
+int OpcClient_c::_variant_get_uatype(UA_Variant *v)
 {
   int rc = -1;
   for (size_t i = 0; i < nb_types; i++)
@@ -91,12 +91,13 @@ int OpcClient_c::_get_type(UA_Variant *v)
   return rc;
 }
 
-void OpcClient_c::_nodeid_init(string s)
-{
+/*
+  void OpcClient_c::_nodeid_init(string s)
+  {
   uaNodeId = UA_NODEID_STRING(1, const_cast<char*>(s.c_str()));
-}
+  }
 
-
+*/
 } // namespace OPC
 
 // eof

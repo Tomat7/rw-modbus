@@ -181,7 +181,7 @@ void opc_client_()
 //    t.start();
 //  OPCclient.ReadNumber(s, ccc);
   val = ReadValue(s);
-  int ua_t = OPCclient.getUAtype(s);
+  int ua_t = OPCclient.get_uatype(s);
 //  Number_c v = ReadValue(s);
 //    t.spent_auto("OPC Client read ONE reg in: ");
 
@@ -193,11 +193,11 @@ void opc_client_()
     } else
       printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
   */
-  if (OPCclient.Write(s, cnt)) {
-    // OPCclient.ReadNumber(s, ccc);
+  Number_c nval = OPCclient.ReadNumber(s);
+  if (OPCclient.Write(s, cnt) && nval.status) {
     val = ReadValue(s);
     OPCs.RefreshAllValues();
-    PRINTF("%d. ua_type: %d %s: %d %d %d\n", n, ua_t, s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
+    PRINTF("%d. ua_type: %d %s: %s %d %d %d\n", n, ua_t, s.c_str(), nval.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
   } else
     PRINTF("%d. ua_type: %d %s: %d %d %d error!\n", n, ua_t, s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
 // ======= Read CLIENT =======
@@ -205,12 +205,20 @@ void opc_client_()
   n++;
   float t1 = 0;
   s = OPCs.GetVarFullName("Tkub1");
-  ua_t = OPCclient.getUAtype(s);
+  ua_t = OPCclient.get_uatype(s);
+
+  nval = OPCclient.ReadNumber(s);
 
   if (OPCclient.Read(s, t1))
     PRINTF("%d. ua_type: %d %s: %f %f\n", n, ua_t, s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
   else
     PRINTF("%d. ua_type: %d %s: %f %f error!\n", n, ua_t, s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+
+  n++;
+  if (nval.status)
+    PRINTF("%d. ua_type: %d %s: %s\n", n, ua_t, s.c_str(), nval.c_str());
+  else
+    PRINTF("%d. ua_type: %d %s: %s %f %f error!\n", n, ua_t, s.c_str(), nval.c_str(), t1, OPCs.ReadRawUnion(s).fl);
 }
 
 // eof
