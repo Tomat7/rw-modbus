@@ -182,43 +182,56 @@ void opc_client_()
 //  OPCclient.ReadNumber(s, ccc);
   val = ReadValue(s);
   int ua_t = OPCclient.get_uatype(s);
-//  Number_c v = ReadValue(s);
-//    t.spent_auto("OPC Client read ONE reg in: ");
-
-  /*
-    if (OPCclient.WriteNumber(s, cnt)) {
-      OPCclient.ReadNumber(s, ccc);
-      OPCs.RefreshAllValues();
-      printf("%s: %d %d %d\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
-    } else
-      printf("%s: %d %d %d error!\n", s.c_str(), ccc, cnt, OPCs.ReadRawUnion(s).ui16);
-  */
   Number_c nval = OPCclient.ReadNumber(s);
+
   if (OPCclient.Write(s, cnt) && nval.status) {
     val = ReadValue(s);
     OPCs.RefreshAllValues();
     PRINTF("%d. ua_type: %d %s: %s %d %d %d\n", n, ua_t, s.c_str(), nval.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
   } else
     PRINTF("%d. ua_type: %d %s: %d %d %d error!\n", n, ua_t, s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
-// ======= Read CLIENT =======
+
+// ======= Read CLIENT 2 =======
 
   n++;
-  float t1 = 0;
-  s = OPCs.GetVarFullName("Tkub1");
+  uint16_t u1 = 777;
+  s = OPCs.GetVarFullName("Process");
   ua_t = OPCclient.get_uatype(s);
-
   nval = OPCclient.ReadNumber(s);
 
-  if (OPCclient.Read(s, t1))
-    PRINTF("%d. ua_type: %d %s: %f %f\n", n, ua_t, s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+  if (OPCclient.Read(s, u1))
+    PRINTF("%d. ua_type: %d %s: %d %d\n", n, ua_t, s.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
   else
-    PRINTF("%d. ua_type: %d %s: %f %f error!\n", n, ua_t, s.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+    PRINTF("%d. ua_type: %d %s: %d %d Read error!\n", n, ua_t, s.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
+
+// ======= Read CLIENT 3 =======
 
   n++;
   if (nval.status)
-    PRINTF("%d. ua_type: %d %s: %s\n", n, ua_t, s.c_str(), nval.c_str());
+    PRINTF("%d. ua_type: %d %s: %s %d\n", n, ua_t, s.c_str(), nval.c_str(), nval.ui16);
   else
-    PRINTF("%d. ua_type: %d %s: %s %f %f error!\n", n, ua_t, s.c_str(), nval.c_str(), t1, OPCs.ReadRawUnion(s).fl);
+    PRINTF("%d. ua_type: %d %s: %s %d %d Status error!\n", n, ua_t, s.c_str(), nval.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
+
+
+// ======= Read CLIENT 4 =======
+  float f1 = 0;
+  s = OPCs.GetVarFullName("Tkub1");
+  ua_t = OPCclient.get_uatype(s);
+  nval = OPCclient.ReadNumber(s);
+
+  n++;
+  if (OPCclient.Read(s, f1))
+    PRINTF("%d. ua_type: %d Read %s: %s %f\n", n, ua_t, s.c_str(), nval.c_str(), f1);
+  else
+    PRINTF("%d. ua_type: %d Read %s: %s %f %f Read error!\n", n, ua_t, s.c_str(), nval.c_str(), f1, OPCs.ReadRawUnion(s).fl);
+
+
+  n++;
+  if (nval.status)
+    PRINTF("%d. ua_type: %d Status %s: %s %f\n", n, ua_t, s.c_str(), nval.c_str(), nval.fl);
+  else
+    PRINTF("%d. ua_type: %d Status %s: %s %f %f Status error!\n", n, ua_t, s.c_str(), nval.c_str(), f1, OPCs.ReadRawUnion(s).fl);
+
 }
 
 // eof
