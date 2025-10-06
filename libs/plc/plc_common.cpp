@@ -35,7 +35,7 @@ void PLC_c::mb_deinit()
     modbus_free(ctx);
     ctx = nullptr;
   }
-  LOGD("- MB deinit: closed, unmapped and free: %s %s.", ip_addr, dev_name);
+  LOGD("PLC_c::mb_deinit: closed, unmapped and free: %s %s.", ip_addr, dev_name);
 
   return;
 }
@@ -52,7 +52,7 @@ int PLC_c::mb_ctx()
 
   if (ctx == nullptr) {
     rc = -1;
-    LOGE("- %s:%d %s CTX allocate error.", ip_addr, tcp_port, dev_name);
+    LOGE("PLC_c::mb_ctx: %s:%d %s CTX allocate error.", ip_addr, tcp_port, dev_name);
   } else
     LOGI("+ %s:%d %s CTX allocate OK.", ip_addr, tcp_port, dev_name);
 
@@ -74,7 +74,7 @@ int PLC_c::set_reg(uint16_t rval, mbreg_t* rptr)  // !! STATIC !!
         ret = 0;  // No update necessary
     }
   } else
-    LOGE("Error set reg: %s", rptr->rfullname.c_str());
+    LOGE("PLC_c::set_reg(*rptr): Error: %s", rptr->rfullname.c_str());
 
   return ret;
 }
@@ -94,7 +94,7 @@ int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
         rc = 0;  // No update necessary
     }
   } else
-    LOGE("Error set reg: %s", regs[raddr].ch_name);
+    LOGE("PLC_c::set_reg(raddr): Error: %s", regs[raddr].ch_name);
 
   return rc;
 }

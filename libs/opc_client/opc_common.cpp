@@ -47,7 +47,7 @@ OpcClient_c::~OpcClient_c()
 {
   if (uaClient != nullptr)
     stop();
-  LOGN("uaClient: finished.");
+  LOGN("~OPC_cli:: finished.");
 }
 
 void OpcClient_c::init(const char* url_)
@@ -63,14 +63,14 @@ void OpcClient_c::init(const char* url_)
 void OpcClient_c::init()
 {
   if ( uaUrl == nullptr) {
-    LOGA("UA_Client: URL not configured!");
+    LOGA("OPC_cli::init: URL not configured!");
     return;
   }
 
   muxClient = new mutex;
   uaClient = UA_Client_new();
   UA_ClientConfig_setDefault(UA_Client_getConfig(uaClient));
-  LOGI("UA_Client: INIT done");
+  LOGI("OPC_cli::init: done");
 
 }
 
@@ -84,13 +84,13 @@ void OpcClient_c::stop()
     UA_Client_delete(uaClient);
     uaClient = nullptr;
   }
-  LOGN("Stop: uaClient deleted.");
+  LOGN("OPC_cli::Stop: uaClient deleted.");
 
   if (muxClient != nullptr)
     muxClient->unlock();
   delete muxClient;
   muxClient = nullptr;
-  LOGN("Stop: muxClient free.");
+  LOGN("OPC_cli::Stop: muxClient free.");
 }
 
 

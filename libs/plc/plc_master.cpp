@@ -53,7 +53,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
        str_dev_folder.c_str(), str_dev_desc.c_str());
 
   if (!Enabled)
-    LOGA("- PLC will be ignored: %s:%i %s", ip_addr, tcp_port, dev_name);
+    LOGA("+PLC_c:: will be ignored: %s:%i %s", ip_addr, tcp_port, dev_name);
 }
 
 // Destructor in plc_common.cpp
@@ -70,7 +70,7 @@ int PLC_c::mb_connect()  // Master only
       mb.errors++;
       mb.errors_cn++;
       if (att >= attempts)
-        LOGE("%s %s connect: %s ", ip_addr, dev_name,
+        LOGE("PLC_c::mb_connect: %s %s: %s ", ip_addr, dev_name,
              modbus_strerror(errno));
     }
   }
@@ -121,13 +121,13 @@ int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
     mb.errors++;
     mb.errors_rd++;
     if (att >= attempts)
-      LOGE("%s %s read: %s ", ip_addr, dev_name, modbus_strerror(errno));
+      LOGE("PLC_c::read_allregs: %s %s: %s ", ip_addr, dev_name, modbus_strerror(errno));
   } else if (rc != nb_regs) {
     mb.errors++;
     mb.errors_rd++;
     rc = -2;
     if (att >= attempts)
-      LOGE("%s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs, rc);
+      LOGE("PLC_c::read_allregs: %s %s qty: expect %d, got %d", ip_addr, dev_name, nb_regs, rc);
   } else {
     mb.errors = 0;
     for (auto &[a, R] : regs)
@@ -163,14 +163,14 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
 
       if (rc == -1) {
         rc_write--;
-        LOGW("%s %s write reg %s: %s", ip_addr, dev_name, R.ch_name,
+        LOGW("PLC_c::write_master:%s %s reg %s: %s", ip_addr, dev_name, R.ch_name,
              modbus_strerror(errno));
       }
     }
   }
 
   if (rc_write < 0)
-    LOGE("%s %s write regs errors: %i", ip_addr, dev_name, rc_write * -1);
+    LOGE("PLC_c::write_master: %s %s regs errors: %i", ip_addr, dev_name, rc_write * -1);
 
   return rc_write;
 }
@@ -232,7 +232,7 @@ int PLC_c::set_timeout()
 
   rc = modbus_set_response_timeout(ctx, 0, mb.timeout_us);
   if (rc == -1) {
-    LOGE("%s %s set timeout failed: %s", ip_addr, dev_name,
+    LOGE("PLC_c::set_timeout: %s %s failed: %s", ip_addr, dev_name,
          modbus_strerror(errno));
   }
 

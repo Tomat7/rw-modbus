@@ -23,7 +23,7 @@
 #define MANUFACTURER_NAME "tomat7@vm32.ru"
 #define PRODUCT_NAME "Modbus-OPC UA gate"
 #define PRODUCT_URI "https://github.com/Tomat7/rw-modbus"
-#define APPLICATION_NAME "open62541-based Modbus-OPC UA gate"
+#define APPLICATION_NAME "open62541-Modbus-OPC UA gate"
 //#define APPLICATION_URI "urn:unconfigured:application"
 #define APPLICATION_URI_SERVER "opc.tcp://mb-opc.vm32.ru"
 //#define APPLICATION_URI_SERVER "urn:open62541.server.application"

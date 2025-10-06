@@ -48,7 +48,7 @@ bool OpcClient_c::_connect()
       UA_Client_disconnect(uaClient);
       UA_Client_delete(uaClient);
       uaClient = nullptr;
-      LOGI("Connect: uaClient deleted.");
+      LOGI("OPC_cli::Connect: uaClient deleted.");
     }
 
     uaClient = UA_Client_new();
@@ -56,7 +56,7 @@ bool OpcClient_c::_connect()
     scConnect = UA_Client_connect(uaClient, uaUrl);
 
     if (scConnect != UA_STATUSCODE_GOOD) {
-      LOGA("The connection failed: %s", UA_StatusCode_name(scConnect));
+      LOGA("OPC_cli::Connect: failed: %s", UA_StatusCode_name(scConnect));
       UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                   "The connection failed: %s", UA_StatusCode_name(scConnect));
       UA_Client_delete(uaClient);

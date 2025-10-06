@@ -37,7 +37,7 @@ Number_c OpcClient_c::ReadNumber(string varname)
       Numx.set(_type, uaVariant->data);
 //      rc = true;
     } else
-      LOGE("%s reading: %s", varname.c_str(), UA_StatusCode_name(scRead));
+      LOGE("OPC_cli::ReadNumber: %s %s", varname.c_str(), UA_StatusCode_name(scRead));
 
     _variant_clean();
   }

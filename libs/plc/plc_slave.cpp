@@ -53,7 +53,7 @@ int PLC_c::renew_mapping()  // Slave only
     mb.errors_cn++;
     rc = -1;
     if (att >= attempts)
-      LOGE("MB Slave: failed to allocate mapping: %s", modbus_strerror(errno));
+      LOGE("PLC_slave::%s: failed to allocate: %s", __func__, modbus_strerror(errno));
   }
 
   return rc;
@@ -73,7 +73,7 @@ int PLC_c::renew_listen()  // Slave only
     mb.errors_rd++;
     rc = -1;
     if (att >= attempts)
-      LOGE("MB Slave: unable to listen TCP on port: %d", tcp_port);
+      LOGE("PLC_slave::%s: unable on port: %d", __func__, tcp_port);
     return rc;
   }
 
@@ -142,7 +142,7 @@ int PLC_c::handle_slave(int usec)
   if (select(fdmax + 1, &rdset, NULL, NULL, &tv) == -1) {
     mb.errors++;
     rc = -1;
-    LOGE("MB Slave: server select() failure.");
+    LOGE("PLC_slave::%s: server select() failure", __func__);
     return rc;
   }
 
@@ -175,12 +175,12 @@ void PLC_c::new_client()  // Handle new connections
 
   if (newfd == -1) {
     mb.errors_wr++;
-    LOGE("MB Slave: server accept() error.");
+    LOGE("PLC_slave::%s: server accept() error", __func__);
   } else {
     FD_SET(newfd, &refset);
     if (newfd > fdmax)
       fdmax = newfd;  // Keep track of the maximum
-    LOGW("MB Slave: new connection from %s:%d on socket %d",
+    LOGW("PLC_slave::%s: connection from %s:%d on socket %d", __func__,
          inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port, newfd);
   }
 
@@ -199,7 +199,7 @@ void PLC_c::work_client()
     FD_CLR(master_socket, &refset);  // Remove from reference set
     if (master_socket == fdmax)
       fdmax--;
-    LOGW("MB Slave: connection closed on socket %d", master_socket);
+    LOGW("PLC_slave::%s: connection closed on socket %d", __func__, master_socket);
   }
 
   return;
