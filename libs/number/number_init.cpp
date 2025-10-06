@@ -94,8 +94,10 @@ Number_c::Number_c(const Number_c &V)
 {
   if (!set_type(V._type_ua)) //init(V._type_index, V._type_size_bytes, &V.value.ui64))
     LOGA("Number_c: TYPE& not supported");
-  else
+  else {
     ui64 = V.ui64;
+    status = V.status;
+  }
   LOGx("+Number_c: %x new (V) COPY %u", this, ui64);
 };
 
@@ -103,8 +105,10 @@ Number_c &Number_c::operator= (const Number_c &V)
 {
   if (!set_type(V._type_ua)) //(!init(V._type_index, V._type_size_bytes, &V.value.ui64))
     LOGA("Number_c: = TYPE not supported");
-  else
+  else {
     ui64 = V.ui64;
+    status = V.status;
+  }
   LOGx("+Number_c: %x (= V) Number_c %s", this, c_str());
   return *this;
 }

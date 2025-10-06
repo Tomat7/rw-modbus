@@ -35,9 +35,8 @@ Number_c OpcClient_c::ReadNumber(string varname)
     if (scRead == UA_STATUSCODE_GOOD) {
       _type = _variant_get_uatype(uaVariant);
       Numx.set(_type, uaVariant->data);
-//      rc = true;
     } else
-      LOGE("OPC_cli::ReadNumber: %s %s", varname.c_str(), UA_StatusCode_name(scRead));
+      LOGE("OPC_cli::%s: %s %s", __func__, varname.c_str(), UA_StatusCode_name(scRead));
 
     _variant_clean();
   }

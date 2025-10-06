@@ -36,7 +36,7 @@ bool OpcClient_c::Read(string varname, T &x)
       x = *(T*)uaVariant->data;
       rc = true;
     } else
-      LOGE("OPC_cli::Read: %s %s", varname.c_str(), UA_StatusCode_name(scRead));
+      LOGE("OPC_cli::%s: %s %s", __func__, varname.c_str(), UA_StatusCode_name(scRead));
 
     _variant_clean();
   }
@@ -62,11 +62,11 @@ bool OpcClient_c::Write(string varname, T &x)
 //  scWrite = UA_Variant_setScalarCopy(uaVariant, &value, &UA_TYPES[uaType]);
 
     if (scWrite != UA_STATUSCODE_GOOD)
-      LOGE("OPC_cli::Write:Scalar: %s", UA_StatusCode_name(scWrite));
+      LOGE("OPC_cli::%s:Scalar: %s", __func__, UA_StatusCode_name(scWrite));
     else {
       scWrite = UA_Client_writeValueAttribute(uaClient, nodeId, uaVariant);
       if (scWrite != UA_STATUSCODE_GOOD)
-        LOGE("OPC_cli::Write: %s", UA_StatusCode_name(scWrite));
+        LOGE("OPC_cli::%s: %s", __func__, UA_StatusCode_name(scWrite));
       else
         rc = true;
     }
