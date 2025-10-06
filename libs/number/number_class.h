@@ -155,6 +155,7 @@ public:
   char* c_str(const char* fmt = nullptr);
 
   bool status = true; // false if something wrong with value/type or other
+  bool &ok = status;
 
   int16_t &i16 = value.i16;
   int32_t &i32 = value.i32;
@@ -187,8 +188,8 @@ private:
   type_index _get_typeidx();
   int _get_typesize();
 
-  static map<type_index, int> typeidx_ua_map;
-  static map<const int, const char*> format_map;
+  static map<type_index, int> map_ti_ua;
+  static map<const int, const char*> map_ua_fmt;
 //  static map<int, type_index> ua_typeidx_map;
 
 };

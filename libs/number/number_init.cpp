@@ -18,7 +18,7 @@
 #define DEBUG(a) if(isDebug){a}
 
 
-map<type_index, int> Number_c::typeidx_ua_map {
+map<type_index, int> Number_c::map_ti_ua {
   {type_index(typeid(int16_t)),  UA_TYPES_INT16 },
   {type_index(typeid(uint16_t)), UA_TYPES_UINT16},
   {type_index(typeid(int32_t)),  UA_TYPES_INT32 },
@@ -29,17 +29,17 @@ map<type_index, int> Number_c::typeidx_ua_map {
   {type_index(typeid(double)),   UA_TYPES_DOUBLE}
 };
 
-map<const int, const char*> Number_c::format_map {
-  {UA_TYPES_INT16, "%i"  },
-  {UA_TYPES_INT32, "%i"  },
-  {UA_TYPES_INT64, "%li" },
+map<const int, const char*> Number_c::map_ua_fmt {
+  {UA_TYPES_INT16,  "%i"  },
+  {UA_TYPES_INT32,  "%i"  },
+  {UA_TYPES_INT64,  "%li" },
   {UA_TYPES_UINT16, "%u" },
   {UA_TYPES_UINT32, "%u" },
   {UA_TYPES_UINT64, "%lu"},
-  {UA_TYPES_DOUBLE, "%.5lf"},
-  {UA_TYPES_FLOAT, "%.4f"},
+  {UA_TYPES_DOUBLE,  "%.5lf"},
+  {UA_TYPES_FLOAT,   "%.4f"},
   {NOTUA_TYPES_F100, "%.2f"},
-  {NOTUA_TYPES_F10, "%.1f" }
+  {NOTUA_TYPES_F10,  "%.1f" }
 };
 
 // ===============================================================
@@ -58,7 +58,7 @@ bool Number_c::set_type(int _uatype)
   _type_index = _get_typeidx(); //   ua_typeidx_map[_type_ua];
   _type_size_bytes = _get_typesize();
   if (_type_size_bytes != 0) {
-    _type_fmt = format_map[_type_ua];
+    _type_fmt = map_ua_fmt[_type_ua];
     _type_is_int = (_type_ua < UA_TYPES_FLOAT);
     status = true;
     value.ui64 = 0;
@@ -121,11 +121,11 @@ bool Number_c::same_type(const type_index &_ti)
 bool Number_c::init(const type_index &_ti, const size_t &_sz, const void* _psrc)
 {
   bool rc = false;
-  if (typeidx_ua_map.count(_ti)) {
+  if (map_ti_ua.count(_ti)) {
     _type_size_bytes = _sz;
     _type_index = _ti;
-    _type_ua = typeidx_ua_map[_ti];
-    _type_fmt = format_map[_type_ua];
+    _type_ua = map_ti_ua[_ti];
+    _type_fmt = map_ua_fmt[_type_ua];
     _type_is_int = (_type_ua < UA_TYPES_FLOAT);
     status = true;
     value.ui64 = 0;
