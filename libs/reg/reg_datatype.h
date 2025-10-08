@@ -112,7 +112,7 @@ enum byteorder_t {
 #define TYPE_DOUBLE_BS { UA_TYPES_DOUBLE, 4, BO_BS }
 #define TYPE_DOUBLE_LE { UA_TYPES_DOUBLE, 4, BO_LE }
 #define TYPE_DOUBLE_LS { UA_TYPES_DOUBLE, 4, BO_LS }
-#define TYPE_DOUBLE TYPE_DOUBLE_BE  // Big-endian as default
+#define TYPE_DOUBLE TYPE_DOUBLE_BE  // Big-endian as de"i16"fault
 
 #define TYPE_1ST { NOTUA_TYPES_1ST, 1, BO_1ST }  // ??
 #define TYPE_2ND { NOTUA_TYPES_2ND, 0, BO_2ND }  // Second word of 2-words type

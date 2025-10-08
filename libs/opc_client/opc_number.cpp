@@ -13,14 +13,13 @@ namespace OPC
 {
 
 // ======= Definition of __READ__ TEMPLATE =========
-
-Number_c OpcClient_c::ReadNumber(string varname)
+bool OpcClient_c::ReadNumber(string varname, Number_c& Numx)
 {
   muxClient->lock();
-//  bool rc = false;
+  bool rc = false;
   int _type = 0;
-  Number_c Numx;
-  Numx.status = false;
+  // Number_c Numx;
+  Numx.isgood = false;
 
   if (_connect()) {
     /* Read the value attribute of the node. UA_Client_readValueAttribute is a
@@ -34,9 +33,56 @@ Number_c OpcClient_c::ReadNumber(string varname)
 
     if (scRead == UA_STATUSCODE_GOOD) {
       _type = _variant_get_uatype(uaVariant);
-      Numx.set(_type, uaVariant->data);
-    } else
+      Numx.set(_type, uaVariant->data, true);
+      Numx.set_status(scRead, UA_StatusCode_name(scRead), true);
+      rc = true;
+    } else {
+      Numx.set_status(scRead, UA_StatusCode_name(scRead), false);
       LOGE("OPC_cli::%s: %s %s", __func__, varname.c_str(), UA_StatusCode_name(scRead));
+    }
+
+    _variant_clean();
+  }
+
+  muxClient->unlock();
+
+  return rc;
+}
+
+Number_c OpcClient_c::ReadNumber(string varname)
+{
+  Number_c Numx;
+  ReadNumber(varname, Numx);
+  return Numx;
+}
+
+/*
+  Number_c OpcClient_c::ReadNumber(string varname)
+  {
+  muxClient->lock();
+  //  bool rc = false;
+  int _type = 0;
+  Number_c Numx;
+  Numx.isgood = false;
+
+  if (_connect()) {
+    // Read the value attribute of the node. UA_Client_readValueAttribute is a
+    // wrapper for the raw read service available as UA_Client_Service_read.
+    // Variants can hold scalar values and arrays of any type
+    // NodeId of the variable holding the current time
+    _variant_init();
+
+    const UA_NodeId nodeId = UA_NODEID_STRING(1, const_cast<char*>(varname.c_str()));
+    scRead = UA_Client_readValueAttribute(uaClient, nodeId, uaVariant);
+
+    if (scRead == UA_STATUSCODE_GOOD) {
+      _type = _variant_get_uatype(uaVariant);
+      Numx.set(_type, uaVariant->data, true);
+      Numx.set_status(scRead, UA_StatusCode_name(scRead), true);
+    } else {
+      Numx.set_status(scRead, UA_StatusCode_name(scRead), false);
+      LOGE("OPC_cli::%s: %s %s", __func__, varname.c_str(), UA_StatusCode_name(scRead));
+    }
 
     _variant_clean();
   }
@@ -44,7 +90,8 @@ Number_c OpcClient_c::ReadNumber(string varname)
   muxClient->unlock();
 
   return Numx;
-}
+  }
+*/
 
 /*
   template <typename T>

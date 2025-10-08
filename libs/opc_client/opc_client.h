@@ -57,6 +57,7 @@ public:
   template <typename T> bool Read(string varname, T &x);
   template <typename T> bool Write(string varname, T &x);
 
+  bool ReadNumber(string varname, Number_c& Numx);
   Number_c ReadNumber(string varname);
 //  bool WriteNumber(string varname, Number_c &x);
 

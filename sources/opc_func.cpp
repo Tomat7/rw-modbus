@@ -184,53 +184,76 @@ void opc_client_()
   int ua_t = OPCclient.get_uatype(s);
   Number_c nval = OPCclient.ReadNumber(s);
 
-  if (OPCclient.Write(s, cnt) && nval.status) {
+  if (OPCclient.Write(s, cnt) && nval.isgood) {
     val = ReadValue(s);
     OPCs.RefreshAllValues();
     PRINTF("%d. ua_type: %d %s: %s %d %d %d\n", n, ua_t, s.c_str(), nval.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
   } else
     PRINTF("%d. ua_type: %d %s: %d %d %d error!\n", n, ua_t, s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
 
-// ======= Read CLIENT 2 =======
+// ======= Read CLIENT 2 (Process) Read =======
 
   n++;
   uint16_t u1 = 777;
   s = OPCs.GetVarFullName("Process");
   ua_t = OPCclient.get_uatype(s);
-  nval = OPCclient.ReadNumber(s);
 
   if (OPCclient.Read(s, u1))
     PRINTF("%d. ua_type: %d %s: %d %d\n", n, ua_t, s.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
   else
     PRINTF("%d. ua_type: %d %s: %d %d Read error!\n", n, ua_t, s.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
 
-// ======= Read CLIENT 3 =======
+// ======= Read CLIENT 3 (Process) Numeric =======
 
   n++;
-  if (nval.status)
-    PRINTF("%d. ua_type: %d %s: %s %d\n", n, ua_t, s.c_str(), nval.c_str(), nval.ui16);
+  nval = OPCclient.ReadNumber(s);
+
+  if (nval.isgood)
+    PRINTF("%d. ua_type: %d %s: %s %d %s\n", n, ua_t, s.c_str(),
+           nval.c_str(), nval.ui16, nval.status_name().c_str());
   else
-    PRINTF("%d. ua_type: %d %s: %s %d %d Status error!\n", n, ua_t, s.c_str(), nval.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
+    PRINTF("%d. ua_type: %d %s: %s %d %d Status error! %s\n", n, ua_t, s.c_str(),
+           nval.c_str(), u1, OPCs.ReadRawUnion(s).ui16, nval.status_name().c_str());
 
 
-// ======= Read CLIENT 4 =======
+// ======= Read CLIENT 4 (Tkub1) =======
   float f1 = 0;
   s = OPCs.GetVarFullName("Tkub1");
   ua_t = OPCclient.get_uatype(s);
-  nval = OPCclient.ReadNumber(s);
+
 
   n++;
   if (OPCclient.Read(s, f1))
-    PRINTF("%d. ua_type: %d Read %s: %s %f\n", n, ua_t, s.c_str(), nval.c_str(), f1);
+    PRINTF("%d. ua_type: %d Read %s: %s %f\n", n, ua_t, s.c_str(),
+           nval.c_str(), f1);
   else
-    PRINTF("%d. ua_type: %d Read %s: %s %f %f Read error!\n", n, ua_t, s.c_str(), nval.c_str(), f1, OPCs.ReadRawUnion(s).fl);
+    PRINTF("%d. ua_type: %d Read %s: %s %f %f Read error!\n", n, ua_t, s.c_str(),
+           nval.c_str(), f1, OPCs.ReadRawUnion(s).fl);
 
+// ======= Read CLIENT 5 (Tkub1) =======
 
   n++;
-  if (nval.status)
-    PRINTF("%d. ua_type: %d Status %s: %s %f\n", n, ua_t, s.c_str(), nval.c_str(), nval.fl);
+  nval = OPCclient.ReadNumber(s);
+
+  if (nval.isgood)
+    PRINTF("%d. ua_type: %d Status %s: %s %f %s\n", n, ua_t, s.c_str(),
+           nval.c_str(), nval.fl, nval.status_name().c_str());
   else
-    PRINTF("%d. ua_type: %d Status %s: %s %f %f Status error!\n", n, ua_t, s.c_str(), nval.c_str(), f1, OPCs.ReadRawUnion(s).fl);
+    PRINTF("%d. ua_type: %d Status %s: %s %f %f Error: %s\n", n, ua_t, s.c_str(),
+           nval.c_str(), f1, OPCs.ReadRawUnion(s).fl, nval.status_name().c_str());
+
+
+// ======= Read CLIENT 6 (Tkub1) =======
+
+  n++;
+
+  if (OPCclient.ReadNumber(s, nval))
+    PRINTF("%d. ua_type: %d Status %s: %s %f %s\n", n, ua_t, s.c_str(),
+           nval.c_str(), nval.fl, nval.status_name().c_str());
+  else
+    PRINTF("%d. ua_type: %d Status %s: %s %f %f Error: %s\n", n, ua_t, s.c_str(),
+           nval.c_str(), f1, OPCs.ReadRawUnion(s).fl, nval.status_name().c_str());
+
 
 }
 

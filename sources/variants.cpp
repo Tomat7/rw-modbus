@@ -71,13 +71,17 @@ void var_test0()
     printf("%f\n", std::get<float>(vv));
   */
   printf("\nReady - 00 myclassES = typed_varS \n");
+  printf("Ux = U1 \n");
   Number_c Ux = U1;
+  printf("Ix = I1 \n");
   Number_c Ix = I1;
+  printf("Fx = F1 \n");
   Number_c Fx = F1;
+  printf("Dx = D1 \n");
   Number_c Dx = D1;
   //Number_c Sx = "qwertyui";
 
-  printf("\nReady - 00 existing myclassES = typed_varS \n");
+  printf("\nReady - 000 existing myclassES = typed_varS \n");
   Ux = U1;
   Ix = I1;
   Fx = F1;

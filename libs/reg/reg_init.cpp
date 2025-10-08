@@ -39,9 +39,9 @@ map<string, regprop_t> regprop_map {
   {"u16", TYPE_U16},
   {"i16", TYPE_I16},
   {"f10", TYPE_F10},
+  {"f100", TYPE_F100},
   {"hex", TYPE_HEX},
   {"bin", TYPE_BINARY},
-  {"f100", TYPE_F100},
 
   // High byte first, high word first (Big-endian) as default
   {"u32", TYPE_U32_BE},
@@ -153,7 +153,7 @@ Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
 //    _type_size = var_size;
 //    var_format = printfmt_map[var_type_ua];
     byte_order = regprop_map[st_].rbyteorder;
-    Number.set_type(var_type_ua);
+    Number.set(var_type_ua);
   } else
     LOGE("Wrong type: %s, reg: %s", st_.c_str(), rn);
 
@@ -212,7 +212,7 @@ Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
 //    var_format = printfmt_map[var_type_ua];
     byte_order = regprop_map[st_].rbyteorder;  // for SCADA ??
     visible = true;
-    Number.set_type(var_type_ua);
+    Number.set(var_type_ua);
   } else
     LOGE("Wrong type: '%s', reg: '%s'", _str_type.c_str(), rn);
 
