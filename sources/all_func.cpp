@@ -150,7 +150,7 @@ void flush_logger()
 
   while (logger_get_string(logger_str)) {
     time_t timestamp = time(NULL);
-    struct tm *local_tm = localtime(&timestamp);
+    struct tm* local_tm = localtime(&timestamp);
     char time_str[22];
     strftime(time_str, 22, "%d.%m.%Y %H:%M:%S ", local_tm);
 

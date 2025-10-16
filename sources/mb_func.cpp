@@ -22,7 +22,7 @@ static std::vector<uint64_t> prev_ts;
 int task_plc_refresh_(void* params)
 {
   uint64_t x = *(uint64_t*)params;
-  PLC_c &D = PLCvec[x];
+  ModbusPLC_c &D = PLCvec[x];
   prev_ts[x] = D.mb.timestamp_try_ms;
   res[x] = D.refresh_master();
   std::this_thread::yield();
@@ -40,7 +40,7 @@ int mb_add_refresh_tasks()
   prev_ts.resize(nb_plcs);
 
   for (i = 0; i < nb_plcs; i++) {
-    PLC_c &D = PLCvec[i];
+    ModbusPLC_c &D = PLCvec[i];
     idx[i] = i;
     //string task_name = D.str_top_folder + ":" + D.str_dev_name + ":refresh_";
     string task_name = "Modbus:" + D.str_dev_name; // + ":refresh_";
@@ -61,7 +61,7 @@ int mb_print_summary()
   uint64_t nb_plcs = PLCvec.size();
 
   for (i = 0; i < nb_plcs; i++) {
-    PLC_c &D = PLCvec[i];
+    ModbusPLC_c &D = PLCvec[i];
     PRINTF(
       "%-7s_dT: %5ld ret: %2d err: %4d conn: %4d rd: %4d wr: %4d rc: %2d\n",
       D.dev_name, D.mb.timestamp_try_ms - prev_ts[i], res[i], D.mb.errors,

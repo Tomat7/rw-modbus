@@ -23,7 +23,7 @@ uint16_t Reg_c::get_plc_reg(mbreg_t* rptr)  // Set reg's local value != read PLC
   if ((is_modbus || is_ref) && (rptr != nullptr)) {
     var_errors = rptr->data.rerrors;
     if (!var_errors)
-      rval = PLC_c::get_reg(rptr);
+      rval = ModbusPLC_c::get_reg(rptr);
   } else
     LOGE("Not Modbus get-reg: %s", str_fullname.c_str());
   return rval;
@@ -85,7 +85,7 @@ numeric_u Reg_c::get_plc_value()
 void Reg_c::set_plc_reg(uint16_t _val, mbreg_t* rptr)
 {
   if ((is_modbus || is_ref) && (rptr != nullptr))
-    PLC_c::set_reg(_val, rptr);
+    ModbusPLC_c::set_reg(_val, rptr);
   else
     LOGE("Not Modbus set-reg: %s", str_fullname.c_str());
 }

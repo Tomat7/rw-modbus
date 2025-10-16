@@ -13,7 +13,7 @@ namespace OPC
 {
 
 // ======= Definition of __READ__ TEMPLATE =========
-bool OpcClient_c::ReadNumber(string varname, Number_c& Numx)
+bool OpcClient_c::ReadNumber(string varname, Number_c &Numx)
 {
   muxClient->lock();
   bool rc = false;

@@ -17,7 +17,7 @@ static int total_regs = 0;
 
 int cfg_init_plcset(const Setting &cfg, const Setting &pl);
 int cfg_init_scadaset(const Setting &cfg, const Setting &pl);
-int cfg_init_plcregs(const Setting &reg, PLC_c* pn);
+int cfg_init_plcregs(const Setting &reg, ModbusPLC_c* pn);
 
 /*
   void cfg_print_plc_details(const PLC_c &pn);
@@ -196,7 +196,7 @@ int cfg_init_plcset(const Setting &cfgPLC, const Setting &listPLC)
   return 0;
 }
 
-int cfg_init_plcregs(const Setting &cfgREG, PLC_c* pn)
+int cfg_init_plcregs(const Setting &cfgREG, ModbusPLC_c* pn)
 {
   int nb_regs = cfgREG.getLength();
   int nb_errors = 0;

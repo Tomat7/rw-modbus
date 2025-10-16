@@ -80,7 +80,7 @@ void OpcClient_c::_variant_clean()
   UA_Variant_delete(uaVariant);
 }
 
-int OpcClient_c::_variant_get_uatype(UA_Variant *v)
+int OpcClient_c::_variant_get_uatype(UA_Variant* v)
 {
   int rc = -1;
   for (size_t i = 0; i < nb_types; i++)

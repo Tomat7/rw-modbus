@@ -29,7 +29,7 @@
 #include "include/numeric.h"
 #include "../number/number_class.h"
 //#include "../opc_server/opcs_class.h"
-#include "../plc/plc_class.h"
+#include "../mb_plc/mbplc_class.h"
 
 #include "reg_datatype.h"
 
@@ -72,7 +72,7 @@ public:
   //  Reg_c(string _rn, string src_ref);       // for Scada regs.
 
   // for PLC master
-  Reg_c(mbreg_t* _reg, PLC_c* _dev);
+  Reg_c(mbreg_t* _reg, ModbusPLC_c* _dev);
 
   // for Scada regs.
   Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,

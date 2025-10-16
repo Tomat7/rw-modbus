@@ -164,7 +164,7 @@ public:
 
   void set_status(int stcode, const char* stchars, bool isok = true);
   void set_status(int stcode, string stname, bool isok = true);
-  bool get_status(int &stcode, string& stname);
+  bool get_status(int &stcode, string &stname);
   string status_name();  // Get StatusCode Name (string)
   int status_code();  // Get StatusCode (int)
 
@@ -210,7 +210,7 @@ private:
 
 
   type_attribute_t* _get_type_ptr(const int &_global_t);
-  type_attribute_t* _get_type_ptr(const type_index& _ti);
+  type_attribute_t* _get_type_ptr(const type_index &_ti);
 
   static type_attribute_t type_attr[];
   static size_t type_attr_sz;

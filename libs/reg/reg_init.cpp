@@ -142,7 +142,7 @@ Reg_c::Reg_c() { /* LOGD("+Construct()! %x", this); */ }
 // ============================================================
 // For Modbus regs only
 
-Reg_c::Reg_c(mbreg_t* _reg, PLC_c* _dev)
+Reg_c::Reg_c(mbreg_t* _reg, ModbusPLC_c* _dev)
 {
   LOGD("+Construct(_reg, _dev): %x", this);
   string st_ = "u16";

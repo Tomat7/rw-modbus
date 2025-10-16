@@ -19,7 +19,7 @@
 #include <vector>
 
 #include "include/macros.h"
-#include "plc_datatype.h"
+#include "mbplc_datatype.h"
 
 #define MB_SLAVE_CONN_MAX 5
 #define MB_NO_DEV_NAME "-"
@@ -29,17 +29,17 @@
 using std::string;
 using std::mutex;
 
-class PLC_c
+class ModbusPLC_c
 {
 public:
   // for Master
-  // PLC_c(string _ip = "none", string _name = "Master");
-  PLC_c(string _devname, string _ip, string _title, string _desc,
-        int _port, int _atm, int _ms, int _us);
+  // ModbusPLC_c(string _ip = "none", string _name = "Master");
+  ModbusPLC_c(string _devname, string _ip, string _title, string _desc,
+              int _port, int _atm, int _ms, int _us);
 
   // for Slave
-  PLC_c(int _port = 502, int _m = 1, string _name = "Slave");
-  ~PLC_c();
+  ModbusPLC_c(int _port = 502, int _m = 1, string _name = "Slave");
+  ~ModbusPLC_c();
 
   void mb_deinit();
   int get_rc_read();

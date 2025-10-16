@@ -17,11 +17,11 @@
 #include <string>
 
 #include "include/logger.h"
-#include "plc_class.h"
+#include "mbplc_class.h"
 
 // Destructor in plc_common.cpp
 
-PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
+ModbusPLC_c::ModbusPLC_c(int _port, int _m, string _name)  // Slave only
 {
   // lock_init();
   lock_mux = new mutex;
@@ -37,7 +37,7 @@ PLC_c::PLC_c(int _port, int _m, string _name)  // Slave only
        dev_name);
 }
 
-int PLC_c::renew_mapping()  // Slave only
+int ModbusPLC_c::renew_mapping()  // Slave only
 {
   rc = 0;
   if (mbm != nullptr) {
@@ -59,7 +59,7 @@ int PLC_c::renew_mapping()  // Slave only
   return rc;
 }
 
-int PLC_c::renew_listen()  // Slave only
+int ModbusPLC_c::renew_listen()  // Slave only
 {
   rc = 0;
   if (server_socket != -1)
@@ -85,7 +85,7 @@ int PLC_c::renew_listen()  // Slave only
   return rc;
 }
 
-int PLC_c::write_raw(int r, uint16_t val)
+int ModbusPLC_c::write_raw(int r, uint16_t val)
 {
   if (r > reg_max)
     return -1;
@@ -96,7 +96,7 @@ int PLC_c::write_raw(int r, uint16_t val)
   return rc;
 }
 
-uint16_t PLC_c::read_raw(int addr)
+uint16_t ModbusPLC_c::read_raw(int addr)
 {
   if (addr > reg_max)
     return -1;
@@ -109,7 +109,7 @@ uint16_t PLC_c::read_raw(int addr)
   return val;
 }
 
-int PLC_c::check_slave()
+int ModbusPLC_c::check_slave()
 {
   rc = 0;
   if ((mb.errors > 0) || (ctx == nullptr)) {
@@ -122,7 +122,7 @@ int PLC_c::check_slave()
   return rc;
 }
 
-int PLC_c::handle_slave(int usec)
+int ModbusPLC_c::handle_slave(int usec)
 {
   //  LOCK_GUARD(network_mux);
   struct timeval tv;
@@ -163,7 +163,7 @@ int PLC_c::handle_slave(int usec)
   return fdmax;
 }
 
-void PLC_c::new_client()  // Handle new connections
+void ModbusPLC_c::new_client()  // Handle new connections
 {
   socklen_t addrlen;
   struct sockaddr_in clientaddr;
@@ -187,7 +187,7 @@ void PLC_c::new_client()  // Handle new connections
   return;
 }
 
-void PLC_c::work_client()
+void ModbusPLC_c::work_client()
 {
   modbus_set_socket(ctx, master_socket);
   rc = modbus_receive(ctx, query);

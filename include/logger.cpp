@@ -114,7 +114,7 @@ void logger_flush_printf()
   }
 }
 
-bool logger_get_string(std::string& logged_string)
+bool logger_get_string(std::string &logged_string)
 {
   LOCK_GUARD(logger_mux);
   if (!Print_queue.empty()) {

@@ -57,7 +57,7 @@ public:
   template <typename T> bool Read(string varname, T &x);
   template <typename T> bool Write(string varname, T &x);
 
-  bool ReadNumber(string varname, Number_c& Numx);
+  bool ReadNumber(string varname, Number_c &Numx);
   Number_c ReadNumber(string varname);
 //  bool WriteNumber(string varname, Number_c &x);
 
@@ -66,7 +66,7 @@ private:
   void _variant_init();
   void _variant_clean();
   //void _nodeid_init(string s);
-  int _variant_get_uatype(UA_Variant *v);
+  int _variant_get_uatype(UA_Variant* v);
 
   std::map<type_index, int> ua_types_map;  // UA types coding (index is CPP type_index)
   mutex* muxClient = nullptr;

@@ -11,9 +11,9 @@
 #include <thread>
 
 #include "include/logger.h"
-#include "plc_class.h"
+#include "mbplc_class.h"
 
-PLC_c::~PLC_c()
+ModbusPLC_c::~ModbusPLC_c()
 {
   // lock_now();
   LOGD("- PLC destructor: try_lock(): %s %s.", ip_addr, dev_name);
@@ -28,7 +28,7 @@ PLC_c::~PLC_c()
        dev_name);
 }
 
-void PLC_c::init_regs()  // Master only
+void ModbusPLC_c::init_regs()  // Master only
 {
   int nb_regs = 0;
 

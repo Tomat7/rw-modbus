@@ -13,7 +13,7 @@
 
 cfg_t Cfg;
 map<string, Reg_c> REGmap;
-vector<PLC_c> PLCvec;
+vector<ModbusPLC_c> PLCvec;
 OPC::OpcClient_c OPCclient;
 OpcServer_c OPCs;
 Schedule_c Task /* (TASKS_NB_MAX) */;

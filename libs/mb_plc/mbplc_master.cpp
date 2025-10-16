@@ -13,7 +13,7 @@
 #include <string>
 
 #include "include/logger.h"
-#include "plc_class.h"
+#include "mbplc_class.h"
 /*
   PLC_c::PLC_c(string _ip, string _name)  // Master only
   {
@@ -25,8 +25,8 @@
   }
 */
 
-PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
-             int _port, int _att, int _ms, int _us)
+ModbusPLC_c::ModbusPLC_c(string _devname, string _ip, string _folder, string _desc,
+                         int _port, int _att, int _ms, int _us)
 {
   // lock_init();
   lock_mux = new mutex;
@@ -58,7 +58,7 @@ PLC_c::PLC_c(string _devname, string _ip, string _folder, string _desc,
 
 // Destructor in plc_common.cpp
 
-int PLC_c::mb_connect()  // Master only
+int ModbusPLC_c::mb_connect()  // Master only
 {
   if ((mb.errors > 0) || (ctx == nullptr)) {
     rc = mb_ctx();
@@ -79,7 +79,7 @@ int PLC_c::mb_connect()  // Master only
   return rc;
 }
 
-int PLC_c::read_master()  // Master only. Read directly from PLC.
+int ModbusPLC_c::read_master()  // Master only. Read directly from PLC.
 {
   //  LOCK_GUARD(network_mux);
   rc = 0;
@@ -110,7 +110,7 @@ int PLC_c::read_master()  // Master only. Read directly from PLC.
   return rc;
 }
 
-int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
+int ModbusPLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
 {
   int nb_regs = reg_max - reg_min + 1;  // WARNING!! May be too much!
   uint16_t* mbregs = new uint16_t[nb_regs];
@@ -140,7 +140,7 @@ int PLC_c::read_allregs()  // Master only. Read (raw) directly from PLC.
   return rc;
 }
 
-int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
+int ModbusPLC_c::write_master()  // Master only. Write all regs directly to PLC.
 {
   //  LOCK_GUARD(network_mux);
   rc_write = 0;
@@ -175,7 +175,7 @@ int PLC_c::write_master()  // Master only. Write all regs directly to PLC.
   return rc_write;
 }
 
-int PLC_c::write_reg(mbreg_t &R)  // Master only. Write (raw) reg directly to PLC.
+int ModbusPLC_c::write_reg(mbreg_t &R)  // Master only. Write (raw) reg directly to PLC.
 {
   auto &rd = R.data;
   rc = modbus_write_register(ctx, R.raddr, rd.rvalue);
@@ -196,7 +196,7 @@ int PLC_c::write_reg(mbreg_t &R)  // Master only. Write (raw) reg directly to PL
 
 // int PLC_c::refresh_master() { update_master(); } // Master only.
 
-int PLC_c::update_master()  // Master only.
+int ModbusPLC_c::update_master()  // Master only.
 {
   int ret = 0;
   if (tcp_port == 0)
@@ -225,7 +225,7 @@ int PLC_c::update_master()  // Master only.
   return ret;
 }
 
-int PLC_c::set_timeout()
+int ModbusPLC_c::set_timeout()
 {
   if (ctx == nullptr)
     mb_ctx();

@@ -30,7 +30,7 @@
 #include "libs/console/console.h"
 #include "libs/opc_server/opcs_class.h"
 #include "libs/opc_client/opc_client.h"
-#include "libs/plc/plc_class.h"
+#include "libs/mb_plc/mbplc_class.h"
 #include "libs/number/number_class.h"
 //#include "include/scheduler/scheduler.h"
 

@@ -35,7 +35,7 @@
 
 void logger_set_queue(bool to_queue);
 void logger_flush_printf();
-bool logger_get_string(std::string& logged_string);
+bool logger_get_string(std::string &logged_string);
 
 #define FILE_LINE __FILE__ ":" STR(__LINE__)
 #define _FL_ FILE_LINE

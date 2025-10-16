@@ -11,13 +11,13 @@
 #include <thread>
 
 #include "include/logger.h"
-#include "plc_class.h"
+#include "mbplc_class.h"
 
-int PLC_c::get_rc_read() { return rc_read; }
+int ModbusPLC_c::get_rc_read() { return rc_read; }
 
-int PLC_c::get_rc_write() { return rc_write; }
+int ModbusPLC_c::get_rc_write() { return rc_write; }
 
-void PLC_c::mb_deinit()
+void ModbusPLC_c::mb_deinit()
 {
   //  LOCK_GUARD(network_mux);
   if (server_socket != -1) {
@@ -40,7 +40,7 @@ void PLC_c::mb_deinit()
   return;
 }
 
-int PLC_c::mb_ctx()
+int ModbusPLC_c::mb_ctx()
 {
   rc = 0;
   mb_deinit();
@@ -59,7 +59,7 @@ int PLC_c::mb_ctx()
   return rc;
 }
 
-int PLC_c::set_reg(uint16_t rval, mbreg_t* rptr)  // !! STATIC !!
+int ModbusPLC_c::set_reg(uint16_t rval, mbreg_t* rptr)  // !! STATIC !!
 {
   int ret = -1;
   if (rptr != nullptr) {
@@ -79,7 +79,7 @@ int PLC_c::set_reg(uint16_t rval, mbreg_t* rptr)  // !! STATIC !!
   return ret;
 }
 
-int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
+int ModbusPLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
 {
   rc = -1;
   if (raddr <= reg_max) {
@@ -99,7 +99,7 @@ int PLC_c::set_reg(uint16_t rval, int raddr)  // Set reg locally != write PLC.
   return rc;
 }
 
-int PLC_c::set_reg_by_name(uint16_t rval, string rname)
+int ModbusPLC_c::set_reg_by_name(uint16_t rval, string rname)
 {
   rc = -2;  // rname not found
 
@@ -113,7 +113,7 @@ int PLC_c::set_reg_by_name(uint16_t rval, string rname)
   return rc;
 }
 
-int PLC_c::set_reg_by_fullname(uint16_t rval, string rname)
+int ModbusPLC_c::set_reg_by_fullname(uint16_t rval, string rname)
 {
   rc = -2;  // rname not found
 
@@ -129,7 +129,7 @@ int PLC_c::set_reg_by_fullname(uint16_t rval, string rname)
 
 // =============================================
 
-uint16_t PLC_c::get_reg(mbreg_t* rptr)  // !! STATIC !!
+uint16_t ModbusPLC_c::get_reg(mbreg_t* rptr)  // !! STATIC !!
 {
   uint16_t rval = 0;
   if (rptr != nullptr)
@@ -137,7 +137,7 @@ uint16_t PLC_c::get_reg(mbreg_t* rptr)  // !! STATIC !!
   return rval;
 }
 
-uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
+uint16_t ModbusPLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
   rc = -1;
@@ -148,7 +148,7 @@ uint16_t PLC_c::get_reg(int raddr)  // Set reg's local value != read PLC.
   return rval;
 }
 
-uint16_t PLC_c::get_reg_by_name(
+uint16_t ModbusPLC_c::get_reg_by_name(
   string rname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
@@ -163,7 +163,7 @@ uint16_t PLC_c::get_reg_by_name(
   return rval;
 }
 
-uint16_t PLC_c::get_reg_by_fullname(
+uint16_t ModbusPLC_c::get_reg_by_fullname(
   string rfname)  // Set reg's local value != read PLC.
 {
   uint16_t rval = 0;
@@ -179,14 +179,14 @@ uint16_t PLC_c::get_reg_by_fullname(
 }
 
 
-uint64_t PLC_c::millis()
+uint64_t ModbusPLC_c::millis()
 {
   using namespace std::chrono;
 #define CAST_MILLIS duration_cast<milliseconds>
   return CAST_MILLIS(system_clock::now().time_since_epoch()).count();
 }
 
-string PLC_c::to_lower(string str)
+string ModbusPLC_c::to_lower(string str)
 {
   for (auto &c : str)
     c = static_cast<char>(tolower(c));

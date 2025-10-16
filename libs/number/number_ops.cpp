@@ -64,7 +64,7 @@ type_attribute_t* Number_c::_get_type_ptr(const int &gtype)
   return nullptr;
 }
 
-type_attribute_t* Number_c::_get_type_ptr(const type_index& _ti)
+type_attribute_t* Number_c::_get_type_ptr(const type_index &_ti)
 {
   for (size_t i = 0; i < type_attr_sz; i++)
     if (_ti == type_attr[i].type_idx)
@@ -87,7 +87,7 @@ void Number_c::set_status(int stcode, const char* stchars, bool isok)
   set_status(stcode, string(stchars), isok);
 }
 
-bool Number_c::get_status(int &stcode, string& stname)
+bool Number_c::get_status(int &stcode, string &stname)
 {
   stcode = _status_code;
   stname = _status_name;

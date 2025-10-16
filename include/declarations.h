@@ -7,7 +7,7 @@
 
 #include "libs/opc_server/opcs_class.h"
 #include "libs/opc_client/opc_client.h"
-#include "libs/plc/plc_class.h"
+#include "libs/mb_plc/mbplc_class.h"
 #include "libs/reg/reg_class.h"
 #include "libs/scheduler/scheduler.h"
 
@@ -53,8 +53,8 @@ extern cfg_t Cfg;
 // extern int Cfg.timeout_sec;
 // extern cchar* mode;
 extern map<string, Reg_c> REGmap;
-extern vector<PLC_c> PLCvec;
-// extern PLC_c Slave;
+extern vector<ModbusPLC_c> PLCvec;
+// extern ModbusPLC_c Slave;
 
 extern OpcServer_c OPCs;
 extern OPC::OpcClient_c OPCclient;
@@ -107,7 +107,7 @@ void regs_create_from_plc();
 void regs_update();
 void regs_deinit();
 bool reg_exist(string);
-// void regs_create(PLC_c* D);
+// void regs_create(ModbusPLC_c* D);
 // void regs_init_shm();
 // void regs_update_shm();
 // void regs_deinit_shm();
