@@ -9,13 +9,12 @@
 #include <poll.h>
 #include <cstring> // For memset
 
-const int PORT = 8080;
-const int MAX_CLIENTS = 10;
+#include "telnet.h"
 
-int telnet_fn()
+int TelnetSvc_c::init_socket()
 {
   // 1. Create a listening socket
-  int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+  server_socket = socket(AF_INET, SOCK_STREAM, 0);
   if (server_socket < 0) {
     std::cerr << "Error creating listening socket" << std::endl;
     return 1;
@@ -28,6 +27,14 @@ int telnet_fn()
     close(server_socket);
     return 1;
   }
+
+};
+
+int telnet_fn()
+{
+
+  init();
+
 
   // Bind the listening socket to an address and port
   sockaddr_in server_addr;
