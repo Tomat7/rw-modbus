@@ -58,6 +58,7 @@ void init_all()
     //  t.sleep_ms(TMOUT); */
 
   //t.start(TIMER_START_MSG);
+  netsvc_init();
   opc_init();
   opc_regs_init();
   //t.spent_auto("=== OPC init finished in: ");   Console_c::c::wait(Cfg.timeout_sec);
@@ -67,8 +68,8 @@ void init_all()
   //t.spent_auto("=== TASKS init finished in: ");   Console_c::c::wait(Cfg.timeout_sec);
 
   tasks_start();
-
   opc_start();
+  netsvc_start();
   //  Cfg.timeout_sec = TIMEOUT_SEC;
 
   return;
@@ -90,6 +91,7 @@ void deinit_all()
   Task.stop();
   regs_deinit();
   opc_deinit();
+  netsvc_deinit();
   LOGD("opc_deinit() - done");
   //  regs_deinit_shm();
   LOGD("regs_deinit() - done");

@@ -100,7 +100,6 @@ void opc_run_thread()
   OPCs.run();
 }
 
-
 // ======= OPC server operations =======
 
 void opc_server_()

@@ -21,6 +21,10 @@
 #define OPC_THREAD_NAME "OPC:server"
 #define OPC_POLLING_MS 700
 
+#define NET_SERVER_THREAD_NAME "JSON:api"
+#define NET_SERVER_PORT 8888
+#define NET_SERVER_MAX_CLIENTS 10
+
 #ifdef DEBUG_FLAG
 #define TIMEOUT_SEC 1
 #else

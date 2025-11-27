@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <title>dLab from API</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            padding: 4px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        #dLab {
+            padding: 4px 8px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .error {
+            color: #b91c1c;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="dLab">dLab</label>
+    <span id="dLab">—</span>
+    <script>
+        (function () {
+            const el = document.getElementById('dLab');
+            const API_URL = 'http://127.0.0.1:5000/number';        // ожидается текст/JSON с числом
+            async function fetchWithTimeout(url, timeoutMS = 5000) {
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), timeoutMS);
+                try {
+                    const res = await fetch(url, { 
+                        signal: controller.signal, 
+                        cache: 'no-store', 
+                    });
+                    return res;
+                }
+                finally {
+                    clearTimeout(id);
+                }
+            }
+            async function updateFromApi() {
+                try {
+                    const res = await fetchWithTimeout(API_URL, 5000);
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    // проверяем не джейсон ли, если нет, считаем текстом
+                    let value;
+                    const ct = res.headers.get('content-type') || '';
+                    if (ct.includes('application/json')) {
+                        // на сервере выдаем: {"x":"1234", "y":"456"}
+						// ============================
+						const data = await res.json();
+						const vars = JSON.parse(data);
+						// вывод в консоль первого значения
+						console.log(vars.x);
+						// Вывод на странице второго значения
+						value = String(vars.y);
+						// ============================
+
+
+                    }
+                    else {
+                        value = await res.text();
+                    }
+                    // в строку
+                    const display = String(value).trim();
+                    el.textContent = display || '—';
+                    el.classList.remove('error');
+                }
+                catch (e) {
+                    el.textContent = 'ERR';
+                    el.classList.add('error');
+                    // В консоль для отладки
+                    console.error('dLab fetch failed:', e);
+                }
+            }
+            function init() {
+                updateFromApi();
+                // первый запуск после готовности DOM
+                setInterval(updateFromApi, 1000);
+            }
+            // Запуск при готовности DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init, { once: true });
+            }
+            else {
+                init();
+            }
+        })();
+    </script>
+</body>
+
+</html>

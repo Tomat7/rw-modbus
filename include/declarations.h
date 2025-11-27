@@ -4,6 +4,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 #include "libs/opc_server/opcs_class.h"
 #include "libs/opc_client/opc_client.h"
@@ -47,6 +48,8 @@ struct cfg_t {
   int millis_heartbeat_ms = MILLIS_HEARTBEAT_MS;
   cchar* mode = nullptr;
 };
+
+//extern nlohmann::json JSON;
 
 extern cfg_t Cfg;
 
@@ -127,6 +130,13 @@ void opc_server_();
 // uint16_t opc_update_uint16(string name, reg_t* reg, uint16_t val);
 // int write_shm(string, uint16_t);
 // int write_rm(string rn, uint16_t val);
+
+void json_update(Reg_c& rm);
+void json_set_answer();
+void netsvc_init();
+void netsvc_deinit();
+void netsvc_start();
+void netsvc_run_thread();
 
 // ===== Scheduled Tasks =====
 void tasks_init();

@@ -9,9 +9,9 @@
 #include <poll.h>
 #include <cstring> // For memset
 
-#include "telnet.h"
+#include "net_service.h"
 
-int TelnetSvc_c::_init_socket()
+int NetService_c::_init_socket()
 {
   // 1. Create a listening socket
   server_socket_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -23,7 +23,7 @@ int TelnetSvc_c::_init_socket()
   return 0;
 }
 
-int TelnetSvc_c::_set_socket()
+int NetService_c::_set_socket()
 {
   // 2. Set socket options to reuse address (??)
   int opt = 1;
@@ -37,7 +37,7 @@ int TelnetSvc_c::_set_socket()
 }
 
 
-int TelnetSvc_c::_bind_socket()
+int NetService_c::_bind_socket()
 {
   // 3. Bind the listening socket to an address and port
   sockaddr_in server_addr;
@@ -55,7 +55,7 @@ int TelnetSvc_c::_bind_socket()
   return 0;
 }
 
-int TelnetSvc_c::_listen_socket()
+int NetService_c::_listen_socket()
 {
   // Listen for incoming connections
   if (listen(server_socket_, 5) < 0) {
@@ -68,14 +68,17 @@ int TelnetSvc_c::_listen_socket()
 }
 
 
-int TelnetSvc_c::init()
+int NetService_c::init(uint16_t _p, int _maxcl)
 {
+  if (_p)
+    port_ = _p;
+  if (_maxcl)
+    max_clients_ = _maxcl;
+
   active_fds.resize(max_clients_ + 1);
   _init_socket();
   _set_socket();
-
   _bind_socket();
-
   _listen_socket();
 
   std::cout << "Server listening on port: " << port_
@@ -85,7 +88,7 @@ int TelnetSvc_c::init()
 }
 
 
-int TelnetSvc_c::run()
+int NetService_c::run()
 {
   // Reset Number of active file descriptors
   nb_active_fds_ = 0;
@@ -121,7 +124,7 @@ int TelnetSvc_c::run()
           _bad_client(i);
           i--; // Re-check the current index as it now contains a new fd
         } else
-          _handle_client(i, bytes_read);
+          _echo_client(i, bytes_read);
 
         sum_updated_fds--;
       }
@@ -131,18 +134,24 @@ int TelnetSvc_c::run()
   return 0;
 }
 
-int TelnetSvc_c::_handle_client(int i, ssize_t bytes_read)
+int NetService_c::_echo_client(int i, ssize_t bytes_read)
 {
   buffer[bytes_read] = '\0';
   std::cout << "Received from client " << active_fds[i].fd << ": " << buffer << std::endl;
   // Echo back the received data
-  send(active_fds[i].fd, buffer, bytes_read, 0);
+  // send(active_fds[i].fd, buffer, bytes_read, 0);
+  send(active_fds[i].fd, answer_.c_str(), answer_.length(), 0);
 
   return 0;
 }
 
+int NetService_c::_answer_client(int fd_)
+{
+  send(fd_, answer_.c_str(), answer_.length(), 0);
+  return 0;
+}
 
-int TelnetSvc_c::_new_client()
+int NetService_c::_new_client()
 {
   int rc = 0;
   sockaddr_in client_addr;
@@ -157,6 +166,7 @@ int TelnetSvc_c::_new_client()
       active_fds[nb_active_fds_].events = POLLIN; // Monitor for incoming data from client
       nb_active_fds_++;
       rc = 1;
+      _answer_client(client_sock);
       std::cout << "New connection from " << inet_ntoa(client_addr.sin_addr)
                 << ":" << ntohs(client_addr.sin_port) << std::endl;
     } else {
@@ -168,7 +178,7 @@ int TelnetSvc_c::_new_client()
   return rc;
 }
 
-int TelnetSvc_c::_bad_client(int i)
+int NetService_c::_bad_client(int i)
 {
   std::cout << "Client error/disconnected: " << active_fds[i].fd << std::endl;
   close(active_fds[i].fd);
@@ -182,8 +192,13 @@ int TelnetSvc_c::_bad_client(int i)
   return 0;
 }
 
+void NetService_c::set_answer(string s)
+{
+  answer_ = s;
+}
 
-int TelnetSvc_c::stop()
+
+int NetService_c::stop()
 {
   // Close all open sockets (good practice)
   for (int i = 0; i < nb_active_fds_; ++i)

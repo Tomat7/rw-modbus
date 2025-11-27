@@ -87,8 +87,11 @@ int task_regs_refresh_(void* params)
       } // ++ isNew_Opc
 
     } // ++ is_Scada
+
+    json_update(rm);
   }
 
+  json_set_answer();
   regmap_mux.unlock();
   LOGI("%s done: %d", __func__, x);
 
@@ -120,8 +123,6 @@ void regs_update()
         PRINTF("%7d", STRmap[n].opc_value.ui16);
       else
         PRINTF("%7s", "       ");
-
-      X += std::to_string(STRmap[n].opc_value.ui16);
 
       if (is_eol)
         PRINTF(" + %s\n", NRM);
