@@ -121,6 +121,8 @@ void regs_update()
       else
         PRINTF("%7s", "       ");
 
+      X += std::to_string(STRmap[n].opc_value.ui16);
+
       if (is_eol)
         PRINTF(" + %s\n", NRM);
       else

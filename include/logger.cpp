@@ -125,6 +125,38 @@ bool logger_get_string(std::string &logged_string)
     return false;
 }
 
+// ==================================================
+
+char* get_new_char(const char* _oldch)
+{
+  char* _newch = new char[1 + strlen(_oldch)];
+  strcpy(_newch, _oldch);
+  return _newch;
+}
+
+char* add_slash(const char* _rn)
+{
+  char* _newch = new char[2 + strlen(_rn)];
+  strcat(_newch, "/");
+  strcat(_newch, _rn);
+  return _newch;
+}
+
+const char* add_funcname(const char* _fmt, const char* _func)
+{
+  std::string fmt = (std::string)_func + "(): " + (std::string)_fmt;
+  _fmt = fmt.c_str();
+  return _fmt;
+}
+
+const char* extract_filename(const char* f)
+{
+  f = strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
+  return f;
+}
+
+
+
 /*
   void logger_fout(const char* _logname, int _prio, const char* _func,
                  const char* _fmt, ...)
@@ -243,33 +275,5 @@ bool logger_get_string(std::string &logged_string)
   //  logger_mux.unlock();
   }
 */
-
-char* get_new_char(const char* _oldch)
-{
-  char* _newch = new char[1 + strlen(_oldch)];
-  strcpy(_newch, _oldch);
-  return _newch;
-}
-
-char* add_slash(const char* _rn)
-{
-  char* _newch = new char[2 + strlen(_rn)];
-  strcat(_newch, "/");
-  strcat(_newch, _rn);
-  return _newch;
-}
-
-const char* add_funcname(const char* _fmt, const char* _func)
-{
-  std::string fmt = (std::string)_func + "(): " + (std::string)_fmt;
-  _fmt = fmt.c_str();
-  return _fmt;
-}
-
-const char* extract_filename(const char* f)
-{
-  f = strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
-  return f;
-}
 
 // eof

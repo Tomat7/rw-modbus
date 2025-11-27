@@ -39,7 +39,7 @@ struct cfg_t {
   opc_t opc;
   mb_t mb;
   //  int log_level;
-  bool show_mb_regs = true;
+  bool show_mb_regs = false;
   bool show_regs = true;
   int timeout_sec = TIMEOUT_SEC;
   int tasks_nb = TASKS_NB_MAX;

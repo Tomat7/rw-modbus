@@ -110,8 +110,9 @@ int main(int argc, char** argv)
     //Console::read_ms(3000);
 
     Console::scrolling_start();
+    fflush(stdout);
     int nb_cycles = Cfg.timeout_sec * 1000 / CONSOLE_WAIT_MS;
-    string logged_;
+    //  string logged_;
 
     for (int i = 0; i < nb_cycles; i++) {
       int ch = Console::read_ms(CONSOLE_WAIT_MS);
