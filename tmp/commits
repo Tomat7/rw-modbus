@@ -1,0 +1,2502 @@
+[
+  {
+    "sha": "d78b01e9833009fab534462e05c03cffc51bf0e3",
+    "node_id": "C_kwDOBY7uftoAKGQ3OGIwMWU5ODMzMDA5ZmFiNTM0NDYyZTA1YzAzY2ZmYzUxYmYwZTM",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-11-20T20:55:50Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-11-20T20:55:50Z"
+      },
+      "message": "Merge pull request #3906 from cathoderay/master\n\nMinor grammar improvement",
+      "tree": {
+        "sha": "e7064bb8aaef800dbe406e245bbfe0e69ec6d270",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/e7064bb8aaef800dbe406e245bbfe0e69ec6d270"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/d78b01e9833009fab534462e05c03cffc51bf0e3",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJpH4BWCRC1aQ7uu5UhlAAAntUQAFeFvVv0p3ncxrNhfuVopAmE\nNmlXv+VtX2eYBLDzZn24N5fLme9wYT5sE2Ib4cyJgtNRWf+iYv66MqBoIu6oqMYE\n26y7Ylhjp3gr6/yUjfFLTvhZqOtLvddY7kH8sMH+r0T+MEvqCbwv30oKWdx39sa2\nTYvBjarpLpcdOm6k/amkDveLj148gehKZB1xeg5VgSDIdwl9cFAWLLlyf4s9dkCB\niX1+82NLR1uWT23WmflBClaP8Q+MH0dLe79KK9Aa8MV0ZuN2KQnhZ/0ICBQUAT7k\na5ks2lFJv+35S/mFjYxCIWGeHf6ntsa7NnJo/tDtSFOMVLwxZ17KeJQjBt5gvFyo\nW1xOpgCpeFL3V9fC567QZ4h2UG1pAn/3Susc6WfG7A4WsGR2La7IuzP2XbcZAN1+\nksewNCSumhWtXsmT9rdzBiDB7mchWljJKzXOAcwTL3rsenpUeLVeexU19qzdUZ4b\nLMjLbt1u+xauX85+k5OW8r/9jiz+gE3B6g3SzNY9ktAxVVQzPq83u22Z27Cm6asL\n5BnDhKIXNA+9UXCVcUWCAsSuxoV4Hgeh6htWqGBEZPWUGHUUt0l4EybnMQRtYn4P\nxTyqyIQK1rioU5Wk/4LrQ9YwPgBgNj1+FV/idunDuYcZm02N7zhCXZu9PLx2MU4u\ndwszDjfzlv5FsMNt5NRz\n=hmS8\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree e7064bb8aaef800dbe406e245bbfe0e69ec6d270\nparent 5e893cffce8e2346d4e50926d5148c70af172533\nparent 9ef986e9cb68073eef1c6a9ac076ec2cb3b95637\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1763672150 +0000\ncommitter GitHub <noreply@github.com> 1763672150 +0000\n\nMerge pull request #3906 from cathoderay/master\n\nMinor grammar improvement",
+        "verified_at": "2025-11-20T20:55:50Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d78b01e9833009fab534462e05c03cffc51bf0e3",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/d78b01e9833009fab534462e05c03cffc51bf0e3",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d78b01e9833009fab534462e05c03cffc51bf0e3/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "5e893cffce8e2346d4e50926d5148c70af172533",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5e893cffce8e2346d4e50926d5148c70af172533",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/5e893cffce8e2346d4e50926d5148c70af172533"
+      },
+      {
+        "sha": "9ef986e9cb68073eef1c6a9ac076ec2cb3b95637",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/9ef986e9cb68073eef1c6a9ac076ec2cb3b95637",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/9ef986e9cb68073eef1c6a9ac076ec2cb3b95637"
+      }
+    ]
+  },
+  {
+    "sha": "9ef986e9cb68073eef1c6a9ac076ec2cb3b95637",
+    "node_id": "C_kwDOBY7uftoAKDllZjk4NmU5Y2I2ODA3M2VlZjFjNmE5YWMwNzZlYzJjYjNiOTU2Mzc",
+    "commit": {
+      "author": {
+        "name": "Ronald Kaiser",
+        "email": "raios.catodicos@gmail.com",
+        "date": "2025-11-20T20:19:45Z"
+      },
+      "committer": {
+        "name": "Ronald Kaiser",
+        "email": "raios.catodicos@gmail.com",
+        "date": "2025-11-20T20:19:45Z"
+      },
+      "message": "minor grammar improvement",
+      "tree": {
+        "sha": "e7064bb8aaef800dbe406e245bbfe0e69ec6d270",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/e7064bb8aaef800dbe406e245bbfe0e69ec6d270"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/9ef986e9cb68073eef1c6a9ac076ec2cb3b95637",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/9ef986e9cb68073eef1c6a9ac076ec2cb3b95637",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/9ef986e9cb68073eef1c6a9ac076ec2cb3b95637",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/9ef986e9cb68073eef1c6a9ac076ec2cb3b95637/comments",
+    "author": {
+      "login": "cathoderay",
+      "id": 150247,
+      "node_id": "MDQ6VXNlcjE1MDI0Nw==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/150247?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cathoderay",
+      "html_url": "https://github.com/cathoderay",
+      "followers_url": "https://api.github.com/users/cathoderay/followers",
+      "following_url": "https://api.github.com/users/cathoderay/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cathoderay/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/cathoderay/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cathoderay/subscriptions",
+      "organizations_url": "https://api.github.com/users/cathoderay/orgs",
+      "repos_url": "https://api.github.com/users/cathoderay/repos",
+      "events_url": "https://api.github.com/users/cathoderay/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/cathoderay/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "cathoderay",
+      "id": 150247,
+      "node_id": "MDQ6VXNlcjE1MDI0Nw==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/150247?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/cathoderay",
+      "html_url": "https://github.com/cathoderay",
+      "followers_url": "https://api.github.com/users/cathoderay/followers",
+      "following_url": "https://api.github.com/users/cathoderay/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cathoderay/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/cathoderay/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cathoderay/subscriptions",
+      "organizations_url": "https://api.github.com/users/cathoderay/orgs",
+      "repos_url": "https://api.github.com/users/cathoderay/repos",
+      "events_url": "https://api.github.com/users/cathoderay/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/cathoderay/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "5e893cffce8e2346d4e50926d5148c70af172533",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5e893cffce8e2346d4e50926d5148c70af172533",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/5e893cffce8e2346d4e50926d5148c70af172533"
+      }
+    ]
+  },
+  {
+    "sha": "5e893cffce8e2346d4e50926d5148c70af172533",
+    "node_id": "C_kwDOBY7uftoAKDVlODkzY2ZmY2U4ZTIzNDZkNGU1MDkyNmQ1MTQ4YzcwYWYxNzI1MzM",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-11-12T21:18:22Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-11-12T21:18:22Z"
+      },
+      "message": "Merge pull request #3902 from Lk-ux/patch-2\n\nclarify wording about null and undefined equality in JS",
+      "tree": {
+        "sha": "d78b421a7db7a3c8766d27aaa1fd1368d48329ed",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/d78b421a7db7a3c8766d27aaa1fd1368d48329ed"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/5e893cffce8e2346d4e50926d5148c70af172533",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJpFPmeCRC1aQ7uu5UhlAAA9KkQAH0VXBg++unSUgQDIWEY8dRw\n3zIzG0Eyj1cNZfXJkvBS1d1AcKh8KyKEAmKVLt8n6DOPznkEP8Z5/ny6BXwGITZP\n0FSEXD/kwNLr7GoZUjFUmNQBECCEGuzmeiKVcKvIFmMYVqCPttxDyxX6bER+NeSZ\nEQwS5LXqpwEwWcOSC7zCa9hPUVltUMHa6hyZ6cveX5F5CZmxXHaBZJ8hA/PwaP8R\n8pu+wVBv8nphPVZGGcSpuP43LQYH6D69u5wbwJZ+GtP+OwnoIiRoragMo5vPsFYw\n2oNd2SQ7SuGiduZoxCblYSr5uT+cSOqiU2NDNN+Jg1H8lNJ1YIzef4Li2YtD1d8T\nFAChTUNaUBwfjRcCU65aQBI4sl8Mz8skjGTtdSfy2rV9U/X39YUekcRolXh+xgqV\n7IryR5whcj7yNbv0Kviy4B4WMY5m9DbjtzIR+9SiTzDWk0fsVH8A7hRn6r5ssq+r\nm/YZv8QF2hlN5DH18J83PImpK4VMfQF//OVRoFLAsMrSTe3ti0qEwSDPVVPsa4Hj\ngX3+xJgv/Jyz/e5rSVTu7GHQW0otsFXiVZ7VuHYE33jPfViepxUf8oidn2xyohbP\nNqzE67KjEYqqZHcSGq3pwT0ayjaO8ilY41K1Fn2TjEfk3EIE73yVJndeDY15A8ag\nWnEwDmVo8lHHBk6uUYpu\n=+1Ff\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree d78b421a7db7a3c8766d27aaa1fd1368d48329ed\nparent 51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19\nparent aa3841a71488adf0a80be0d461e3d7cb17865a82\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1762982302 +0000\ncommitter GitHub <noreply@github.com> 1762982302 +0000\n\nMerge pull request #3902 from Lk-ux/patch-2\n\nclarify wording about null and undefined equality in JS",
+        "verified_at": "2025-11-12T21:18:23Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5e893cffce8e2346d4e50926d5148c70af172533",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/5e893cffce8e2346d4e50926d5148c70af172533",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5e893cffce8e2346d4e50926d5148c70af172533/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19"
+      },
+      {
+        "sha": "aa3841a71488adf0a80be0d461e3d7cb17865a82",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/aa3841a71488adf0a80be0d461e3d7cb17865a82",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/aa3841a71488adf0a80be0d461e3d7cb17865a82"
+      }
+    ]
+  },
+  {
+    "sha": "aa3841a71488adf0a80be0d461e3d7cb17865a82",
+    "node_id": "C_kwDOBY7uftoAKGFhMzg0MWE3MTQ4OGFkZjBhODBiZTBkNDYxZTNkN2NiMTc4NjVhODI",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-11-12T21:18:11Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-11-12T21:18:11Z"
+      },
+      "message": "Update 1-js/02-first-steps/09-comparison/article.md\n\nCo-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>",
+      "tree": {
+        "sha": "d78b421a7db7a3c8766d27aaa1fd1368d48329ed",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/d78b421a7db7a3c8766d27aaa1fd1368d48329ed"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/aa3841a71488adf0a80be0d461e3d7cb17865a82",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJpFPmTCRC1aQ7uu5UhlAAA7M4QAC4V9vCw0Jb/0bFB5mJF/iD5\nFN6imjPnzxayRlPY4VHA16ei+NhFHQEU1/gP8vLCGZ8MJ9YopBuKMNnAit/O9hNt\nY6HJN9JwVE/QU1YKswPw5Ch0EnjtT3uJwW1RYOTGXP4npDqpJU5rPiTJn6vnlAqH\nAStoB+r98gDIq96hjC9Ap8OSC7XXicic5bycUDQUbfcA0S7JGwnsA0W88mLuqtyr\nAoGeZWEB/CTnv4hEWcKkND3Ila402ynll4qVtovHNDryihkjbp8f/HK8ocZ5VyPl\nvU81JaY0z8bHOnBqtsnNDzqnW6JHFBMvpOJnv9aThVPRJthWAWM8Mh7bscp5xNHa\nZZtBsOH5Fvqj7lwW8lGFUi8ngwfwNZLKYleaUJG660RoVh3UU4GVGi+bGK5jC0oq\nwdCMXHRjdGXGmkX5o36SYgBfYM9LDgvrRbd7qgv9ghhfgEmJs7cOm2RiSXTEM79v\nxo3tsUQuxmuzK3YXs9qcKZJUA5DKyxx912cdIiWeFFIH2NfijjzWhnnW4z9h0ONK\nH7WepGxmmHSO8GpRka48llwN1Od5VzgVZNWs6eDPe2SDvICCxjC1Q2qq9wzxuzeb\nEP2+b9RFw0cYIUjnyz3PivZmcwEzBw8Gk8UJoP4EPK/UdCvofmPQyixHJ/mzrQSf\nm2P8DacYgxi3eGL0BzKZ\n=s8N9\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree d78b421a7db7a3c8766d27aaa1fd1368d48329ed\nparent a1257db1a0b036a97f842c0e4907169a2266c917\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1762982291 +0000\ncommitter GitHub <noreply@github.com> 1762982291 +0000\n\nUpdate 1-js/02-first-steps/09-comparison/article.md\n\nCo-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>",
+        "verified_at": "2025-11-12T21:18:12Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/aa3841a71488adf0a80be0d461e3d7cb17865a82",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/aa3841a71488adf0a80be0d461e3d7cb17865a82",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/aa3841a71488adf0a80be0d461e3d7cb17865a82/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "a1257db1a0b036a97f842c0e4907169a2266c917",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a1257db1a0b036a97f842c0e4907169a2266c917",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/a1257db1a0b036a97f842c0e4907169a2266c917"
+      }
+    ]
+  },
+  {
+    "sha": "a1257db1a0b036a97f842c0e4907169a2266c917",
+    "node_id": "C_kwDOBY7uftoAKGExMjU3ZGIxYTBiMDM2YTk3Zjg0MmMwZTQ5MDcxNjlhMjI2NmM5MTc",
+    "commit": {
+      "author": {
+        "name": "Lakshya Keshwani",
+        "email": "lakshyakeshwani3@gmail.com",
+        "date": "2025-11-09T09:46:51Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-11-09T09:46:51Z"
+      },
+      "message": "clarify wording about null and undefined equality in JS",
+      "tree": {
+        "sha": "a96be61f2131043860e9ec72655f6e153285bb84",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/a96be61f2131043860e9ec72655f6e153285bb84"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/a1257db1a0b036a97f842c0e4907169a2266c917",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJpEGMLCRC1aQ7uu5UhlAAAPdQQADADaPFkmFoWPTHfOBqvQKZV\n+tqviZrLlXiI/dGaI1T/lGUgRTld+BNnd3QsVellyVwTHAVi9S/ZSdknUXVpOE/Q\nGdPXVmUO2zkTOulNPxrY8UzCvHVIlumDxFiXdkAOUb7T+Qex2eeLPP+NQhArHIYB\nD1so9R5ZSG5JOTJoZzcKTEht/FsZCz3F1AgrQoygJDE50tDtQ6GQyPTzyaLIK+gs\nTpdvs/DOWPNllFGvp+Ev/Fu4lQ/Ez3RpZxPyQu2Z7DR2eiUqP+bDl4CfpUcTFrus\nZ2BR+9pdQogkx/LHDXgfZozlvHYsqPuge/amxF02BG67YLZQjA8N2BlD9540A6jZ\nsBNngn9wfPv1ZrTwtSK8w1zKllPTlU14p1jY/gsslZFKgk2ZY1txI3sGxgWTneUk\nc2sBT66SLfUC15q4/dlkRhmmfOBZl9uPK7QagWUG2uzmoWUu6CfQ7nQQbGuYamhp\nGMjNsM/DHhPa3TL2WsnDuOuYHYvyjP8npwSV6E002mtq2090rkr2hWBp47I0pkcM\n9hsybEJ8ygUerHSS7D5xArtbmUU/xe3LRo0SClEqjxRzlavCXahbymnKn8s8NtDQ\nZDtqxlkKBA65JcLeSulcM5TkbdcpEetD09KhP5W2CqRcqiYSXSkTT4eEZGYl+G6F\nOt2efoPWEaUiQvif5lns\n=Dno7\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree a96be61f2131043860e9ec72655f6e153285bb84\nparent 51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19\nauthor Lakshya Keshwani <lakshyakeshwani3@gmail.com> 1762681611 +0530\ncommitter GitHub <noreply@github.com> 1762681611 +0530\n\nclarify wording about null and undefined equality in JS",
+        "verified_at": "2025-11-09T09:46:51Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a1257db1a0b036a97f842c0e4907169a2266c917",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/a1257db1a0b036a97f842c0e4907169a2266c917",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a1257db1a0b036a97f842c0e4907169a2266c917/comments",
+    "author": {
+      "login": "Lk-ux",
+      "id": 174747728,
+      "node_id": "U_kgDOCmpwUA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/174747728?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Lk-ux",
+      "html_url": "https://github.com/Lk-ux",
+      "followers_url": "https://api.github.com/users/Lk-ux/followers",
+      "following_url": "https://api.github.com/users/Lk-ux/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Lk-ux/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Lk-ux/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Lk-ux/subscriptions",
+      "organizations_url": "https://api.github.com/users/Lk-ux/orgs",
+      "repos_url": "https://api.github.com/users/Lk-ux/repos",
+      "events_url": "https://api.github.com/users/Lk-ux/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Lk-ux/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19"
+      }
+    ]
+  },
+  {
+    "sha": "51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+    "node_id": "C_kwDOBY7uftoAKDUxYmM2ZDNjZGMxNmI2ZWI3OWNiODg4MjBhNThjNGYwMzdmM2JmMTk",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-09-26T11:16:13Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-09-26T11:16:13Z"
+      },
+      "message": "Merge pull request #3871 from wjw020206/path-3\n\nFix minor typo",
+      "tree": {
+        "sha": "849cf619f6a1695f4e222492b409bbcf5684e463",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/849cf619f6a1695f4e222492b409bbcf5684e463"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJo1nX9CRC1aQ7uu5UhlAAA0c4QAFdQie44uB2IK+2Dt/dEAhgx\ngNIIIiwmJiUokA6wwbUmvTVIgwbscdE764UXNRb29rWxWhIce3RE0efZDo/loGQM\nzYp1lqOpuEeTlQZc67nCWiw6OVUWRQO4KKfPrg75hu0iFBISzW31G/ZHJmqadpZj\nkT+h2LEMJHc0l5ayRwpf+hCJ4daehDMY3nTGV+s/USk1g3+Ujve8FvjFYh3OoTOB\nDDkn+2NhdEd9WqCXc8g34scNorsW3pvFKDODNN37DKDFtjZJ2I+WuMDkiuGyv+3F\nqCDn03520f18+mxONnEUSG7a21zF+rThos1BJ4Uycf2bD/8nX4YwC3EVn0qQ4xWO\nCEKZ20JoPL7N0ZB4RgHqEUWutSxwyOifEYMkgayn5r0ctN92FqNJMOdp5r+Rn4xh\nbFyPxy9CEB+Tusnrdc8NjP3a6wsOozZtNIXaK7B073ZJ/S4yxah4EPSFkH/JN+sz\nIdoZsOIszRP+GmZFXs962cdgbDivtS+h4AUg5N1xyzgsX/GdBGiQ/bpxAf9oIHKh\ner4VP/QdEs4imBs8xOqJkaxOfDfi1rLr7Itz4LCViUKmsO0rt3iu8qxFZtJEgD+W\nUG6UI7F8nZM8UKKWuDObgGNgceHe2/TxxzHR/UytlThnc5yOasUcR7GXoF78mdzg\n6+qhWai1KX8VXVGNUkJh\n=mB2V\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 849cf619f6a1695f4e222492b409bbcf5684e463\nparent 540d753e90789205fc6e75c502f68382c87dea9b\nparent a9864a583e0602857bf1054c48f25f2793132bbd\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1758885373 +0100\ncommitter GitHub <noreply@github.com> 1758885373 +0100\n\nMerge pull request #3871 from wjw020206/path-3\n\nFix minor typo",
+        "verified_at": "2025-09-26T11:16:14Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/51bc6d3cdc16b6eb79cb88820a58c4f037f3bf19/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "540d753e90789205fc6e75c502f68382c87dea9b",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/540d753e90789205fc6e75c502f68382c87dea9b",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/540d753e90789205fc6e75c502f68382c87dea9b"
+      },
+      {
+        "sha": "a9864a583e0602857bf1054c48f25f2793132bbd",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a9864a583e0602857bf1054c48f25f2793132bbd",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/a9864a583e0602857bf1054c48f25f2793132bbd"
+      }
+    ]
+  },
+  {
+    "sha": "a9864a583e0602857bf1054c48f25f2793132bbd",
+    "node_id": "C_kwDOBY7uftoAKGE5ODY0YTU4M2UwNjAyODU3YmYxMDU0YzQ4ZjI1ZjI3OTMxMzJiYmQ",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-09-26T11:15:50Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-09-26T11:15:50Z"
+      },
+      "message": "Update 1-js/09-classes/06-instanceof/article.md\n\nCo-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>",
+      "tree": {
+        "sha": "849cf619f6a1695f4e222492b409bbcf5684e463",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/849cf619f6a1695f4e222492b409bbcf5684e463"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/a9864a583e0602857bf1054c48f25f2793132bbd",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJo1nXmCRC1aQ7uu5UhlAAAwLMQAKAL8yjzsjSdgSGMyAnWuTy0\nXv/I1v7zGACKtJtDp/fk1iPMuDYxtkv8k7Yizeb9kFJyLEzjifjO+xSdULWyk4Ea\ntP2D9wZhSWs+MdZ3SLoMNzrwihx31IiiIbtLIGs8gQ38qcegtPxXLBx7xYdrrgyY\nTSdHyxikkVV4+6A3le5zAUkZ+JR9HeTbtNzM2sGdrlI81bdvi/D/Gp0qtqek4ilb\nPtm9UOCAYJelWbaBryvFZWFvzkgg6HGmHDsYTDWgZjD6jE3ayUdvsdd2tAh9Ka2W\nRyak/k6VX9HgUjqDgGdGvcvLveI4qkhFLWkPT7RLI+fJFwgMM4dcKE2VbQoRhTSF\n4RQBgcj8aDwrBhkMqx55zxh9rzGZB62jqJxvsjkUitHjdW+AIp8TixAmjyS5vJbW\n3XNAx6uBQQIJd4Y70iTchE0mjlbuDvPzVgwCFHkYzFsciVdypQMbIcjdRe9ABs9Z\nJichUrcB49+ZdBGZjQfNnQoe4Yk2+Wbz+6hD5Dcn+epz01yVEVPSBhkCVTz+VpKV\nu94NpJBo4Zdp7g9+Uh4rzG8lmim61Ol0Tq9kaeuHKGtycl2I8W6GLClncZKC3pOg\n3u0/emhNElfhFc4KE8sO49mWf7ZctqMQVQ9+n0wtwx+0Nlz8g3A4ar3PSBV5CUhP\n+LQ0a3a+ORNSLqCe9Rs6\n=4tCf\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 849cf619f6a1695f4e222492b409bbcf5684e463\nparent 5629b6b8e05dd8683873c6840ba189ddb6a94307\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1758885350 +0200\ncommitter GitHub <noreply@github.com> 1758885350 +0200\n\nUpdate 1-js/09-classes/06-instanceof/article.md\n\nCo-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>",
+        "verified_at": "2025-09-26T11:15:51Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a9864a583e0602857bf1054c48f25f2793132bbd",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/a9864a583e0602857bf1054c48f25f2793132bbd",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a9864a583e0602857bf1054c48f25f2793132bbd/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "5629b6b8e05dd8683873c6840ba189ddb6a94307",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5629b6b8e05dd8683873c6840ba189ddb6a94307",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/5629b6b8e05dd8683873c6840ba189ddb6a94307"
+      }
+    ]
+  },
+  {
+    "sha": "5629b6b8e05dd8683873c6840ba189ddb6a94307",
+    "node_id": "C_kwDOBY7uftoAKDU2MjliNmI4ZTA1ZGQ4NjgzODczYzY4NDBiYTE4OWRkYjZhOTQzMDc",
+    "commit": {
+      "author": {
+        "name": "CodePencil",
+        "email": "jiawei.wang2021@gmail.com",
+        "date": "2025-08-27T01:02:28Z"
+      },
+      "committer": {
+        "name": "CodePencil",
+        "email": "jiawei.wang2021@gmail.com",
+        "date": "2025-08-27T01:02:28Z"
+      },
+      "message": "Fix minor typo",
+      "tree": {
+        "sha": "df5e014730dd5b3626a3b84c3b756ad9b5ebdfdd",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/df5e014730dd5b3626a3b84c3b756ad9b5ebdfdd"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/5629b6b8e05dd8683873c6840ba189ddb6a94307",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5629b6b8e05dd8683873c6840ba189ddb6a94307",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/5629b6b8e05dd8683873c6840ba189ddb6a94307",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5629b6b8e05dd8683873c6840ba189ddb6a94307/comments",
+    "author": {
+      "login": "wjw020206",
+      "id": 59106659,
+      "node_id": "MDQ6VXNlcjU5MTA2NjU5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59106659?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/wjw020206",
+      "html_url": "https://github.com/wjw020206",
+      "followers_url": "https://api.github.com/users/wjw020206/followers",
+      "following_url": "https://api.github.com/users/wjw020206/following{/other_user}",
+      "gists_url": "https://api.github.com/users/wjw020206/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/wjw020206/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/wjw020206/subscriptions",
+      "organizations_url": "https://api.github.com/users/wjw020206/orgs",
+      "repos_url": "https://api.github.com/users/wjw020206/repos",
+      "events_url": "https://api.github.com/users/wjw020206/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/wjw020206/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "wjw020206",
+      "id": 59106659,
+      "node_id": "MDQ6VXNlcjU5MTA2NjU5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59106659?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/wjw020206",
+      "html_url": "https://github.com/wjw020206",
+      "followers_url": "https://api.github.com/users/wjw020206/followers",
+      "following_url": "https://api.github.com/users/wjw020206/following{/other_user}",
+      "gists_url": "https://api.github.com/users/wjw020206/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/wjw020206/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/wjw020206/subscriptions",
+      "organizations_url": "https://api.github.com/users/wjw020206/orgs",
+      "repos_url": "https://api.github.com/users/wjw020206/repos",
+      "events_url": "https://api.github.com/users/wjw020206/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/wjw020206/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "540d753e90789205fc6e75c502f68382c87dea9b",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/540d753e90789205fc6e75c502f68382c87dea9b",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/540d753e90789205fc6e75c502f68382c87dea9b"
+      }
+    ]
+  },
+  {
+    "sha": "540d753e90789205fc6e75c502f68382c87dea9b",
+    "node_id": "C_kwDOBY7uftoAKDU0MGQ3NTNlOTA3ODkyMDVmYzZlNzVjNTAyZjY4MzgyYzg3ZGVhOWI",
+    "commit": {
+      "author": {
+        "name": "Stanislav Modrak",
+        "email": "stanislav.modrak@gmail.com",
+        "date": "2025-04-13T21:58:25Z"
+      },
+      "committer": {
+        "name": "Stanislav Modrak",
+        "email": "stanislav.modrak@gmail.com",
+        "date": "2025-04-13T21:58:25Z"
+      },
+      "message": "Replace with up to date screenshots",
+      "tree": {
+        "sha": "697f827360b15179630a2785098202830622f762",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/697f827360b15179630a2785098202830622f762"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/540d753e90789205fc6e75c502f68382c87dea9b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/540d753e90789205fc6e75c502f68382c87dea9b",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/540d753e90789205fc6e75c502f68382c87dea9b",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/540d753e90789205fc6e75c502f68382c87dea9b/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d3c395c56214838bf9a89abed53fd0558affe9e1",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d3c395c56214838bf9a89abed53fd0558affe9e1",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/d3c395c56214838bf9a89abed53fd0558affe9e1"
+      }
+    ]
+  },
+  {
+    "sha": "d3c395c56214838bf9a89abed53fd0558affe9e1",
+    "node_id": "C_kwDOBY7uftoAKGQzYzM5NWM1NjIxNDgzOGJmOWE4OWFiZWQ1M2ZkMDU1OGFmZmU5ZTE",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-04-13T17:35:11Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-13T17:35:11Z"
+      },
+      "message": "Merge pull request #3832 from dangerman/update-safari-devtools-screenshot\n\nUpdate Safari dev tools setup instructions",
+      "tree": {
+        "sha": "2d76719090b0a5f6e05f833e67b704f08c4a376f",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/2d76719090b0a5f6e05f833e67b704f08c4a376f"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/d3c395c56214838bf9a89abed53fd0558affe9e1",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn+/XPCRC1aQ7uu5UhlAAAOiAQAApZJZnwsafrcnQ9tq243Qbg\nhUN3G4mr5fJEQ48dHDk2Oe+89A9lCy4tciGAV5I8qvsoqb6mtZrst24BgSlrL3Uv\nxfJKA2OBiBaOkfRuwheShfK9YaatN3SDqUPKCulLl6SmK8hc6sdP6dM+rbXPDEnF\nqLQqpUEt191zjI6+LjHDYooeIy8WHD42/RENaP62EhYpqWQDFSF4l66uAS2KuJmQ\nAuaIa4jQcdZKpPEus3NpUVc/jtlE4g22SXq+CScdxWAW6ZjwIW5a0cbCtrwN3T1Z\n8iMk4Jpx2sJ2Icu/XRwA36OhO6lrRoFRaBFeY+lg/mxLmeudfUeW/4a07hnP0sPt\n9syPvcpk/tgyH9/OG7Ris6+CZY7ZQpR+bNaCpnP1u/TOxuzmoKouuzQnO88BYeSs\nDxJE5wPUhaiPDvSS7fbAQZLO39/LipD5VkkUNhR2gwt8/oEWJXfpMac8M/G3Jlui\n3pf0WRbntpd+bN/A2myE8Z6VenHvdIyH2wJUZ3NDPdFej7ab4HvfS7EuNnbUgaRm\nrfq7rdKLxOb3dGLlLkmyBGqkH2n7cLPNUSouVAUBl91dqqX+5Vp36vR6HBk8G28A\nF909plLg/xm54PsvtTQtLyNWJIuA5OhQC5FhRrvZpM4YcoX9jPQla8JM+hkcp7nF\nJG7ZNnJ5en0gq1Ci0kqy\n=hyXs\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 2d76719090b0a5f6e05f833e67b704f08c4a376f\nparent 6bbdd0cb8f287ba7c327d95357add92753d5e537\nparent 78c6c446b70050aa25b4e5b5fd4ab664bd2cc488\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1744565711 +0100\ncommitter GitHub <noreply@github.com> 1744565711 +0100\n\nMerge pull request #3832 from dangerman/update-safari-devtools-screenshot\n\nUpdate Safari dev tools setup instructions",
+        "verified_at": "2025-04-13T17:35:15Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d3c395c56214838bf9a89abed53fd0558affe9e1",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/d3c395c56214838bf9a89abed53fd0558affe9e1",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d3c395c56214838bf9a89abed53fd0558affe9e1/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "6bbdd0cb8f287ba7c327d95357add92753d5e537",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/6bbdd0cb8f287ba7c327d95357add92753d5e537",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/6bbdd0cb8f287ba7c327d95357add92753d5e537"
+      },
+      {
+        "sha": "78c6c446b70050aa25b4e5b5fd4ab664bd2cc488",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/78c6c446b70050aa25b4e5b5fd4ab664bd2cc488",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/78c6c446b70050aa25b4e5b5fd4ab664bd2cc488"
+      }
+    ]
+  },
+  {
+    "sha": "6bbdd0cb8f287ba7c327d95357add92753d5e537",
+    "node_id": "C_kwDOBY7uftoAKDZiYmRkMGNiOGYyODdiYTdjMzI3ZDk1MzU3YWRkOTI3NTNkNWU1Mzc",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-04-13T15:25:04Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-13T15:25:04Z"
+      },
+      "message": "Merge pull request #3834 from rahulrao0209/patch-2\n\nUpdate Function object, NFE article",
+      "tree": {
+        "sha": "dd73132604967fff9eccfc0b75c7441e34179bd1",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/dd73132604967fff9eccfc0b75c7441e34179bd1"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/6bbdd0cb8f287ba7c327d95357add92753d5e537",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn+9dQCRC1aQ7uu5UhlAAAL3cQAI7jxILClZ3Z0QgABDUO27Rm\nbcWT+A086gtabBdHkOS7rdJj3Kfo5+G33VGkgVfdOvTUSswj0APgW2WavWwNa77v\nxhBteuWgW/V8qKVMovcH1SWJ6jryVjAHXqZ7qicLhr/2jKg0UkMJ8MlTNKhkJyUC\nhw4bslc6qmucVRk1zgLFpphp7GBqMpfB6NNXKtITjNwermNEwWQsxCrcMUkpGyjs\n36sw1UgoirROVyw2yvE0wHYvsC1G8iYGefOoYBv1medJJg7DujlOY7iQaSckmfZg\n00BzLzQ1mfRCzJgxevkBVa5No6D1R10irh7grsJePg4rB0muxvsu0bol4BCB73BF\n8Cjz/be3iieYRkPlPO52It68u3GbXGRJaNy9T3QSODdu3+S+c6Kn+TeKpkpuvTi2\nHmir8VH3fBOmk4dJCICx0iDQ9PCBp/am3Tx4uUnyyfCYnQol105AE9/3z2tITnbi\nvqr95J/LjgeXKeSBSJI/wlY7gerzQ7iXJyDC0BcOxZ9ImI2L6BIXYOg9IhsAr6IU\nJaqj8AaFFUEAZRicXqMCQBZQ+0Bk9fj5Ltnotrbf0G3IVzaLjP4qCWnkwFL9w1jz\nWjUJGF+OquPnsp9r4CZcVNPqucI8sl7lKmQ7A5+GtEuL2jf82DpFmb9M0NVXMA3j\nSmVY9MwipZmwjsAkSDrf\n=j6K4\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree dd73132604967fff9eccfc0b75c7441e34179bd1\nparent e2d8ebe12a0b2794132cb192cd9367ea4cfa850d\nparent e88c2122668a08f3e5bd09b1ecebbae2f876ca6c\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1744557904 +0100\ncommitter GitHub <noreply@github.com> 1744557904 +0100\n\nMerge pull request #3834 from rahulrao0209/patch-2\n\nUpdate Function object, NFE article",
+        "verified_at": "2025-04-13T15:25:07Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/6bbdd0cb8f287ba7c327d95357add92753d5e537",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/6bbdd0cb8f287ba7c327d95357add92753d5e537",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/6bbdd0cb8f287ba7c327d95357add92753d5e537/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "e2d8ebe12a0b2794132cb192cd9367ea4cfa850d",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/e2d8ebe12a0b2794132cb192cd9367ea4cfa850d",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/e2d8ebe12a0b2794132cb192cd9367ea4cfa850d"
+      },
+      {
+        "sha": "e88c2122668a08f3e5bd09b1ecebbae2f876ca6c",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/e88c2122668a08f3e5bd09b1ecebbae2f876ca6c",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/e88c2122668a08f3e5bd09b1ecebbae2f876ca6c"
+      }
+    ]
+  },
+  {
+    "sha": "e2d8ebe12a0b2794132cb192cd9367ea4cfa850d",
+    "node_id": "C_kwDOBY7uftoAKGUyZDhlYmUxMmEwYjI3OTQxMzJjYjE5MmNkOTM2N2VhNGNmYTg1MGQ",
+    "commit": {
+      "author": {
+        "name": "Stanislav (Stanley) Modrak",
+        "email": "44023416+smith558@users.noreply.github.com",
+        "date": "2025-04-13T15:24:20Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-13T15:24:20Z"
+      },
+      "message": "Merge pull request #3836 from rahulrao0209/patch-3\n\nUpdate article.md",
+      "tree": {
+        "sha": "478c4c4d779789399032325c7872e79e03d9a518",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/478c4c4d779789399032325c7872e79e03d9a518"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/e2d8ebe12a0b2794132cb192cd9367ea4cfa850d",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn+9ckCRC1aQ7uu5UhlAAAeRkQAFas23vrF4n/PoNBYjRpX6hC\nN9O6Bs0OyAK8aiIab5b67bKYH19yP0wIaSjqHYHc9qjbAOPJOH7AgUHSJcJzzYTz\nlx/6sGYhWvURx72sL1mtwuAesqXiXaClzDZWfuG9ESWf/hjLS7+ce3UwQlBnvAot\n1DFsp8CnDJsV6ms+t/JlpVZstUnE1KHB+JfS3OIgJY1ZP6WnUE0EV3rrT3MCBK6m\n7dYQG22BlHez4wR9EyAsy27ldWgTYKImkuA6rFK61JVAckVNPVy2UZsgxmv9fRPx\nDF/TkHfbGrecYWoQMOX5QODtejiQyZ8tb6IjVHw7EI/cPZcDb8ozzl1ASXAkwklD\nZMA/6srQtvw1bXCD+ZcuwDbDnDnEb+S4LE3QIbLmXH75eVflZoaDLAFB68L522Df\nNcwRSpil8qDukY/BiQvkNoGBpjkhGBu3axNFFRgZ9xYsjwrL7edTg6Yoj7oiKeT/\npNNLTqjTJLG3UdW2i6J12lz0ATq8oXJcxdX719b6FKAHmqZSRUIOEPPrT+bUeayl\nQnEzTB1+2o3hG88DF6gFsHtLcfHfs4YaXtSoPXTi0jA1zNMfUzlc+HVfXJhaDhya\nQn/R5osC4QtW13JwYGdQWe3MxHIRyqpveyfU/rwXoGJ7h6VyePfroIltTqbWPjF5\nn6ypalZBmEHaObJFmagi\n=0ghU\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 478c4c4d779789399032325c7872e79e03d9a518\nparent 6cc5077e3b2723165480741fc1f3cbb9dbc3b37c\nparent 81cfee91fad3e5bfa05b159321c17105ad009ceb\nauthor Stanislav (Stanley) Modrak <44023416+smith558@users.noreply.github.com> 1744557860 +0100\ncommitter GitHub <noreply@github.com> 1744557860 +0100\n\nMerge pull request #3836 from rahulrao0209/patch-3\n\nUpdate article.md",
+        "verified_at": "2025-04-13T15:24:24Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/e2d8ebe12a0b2794132cb192cd9367ea4cfa850d",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/e2d8ebe12a0b2794132cb192cd9367ea4cfa850d",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/e2d8ebe12a0b2794132cb192cd9367ea4cfa850d/comments",
+    "author": {
+      "login": "smith558",
+      "id": 44023416,
+      "node_id": "MDQ6VXNlcjQ0MDIzNDE2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44023416?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/smith558",
+      "html_url": "https://github.com/smith558",
+      "followers_url": "https://api.github.com/users/smith558/followers",
+      "following_url": "https://api.github.com/users/smith558/following{/other_user}",
+      "gists_url": "https://api.github.com/users/smith558/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/smith558/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/smith558/subscriptions",
+      "organizations_url": "https://api.github.com/users/smith558/orgs",
+      "repos_url": "https://api.github.com/users/smith558/repos",
+      "events_url": "https://api.github.com/users/smith558/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/smith558/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c"
+      },
+      {
+        "sha": "81cfee91fad3e5bfa05b159321c17105ad009ceb",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/81cfee91fad3e5bfa05b159321c17105ad009ceb",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/81cfee91fad3e5bfa05b159321c17105ad009ceb"
+      }
+    ]
+  },
+  {
+    "sha": "81cfee91fad3e5bfa05b159321c17105ad009ceb",
+    "node_id": "C_kwDOBY7uftoAKDgxY2ZlZTkxZmFkM2U1YmZhMDViMTU5MzIxYzE3MTA1YWQwMDljZWI",
+    "commit": {
+      "author": {
+        "name": "Rahul Rao",
+        "email": "63695122+rahulrao0209@users.noreply.github.com",
+        "date": "2025-04-13T09:50:08Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-13T09:50:08Z"
+      },
+      "message": "Update article.md\n\nFix minor typo in Function binding article.",
+      "tree": {
+        "sha": "478c4c4d779789399032325c7872e79e03d9a518",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/478c4c4d779789399032325c7872e79e03d9a518"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/81cfee91fad3e5bfa05b159321c17105ad009ceb",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn+4jQCRC1aQ7uu5UhlAAAYj8QADKCeZViF96ZLcmUxf6IJenO\ndQVk5jBr1LwHTM1PWFO76fEhCHVRom9CmQEw25ISjdbzlN6jC72nUKMDbaFBUF09\nIOj0H+goJaB477V4pBctulYnIePvmXHwj179/n77hR37CY8bBrK8vp/gDUqLBHgq\n6mqO6ACTyIuRZXOdo/L12SSxiwM+PoT1pez/bx0oB/1YhtvF+kpbR2Zaiy1h2PZ0\nzLrwHGT7Z6uclTSDZfCXKrtx7I/Vms3IYvvzMATBtpygp9n9TUCkvbi8r56S+9T7\neqlurO0oLF3rBdp0mgo4zcZkS4H+8tmjY8eeZmfSrYC7q+pl6YgrNkyVEHDqMxh5\nX/KXrDGPCMEFUnJa7BQl9XZ7D5G6pgFoLrlQf3u/o6vd2NMdMH7SmsM/b0HiEQlk\nCxT6pOZaWogViUe1IQIlFz7yTydZBvezRohi0Mc4OZPLGrgnievBhxdI/9BF4C1C\n2JsR6GY45JgZjGMvc8bpVRbbHwuoG11RdBJGVuAIsGxDjq8kL1q3gRve+2A9TC5C\nau/rSKP4Ty+YsEkwD4Bf1FPUm8ikslvF/uhyD41iqZWYYmYAEqxPJ+3WPDsya8a/\nMKqPI2RT6R/mLLb8h98Pzyb5ooMFPcpKb3hL3o1QPm8JL77dzvH4IW0I9dpD6dRi\ns7+HsstiI4k8xpxvyYk6\n=g7wI\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 478c4c4d779789399032325c7872e79e03d9a518\nparent 6cc5077e3b2723165480741fc1f3cbb9dbc3b37c\nauthor Rahul Rao <63695122+rahulrao0209@users.noreply.github.com> 1744537808 +0530\ncommitter GitHub <noreply@github.com> 1744537808 +0530\n\nUpdate article.md\n\nFix minor typo in Function binding article.",
+        "verified_at": "2025-04-13T09:50:30Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/81cfee91fad3e5bfa05b159321c17105ad009ceb",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/81cfee91fad3e5bfa05b159321c17105ad009ceb",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/81cfee91fad3e5bfa05b159321c17105ad009ceb/comments",
+    "author": {
+      "login": "rahulrao0209",
+      "id": 63695122,
+      "node_id": "MDQ6VXNlcjYzNjk1MTIy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63695122?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/rahulrao0209",
+      "html_url": "https://github.com/rahulrao0209",
+      "followers_url": "https://api.github.com/users/rahulrao0209/followers",
+      "following_url": "https://api.github.com/users/rahulrao0209/following{/other_user}",
+      "gists_url": "https://api.github.com/users/rahulrao0209/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/rahulrao0209/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/rahulrao0209/subscriptions",
+      "organizations_url": "https://api.github.com/users/rahulrao0209/orgs",
+      "repos_url": "https://api.github.com/users/rahulrao0209/repos",
+      "events_url": "https://api.github.com/users/rahulrao0209/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/rahulrao0209/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c"
+      }
+    ]
+  },
+  {
+    "sha": "6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+    "node_id": "C_kwDOBY7uftoAKDZjYzUwNzdlM2IyNzIzMTY1NDgwNzQxZmMxZjNjYmI5ZGJjM2IzN2M",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-04-09T06:46:44Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-09T06:46:44Z"
+      },
+      "message": "Merge pull request #3835 from Paramesh-T-S/Issue_fix_Outdate_-link_in_JS_topic_Error-handling\n\nsentry.io added as per suggestion",
+      "tree": {
+        "sha": "f0a26811c2c41c9489a467adad2b8f354951b71c",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/f0a26811c2c41c9489a467adad2b8f354951b71c"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn9hfVCRC1aQ7uu5UhlAAAEbwQAAH/lf37PN8JqrOL7sPu7IAe\ncOnLUnRPgNPSYyyIGt7tEhZmAgBURVLXBTKMYF/SsfI0SnSp9j8dYR2Oj094hyvD\n4UI4VYdzyvxdxJmYWcDcOnop8siBv8BeYTAkZIHHM45AutCdWA8Tf3rjYTypUX8M\npkkHjr1TT9gDByCPzRl2owK9tbkYsX3Exx2pl54LSoRN0TsvnNmzXEwP2uYm0OS8\nTS2gdlmmfFG1RYnJJ5lQVTx3h7s6KZAwNwfcSRN5CwHq2XsnJSUP73jg79nRV/KC\nSiyevbSFjp+0K4Ymv5LCvaKN9haAWt26XKmmAqKQWcwoE075MzG0JAP7T6BgFVmB\nYC+XDekbROucWi0BfplJUd3arkDwMYRD4xB2bg4WJjqzPnKs+H1Cxz8+88q59NT+\nDRjPP4mEXe8Nm/vroQgI95OC7NhbSxfhoBwp/psTbvOMS/vThvA89b+ZhcB03p1P\nojHXOWshQhihTcpWsD81p6Guy5l6Pa3iCOaUFqq/pBnl3iKnkdM/hF6lG1wgTwtf\n65uNI6AnUCoadfpkRHMMx6jIYAiWL/K8SprRg/oGyEgTn4R1OJMg7R5yKVvfhY9o\nYA8ZwW7cS+XNbG6tmMxobPCIgSaI6a6eb7eWAnA4w8bRzje2mgiL7vB+3N3xpTHq\nNZQ+Xg19IY2MQoGkYJCB\n=7Fhe\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree f0a26811c2c41c9489a467adad2b8f354951b71c\nparent a711a1fad95cba3021cc4b988b4c9b554005369b\nparent efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267\nauthor Ilya Kantor <iliakan@users.noreply.github.com> 1744181204 +0200\ncommitter GitHub <noreply@github.com> 1744181204 +0200\n\nMerge pull request #3835 from Paramesh-T-S/Issue_fix_Outdate_-link_in_JS_topic_Error-handling\n\nsentry.io added as per suggestion ",
+        "verified_at": "2025-04-09T06:51:48Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/6cc5077e3b2723165480741fc1f3cbb9dbc3b37c/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "a711a1fad95cba3021cc4b988b4c9b554005369b",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a711a1fad95cba3021cc4b988b4c9b554005369b",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/a711a1fad95cba3021cc4b988b4c9b554005369b"
+      },
+      {
+        "sha": "efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267"
+      }
+    ]
+  },
+  {
+    "sha": "efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267",
+    "node_id": "C_kwDOBY7uftoAKGVmYWE5YWFiM2JiOWI1NzM2YWUxYWU2NWI2ODU5ZDNmZjlhMjAyNjc",
+    "commit": {
+      "author": {
+        "name": "PARAMESH T S",
+        "email": "42896229+Paramesh-T-S@users.noreply.github.com",
+        "date": "2025-04-08T17:44:47Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-08T17:44:47Z"
+      },
+      "message": "sentry.io added as per suggestion - https://github.com/javascript-tutorial/en.javascript.info/pull/3830#issuecomment-2785397131",
+      "tree": {
+        "sha": "f0a26811c2c41c9489a467adad2b8f354951b71c",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/f0a26811c2c41c9489a467adad2b8f354951b71c"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn9WCPCRC1aQ7uu5UhlAAARX8QAGyZiO3UC4/VqZ6ZmyaSId8n\nf5ln1YzCmf2nydA7lftPrJJcme2OISyeAq6cRJOaXtphYIqKnf+YozrqKMKN4LwX\nPNcGspF2FwKxUAveLEaBWiH9sVIF+ick3CGx7Zh+JdxvNauPLkWtQ0DCUFuGDNWQ\nzXz4+FXahKc7EIGXjBCTe+ogjKVscrXCdOyhe7gqQNQuVxyY0yIyrA9oqrmXszde\nxkT46M7RVCYJaH1HO06I41ZCB0auTUKTETo7dmc1Mnu2JAWN46aGFewZ7E/VFU9J\nvTzv2EWmYfpRWbTN5BJpAMTqh77UoXCwBfqAUeudKHrLvxqCZRxhxiZRraukbxA5\nSX0wzY2qy7E1VremSP6+l7BzY1iHe0Tk/lVh13Dx55bH8p7c8B/j998nlWb3gu3x\nO6GdE/ex0KjBcyXMJeakE1HS3Qi0PR15MKOBK57K7qyTjbwae1iXg/fPM4atE/Hi\ndwPsgQJ0ePHa6QhY+MUdsOCB6aTJLNWJXoXSALNxv1/0oc5XmzEikB2eZZteCkPa\nMEOkhYAMujGsvvOFzWbgy43nLTYS9Sqojmri2KtJGKPvOK+JD0vLGeKV6URayKAM\nxL7RP2SPcSVNEgqEdzyqSxnPDP0vo4xexVjwgp5OiajJo4i95c0Eqogg+LLBDv6H\nA7saP0rQgjiGiV+giRIP\n=Gh2O\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree f0a26811c2c41c9489a467adad2b8f354951b71c\nparent a711a1fad95cba3021cc4b988b4c9b554005369b\nauthor PARAMESH T S <42896229+Paramesh-T-S@users.noreply.github.com> 1744134287 +0530\ncommitter GitHub <noreply@github.com> 1744134287 +0530\n\nsentry.io added as per suggestion - https://github.com/javascript-tutorial/en.javascript.info/pull/3830#issuecomment-2785397131",
+        "verified_at": "2025-04-08T17:44:59Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/efaa9aab3bb9b5736ae1ae65b6859d3ff9a20267/comments",
+    "author": {
+      "login": "Paramesh-T-S",
+      "id": 42896229,
+      "node_id": "MDQ6VXNlcjQyODk2MjI5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42896229?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Paramesh-T-S",
+      "html_url": "https://github.com/Paramesh-T-S",
+      "followers_url": "https://api.github.com/users/Paramesh-T-S/followers",
+      "following_url": "https://api.github.com/users/Paramesh-T-S/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Paramesh-T-S/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Paramesh-T-S/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Paramesh-T-S/subscriptions",
+      "organizations_url": "https://api.github.com/users/Paramesh-T-S/orgs",
+      "repos_url": "https://api.github.com/users/Paramesh-T-S/repos",
+      "events_url": "https://api.github.com/users/Paramesh-T-S/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Paramesh-T-S/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "a711a1fad95cba3021cc4b988b4c9b554005369b",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a711a1fad95cba3021cc4b988b4c9b554005369b",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/a711a1fad95cba3021cc4b988b4c9b554005369b"
+      }
+    ]
+  },
+  {
+    "sha": "a711a1fad95cba3021cc4b988b4c9b554005369b",
+    "node_id": "C_kwDOBY7uftoAKGE3MTFhMWZhZDk1Y2JhMzAyMWNjNGI5ODhiNGM5YjU1NDAwNTM2OWI",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-04-08T06:41:40Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-08T06:41:40Z"
+      },
+      "message": "Merge pull request #3830 from Paramesh-T-S/Issue_fix_Outdate_-link_in_JS_topic_Error-handling\n\nFix for #3826 - Removed errorception.com from the respective md file.",
+      "tree": {
+        "sha": "70e54dccb8e02df69f2bb909e35de350cf0b6ac5",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/70e54dccb8e02df69f2bb909e35de350cf0b6ac5"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/a711a1fad95cba3021cc4b988b4c9b554005369b",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn9MUkCRC1aQ7uu5UhlAAAWMoQAKSqU3H2YL3xGMBUkbrCpCNW\nt45JqRIDw6s2L2Re/ZL4+mI5rQBhAzXv9Re1sH0rQt74QuyhKrLAH4ufd1qPFjai\nJbgM6fCTVIMYVC4bLfYg9hHI2SA+rM1+TgwsNBtbS0MZFpuT3RdWd49WdexTIsWh\n5F0yRmRdr0VO4T5b34WJOC+Kqs2ScMMvf7clMN+8Kx49hYyOBBZgL1Jzz5/ycbhm\nEDqjzqCMzcUigmnBORTDVpASheP1mhAFQcTHwrC/0JpE7JZp8Dys7l+wrmczLWWz\nabtBj9U5WBlRw3XWPiWgXW6KTnuh+7/+wPH3XQYjMMllm410xo97ScO6/qwCMEs3\nJ6ADk1rWyzVfp1wLAqyhhutUTmz4StdlPzMe6+ETzFWTKUih0vkK3GYOmmaEBONp\n0BrJWix9vDYkuV/gWM1dEQdjIuqNjtMRobUwbbj4BFdGY0QY2mg1IlP2928XzxFV\nA6/HVueOvq8Kr8gaXRGic7j0lAbSKYvY/yNFWvfm0bX+9QuuIG35GIgKeoa0GWQy\ngoLw6azilFL0esQopnHCmtGDj/KK7PijX92cZqprF5Xy9buc7fvrk0IXpWqL0uYI\n8BQGeqaeqccE1pODir4WfUtuDiHbQRpd9d/wdydY0IHBjRBcK9+UdVGn+cyU+OMt\nqWSNNSVCQWsmbdSCYi1E\n=lppc\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 70e54dccb8e02df69f2bb909e35de350cf0b6ac5\nparent 035c5267ba80fa7b55878f7213cbde449b4092d9\nparent 4c4598ba3f7bb65e2e84b87bdd021cdaab8db818\nauthor Ilya Kantor <iliakan@users.noreply.github.com> 1744094500 +0200\ncommitter GitHub <noreply@github.com> 1744094500 +0200\n\nMerge pull request #3830 from Paramesh-T-S/Issue_fix_Outdate_-link_in_JS_topic_Error-handling\n\nFix for #3826 - Removed errorception.com from the respective md file.",
+        "verified_at": "2025-04-08T06:41:44Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a711a1fad95cba3021cc4b988b4c9b554005369b",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/a711a1fad95cba3021cc4b988b4c9b554005369b",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/a711a1fad95cba3021cc4b988b4c9b554005369b/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/035c5267ba80fa7b55878f7213cbde449b4092d9"
+      },
+      {
+        "sha": "4c4598ba3f7bb65e2e84b87bdd021cdaab8db818",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/4c4598ba3f7bb65e2e84b87bdd021cdaab8db818",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/4c4598ba3f7bb65e2e84b87bdd021cdaab8db818"
+      }
+    ]
+  },
+  {
+    "sha": "e88c2122668a08f3e5bd09b1ecebbae2f876ca6c",
+    "node_id": "C_kwDOBY7uftoAKGU4OGMyMTIyNjY4YTA4ZjNlNWJkMDliMWVjZWJiYWUyZjg3NmNhNmM",
+    "commit": {
+      "author": {
+        "name": "Rahul Rao",
+        "email": "63695122+rahulrao0209@users.noreply.github.com",
+        "date": "2025-04-06T10:52:40Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-04-06T10:52:40Z"
+      },
+      "message": "Update Function object, NFE article\n\nFix minor typo in Function object, NFE article.",
+      "tree": {
+        "sha": "9e19c5566e0a1b4050806f0f9a73bf8c4b9c5b99",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/9e19c5566e0a1b4050806f0f9a73bf8c4b9c5b99"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/e88c2122668a08f3e5bd09b1ecebbae2f876ca6c",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn8lz4CRC1aQ7uu5UhlAAAw3oQACOqDHceZU4buEM4u6eYD5dS\ncUEFRkTqPI3WnYW5dcQcrFoc2l/fbShCRjTN5Sq7kNOkJpe4MtUmRFP2OOZNAdAX\nuIs+KlK9K/LiDRumOy2NllKEviegLUVanZyogoqwtMaVI1unY7lWEYoissm825hD\nyFKuA3aeIAe2+Ho02Tg5dYYpbxBirhU83EtocSKf9nIb7DM7wUPBzqxEHUbgPVGJ\nj3Hvej93lE3k1srYubkRm57qfMbPWoqF3u2wUUAq9SYbbG4uocbvY+vZ9UmeM8VB\nngi/TX93uCmTBWYQNuioyRbpydeoLI/8LdU8quJMS/WpysWlvj8UeByK0H2QpIx8\n+VJRXEqgd4pfzOAfUP0o1GngB3WoqZq4XOQcyx+gG78cZC00qYid5KVWBS5IpLlu\nD8NGoGFARQTd1UY0XeT7Vytv+rEhDQJk5GfloSB2Pi8vT5NeI01ODjbmLgHFc1F3\ntRhjNaxnnbwnUgXvDa5SJ1Wc1V7kSmfvCY3DS3WQ+L/bgf+dA3qm2qONac198gMJ\nt4+09MwW/D4bdmZM/J+WApHAaTs0IKyJatWdjszsX8aVjrMnpCFMd8vWf3MvWwXE\n1hvbZHEafLg3tFklDYWg4zC42o5mw7nedfwW3cuYZMLDk/m3IOTSm8UpP91C/thk\nt+J5hecc9MbLH31MrNWL\n=3s8P\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 9e19c5566e0a1b4050806f0f9a73bf8c4b9c5b99\nparent 035c5267ba80fa7b55878f7213cbde449b4092d9\nauthor Rahul Rao <63695122+rahulrao0209@users.noreply.github.com> 1743936760 +0530\ncommitter GitHub <noreply@github.com> 1743936760 +0530\n\nUpdate Function object, NFE article\n\nFix minor typo in Function object, NFE article.",
+        "verified_at": "2025-04-06T10:53:44Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/e88c2122668a08f3e5bd09b1ecebbae2f876ca6c",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/e88c2122668a08f3e5bd09b1ecebbae2f876ca6c",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/e88c2122668a08f3e5bd09b1ecebbae2f876ca6c/comments",
+    "author": {
+      "login": "rahulrao0209",
+      "id": 63695122,
+      "node_id": "MDQ6VXNlcjYzNjk1MTIy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63695122?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/rahulrao0209",
+      "html_url": "https://github.com/rahulrao0209",
+      "followers_url": "https://api.github.com/users/rahulrao0209/followers",
+      "following_url": "https://api.github.com/users/rahulrao0209/following{/other_user}",
+      "gists_url": "https://api.github.com/users/rahulrao0209/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/rahulrao0209/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/rahulrao0209/subscriptions",
+      "organizations_url": "https://api.github.com/users/rahulrao0209/orgs",
+      "repos_url": "https://api.github.com/users/rahulrao0209/repos",
+      "events_url": "https://api.github.com/users/rahulrao0209/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/rahulrao0209/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/035c5267ba80fa7b55878f7213cbde449b4092d9"
+      }
+    ]
+  },
+  {
+    "sha": "78c6c446b70050aa25b4e5b5fd4ab664bd2cc488",
+    "node_id": "C_kwDOBY7uftoAKDc4YzZjNDQ2YjcwMDUwYWEyNWI0ZTViNWZkNGFiNjY0YmQyY2M0ODg",
+    "commit": {
+      "author": {
+        "name": "Anees",
+        "email": "aneesahee@gmail.com",
+        "date": "2025-04-02T23:34:33Z"
+      },
+      "committer": {
+        "name": "Anees",
+        "email": "aneesahee@gmail.com",
+        "date": "2025-04-02T23:34:33Z"
+      },
+      "message": "Update Safari devtools instructions",
+      "tree": {
+        "sha": "48d07024bcb84c991cd7e50df4920cc75e98f646",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/48d07024bcb84c991cd7e50df4920cc75e98f646"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/78c6c446b70050aa25b4e5b5fd4ab664bd2cc488",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/78c6c446b70050aa25b4e5b5fd4ab664bd2cc488",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/78c6c446b70050aa25b4e5b5fd4ab664bd2cc488",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/78c6c446b70050aa25b4e5b5fd4ab664bd2cc488/comments",
+    "author": {
+      "login": "dangerman",
+      "id": 1149641,
+      "node_id": "MDQ6VXNlcjExNDk2NDE=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1149641?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dangerman",
+      "html_url": "https://github.com/dangerman",
+      "followers_url": "https://api.github.com/users/dangerman/followers",
+      "following_url": "https://api.github.com/users/dangerman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dangerman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dangerman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dangerman/subscriptions",
+      "organizations_url": "https://api.github.com/users/dangerman/orgs",
+      "repos_url": "https://api.github.com/users/dangerman/repos",
+      "events_url": "https://api.github.com/users/dangerman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dangerman/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "dangerman",
+      "id": 1149641,
+      "node_id": "MDQ6VXNlcjExNDk2NDE=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1149641?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dangerman",
+      "html_url": "https://github.com/dangerman",
+      "followers_url": "https://api.github.com/users/dangerman/followers",
+      "following_url": "https://api.github.com/users/dangerman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dangerman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dangerman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dangerman/subscriptions",
+      "organizations_url": "https://api.github.com/users/dangerman/orgs",
+      "repos_url": "https://api.github.com/users/dangerman/repos",
+      "events_url": "https://api.github.com/users/dangerman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dangerman/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "cde189de04f74546b0c9589aedc8050e7e9ca948",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/cde189de04f74546b0c9589aedc8050e7e9ca948",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/cde189de04f74546b0c9589aedc8050e7e9ca948"
+      }
+    ]
+  },
+  {
+    "sha": "cde189de04f74546b0c9589aedc8050e7e9ca948",
+    "node_id": "C_kwDOBY7uftoAKGNkZTE4OWRlMDRmNzQ1NDZiMGM5NTg5YWVkYzgwNTBlN2U5Y2E5NDg",
+    "commit": {
+      "author": {
+        "name": "Anees",
+        "email": "aneesahee@gmail.com",
+        "date": "2025-04-02T23:08:41Z"
+      },
+      "committer": {
+        "name": "Anees",
+        "email": "aneesahee@gmail.com",
+        "date": "2025-04-02T23:08:41Z"
+      },
+      "message": "Update Safari settings screenshots",
+      "tree": {
+        "sha": "af1c3fd5e21a34244f605a5fdde0087e343bceb6",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/af1c3fd5e21a34244f605a5fdde0087e343bceb6"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/cde189de04f74546b0c9589aedc8050e7e9ca948",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/cde189de04f74546b0c9589aedc8050e7e9ca948",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/cde189de04f74546b0c9589aedc8050e7e9ca948",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/cde189de04f74546b0c9589aedc8050e7e9ca948/comments",
+    "author": {
+      "login": "dangerman",
+      "id": 1149641,
+      "node_id": "MDQ6VXNlcjExNDk2NDE=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1149641?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dangerman",
+      "html_url": "https://github.com/dangerman",
+      "followers_url": "https://api.github.com/users/dangerman/followers",
+      "following_url": "https://api.github.com/users/dangerman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dangerman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dangerman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dangerman/subscriptions",
+      "organizations_url": "https://api.github.com/users/dangerman/orgs",
+      "repos_url": "https://api.github.com/users/dangerman/repos",
+      "events_url": "https://api.github.com/users/dangerman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dangerman/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "dangerman",
+      "id": 1149641,
+      "node_id": "MDQ6VXNlcjExNDk2NDE=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1149641?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dangerman",
+      "html_url": "https://github.com/dangerman",
+      "followers_url": "https://api.github.com/users/dangerman/followers",
+      "following_url": "https://api.github.com/users/dangerman/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dangerman/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dangerman/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dangerman/subscriptions",
+      "organizations_url": "https://api.github.com/users/dangerman/orgs",
+      "repos_url": "https://api.github.com/users/dangerman/repos",
+      "events_url": "https://api.github.com/users/dangerman/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dangerman/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/035c5267ba80fa7b55878f7213cbde449b4092d9"
+      }
+    ]
+  },
+  {
+    "sha": "4c4598ba3f7bb65e2e84b87bdd021cdaab8db818",
+    "node_id": "C_kwDOBY7uftoAKDRjNDU5OGJhM2Y3YmI2NWUyZTg0Yjg3YmRkMDIxY2RhYWI4ZGI4MTg",
+    "commit": {
+      "author": {
+        "name": "PARAMESH T S",
+        "email": "42896229+Paramesh-T-S@users.noreply.github.com",
+        "date": "2025-03-29T08:13:36Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-03-29T08:13:36Z"
+      },
+      "message": "Fix for #3826 - Removed errorception.com from the respective md file.\n\nRemoved  https://errorception.com/ from the md file as it is no longer operational.",
+      "tree": {
+        "sha": "70e54dccb8e02df69f2bb909e35de350cf0b6ac5",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/70e54dccb8e02df69f2bb909e35de350cf0b6ac5"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/4c4598ba3f7bb65e2e84b87bdd021cdaab8db818",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJn56uwCRC1aQ7uu5UhlAAAyUUQAAgYWKGc8dQITU4q6Bm0KLsX\nFni7YjR+/cCvn+vG0sP321lnVsGMuMRzYRZK/TxZakYu2gHral1fXi7fCVI1H0Sv\naGlEjk0kPsJBTGFuCb7rMr3UIkomdRAV1ThQ+Ikedg8ITwXg5aNrd9LsqensoAdo\nypBFb2MoLmBojwmzSXJRwZRJau3J3owMXm3vzTtdFBWFT03eyholvrIkv8MwyAfY\nMCxdNLKomg431P6VXHnnDKVYrZmGmT0T6WSqTuVLbMXpsXxFUB8ISHmJZBlLNVW5\nBodTewrNETMXRh57sfhz/OhXRDHv9ku7UYp+Tf+SqaJp20ICv1fbHGBO/67rysI4\nLfcID7alQbfggVK8QW63SZdfzbhDAn6tYcaBIVH0mg1hIt/BNgG2ThmDy33MgKWZ\ncxp3Hb9aHXfthY5pPG4mAbMogTfxJQobWXwz5nvOuLpDcvI/pnQztqulk6VDTbmK\nCTMkNwSSCR+7yY6KX+U/55XUZCix7exnuCMmE9FltBhxxkhZ8rrjKMRkrXBLT2/p\nU5sCodZGMzd1CZLRkg01Hswd7lTINj7b1S/wfEdqjP+2ESwPtXzlEcdVOrprBCFc\n/2HCOSNnVWWHZrYmHbj/fjbVd8cs7dhnkiCID6VS2sp6os5euQFS+hI8Fh3ud/4y\n9tDzHZ9b9L+lyr91HzVH\n=MA93\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 70e54dccb8e02df69f2bb909e35de350cf0b6ac5\nparent 035c5267ba80fa7b55878f7213cbde449b4092d9\nauthor PARAMESH T S <42896229+Paramesh-T-S@users.noreply.github.com> 1743236016 +0530\ncommitter GitHub <noreply@github.com> 1743236016 +0530\n\nFix for #3826 - Removed errorception.com from the respective md file.\n\nRemoved  https://errorception.com/ from the md file as it is no longer operational.",
+        "verified_at": "2025-03-29T08:13:38Z"
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/4c4598ba3f7bb65e2e84b87bdd021cdaab8db818",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/4c4598ba3f7bb65e2e84b87bdd021cdaab8db818",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/4c4598ba3f7bb65e2e84b87bdd021cdaab8db818/comments",
+    "author": {
+      "login": "Paramesh-T-S",
+      "id": 42896229,
+      "node_id": "MDQ6VXNlcjQyODk2MjI5",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42896229?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Paramesh-T-S",
+      "html_url": "https://github.com/Paramesh-T-S",
+      "followers_url": "https://api.github.com/users/Paramesh-T-S/followers",
+      "following_url": "https://api.github.com/users/Paramesh-T-S/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Paramesh-T-S/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Paramesh-T-S/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Paramesh-T-S/subscriptions",
+      "organizations_url": "https://api.github.com/users/Paramesh-T-S/orgs",
+      "repos_url": "https://api.github.com/users/Paramesh-T-S/repos",
+      "events_url": "https://api.github.com/users/Paramesh-T-S/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Paramesh-T-S/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/035c5267ba80fa7b55878f7213cbde449b4092d9",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/035c5267ba80fa7b55878f7213cbde449b4092d9"
+      }
+    ]
+  },
+  {
+    "sha": "035c5267ba80fa7b55878f7213cbde449b4092d9",
+    "node_id": "C_kwDOBY7uftoAKDAzNWM1MjY3YmE4MGZhN2I1NTg3OGY3MjEzY2JkZTQ0OWI0MDkyZDk",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T23:02:18Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T23:02:18Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "bc5517f98094776c88ef57acafd1ed00b2bda5cf",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/bc5517f98094776c88ef57acafd1ed00b2bda5cf"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/035c5267ba80fa7b55878f7213cbde449b4092d9",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/035c5267ba80fa7b55878f7213cbde449b4092d9",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/035c5267ba80fa7b55878f7213cbde449b4092d9",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/035c5267ba80fa7b55878f7213cbde449b4092d9/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "5dea44151bdd7791380b65d8b8bb60779f2576ca",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5dea44151bdd7791380b65d8b8bb60779f2576ca",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/5dea44151bdd7791380b65d8b8bb60779f2576ca"
+      }
+    ]
+  },
+  {
+    "sha": "5dea44151bdd7791380b65d8b8bb60779f2576ca",
+    "node_id": "C_kwDOBY7uftoAKDVkZWE0NDE1MWJkZDc3OTEzODBiNjVkOGI4YmI2MDc3OWYyNTc2Y2E",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:58:32Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:58:32Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "6054e1390032677f851bb9cc47290d7696e07f72",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/6054e1390032677f851bb9cc47290d7696e07f72"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/5dea44151bdd7791380b65d8b8bb60779f2576ca",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5dea44151bdd7791380b65d8b8bb60779f2576ca",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/5dea44151bdd7791380b65d8b8bb60779f2576ca",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/5dea44151bdd7791380b65d8b8bb60779f2576ca/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0760c909d345738de0a6bf322d36337746253c27",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/0760c909d345738de0a6bf322d36337746253c27",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/0760c909d345738de0a6bf322d36337746253c27"
+      }
+    ]
+  },
+  {
+    "sha": "0760c909d345738de0a6bf322d36337746253c27",
+    "node_id": "C_kwDOBY7uftoAKDA3NjBjOTA5ZDM0NTczOGRlMGE2YmYzMjJkMzYzMzc3NDYyNTNjMjc",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:55:35Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:55:35Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "912fda7c536f04be898b22d489cc33c19cebf67a",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/912fda7c536f04be898b22d489cc33c19cebf67a"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/0760c909d345738de0a6bf322d36337746253c27",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/0760c909d345738de0a6bf322d36337746253c27",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/0760c909d345738de0a6bf322d36337746253c27",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/0760c909d345738de0a6bf322d36337746253c27/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f7758353711601d5a17d50ef1676720beff6eaf4",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/f7758353711601d5a17d50ef1676720beff6eaf4",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/f7758353711601d5a17d50ef1676720beff6eaf4"
+      }
+    ]
+  },
+  {
+    "sha": "f7758353711601d5a17d50ef1676720beff6eaf4",
+    "node_id": "C_kwDOBY7uftoAKGY3NzU4MzUzNzExNjAxZDVhMTdkNTBlZjE2NzY3MjBiZWZmNmVhZjQ",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:55:01Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:55:01Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "01e0aaf0da313d991449ab8c9af4756d12466702",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/01e0aaf0da313d991449ab8c9af4756d12466702"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/f7758353711601d5a17d50ef1676720beff6eaf4",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/f7758353711601d5a17d50ef1676720beff6eaf4",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/f7758353711601d5a17d50ef1676720beff6eaf4",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/f7758353711601d5a17d50ef1676720beff6eaf4/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f0d8abbc136dcad9f9424d6b69e75dc87a393586",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/f0d8abbc136dcad9f9424d6b69e75dc87a393586",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/f0d8abbc136dcad9f9424d6b69e75dc87a393586"
+      }
+    ]
+  },
+  {
+    "sha": "f0d8abbc136dcad9f9424d6b69e75dc87a393586",
+    "node_id": "C_kwDOBY7uftoAKGYwZDhhYmJjMTM2ZGNhZDlmOTQyNGQ2YjY5ZTc1ZGM4N2EzOTM1ODY",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:54:09Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:54:09Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "b4b583ee4fccc41e15377923a2a2b7febbf13c1b",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/b4b583ee4fccc41e15377923a2a2b7febbf13c1b"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/f0d8abbc136dcad9f9424d6b69e75dc87a393586",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/f0d8abbc136dcad9f9424d6b69e75dc87a393586",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/f0d8abbc136dcad9f9424d6b69e75dc87a393586",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/f0d8abbc136dcad9f9424d6b69e75dc87a393586/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d932e522d6e483d1bd639bca6796f215dd34d9dd",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d932e522d6e483d1bd639bca6796f215dd34d9dd",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/d932e522d6e483d1bd639bca6796f215dd34d9dd"
+      }
+    ]
+  },
+  {
+    "sha": "d932e522d6e483d1bd639bca6796f215dd34d9dd",
+    "node_id": "C_kwDOBY7uftoAKGQ5MzJlNTIyZDZlNDgzZDFiZDYzOWJjYTY3OTZmMjE1ZGQzNGQ5ZGQ",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:52:42Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:52:42Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "09a4b790cef016e3f107d30f5e9869c883ef0d01",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/09a4b790cef016e3f107d30f5e9869c883ef0d01"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/d932e522d6e483d1bd639bca6796f215dd34d9dd",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d932e522d6e483d1bd639bca6796f215dd34d9dd",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/d932e522d6e483d1bd639bca6796f215dd34d9dd",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/d932e522d6e483d1bd639bca6796f215dd34d9dd/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b"
+      }
+    ]
+  },
+  {
+    "sha": "0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b",
+    "node_id": "C_kwDOBY7uftoAKDBhZjI1YmNhOGE3YjJmZjVlNGY5N2VmNzZhZmM2ZDdhZTRjNTU2N2I",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:52:07Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:52:07Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "82cb46d41e3de509c11354cc5545b88e0426d01b",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/82cb46d41e3de509c11354cc5545b88e0426d01b"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/0af25bca8a7b2ff5e4f97ef76afc6d7ae4c5567b/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "de4247b8ba964f497875aab256f8d9d797b5d91d",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/de4247b8ba964f497875aab256f8d9d797b5d91d",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/de4247b8ba964f497875aab256f8d9d797b5d91d"
+      }
+    ]
+  },
+  {
+    "sha": "de4247b8ba964f497875aab256f8d9d797b5d91d",
+    "node_id": "C_kwDOBY7uftoAKGRlNDI0N2I4YmE5NjRmNDk3ODc1YWFiMjU2ZjhkOWQ3OTdiNWQ5MWQ",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:51:08Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:51:08Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "0b93a00ba4b4e37640bc02ec202ae350220c32f5",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/0b93a00ba4b4e37640bc02ec202ae350220c32f5"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/de4247b8ba964f497875aab256f8d9d797b5d91d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/de4247b8ba964f497875aab256f8d9d797b5d91d",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/de4247b8ba964f497875aab256f8d9d797b5d91d",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/de4247b8ba964f497875aab256f8d9d797b5d91d/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "ef31066fc570fc4528c55275c951342ba1fda7d8",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/ef31066fc570fc4528c55275c951342ba1fda7d8",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/ef31066fc570fc4528c55275c951342ba1fda7d8"
+      }
+    ]
+  },
+  {
+    "sha": "ef31066fc570fc4528c55275c951342ba1fda7d8",
+    "node_id": "C_kwDOBY7uftoAKGVmMzEwNjZmYzU3MGZjNDUyOGM1NTI3NWM5NTEzNDJiYTFmZGE3ZDg",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:50:06Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:50:06Z"
+      },
+      "message": "minor fixes",
+      "tree": {
+        "sha": "56a9ac94cd507dbae97497517d27f293e6628fd6",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/56a9ac94cd507dbae97497517d27f293e6628fd6"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/ef31066fc570fc4528c55275c951342ba1fda7d8",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/ef31066fc570fc4528c55275c951342ba1fda7d8",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/ef31066fc570fc4528c55275c951342ba1fda7d8",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/ef31066fc570fc4528c55275c951342ba1fda7d8/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3de63df651b3b796da5b2f2d3c21f9bd20cfaf28",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/3de63df651b3b796da5b2f2d3c21f9bd20cfaf28",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/3de63df651b3b796da5b2f2d3c21f9bd20cfaf28"
+      }
+    ]
+  },
+  {
+    "sha": "3de63df651b3b796da5b2f2d3c21f9bd20cfaf28",
+    "node_id": "C_kwDOBY7uftoAKDNkZTYzZGY2NTFiM2I3OTZkYTViMmYyZDNjMjFmOWJkMjBjZmFmMjg",
+    "commit": {
+      "author": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:30:16Z"
+      },
+      "committer": {
+        "name": "Ilya Kantor",
+        "email": "iliakan@users.noreply.github.com",
+        "date": "2025-03-24T22:30:16Z"
+      },
+      "message": "promise.all task",
+      "tree": {
+        "sha": "2dd343ab74ed432fc2f628a0506e85e8c07c60a8",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/trees/2dd343ab74ed432fc2f628a0506e85e8c07c60a8"
+      },
+      "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/git/commits/3de63df651b3b796da5b2f2d3c21f9bd20cfaf28",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/3de63df651b3b796da5b2f2d3c21f9bd20cfaf28",
+    "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/3de63df651b3b796da5b2f2d3c21f9bd20cfaf28",
+    "comments_url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/3de63df651b3b796da5b2f2d3c21f9bd20cfaf28/comments",
+    "author": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "iliakan",
+      "id": 349336,
+      "node_id": "MDQ6VXNlcjM0OTMzNg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349336?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/iliakan",
+      "html_url": "https://github.com/iliakan",
+      "followers_url": "https://api.github.com/users/iliakan/followers",
+      "following_url": "https://api.github.com/users/iliakan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/iliakan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/iliakan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/iliakan/subscriptions",
+      "organizations_url": "https://api.github.com/users/iliakan/orgs",
+      "repos_url": "https://api.github.com/users/iliakan/repos",
+      "events_url": "https://api.github.com/users/iliakan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/iliakan/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3d7abb9cc8fa553963025547717f06f126c449b6",
+        "url": "https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits/3d7abb9cc8fa553963025547717f06f126c449b6",
+        "html_url": "https://github.com/javascript-tutorial/en.javascript.info/commit/3d7abb9cc8fa553963025547717f06f126c449b6"
+      }
+    ]
+  }
+]

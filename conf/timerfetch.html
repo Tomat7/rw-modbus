@@ -35,14 +35,17 @@
     <script>
         (function () {
             const el = document.getElementById('dLab');
-            const API_URL = 'http://127.0.0.1:5000/number';        // ожидается текст/JSON с числом
+            const API_URL = 'http://127.0.0.1:8888';        // ожидается текст/JSON с числом
+            //const API_URL = 'http://localhost:8000/test.json';        // ожидается текст/JSON с числом
+            //const API_URL = 'http://127.0.0.1:8000/github.json';        // ожидается текст/JSON с числом
+            // const API_URL = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
             async function fetchWithTimeout(url, timeoutMS = 5000) {
                 const controller = new AbortController();
                 const id = setTimeout(() => controller.abort(), timeoutMS);
                 try {
-                    const res = await fetch(url, { 
-                        signal: controller.signal, 
-                        cache: 'no-store', 
+                    const res = await fetch(url, {
+                        signal: controller.signal,
+                        cache: 'no-store',
                     });
                     return res;
                 }
@@ -52,26 +55,62 @@
             }
             async function updateFromApi() {
                 try {
-                    const res = await fetchWithTimeout(API_URL, 5000);
+                    // =======================================
+/*                     const json = '{"result":true, "count":42}';
+                    console.log(json);
+                    const obj = JSON.parse(json);
+                    console.log(obj.count); // Expected output: 42
+                    console.log(obj.result); // Expected output: true */
+                    // ========================================
+ 
+/*                     let url = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
+                    let response = await fetch(url);
+                    let commits = await response.json(); // читаем ответ в формате JSON
+                    //alert(commits[1].author.login);
+ */
+                    // ========================================
+
+                    let res = await fetchWithTimeout(API_URL, 5000);
                     if (!res.ok) throw new Error('HTTP ' + res.status);
+                    //console.log("text");
+                    //console.log(res.text());
+                    //console.log("json");
+                    //console.log(res.json());
                     // проверяем не джейсон ли, если нет, считаем текстом
                     let value;
-                    const ct = res.headers.get('content-type') || '';
-                    if (ct.includes('application/json')) {
+                    //const ct = res.headers.get('content-type') || '';
+                    if (true) {
                         // на сервере выдаем: {"x":"1234", "y":"456"}
-						// ============================
-						const data = await res.json();
-						const vars = JSON.parse(data);
-						// вывод в консоль первого значения
-						console.log(vars.x);
-						// Вывод на странице второго значения
-						value = String(vars.y);
-						// ============================
+                        // ============================
+                        let _json = await res.json();
+                        //alert(data[0].author.login);
+                        alert(_json.x);
+                        console.log("_json_data");
+                        console.log(_json.y);
+                        //let vars = JSON.parse(data);
+                        // вывод в консоль первого значения
+                        console.log(_json.x);
+                        // Вывод на странице второго значения
+                        value = String(_json.y);
+                        console.log("it is JSON!");
+                        // ================================
+                        const numberOfKeys = Object.keys(_json).length;
+                        console.log(numberOfKeys); // Output: 3
 
+                        // ==============================
 
+                        Object.entries(_json).forEach(([key, value]) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        
+                        Object.entries(_json).forEach((_data) => {
+                            console.log(_data);
+                        });
+                        // ============================
                     }
                     else {
                         value = await res.text();
+                        console.log("not JSON!");
                     }
                     // в строку
                     const display = String(value).trim();

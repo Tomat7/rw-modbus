@@ -141,6 +141,7 @@ int NetService_c::_echo_client(int i, ssize_t bytes_read)
   // Echo back the received data
   // send(active_fds[i].fd, buffer, bytes_read, 0);
   send(active_fds[i].fd, answer_.c_str(), answer_.length(), 0);
+  close(active_fds[i].fd);
 
   return 0;
 }
@@ -166,7 +167,7 @@ int NetService_c::_new_client()
       active_fds[nb_active_fds_].events = POLLIN; // Monitor for incoming data from client
       nb_active_fds_++;
       rc = 1;
-      _answer_client(client_sock);
+      //_answer_client(client_sock);
       std::cout << "New connection from " << inet_ntoa(client_addr.sin_addr)
                 << ":" << ntohs(client_addr.sin_port) << std::endl;
     } else {

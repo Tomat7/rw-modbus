@@ -131,7 +131,7 @@ void opc_server_();
 // int write_shm(string, uint16_t);
 // int write_rm(string rn, uint16_t val);
 
-void json_update(Reg_c& rm);
+void json_update(Reg_c &rm);
 void json_set_answer();
 void netsvc_init();
 void netsvc_deinit();
