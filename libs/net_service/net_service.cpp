@@ -121,7 +121,7 @@ int NetService_c::run()
         ssize_t bytes_read = recv(active_fds[i].fd, buffer, sizeof(buffer) - 1, 0);
 
         if (bytes_read <= 0) { // Connection closed or error
-          _bad_client(i);
+          _close_client(i);
           i--; // Re-check the current index as it now contains a new fd
         } else
           _echo_client(i, bytes_read);
@@ -140,17 +140,19 @@ int NetService_c::_echo_client(int i, ssize_t bytes_read)
   std::cout << "Received from client " << active_fds[i].fd << ": " << buffer << std::endl;
   // Echo back the received data
   // send(active_fds[i].fd, buffer, bytes_read, 0);
-  send(active_fds[i].fd, answer_.c_str(), answer_.length(), 0);
-  close(active_fds[i].fd);
+  //send(active_fds[i].fd, answer_.c_str(), answer_.length(), 0);
+  _answer_client(active_fds[i].fd);
+  _close_client(i);
 
   return 0;
 }
 
-int NetService_c::_answer_client(int fd_)
+
+ssize_t NetService_c::_answer_client(int fd_)
 {
-  send(fd_, answer_.c_str(), answer_.length(), 0);
-  return 0;
+  return send(fd_, answer_.c_str(), answer_.length(), 0);
 }
+
 
 int NetService_c::_new_client()
 {
@@ -179,7 +181,7 @@ int NetService_c::_new_client()
   return rc;
 }
 
-int NetService_c::_bad_client(int i)
+int NetService_c::_close_client(int i)
 {
   std::cout << "Client error/disconnected: " << active_fds[i].fd << std::endl;
   close(active_fds[i].fd);

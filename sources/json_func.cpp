@@ -1,5 +1,8 @@
 // reg_func.cpp -----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
+// http://jsonplaceholder.typicode.com/users
+// http://localhost:8080/timerfetch.html
+//
 
 #include <string.h>
 
@@ -25,8 +28,10 @@ void json_update(Reg_c &rm)
 
 void json_set_answer()
 {
+  //static float Y = 3.14f;
+  // Y += 0.001f;
+  JSON_reg["y"] = "3.1415926"; //std::to_string(Y);
   JSON_reg["x"] = "TheX";
-  JSON_reg["y"] = "3.1415926";
   string json_str = JSON_reg.dump(4);
 
   string http_header = "HTTP/1.1 200 OK\r\n";

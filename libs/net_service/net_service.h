@@ -39,9 +39,9 @@ private:
   int _listen_socket();
 
   int _new_client();
-  int _bad_client(int);
+  int _close_client(int);
   int _echo_client(int, ssize_t);
-  int _answer_client(int fd_);
+  ssize_t _answer_client(int fd_);
 //  int _handle_socket();
 
   string answer_ = "";
