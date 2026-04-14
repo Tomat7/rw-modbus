@@ -24,7 +24,7 @@ type_attribute_t Number_c::type_attr[] = {
   {"i64", UA_TYPES_INT64, UA_TYPES_INT64,  8, type_index(typeid(int64_t)), "%li"},
   {"u16", UA_TYPES_UINT16, UA_TYPES_UINT16, 2, type_index(typeid(uint16_t)), "%u"},
   {"u32", UA_TYPES_UINT32, UA_TYPES_UINT32, 4, type_index(typeid(uint32_t)), "%u"},
-  {"u64", UA_TYPES_UINT16, UA_TYPES_UINT16, 8, type_index(typeid(uint64_t)), "%lu"},
+  {"u64", UA_TYPES_UINT64, UA_TYPES_UINT64, 8, type_index(typeid(uint64_t)), "%lu"},
   {"dbl", UA_TYPES_DOUBLE,   UA_TYPES_DOUBLE, 8, type_index(typeid(double)), "%.5lf"},
   {"fl",  UA_TYPES_FLOAT,    UA_TYPES_FLOAT,  4, type_index(typeid(float)), "%.3f"},
   {"f100", NOTUA_TYPES_F100, UA_TYPES_FLOAT,  4, type_index(typeid(float)), "%.2f"},
@@ -35,11 +35,11 @@ size_t Number_c::type_attr_sz = sizeof(type_attr) / sizeof(type_attribute_t);
 
 // ==================================================================
 
-Number_c::Number_c()
+Number_c::Number_c()  // Use set(Number_c(x)) if necessary update type!!
 {
-  if (!set(UA_TYPES_UINT16))
-    LOGA("Number_c:: new (UINT16) type %i not supported");
-  LOGx("+Number_c:: %x new (UINT16) %u", this, ui64);
+  if (!_set_type(UA_TYPES_UINT16))
+    LOGA("Number_c:: new EMPTY (UINT16) type %i not supported");
+  LOGx("+Number_c:: %x new EMPTY (UINT16) %u", this, ui64);
 }
 
 
@@ -63,7 +63,7 @@ Number_c &Number_c::operator= (const Number_c &V)
 
 bool Number_c::set(const Number_c &V)
 {
-  if (set(V._type_ua, (const void*)&V.value, V.isgood)) {
+  if (_set_type(V._type_ua, (const void*)&V.value, V.isgood)) {
     _status_code = V._status_code;
     _status_name = V._status_name;
     return true;
@@ -71,17 +71,17 @@ bool Number_c::set(const Number_c &V)
   return false;
 }
 
-bool Number_c::set(int gtype, const void* psrc, bool isok)
+bool Number_c::_set_type(int gtype, const void* psrc, bool isok)
 {
-  return _set(_get_type_ptr(gtype), psrc, isok);
+  return _set_attr(_get_type_ptr(gtype), psrc, isok);
 }
 
-bool Number_c::set(type_index ti, const void* psrc, bool isok)
+bool Number_c::_set_ti(type_index ti, const void* psrc, bool isok)
 {
-  return _set(_get_type_ptr(ti), psrc, isok);
+  return _set_attr(_get_type_ptr(ti), psrc, isok);
 }
 
-bool Number_c::_set(type_attribute_t* ta, const void* psrc, bool isok)
+bool Number_c::_set_attr(type_attribute_t* ta, const void* psrc, bool isok)
 {
   bool rc = _set_attributes(ta);
 

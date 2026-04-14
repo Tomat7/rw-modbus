@@ -3,6 +3,7 @@
 // Copyright 2025 Tomat7 (star0413@gmail.com)
 
 #include <float.h>
+#include <cstdint>
 
 #define UA_TYPES_BOOLEAN 0
 #define UA_TYPES_SBYTE 1

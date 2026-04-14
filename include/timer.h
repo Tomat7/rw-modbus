@@ -72,7 +72,7 @@ public:
 
   double passed_sec() const
   {
-    string n;
+    std::string n;
     return DURATION_CAST<second_t>(cclock_t::now() - begin).count();
   }
 
@@ -147,17 +147,17 @@ public:
 
   // ===========================
 
-  void sleep_sec(int s)
+  void sleep_sec(int s = 1)
   {
     std::this_thread::sleep_for(std::chrono::seconds(s));  // std::chrono::
   }
 
-  void sleep_ms(int ms)
+  void sleep_ms(int ms = 1)
   {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
   }
 
-  void sleep_us(int us)
+  void sleep_us(int us = 1)
   {
     std::this_thread::sleep_for(std::chrono::microseconds(us));
   }

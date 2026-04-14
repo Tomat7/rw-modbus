@@ -52,6 +52,11 @@ char* Number_c::c_str(const char* _fmt)
     return _c_str(_fmt);
 }
 
+int Number_c::get_type()
+{
+  return _type_ua;
+}
+
 // ===============================================================
 
 type_attribute_t* Number_c::_get_type_ptr(const int &gtype)

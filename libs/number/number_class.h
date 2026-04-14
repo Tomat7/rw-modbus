@@ -76,10 +76,12 @@ public:
 
   template <typename T> Number_c &operator= (T x)
   {
-    if ((_type_bytes == 0) || (_type_ua == 0)) {
-      if (!set(type_index(typeid(x)), &x))
+    if ((_type_bytes == 0) || (_type_ua == 0)) {  // NO UPDATE TYPE!!
+//    LOGx("+Number_c: %x (= Tx) type %i", this, _type_ua);
+      if (!_set_ti(type_index(typeid(x)), &x))
         LOGA("Number_c: new=Tx not supported");
     } else {
+//    LOGx("+Number_c: %x (= Tx) type %i", this, _type_ua);
       if (!_set_value((float128)x))
         LOGA("Number_c: existing=Tx not supported");
     }
@@ -90,14 +92,14 @@ public:
 
   template <typename T> Number_c(T x)
   {
-    if (!set(type_index(typeid(x)), &x))
+    if (!_set_ti(type_index(typeid(x)), &x))
       LOGA("Number_c: new (Tx) not supported");
     LOGx("+Number_c: %x new (Tx) type - %i", this, _type_ua);
   };
 
   template <typename T> Number_c(numeric_u v, T x)
   {
-    if (!set(type_index(typeid(x)), &x))
+    if (!_set_ti(type_index(typeid(x)), &x))
       LOGA("Number_c: new (value_u, Tx) not supported");
     LOGx("+Number_c: %x new (value_u) ", this);
   };
@@ -157,17 +159,16 @@ public:
   }
 
 // =======================================
-//  bool set_type(int _sz_byte = 2, int _uatype = UA_TYPES_UINT16);
+  // Use set(Number_c(x)) if necessary update type!!
   bool set(const Number_c &V);
-  bool set(int gtype, const void* ptr = nullptr, bool isok = true);
-  bool set(type_index ti, const void* ptr = nullptr, bool isok = true);
 
   void set_status(int stcode, const char* stchars, bool isok = true);
   void set_status(int stcode, string stname, bool isok = true);
   bool get_status(int &stcode, string &stname);
+
   string status_name();  // Get StatusCode Name (string)
   int status_code();  // Get StatusCode (int)
-
+  int get_type();
   char* c_str(const char* fmt = nullptr);
 
   bool isgood = true; // false if something wrong with value/type or other
@@ -198,7 +199,11 @@ private:
   char _str[STR_SIZE + 1];
 
   float128 _as_f128();
-  bool _set(type_attribute_t* ta, const void* psrc, bool status);
+
+  bool _set_type(int gtype, const void* ptr = nullptr, bool isok = true);
+  bool _set_ti(type_index ti, const void* ptr = nullptr, bool isok = true);
+
+  bool _set_attr(type_attribute_t* ta, const void* psrc, bool status);
   bool _set_attributes(type_attribute_t* ta);
   void _init(const void* _psrc = nullptr, bool _status = true);
 
