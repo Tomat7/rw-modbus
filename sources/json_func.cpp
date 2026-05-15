@@ -30,16 +30,17 @@ void json_set_answer()
 {
   //static float Y = 3.14f;
   // Y += 0.001f;
-  JSON_reg["y"] = "3.1415926"; //std::to_string(Y);
-  JSON_reg["x"] = "TheX";
+//  JSON_reg["y"] = "3.1415926"; //std::to_string(Y);
+//  JSON_reg["x"] = "TheX";
   string json_str = JSON_reg.dump(4);
 
   string http_header = "HTTP/1.1 200 OK\r\n";
   http_header += "Content-Type: application/json\r\n";
   http_header += "Access-Control-Allow-Origin: *\r\n";
-  http_header += "Content-Length: [";
-  http_header += std::to_string(json_str.length()) + "]\r\n\r\n" ;
+//  http_header += "Content-Length: [";
+//  http_header += std::to_string(json_str.length()) + "]\r\n\r\n" ;
 
+  http_header += "\r\n" ;
   NetSvc.set_answer(http_header + json_str + "\r\n");
 }
 

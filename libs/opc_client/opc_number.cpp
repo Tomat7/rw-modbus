@@ -33,7 +33,7 @@ bool OpcClient_c::ReadNumber(string varname, Number_c &Numx)
 
     if (scRead == UA_STATUSCODE_GOOD) {
       _type = _variant_get_uatype(uaVariant);
-      Numx.set(_type, uaVariant->data, true);
+//      Numx.set(_type, uaVariant->data, true);
       Numx.set_status(scRead, UA_StatusCode_name(scRead), true);
       rc = true;
     } else {

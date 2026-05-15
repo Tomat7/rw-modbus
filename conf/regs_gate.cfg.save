@@ -25,19 +25,19 @@
 
 regs :
 (
-    { rname = "millis";  raddr = 0;   rmode = "rw";  rtype = "u";    },
+    { rname = "millis";  raddr = 0;   rmode = "rw";  rtype = "u"; },
     { rname = "Temp1";   raddr = 1;   rmode = "r";   rtype = "f100"; },
-    { rname = "open2";   raddr = 6;   rmode = "rw";  rtype = "uFF";  },
-    { rname = "close2";  raddr = 7;   rmode = "rw";  rtype = "u";    },
-    { rname = "timeout"; raddr = 9;   rmode = "r";   rtype = "u";    },
+    { rname = "open2";   raddr = 6;   rmode = "rw";  rtype = "uFF";    rfolder = "valve"; },
+    { rname = "close2";  raddr = 7;   rmode = "rw";  rtype = "u";      rfolder = "valve"; },
+    { rname = "timeout"; raddr = 9;   rmode = "r";   rtype = "u";      rfolder = "valve"; },
 
     { rname = "Tabcd1";  raddr = 14;  rmode = "r";   rtype = "Fbe";    rfolder = "Float"; },
     { rname = "Tabcd2";  raddr = 15;  rmode = "r";   rtype = "2";      rfolder = "Float"; },
 
-    { rname = "Tbadc1";  raddr = 16;  rmode = "r";   rtype = "Fbes";   rfolder = "Float"; },
+    { rname = "Tbadc1";  raddr = 16;  rmode = "r";   rtype = "Fbes";    rfolder = "Float"; },
     { rname = "Tbadc2";  raddr = 17;  rmode = "r";   rtype = "2";      rfolder = "Float"; },
 
-    { rname = "Tdcba1";  raddr = 18;  rmode = "r";   rtype = "Fle";    rfolder = "Float"; },
+    { rname = "Tdcba1";  raddr = 18;  rmode = "r";   rtype = "Fle";   rfolder = "Float"; },
     { rname = "Tdcba2";  raddr = 19;  rmode = "r";   rtype = "2";      rfolder = "Float"; },
 
     { rname = "Tcdab1";  raddr = 20;  rmode = "r";   rtype = "Fles";   rfolder = "Float"; },
