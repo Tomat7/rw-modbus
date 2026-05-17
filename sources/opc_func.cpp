@@ -181,7 +181,7 @@ void opc_client_()
 //  OPCclient.ReadNumber(s, ccc);
   val = ReadValue(s);
   int ua_t = OPCclient.get_uatype(s);
-  Number_c nval = OPCclient.ReadNumber(s);
+  Number_c nval = 3.14 * 4; //OPCclient.ReadNumber(s);
 
   if (OPCclient.Write(s, cnt) && nval.isgood) {
     val = ReadValue(s);
@@ -205,7 +205,8 @@ void opc_client_()
 // ======= Read CLIENT 3 (Process) Numeric =======
 
   n++;
-  nval = OPCclient.ReadNumber(s);
+  nval = /* OPCclient.ReadNumber(s) + */ 12345;
+
 
   if (nval.isgood)
     PRINTF("%d. ua_type: %d %s: %s %d %s\n", n, ua_t, s.c_str(),

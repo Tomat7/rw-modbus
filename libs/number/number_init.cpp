@@ -47,14 +47,14 @@ Number_c::Number_c(const Number_c &V)
 {
   if (!set(V))
     LOGA("Number_c:: new (&V) not supported");
-  LOGx("+Number_c:: %x new (&V) COPY %u", this, ui64);
+  LOGC("+Number_c:: %x new (&V) COPY %u", this, ui64);
 };
 
 Number_c &Number_c::operator= (const Number_c &V)
 {
   if (!set(V))
     LOGA("Number_c: (=&V) not supported");
-  LOGx("+Number_c: %x (=&V) Number_c %s", this, c_str());
+  LOGC("+Number_c: %x (=&V) Number_c %s", this, c_str());
   return *this;
 }
 
@@ -64,12 +64,27 @@ Number_c &Number_c::operator= (const Number_c &V)
 bool Number_c::set(const Number_c &V)
 {
   if (_set_type(V._type_ua, (const void*)&V.value, V.isgood)) {
+    /*!!*/
+    LOGA("N.set: type = %i %s", V._type_ua, this->c_str());
     _status_code = V._status_code;
     _status_name = V._status_name;
     return true;
   }
   return false;
 }
+
+bool Number_c::set_type(int gtype)
+{
+  if (_set_type(gtype)) {
+    /*!!*/
+    LOGA("N.set_type: type = %i", gtype);
+//    _status_code = V._status_code;
+//    _status_name = V._status_name;
+    return true;
+  }
+  return false;
+}
+
 
 bool Number_c::_set_type(int gtype, const void* psrc, bool isok)
 {

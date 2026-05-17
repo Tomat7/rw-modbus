@@ -13,7 +13,8 @@
 
 .DEFAULT_GOAL := all
 $(info === The GOALS is: $(MAKECMDGOALS))
-MAKEFLAGS+= -j$(nproc)
+#MAKEFLAGS+= -j$(nproc)
+MAKEFLAGS+= -j4
 
 # === COMMON: Version/standard & Directories & files & libraries ===
 CXX_VER=c++20

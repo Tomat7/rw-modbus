@@ -68,7 +68,7 @@ public:
 
   Number_c();
   Number_c(const Number_c &V);
-  ~Number_c() {LOGD("--Number_c! %x ", this);}
+  ~Number_c() {LOGC("--Number_c! %x ", this);}
 
 // ======= Constructors Templates =======
 
@@ -97,12 +97,12 @@ public:
     LOGx("+Number_c: %x new (Tx) type - %i", this, _type_ua);
   };
 
-  template <typename T> Number_c(numeric_u v, T x)
-  {
-    if (!_set_ti(type_index(typeid(x)), &x))
-      LOGA("Number_c: new (value_u, Tx) not supported");
-    LOGx("+Number_c: %x new (value_u) ", this);
-  };
+//  template <typename T> Number_c(numeric_u v, T x)
+//  {
+//    if (!_set_ti(type_index(typeid(x)), &x))
+//      LOGA("Number_c: new (value_u, Tx) not supported");
+//    LOGx("+Number_c: %x new (value_u) ", this);
+//  };
 
 // ======= TYPE() Templates =======
 
@@ -161,6 +161,8 @@ public:
 // =======================================
   // Use set(Number_c(x)) if necessary update type!!
   bool set(const Number_c &V);
+  bool set_type(int gtype);
+  int get_type();
 
   void set_status(int stcode, const char* stchars, bool isok = true);
   void set_status(int stcode, string stname, bool isok = true);
@@ -168,7 +170,6 @@ public:
 
   string status_name();  // Get StatusCode Name (string)
   int status_code();  // Get StatusCode (int)
-  int get_type();
   char* c_str(const char* fmt = nullptr);
 
   bool isgood = true; // false if something wrong with value/type or other
