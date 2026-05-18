@@ -35,6 +35,16 @@ Number_c get_val()
 void var_test0()
 {
   printf("\n======= var_test0 =======\n");
+
+  printf(__SHORT_FILENAME__);
+  printf("\n");
+  printf(__FILE_NAME__);
+  printf("\n");
+  printf(__BASE_FILE__);
+  printf("\n");
+  printf(__FILE__);
+  printf("\n");
+
   //printf("Value_c:Float = %i\n", (int)get_val());
   //printf("Variant:Float = %f\n", get<float>(get_var()));
   long double ld = 0.0;
@@ -58,8 +68,32 @@ void var_test0()
   v.i32 = INT32_MIN;
   float f = *(float*)p;
   F1 = INT32_MIN;
-  Number_c x = F1;
 
+  printf("================================================\n");
+  printf("Number_c e\n");
+  Number_c e;
+  printf("Number_c i = I1\n");
+  Number_c i = I1;
+  printf("Number_c b = F1\n");
+  Number_c ff = F1;
+  printf("Number_c ii = INT32_MIN\n");
+  Number_c ii = INT32_MIN;
+
+  printf("Number_c v1(ii)\n");
+  Number_c v1(ii);
+
+  printf("Number_c v2(ff)\n");
+  Number_c v2(ff);
+
+  printf("Number_c y(3.14)\n");
+  Number_c y(3.14);
+  printf("Number_c z{3.1415926}\n");
+  Number_c z{3.1415926};
+  e = 3.141;
+  i = y;
+  printf("================================================\n");
+
+  Number_c x(3.14);
   printf("F1=%f, x=%f, (char*)x=%s)\n", F1, (double)x, (char*)x);
   printf("(int32_t)F1=%i, (int32_t)x=%i, (char*)x=%s\n", (int32_t)F1, (int32_t)x, (char*)x);
 

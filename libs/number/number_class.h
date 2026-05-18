@@ -41,6 +41,8 @@ using float128=long double;
 #define LOGb(...)
 #define LOGg(...)
 #define LOGx LOGC
+#define LOGy
+#define LOGz
 #endif // DEBUG_NUMBER
 /*
   struct type_properties_t {
@@ -66,11 +68,20 @@ class Number_c
 public:
   numeric_u value;
 
-  Number_c();
-  Number_c(const Number_c &V);
+  Number_c();                   // in .cpp
+  Number_c(const Number_c &V);  // in .cpp
   ~Number_c() {LOGx("--Number_c! %x ", this);}
 
 // ======= Constructors Templates =======
+
+  template <typename T> Number_c(T x)
+  {
+    if (!_set_ti(type_index(typeid(x)), &x))
+      LOGA("Number_c: new(Tx) not supported");
+    LOGx("+Number_c: %x new(Tx) type %i, = %s", this, _type_ua, c_str());
+  };
+
+// ======================================
 
   Number_c &operator= (const Number_c &V);
 
@@ -86,16 +97,10 @@ public:
         LOGA("Number_c: existing=Tx not supported");
     }
 
-    LOGx("+Number_c: %x (= Tx) type %i", this, _type_ua);
+    LOGx("Number_c: %x [=Tx] type %i", this, _type_ua);
     return *this;
   };
 
-  template <typename T> Number_c(T x)
-  {
-    if (!_set_ti(type_index(typeid(x)), &x))
-      LOGA("Number_c: new (Tx) not supported");
-    LOGx("+Number_c: %x new (Tx) type - %i", this, _type_ua);
-  };
 
 //  template <typename T> Number_c(numeric_u v, T x)
 //  {

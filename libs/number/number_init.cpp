@@ -38,23 +38,23 @@ size_t Number_c::type_attr_sz = sizeof(type_attr) / sizeof(type_attribute_t);
 Number_c::Number_c()  // Use set(Number_c(x)) if necessary update type!!
 {
   if (!_set_type(UA_TYPES_UINT16))
-    LOGA("Number_c: new EMPTY (UINT16) type %i not supported");
-  LOGx("+Number_c: %x new EMPTY (UINT16) %u", this, ui64);
+    LOGA("Number_c: new() (EMPTY=UINT16) type %i not supported");
+  LOGx("+Number_c: %x new() (EMPTY=UINT16) type %i, = %s", this, _type_ua, c_str());
 }
-
 
 Number_c::Number_c(const Number_c &V)
 {
   if (!set(V))
-    LOGA("Number_c: new (&V) not supported");
-  LOGx("+Number_c: %x new (&V) COPY %u", this, ui64);
+    LOGA("Number_c: new(&V) not supported");
+  LOGx("+Number_c: %x new(&V) (COPY) type %i, = %s", this, _type_ua, c_str());
 };
+
 
 Number_c &Number_c::operator= (const Number_c &V)
 {
   if (!set(V))
-    LOGA("Number_c: (=&V) not supported");
-  LOGx("+Number_c: %x (=&V) Number_c %s", this, c_str());
+    LOGA("Number_c: [=&V] not supported");
+  LOGx("Number_c: %x [=&V] Number_c %s", this, c_str());
   return *this;
 }
 

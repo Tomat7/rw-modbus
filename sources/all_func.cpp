@@ -20,20 +20,6 @@ void init_all()
   Timer t;
   int ret = 0;
 
-
-
-  printf(__SHORT_FILENAME__);
-  printf("\n");
-  printf(__FILE_NAME__);
-  printf("\n");
-  printf(__BASE_FILE__);
-  printf("\n");
-  printf(__FILE__);
-  printf("\n");
-
-
-
-
   //  Console::save();
   //t.start(TIMER_START_MSG);
   ret = cfg_master(CFG_DIR, CFG_FILE, Cfg.mode);

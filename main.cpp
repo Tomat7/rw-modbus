@@ -52,7 +52,6 @@ int main(int argc, char** argv)
   int R, C;
   Console::get_size(&R, &C);
   LOGA("TTY window size: %d rows, %d columns.", R, C);
-  console_wait_sec(Cfg.timeout_sec * 3);
 
   std::deque<int> numbers { 1, 2, 3, 4, 5 };
   int first = numbers.front();    // 1
@@ -60,6 +59,8 @@ int main(int argc, char** argv)
   int second = numbers[1];        // 2
   int third = numbers.at(2);      // 3
   std::cout << first << second << third << last << std::endl; // 1235
+
+  console_wait_sec(Cfg.timeout_sec * 3);
 // =====================================================
 
   Timer t;
