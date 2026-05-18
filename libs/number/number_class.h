@@ -40,7 +40,7 @@ using float128=long double;
 #define LOGr(...)
 #define LOGb(...)
 #define LOGg(...)
-#define LOGx(...)
+#define LOGx LOGC
 #endif // DEBUG_NUMBER
 /*
   struct type_properties_t {
@@ -68,7 +68,7 @@ public:
 
   Number_c();
   Number_c(const Number_c &V);
-  ~Number_c() {LOGC("--Number_c! %x ", this);}
+  ~Number_c() {LOGx("--Number_c! %x ", this);}
 
 // ======= Constructors Templates =======
 

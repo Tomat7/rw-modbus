@@ -91,11 +91,11 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
   for (int j = 0; j < nb_regs; ++j) {
     mbreg_t r;
     string s_source, s_type;
-    Number_c val =
+//    Number_c val =
 
-      if (cfgREG[j].lookupValue("rsource", s_source) &&
-          cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
-    cfgREG[j].lookupValue("rname", r.str_rname)) {
+    if (cfgREG[j].lookupValue("rsource", s_source) &&
+        cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
+        cfgREG[j].lookupValue("rname", r.str_rname)) {
       // This is SCADA register/variable/tag
 
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&

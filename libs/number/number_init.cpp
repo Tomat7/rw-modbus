@@ -38,23 +38,23 @@ size_t Number_c::type_attr_sz = sizeof(type_attr) / sizeof(type_attribute_t);
 Number_c::Number_c()  // Use set(Number_c(x)) if necessary update type!!
 {
   if (!_set_type(UA_TYPES_UINT16))
-    LOGA("Number_c:: new EMPTY (UINT16) type %i not supported");
-  LOGx("+Number_c:: %x new EMPTY (UINT16) %u", this, ui64);
+    LOGA("Number_c: new EMPTY (UINT16) type %i not supported");
+  LOGx("+Number_c: %x new EMPTY (UINT16) %u", this, ui64);
 }
 
 
 Number_c::Number_c(const Number_c &V)
 {
   if (!set(V))
-    LOGA("Number_c:: new (&V) not supported");
-  LOGC("+Number_c:: %x new (&V) COPY %u", this, ui64);
+    LOGA("Number_c: new (&V) not supported");
+  LOGx("+Number_c: %x new (&V) COPY %u", this, ui64);
 };
 
 Number_c &Number_c::operator= (const Number_c &V)
 {
   if (!set(V))
     LOGA("Number_c: (=&V) not supported");
-  LOGC("+Number_c: %x (=&V) Number_c %s", this, c_str());
+  LOGx("+Number_c: %x (=&V) Number_c %s", this, c_str());
   return *this;
 }
 
@@ -65,7 +65,7 @@ bool Number_c::set(const Number_c &V)
 {
   if (_set_type(V._type_ua, (const void*)&V.value, V.isgood)) {
     /*!!*/
-    LOGA("N.set: type = %i %s", V._type_ua, this->c_str());
+    LOGx("N.set: %x type = %i val = %s", this, V._type_ua, this->c_str());
     _status_code = V._status_code;
     _status_name = V._status_name;
     return true;
