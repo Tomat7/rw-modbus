@@ -36,7 +36,6 @@
 //#define USE_SYSLOG
 
 #define DEBUG_REGCLASS
-
 #undef LOGb
 #undef LOGr
 #undef LOGg
@@ -72,7 +71,7 @@ public:
   //  Reg_c(string _rn, string src_ref);       // for Scada regs.
 
   // for PLC master
-  Reg_c(mbreg_t* _reg, ModbusPLC_c* _dev);
+  Reg_c(mbreg_t* _reg, ModbusPLC_c* _dev, string st_ = "u16");
 
   // for Scada regs.
   Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,

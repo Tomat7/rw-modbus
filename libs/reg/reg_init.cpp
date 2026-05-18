@@ -142,10 +142,10 @@ Reg_c::Reg_c() { /* LOGD("+Construct()! %x", this); */ }
 // ============================================================
 // For Modbus regs only
 
-Reg_c::Reg_c(mbreg_t* _reg, ModbusPLC_c* _dev)
+Reg_c::Reg_c(mbreg_t* _reg, ModbusPLC_c* _dev, string st_)
 {
   LOGD("+Construct(_reg, _dev): %x", this);
-  string st_ = "u16";
+//  string st_ = "u16";
   if (regprop_map.count(st_)) {
     var_mode_rw = _reg->data.rmode;
     var_type_ua = regprop_map[st_].rtype;

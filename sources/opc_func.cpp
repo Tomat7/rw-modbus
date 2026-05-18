@@ -33,8 +33,8 @@ void opc_regs_init()
     //  value_u v;
     //  v.ui64 = 0;
     int t = rm.var_type_ua;
-    if (rm.is_modbus)
-      t = UA_TYPES_UINT16;
+//    if (rm.is_modbus)
+//      t = UA_TYPES_UINT16;
 
 //    printf("Ready to add Var type %i\n", t);
 

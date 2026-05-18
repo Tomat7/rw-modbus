@@ -12,6 +12,16 @@
 
 #define MB_READ
 
+void replace_str(string& str, const string& from, const string& to)
+{
+  size_t start_pos = 0;
+  // Цикл ищет подстроку 'from' до тех пор, пока она не перестанет встречаться
+  while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+    str.replace(start_pos, from.length(), to);
+    start_pos += to.length(); // Продвигаем позицию, чтобы избежать бесконечного цикла
+  }
+}
+
 
 void regs_create_from_plc()
 {
@@ -21,6 +31,13 @@ void regs_create_from_plc()
     for (auto &[a, r] : D.regs) {
       REGmap[r.rfullname] = {&r, &D};
     }
+    mbreg_t status_reg = D.regs[0];
+    replace_str(status_reg.rfullname, ".millis", ".status");
+//  string reg_status_name = "/PLC/" + D.str_dev_name + "/";
+//  reg_status_name += D.str_dev_name + ".status";
+    REGmap[status_reg.rfullname] = {&status_reg, &D, "i"};
+//    REGmap[status_reg.rfullname].str_type = "i";
+//    REGmap[status_reg.rfullname].var_type_ua = 3;
   }
 
   return;

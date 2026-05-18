@@ -19,6 +19,16 @@ static std::vector<int> res;
 static std::vector<uint64_t> idx;
 static std::vector<uint64_t> prev_ts;
 
+void set_dev_status(ModbusPLC_c* D)
+{
+//  string reg_status_name = "/PLC/" + D->str_dev_name + "/";
+  //string reg_status_name = D->str_dev_name + ".status";
+  //LOGA(reg_status_name.c_str());
+  string s = OPCs.GetVarFullName(D->str_dev_name + ".status");
+  OPC_client::WriteValue(s, (int16_t)D->get_rc_read());
+  //REGmap[reg_status_name].data.rvalue = (uint16_t)D->get_rc_read();
+}
+
 int task_plc_refresh_(void* params)
 {
   uint64_t x = *(uint64_t*)params;
@@ -66,6 +76,7 @@ int mb_print_summary()
       "%-7s_dT: %5ld ret: %2d err: %4d conn: %4d rd: %4d wr: %4d rc: %2d\n",
       D.dev_name, D.mb.timestamp_try_ms - prev_ts[i], res[i], D.mb.errors,
       D.mb.errors_cn, D.mb.errors_rd, D.mb.errors_wr, D.get_rc_read());
+    set_dev_status(&PLCvec[i]);
   }
   return (int)nb_plcs;
 }
