@@ -93,9 +93,7 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
     string s_source, s_type;
 //    Number_c val =
 
-    if (cfgREG[j].lookupValue("rsource", s_source) &&
-        cfgREG[j].lookupValue("rfolder", r.str_rfolder) &&
-        cfgREG[j].lookupValue("rname", r.str_rname)) {
+    if (cfgREG[j].lookupValue("rname", r.str_rname)) {
       // This is SCADA register/variable/tag
 
       if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
@@ -105,6 +103,12 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
              _dname.c_str(), r.str_rname.c_str(), j);
         continue;
       }
+
+      if (!cfgREG[j].lookupValue("rsource", s_source))
+        s_source = "";
+
+      if (!cfgREG[j].lookupValue("rfolder", r.str_rfolder))
+        r.str_rfolder = "";
 
       r.raddr = j;
       // LOGI("Read 'rsource'/'rfolder' on %s: %s/%s REG: %d", r.str_rname.c_str(),
