@@ -1,6 +1,6 @@
 // telnet.cpp
 
-#include <iostream>
+//#include <iostream>
 #include <vector>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,6 +9,7 @@
 #include <poll.h>
 #include <cstring> // For memset
 
+#include "include/logger.h"
 #include "net_service.h"
 
 int NetService_c::_init_socket()
@@ -16,7 +17,7 @@ int NetService_c::_init_socket()
   // 1. Create a listening socket
   server_socket_ = socket(AF_INET, SOCK_STREAM, 0);
   if (server_socket_ < 0) {
-    std::cerr << "Error creating socket" << std::endl;
+    LOGE("Error creating socket");
     return 1;
   }
 
@@ -28,7 +29,7 @@ int NetService_c::_set_socket()
   // 2. Set socket options to reuse address (??)
   int opt = 1;
   if (setsockopt(server_socket_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
-    std::cerr << "Error setting socket options" << std::endl;
+    LOGA("Error setting socket options");
     close(server_socket_);
     return 1;
   }
@@ -47,7 +48,7 @@ int NetService_c::_bind_socket()
   server_addr.sin_port = htons(port_);
 
   if (bind(server_socket_, (sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
-    std::cerr << "Error binding socket" << std::endl;
+    LOGA("Error binding socket");
     close(server_socket_);
     return 1;
   }
@@ -59,7 +60,7 @@ int NetService_c::_listen_socket()
 {
   // Listen for incoming connections
   if (listen(server_socket_, 5) < 0) {
-    std::cerr << "Error listening on socket" << std::endl;
+    LOGA("Error listening on socket");
     close(server_socket_);
     return 1;
   }
@@ -81,8 +82,7 @@ int NetService_c::init(uint16_t _p, int _maxcl)
   _bind_socket();
   _listen_socket();
 
-  std::cout << "Server listening on port: " << port_
-            << ", socket: " << server_socket_ << std::endl;
+  LOGN("Server listening on port: i%, socket: %i", port_, server_socket_);
 
   return 0;
 }
@@ -98,14 +98,13 @@ int NetService_c::run()
   active_fds[0].events = POLLIN; // Monitor for incoming data (new connections)
   nb_active_fds_++;
 
-  std::cout << "Server running: " << active_fds.size() << " "
-            << active_fds.capacity() << std::endl;
+  LOGN("Server running: %li, %li", active_fds.size(), active_fds.capacity());
 
 // Main polling loop
   while (true) {                           // -1 for infinite timeout
     int sum_updated_fds = poll(active_fds.data(), nb_active_fds_, -1);
     if (sum_updated_fds < 0) {
-      std::cerr << "Error in poll()" << std::endl;
+      LOGE("Error in poll()");
       break;
     }
 
@@ -137,7 +136,7 @@ int NetService_c::run()
 int NetService_c::_echo_client(int i, ssize_t bytes_read)
 {
   buffer[bytes_read] = '\0';
-  std::cout << "Received from client " << active_fds[i].fd << ": " << buffer << std::endl;
+  LOGD("Received from client %i: %s ", active_fds[i].fd, buffer);
   // Echo back the received data
   // send(active_fds[i].fd, buffer, bytes_read, 0);
   //send(active_fds[i].fd, answer_.c_str(), answer_.length(), 0);
@@ -162,7 +161,7 @@ int NetService_c::_new_client()
   int client_sock = accept(server_socket_, (sockaddr*)&client_addr, &client_len);
 
   if (client_sock < 0)
-    std::cerr << "Error accepting connection" << std::endl;
+    LOGE("Error accepting connection");
   else {
     if (nb_active_fds_ < max_clients_ + 1) {
       active_fds[nb_active_fds_].fd = client_sock;
@@ -170,10 +169,9 @@ int NetService_c::_new_client()
       nb_active_fds_++;
       rc = 1;
       //_answer_client(client_sock);
-      std::cout << "New connection from " << inet_ntoa(client_addr.sin_addr)
-                << ":" << ntohs(client_addr.sin_port) << std::endl;
+      LOGI("New client %s:%i", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
     } else {
-      std::cerr << "Max clients reached, closing new connection" << std::endl;
+      LOGE("Max clients reached, closing new connection");
       close(client_sock);
     }
   }
@@ -183,7 +181,7 @@ int NetService_c::_new_client()
 
 int NetService_c::_close_client(int i)
 {
-  std::cout << "Client error/disconnected: " << active_fds[i].fd << std::endl;
+  LOGI("Client error/disconnected: %i", active_fds[i].fd);
   close(active_fds[i].fd);
 
   // Remove the disconnected client from the array
