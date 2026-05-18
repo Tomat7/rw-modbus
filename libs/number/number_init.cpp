@@ -64,8 +64,7 @@ Number_c &Number_c::operator= (const Number_c &V)
 bool Number_c::set(const Number_c &V)
 {
   if (_set_type(V._type_ua, (const void*)&V.value, V.isgood)) {
-    /*!!*/
-    LOGx("N.set: %x type = %i val = %s", this, V._type_ua, this->c_str());
+    LOGw("N.set: %x type = %i val = %s", this, V._type_ua, this->c_str());
     _status_code = V._status_code;
     _status_name = V._status_name;
     return true;
@@ -76,10 +75,7 @@ bool Number_c::set(const Number_c &V)
 bool Number_c::set_type(int gtype)
 {
   if (_set_type(gtype)) {
-    /*!!*/
-    LOGA("N.set_type: type = %i", gtype);
-//    _status_code = V._status_code;
-//    _status_name = V._status_name;
+    LOGw("N.set_type: type = %i", gtype);
     return true;
   }
   return false;
@@ -138,7 +134,7 @@ bool Number_c::_set_attributes(type_attribute_t* ta)
     value.ui64 = 0;
     LOGx("Number_c::set_attributes: TYPE not supported");
   }
-  LOGb("xNumber_c::set_attributes: size %i type %i", _type_bytes, _type_ua);
+  LOGn("xNumber_c::set_attributes: size %i type %i", _type_bytes, _type_ua);
   return rc;
 };
 

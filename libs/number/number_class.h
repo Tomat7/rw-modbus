@@ -32,17 +32,21 @@ using float128=long double;
 #undef LOGx
 
 #ifdef DEBUG_NUMBER
-#define LOGr LOG_RED
-#define LOGb LOG_BLU
-#define LOGg LOG_GRN
-#define LOGx LOG_CYN
+#define LOGa LOGA
+#define LOGc LOGC
+#define LOGe LOGE
+#define LOGw LOGW
+#define LOGn LOGN
+#define LOGi LOGI
+#define LOGx LOGN
 #else
-#define LOGr(...)
-#define LOGb(...)
-#define LOGg(...)
-#define LOGx LOGC
-#define LOGy
-#define LOGz
+#define LOGa(...)
+#define LOGc(...)
+#define LOGe(...)
+#define LOGw(...)
+#define LOGn(...)
+#define LOGi(...)
+#define LOGx(...)
 #endif // DEBUG_NUMBER
 /*
   struct type_properties_t {
