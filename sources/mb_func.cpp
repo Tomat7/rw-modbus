@@ -21,12 +21,8 @@ static std::vector<uint64_t> prev_ts;
 
 void set_dev_status(ModbusPLC_c* D)
 {
-//  string reg_status_name = "/PLC/" + D->str_dev_name + "/";
-  //string reg_status_name = D->str_dev_name + ".status";
-  //LOGA(reg_status_name.c_str());
-  string s = OPCs.GetVarFullName(D->str_dev_name + ".status");
-  OPC_client::WriteValue(s, (int16_t)D->get_rc_read());
-  //REGmap[reg_status_name].data.rvalue = (uint16_t)D->get_rc_read();
+  string s = D->str_dev_name + ".status";
+  OPC_server::WriteValue(s, (int16_t)D->get_rc_read());
 }
 
 int task_plc_refresh_(void* params)

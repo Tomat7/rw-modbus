@@ -16,27 +16,29 @@
 
 #define CAST(_XTYPE) static_cast<_XTYPE>
 
+
 void opc_regs_init()
 {
   printf("\n===== %s =====\n", __func__);
 
+  // Add all regs from REGmap: PLC devices & SCADA
   for (auto &[name, rm] : REGmap) {
-    // reg_print(n, rm.ptr_data_plc);
-    // n - name, rm - RegMap_c rm.set_shm_val();
+
+    // Add status reg for each PLC device
+    if (rm.str_opcname.ends_with(".millis")) {
+      string s = rm.str_opcname;
+      s.replace(s.length() - string(".millis").length(), string(".status").length(), ".status");
+      OPCs.AddVar(s, (int16_t)-1, 0);
+    }
 
     string n, e;
     n = rm.str_opcname;
     e = Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix;  // Kub.Temp1.errors
 
-    OPCs.AddVar(e, (uint16_t)0, 0);  // Reg to keep NB of errors
+    // Add reg to keep NB of errors for EACH reg
+    OPCs.AddVar(e, (uint16_t)0, 0);
 
-    //  value_u v;
-    //  v.ui64 = 0;
     int t = rm.var_type_ua;
-//    if (rm.is_modbus)
-//      t = UA_TYPES_UINT16;
-
-//    printf("Ready to add Var type %i\n", t);
 
     if (t == UA_TYPES_UINT16)
       OPCs.AddVar(n, rm.get_local_value().ui16, rm.var_mode_rw);

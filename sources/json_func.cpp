@@ -20,10 +20,33 @@ nlohmann::json JSON_reg;
 NetService_c NetSvc;
 string HTTP_header = "";
 
+/*
+  void replace_str(string& str, const string& from, const string& to)
+  {
+  size_t start_pos = 0;
+  // Цикл ищет подстроку 'from' до тех пор, пока она не перестанет встречаться
+  while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+    str.replace(start_pos, from.length(), to);
+    start_pos += to.length(); // Продвигаем позицию, чтобы избежать бесконечного цикла
+  }
+  }
+*/
+
 void json_update(Reg_c &rm)
 {
   JSON_reg[rm.str_opcname] = rm.c_str();
 //  NetSvc.set_answer(JSON_reg.dump());
+
+  using OPC_client::ReadValue;
+  using OPC_client::WriteValue;
+
+  if (rm.str_opcname.ends_with(".millis")) {
+    string s = rm.str_opcname;
+    //replace_str(s, ".millis", ".status");
+    s.replace(s.length() - string(".millis").length(), string(".status").length(), ".status");
+    JSON_reg[s] = (int16_t)OPC_server::ReadValue(s);
+  }
+
 }
 
 void json_set_answer()

@@ -169,7 +169,7 @@ void Schedule_c::scheduler_cycle_()
   uint64_t nb_tasks = tasks.size();
   vector<thread> threads(nb_tasks);
   // function<void(Task_c*)> f; // for other way1
-  function<void()> fn_task; // for other way 3
+  // function<void()> fn_task; // for other way 3
 
   while (isRunning) {
     sleep_for(10ms);
@@ -184,7 +184,7 @@ void Schedule_c::scheduler_cycle_()
           // f = tasks[i].run;                  // way1
           // threads[i] = thread(f, &tasks[i]); // way1
           // threads[i] = thread(t.run, &tasks[i]); // way2
-          fn_task = std::bind_front(&Task_c::run, &tasks[i]); // way3
+          auto fn_task = std::bind_front(&Task_c::run, &tasks[i]); // way3
           threads[i] = thread(fn_task);                       // way3
           // threads[i] = thread(std::bind(&Task_c::run, &tasks[i]));   // way 4a
           // threads[i] = thread(std::bind_front(&Task_c::run, &tasks[i])); // 4b
