@@ -184,6 +184,15 @@ bool OpcServer_c::isFolder(string s)
     return false;
 }
 
+int OpcServer_c::GetVarType(string s)
+{
+  if (isVariable(s))
+    return vars[s].ua_type;
+  else
+    return 0;
+}
+
+
 string OpcServer_c::GetVarFullName(string s)
 {
   for (auto [ss, v] : vars) {

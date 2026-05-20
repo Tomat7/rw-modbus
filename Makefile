@@ -233,5 +233,8 @@ Clang-google:
 	@echo -e $(BLU)"=== Formatting with: $@"$(NC)
 	clang-format -i -style=google --verbose $(CLANGFILES)
 
+upload:
+	cd bin && ./git_upload
+
 # === eof ===
 

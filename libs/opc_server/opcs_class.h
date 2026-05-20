@@ -51,6 +51,7 @@ public:
   bool isGood(string s);      // OPC var has no errors
 
   string GetVarFullName(string s);
+  int GetVarType(string s);
   void DeleteVar(string s);
 
   numeric_u ReadRawUnion(string s);  // returns saved value_union
@@ -70,7 +71,7 @@ public:
   bool ReadNumber(string s, T &x);
 
   template <typename T>
-  bool WriteNumber(string s, T &x, bool isOK);
+  bool WriteNumber(string s, T x, bool isOK);
 
 private:
   void init_config(UA_ServerConfig* conf);
@@ -105,11 +106,11 @@ private:
   void* get_VariantDataPtr(string s);  // get pointer to UA_Variant.Data
   bool refresh_RawValue(string s);     // Reread value_u form server
 
-  template <typename T>
-  bool get_NumericValue(string s, T &Value);
+  //template <typename T>
+  //bool get_NumericValue(string s, T &Value);
 
-  template <typename T>
-  bool set_NumericValue(string s, T Numeric_set, bool isOK);
+  //template <typename T>
+  //bool set_NumericValue(string s, T Numeric_set, bool isOK);
 
   badvalue_t bad_value;
   map<string, ua_var_t> vars;        // All vars/regs here.
