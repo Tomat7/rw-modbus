@@ -136,6 +136,21 @@ int NetService_c::run()
 int NetService_c::_echo_client(int i, ssize_t bytes_read)
 {
   buffer[bytes_read] = '\0';
+  // ==============================
+  string path_str;
+  string full_str = string(buffer);
+  // Ищем первый символ '/'
+  size_t pos = full_str.find('/');
+  // Если символ найден, обрезаем строку
+  if (pos != std::string::npos)
+    full_str.erase(0, pos); // Удаляем всё от начала до найденного '/'
+  // Ищем первый символ ' ' (пробел)
+  pos = full_str.find(' ');
+  // Если найден - обрезаем всё что за ним
+  if (pos != std::string::npos)
+    path_str = full_str.substr(0, pos);
+  LOGW(path_str.c_str());
+  // ==============================
   LOGD("Received from client %i: %s ", active_fds[i].fd, buffer);
   // Echo back the received data
   // send(active_fds[i].fd, buffer, bytes_read, 0);
