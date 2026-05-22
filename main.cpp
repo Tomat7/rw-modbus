@@ -46,7 +46,9 @@ int main(int argc, char** argv)
   log_level = LOG_LEVEL_DEFAULT;  // Need "work" logging
   LOGA("Log 'Modbus' started.");
   signal(SIGINT, close_sigint);
-
+// =====================================================
+  time_t ttt;
+  LOGA("time_t size: %i", sizeof(ttt));
 //======================================================
   var_test0();
   int R, C;
