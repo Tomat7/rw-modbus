@@ -32,6 +32,7 @@
 #include "libs/opc_client/opc_client.h"
 #include "libs/mb_plc/mbplc_class.h"
 #include "libs/number/number_class.h"
+#include "libs/net_service/net_service.h"
 //#include "include/scheduler/scheduler.h"
 
 #ifdef USE_NCURSES

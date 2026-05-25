@@ -89,9 +89,11 @@ int task_regs_refresh_(void* params)
     } // ++ is_Scada
 
     json_update(rm);
+    //json_update(rm.str_opcname, rm.c_str(), (int16_t)OPC_server::ReadValue(s));
   }
 
-  json_set_answer();
+  //json_set_answer();
+  netsvc_update_json(json_get_answer());
   regmap_mux.unlock();
   LOGI("%s done: %d", __func__, x);
 

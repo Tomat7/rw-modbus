@@ -1,4 +1,8 @@
-// telnet.cpp
+#pragma once
+
+// net_service.h ----------------------------------
+// Copyright 2026 Tomat7 (star0413@gmail.com)
+//
 
 #include <sys/socket.h>
 #include <netinet/in.h>

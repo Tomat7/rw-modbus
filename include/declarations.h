@@ -132,11 +132,15 @@ void opc_server_();
 // int write_rm(string rn, uint16_t val);
 
 void json_update(Reg_c &rm);
-void json_set_answer();
+void json_update(string _key, const char* _value, int16_t _status);
+string json_get_answer();
+
 void netsvc_init();
 void netsvc_deinit();
 void netsvc_start();
 void netsvc_run_thread();
+//void netsvc_update();
+void netsvc_update_json(string _str);
 
 // ===== Scheduled Tasks =====
 void tasks_init();
