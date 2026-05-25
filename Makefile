@@ -11,6 +11,8 @@
 # COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 # LINK.o = $(CC) $(LDFLAGS) $(TARGET_ARCH)
 
+.PHONY: all clean shared
+
 .DEFAULT_GOAL := all
 $(info === The GOALS is: $(MAKECMDGOALS))
 #MAKEFLAGS+= -j$(nproc)
@@ -23,9 +25,9 @@ SRCDIRS= .
 SUBDIRS= include sources libs
 
 INCLUDES = -I.
-LIBS=libmodbus libconfig++
+LIBS=libconfig++ libmodbus
 # open62541
-LDLIBS= -lrt -lpthread -lmbedtls -lmbedx509 -lmbedcrypto -lopen62541 -lhttplib -lTomatLogger
+LDLIBS= -lrt -lpthread -lmbedtls -lmbedx509 -lmbedcrypto -lopen62541 -lTomatLogger -lhttplib
 #-lncurses 
 #OPEN62541_O= include/open62541/open62541.o
 OBJDIR =./tmp/obj
@@ -187,6 +189,12 @@ clean: format
 #	find test -maxdepth 5 -type f -name *.o -print -delete
 	find . -type f \( -name "*.d" -or -name "*.o" -or -name "a.out" \) -print -delete
 #	find .pvs/ -type f \( -name "*.cpp" -or -name "*.h" \) -print -delete
+
+shared: ./shared/*.cpp ./shared/*.h
+	g++ -fPIC -shared -o ./shared/libTomatLogger.so ./shared/logger.cpp
+
+install-shared:
+	cp ./shared/*.so /usr/local/lib/
 
 pvs:
 	$(foreach srcfile,$(SRCFILES),$(shell cat .pvs/pvs.inc $(srcfile) > .pvs/$(srcfile)))
