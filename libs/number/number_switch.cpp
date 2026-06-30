@@ -12,7 +12,7 @@
 #include <cassert>
 
 //#include "include/console.h"
-#include "include/logger.h"
+//#include "include/logger.h"
 #include "number_class.h"
 
 #define DEBUG(a) if(isDebug){a}

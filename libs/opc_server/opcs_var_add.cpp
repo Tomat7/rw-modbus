@@ -10,7 +10,6 @@
 #include <thread>
 #include <typeinfo>
 
-#include "include/logger.h"
 #include "opcs_class.h"
 
 #define DEBUG(a) if(isDebug){a}

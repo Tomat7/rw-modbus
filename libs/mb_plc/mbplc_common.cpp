@@ -10,7 +10,6 @@
 #include <mutex>
 #include <thread>
 
-#include "include/logger.h"
 #include "mbplc_class.h"
 
 int ModbusPLC_c::get_rc_read() { return rc_read; }

@@ -7,7 +7,7 @@
 
 #include "reg_class.h"
 
-#include "include/logger.h"
+//#include "include/logger.h"
 //#include "../plc/plc_class.h"
 
 #ifdef SYSLOG_NAME

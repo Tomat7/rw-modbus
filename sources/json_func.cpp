@@ -17,7 +17,6 @@
 #include "libs.h"
 
 nlohmann::json JSON_reg;
-//string HTTP_header = "";
 
 /*
   void replace_str(string& str, const string& from, const string& to)
@@ -35,10 +34,10 @@ nlohmann::json JSON_reg;
 void json_update(Reg_c &rm)
 {
   JSON_reg[rm.str_opcname] = rm.c_str();
-//  NetSvc.set_answer(JSON_reg.dump());
+  //  NetSvc.set_answer(JSON_reg.dump());
 
-//  using OPC_client::ReadValue;
-//  using OPC_client::WriteValue;
+  //  using OPC_client::ReadValue;
+  //  using OPC_client::WriteValue;
 
   if (rm.str_opcname.ends_with(".millis")) {
     string s = rm.str_opcname;
@@ -47,6 +46,7 @@ void json_update(Reg_c &rm)
     JSON_reg[s] = (int16_t)OPC_server::ReadValue(s);
   }
 }
+
 
 /*
   void json_update(string _key, const char* _value, int16_t _status)
@@ -62,20 +62,21 @@ void json_update(Reg_c &rm)
   }
 */
 
+
 string json_get_answer()
 {
   return JSON_reg.dump(4);
-  string json_str = JSON_reg.dump(4);
+  // string json_str = JSON_reg.dump(4);
 
-  string http_header = "HTTP/1.1 200 OK\r\n";
-  http_header += "Content-Type: application/json\r\n";
-  http_header += "Access-Control-Allow-Origin: *\r\n";
-//  http_header += "Content-Length: [";
-//  http_header += std::to_string(json_str.length()) + "]\r\n\r\n" ;
+  // string http_header = "HTTP/1.1 200 OK\r\n";
+  // http_header += "Content-Type: application/json\r\n";
+  // http_header += "Access-Control-Allow-Origin: *\r\n";
+  // //  http_header += "Content-Length: [";
+  // //  http_header += std::to_string(json_str.length()) + "]\r\n\r\n" ;
 
-  http_header += "\r\n" ;
-//  NetSvc.set_answer(http_header + json_str + "\r\n");
-  return (http_header + json_str + "\r\n");
+  // http_header += "\r\n" ;
+  // //  NetSvc.set_answer(http_header + json_str + "\r\n");
+  // return (http_header + json_str + "\r\n");
 }
 
 // eof

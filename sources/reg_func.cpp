@@ -23,6 +23,9 @@ struct regupd_t {
 static map<string, regupd_t> STRmap;
 static mutex regmap_mux;  // already defined in .h
 
+string quote(string str) { return "\"" + str + "\""; }
+string quote(const char* ch) { return "\"" + string(ch) + "\""; }
+
 // void reg_print(string, const mbregdata_t*);
 void reg_print(Reg_c &);
 
@@ -32,6 +35,7 @@ int task_regs_refresh_(void* params)
   LOG_BLU(" ===== %s =====", __func__);
   regmap_mux.lock();
   int x = 0;
+  string JSON_dump = "{\n\t" + quote("Compiled") + ":" + quote(__DATE__ __TIME__);
 
   for (auto& [n, rm] : REGmap) {
     numeric_u plc_val;  // Value from PLC
@@ -88,12 +92,14 @@ int task_regs_refresh_(void* params)
 
     } // ++ is_Scada
 
+    JSON_dump += ",\n\t" + quote(rm.str_opcname) + ":" + quote(rm.c_str());
     json_update(rm);
     //json_update(rm.str_opcname, rm.c_str(), (int16_t)OPC_server::ReadValue(s));
   }
 
   //json_set_answer();
-  netsvc_update_json(json_get_answer());
+  //netsvc_update_json(json_get_answer());
+  netsvc_update_json(JSON_dump + "\n}\n");
   regmap_mux.unlock();
   LOGI("%s done: %d", __func__, x);
 

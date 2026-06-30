@@ -10,7 +10,6 @@
 #include <mutex>
 #include <thread>
 
-#include "include/logger.h"
 #include "mbplc_class.h"
 
 ModbusPLC_c::~ModbusPLC_c()

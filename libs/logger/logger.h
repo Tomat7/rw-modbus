@@ -1,13 +1,7 @@
 #pragma once
-// logger.cpp ----------------------------
+// logger.h ----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
-//
-// timer & millis() (c)
-// https://www.techiedelight.com/ru/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/
-//
 
-// #include <chrono>
-// #include <iostream>
 #include <stdarg.h>
 #include <syslog.h>
 #include <unistd.h>
@@ -16,8 +10,9 @@
 #include <mutex>
 #include <string>
 
-//#include "config.h"  // to get definition of USE_SYSLOG & LOG_LEVEL_DEFAULT
-#include "macros.h"
+#include "colors_esc.h"
+// #include "macros.h"
+
 
 #define MESSAGE_MAX_LEN 254
 #define LOG_LEVEL_DEFAULT 4

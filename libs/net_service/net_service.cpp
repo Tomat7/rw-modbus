@@ -9,7 +9,7 @@
 #include <poll.h>
 #include <cstring> // For memset
 
-#include "include/logger.h"
+#include "../logger/logger.h"
 #include "net_service.h"
 
 int NetService_c::_init_socket()

@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "include/macros.h"
+#include "../logger/logger.h"
 #include "mbplc_datatype.h"
 
 #define MB_SLAVE_CONN_MAX 5

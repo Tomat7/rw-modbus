@@ -16,7 +16,7 @@
 #include <typeindex>
 #include <typeinfo>
 
-#include "include/logger.h"
+#include "../logger/logger.h"
 #include "opcs_datatype.h"
 
 #ifndef MANUFACTURER_NAME

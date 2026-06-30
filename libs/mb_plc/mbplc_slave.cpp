@@ -16,7 +16,6 @@
 
 #include <string>
 
-#include "include/logger.h"
 #include "mbplc_class.h"
 
 // Destructor in plc_common.cpp

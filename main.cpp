@@ -24,17 +24,22 @@ Schedule_c Task /* (TASKS_NB_MAX) */;
 // int timeout_sec = TIMEOUT_SEC;
 
 const char* mode = "master";
+bool exit_now = false;
 int rc;
 
 void var_test0();
 
 static void close_sigint(int dummy)
 {
-  logger_set_queue(false);
-  LOGC("Exit by Ctrl-C. Bye.\n");
-  deinit_all();
-  closelog();
-  exit(dummy);
+  if (!exit_now) {
+    exit_now = true;
+    logger_set_queue(false);
+    LOGC("Exit by Ctrl-C. Bye.\n");
+    deinit_all();
+    closelog();
+    exit(dummy);
+  } else
+    LOGA("P-rrr! Not so fast!");
 }
 
 //  std::cout << "dbl_fmt: " << std::format("{}", 2.235435435) << "\n";

@@ -12,8 +12,6 @@
 #include <typeindex>
 #include <typeinfo>
 
-//#include "include/console.h"
-#include "include/logger.h"
 #include "opcs_class.h"
 
 #define DEBUG(a) if(isDebug){a}

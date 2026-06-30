@@ -13,7 +13,7 @@
 #include <typeinfo>
 
 //#include "include/console.h"
-#include "include/logger.h"
+//#include "include/logger.h"
 #include "opc_client.h"
 //#include "opc_templates.h"
 

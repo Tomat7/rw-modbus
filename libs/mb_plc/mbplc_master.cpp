@@ -12,7 +12,6 @@
 
 #include <string>
 
-#include "include/logger.h"
 #include "mbplc_class.h"
 /*
   PLC_c::PLC_c(string _ip, string _name)  // Master only

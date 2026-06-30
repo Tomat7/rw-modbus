@@ -17,7 +17,7 @@
 #include <mutex>
 #include <thread>
 
-#include "include/logger.h"
+#include "../logger/logger.h"
 //#include "../plc/plc_class.h"
 //#include "include/shmem/shmem.h"
 
