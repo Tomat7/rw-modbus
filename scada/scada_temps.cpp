@@ -9,10 +9,23 @@
 float Tkub0 = 0.0;
 float Tkub1 = 0.0;
 float Tkub2 = 0.0;
+float Tdef = 0.0;
 float Tbuf = 0.0;
 float Ttsa = 0.0;
 
-bool AddAlarm(string Aname)
+float &Tbuf0 = Tbuf;
+float &Tdef0 = Tbuf;
+float &Ttsa0 = Ttsa;
+
+static map<string, float*> TempMap {
+  { "Tkub1", &Tkub1 },
+  { "Tkub2", &Tkub2 },
+  { "Tbuf", &Tbuf  },
+  { "Tdef", &Tdef  },
+  { "Ttsa", &Ttsa  }
+};
+
+void AddAlarm(string Aname)
 {
   uint16_t a = 0;
   OPCs.ReadNumber(Aname, a);
@@ -22,8 +35,9 @@ bool AddAlarm(string Aname)
 
 bool ReadTemp(string s, float &t)
 {
-
+  bool ret = false;
   float f = 0.0;
+
   if (OPCs.ReadNumber(s, f)) {
     // Check for T range
     t = f;
@@ -31,34 +45,29 @@ bool ReadTemp(string s, float &t)
       AddAlarm("Alarm.T");
     if (f < -54)
       AddAlarm("Alarm.DS");
+    ret = true;
   } else {
     // Update Alarm.MB
     AddAlarm("Alarm.MB");
   }
 
+  return ret;
 }
 
-int task_scada_(void* params)
+uint16_t UpdateTemps()
 {
-  (void)(params);
-  float f = 0.0;
+  uint16_t error_counter = 0;
 
-  ReadTemp("Ttsa", Ttsa);
-
-  if (OPCs.ReadNumber("Tkub2", f))
-    Tbuf = f;
-  if (OPCs.ReadNumber("Tkub1", f))
-    Tkub1 = f;
-  if (OPCs.ReadNumber("Tkub2", f))
-    Tkub2 = f;
+  for (auto& [S, t_] : TempMap) {
+    if (!ReadTemp(S, *t_))
+      error_counter++;
+  }
 
   Tkub0 = (Tkub1 > Tkub2) ? Tkub1 : Tkub2;
   OPCs.WriteNumber("Tkub0", Tkub0, true);
 
-
-
-  LOGI("%s done.", __func__);
-  return 0;
+  return error_counter;
 }
+
 
 // eof
