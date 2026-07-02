@@ -10,6 +10,7 @@ void tasks_init()
 {
   Task.init(Cfg.tasks_nb);
   Task.add_task(task_millis_, Cfg.millis_heartbeat_ms, "Millis_");
+  Task.add_task(task_scada_, Cfg.tkub_heartbeat_ms, "Scada_");
   Task.add_task(task_opc_refresh_, Cfg.opc.polling_ms, "OPC:Refresh_");
   Task.add_task(task_regs_refresh_, Cfg.regs_refresh_ms, "REGS:Refresh_");
   // Task.add_task(task_begin_, 1300, "Begin_", &timeout_sec);

@@ -22,7 +22,7 @@ MAKEFLAGS+= -j4
 CXX_VER=c++20
 EXEC_FILE=a.out
 SRCDIRS= .
-SUBDIRS= include sources libs
+SUBDIRS= include sources libs scada
 
 INCLUDES = -I.
 LIBS=libconfig++ libmodbus

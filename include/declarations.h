@@ -46,6 +46,8 @@ struct cfg_t {
   int tasks_nb = TASKS_NB_MAX;
   int regs_refresh_ms = REGS_REFRESH_MS;
   int millis_heartbeat_ms = MILLIS_HEARTBEAT_MS;
+  int tkub_heartbeat_ms = REGS_REFRESH_MS + 100;
+
   cchar* mode = nullptr;
 };
 
@@ -146,6 +148,7 @@ void netsvc_update_json(string _str);
 void tasks_init();
 void tasks_start();
 int task_millis_(void* params);
+int task_scada_(void* params);
 int task_opc_refresh_(void* params);
 int task_regs_refresh_(void* params);
 int task_plc_refresh_(void* params);

@@ -93,6 +93,12 @@ int task_regs_refresh_(void* params)
     } // ++ is_Scada
 
     JSON_dump += ",\n\t" + quote(rm.str_opcname) + ": " + string(rm.c_str()); //quote(rm.c_str());
+
+    if (rm.str_opcname.ends_with(".millis")) {
+      string s = rm.str_opcname;
+      s.replace(s.length() - string(".millis").length(), string(".status").length(), ".status");
+      JSON_dump += ",\n\t" + quote(s) + ": " + std::to_string((int16_t)OPC_server::ReadValue(s));
+    }
     //json_update(rm);
     //json_update(rm.str_opcname, rm.c_str(), (int16_t)OPC_server::ReadValue(s));
   }

@@ -1,5 +1,5 @@
-// reg_func.cpp -----------------------------
-// Copyright 2024 Tomat7 (star0413@gmail.com)
+// scada_power.cpp -----------------------------
+// Copyright 2026 Tomat7 (star0413@gmail.com)
 
 #include <string.h>
 #include <sys/prctl.h>
@@ -12,251 +12,276 @@
 #include "config.h"
 #include "libs.h"
 
-#define MB_READ
+float Tkub0 = 0.0;
+float Tkub1 = 0.0;
+float Tkub2 = 0.0;
+float Tbuf0 = 0.0;
+float Ttsa0 = 0.0;
 
-#define CAST(_XTYPE) static_cast<_XTYPE>
 
+int Pset0 = 0;
+int Mode0 = 0;
 
-void opc_regs_init()
+void if_init() {};
+
+void SetP1()
 {
-  printf("\n===== %s =====\n", __func__);
+  float Tdef0 = ReadValue("Tdef");
+  //float Tkub1 = ReadValue("Tkub1");
+  //float Tkub2 = ReadValue("Tkub2");
+  float Tkub0 = ReadValue("Tkub0");
 
-  // Add all regs from REGmap: PLC devices & SCADA
-  for (auto &[name, rm] : REGmap) {
-
-    // Add status reg for each PLC device
-    if (rm.str_opcname.ends_with(".millis")) {
-      string s = rm.str_opcname;
-      s.replace(s.length() - string(".millis").length(), string(".status").length(), ".status");
-      OPCs.AddVar(s, (int16_t)-1, 0);
+  if (Tdef0 > 40) {
+    switch ((int)Tkub0) {
+    case 0 ... 97:
+    { Pset0 = ReadValue("P_DIST"); Mode0=31; break; }
+    case 98 ... 101:
+    { Pset0 = ReadValue("P_TAIL"); Mode0=71; break; }
+    default:
+      Pset0 = 0;
     }
-
-    string n, e;
-    n = rm.str_opcname;
-    e = Cfg.opc.ErrFolder + n + Cfg.opc.ErrSuffix;  // Kub.Temp1.errors
-
-    // Add reg to keep NB of errors for EACH reg
-    OPCs.AddVar(e, (uint16_t)0, 0);
-
-    int t = rm.var_type_ua;
-
-    if (t == UA_TYPES_UINT16)
-      OPCs.AddVar(n, rm.get_local_value().ui16, rm.var_mode_rw);
-    else if (t == UA_TYPES_INT16)
-      OPCs.AddVar(n, rm.get_local_value().i16, rm.var_mode_rw);
-    else if (t == UA_TYPES_UINT32)
-      OPCs.AddVar(n, rm.get_local_value().ui32, rm.var_mode_rw);
-    else if (t == UA_TYPES_INT32)
-      OPCs.AddVar(n, rm.get_local_value().i32, rm.var_mode_rw);
-    else if (t == UA_TYPES_UINT64)
-      OPCs.AddVar(n, rm.get_local_value().ui64, rm.var_mode_rw);
-    else if (t == UA_TYPES_INT64)
-      OPCs.AddVar(n, rm.get_local_value().i64, rm.var_mode_rw);
-    else if (t == NOTUA_TYPES_F100)
-      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode_rw);
-    else if (t == NOTUA_TYPES_F10)
-      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode_rw);
-    else if (t == UA_TYPES_FLOAT)
-      OPCs.AddVar(n, rm.get_local_value().fl, rm.var_mode_rw);
-    else if (t == UA_TYPES_DOUBLE)
-      OPCs.AddVar(n, rm.get_local_value().dbl, rm.var_mode_rw);
-    else
-      LOGE("Wrong type: %d, Var: %s", t, n.c_str());
+  } else if (Tdef0 > 30)  {
+    Pset0 = ReadValue("P_WARM");
+    Pset0 = Pset0 * 2;
+    Mode0=21;
+  } else if (Tkub0 > 100) {
+    Pset0 = 0;  // на всякий случай
+    Mode0=91;
+  } else                  {
+    Pset0 = ReadValue("P_MAX");
+    Mode0=11;
   }
 }
 
-numeric_u opc_get_value(string s) { return OPCs.ReadRawUnion(OPCs.GetVarFullName(s)); }
-
-bool opc_set_value(string s, numeric_u val, bool isOK)
+void SetP2()
 {
-  return OPCs.WriteRawUnion(OPCs.GetVarFullName(s), val, isOK);
+  float Tdef0 = ReadValue("Tdef");
+  //float Tkub1 = ReadValue("Tkub1");
+  //float Tkub2 = ReadValue("Tkub2");
+  float Tkub0 = ReadValue("Tkub0");
+
+  if (Tdef0 > 40) {
+    switch ((int)Tkub0) {
+    case 0 ... 81:
+    { Pset0 = ReadValue("P_WARM");  Mode0=12; break; }
+    case 82 ... 96:
+    { Pset0 = ReadValue("P_DIST2"); Mode0=32; break; }
+    case 97 ... 100:
+    { Pset0 = ReadValue("P_DIST3"); Mode0=33; break; }
+    default:
+      Pset0 = 0;
+    }
+  } else {
+    switch ((int)Tkub0) {
+    case 0 ... 80:
+    { Pset0 = ReadValue("P_MAX");   Mode0=12; break; }
+    case 81 ... 100:
+    { Pset0 = ReadValue("P_WARM");  Mode0=22; break; }
+    default:
+      Pset0 = 0;
+    }
+  }
 }
 
-void opc_deinit() { OPCs.stop(); }
-
-void opc_init()
+void ChkBoil()
 {
+  if_init();
+  //float Tkub1 = ReadValue("Tkub1");
+  //float Tkub2 = ReadValue("Tkub2");
+  //float Tkub0 = (Tkub1 > Tkub2) ? Tkub1 : Tkub2;
+  float Tkub0 = ReadValue("Tkub0");
 
-  if (log_level >= LOG_DEBUG)
-    Cfg.opc.LogLevel = UA_LOGLEVEL_DEBUG;
-  else if (log_level == LOG_INFO)
-    Cfg.opc.LogLevel = UA_LOGLEVEL_INFO;
-  else if (log_level == LOG_NOTICE  || log_level == LOG_WARNING)
-    Cfg.opc.LogLevel = UA_LOGLEVEL_WARNING;
-  else
-    Cfg.opc.LogLevel = UA_LOGLEVEL_ERROR;
-
-  OPCs.init(Cfg.opc.SrvPort, Cfg.opc.LogLevel);
+  float Tboil0=ReadValue("T_boil");
+  Tboil0 += 0.15;
+  float Tstop0=ReadValue("T_heat");
+  if ((Tkub0>Tstop0) || (Tkub0>Tboil0))
+    Mode0=91;
 }
 
-void opc_start()
+// =========================================================
+
+
+/* P.dist */
+
+void P_dist()
 {
-  std::thread opc_thread(opc_run_thread);
-  opc_thread.detach();
-  console_wait_sec(Cfg.timeout_sec);
+  if_init();
+  int job0 = ReadValue("Process");
+
+  if (job0==1) {
+    SetP1();
+    ChkBoil();
+  }
+  if (job0==2) {
+    SetP2();
+    ChkBoil();
+  }
+
+  WriteValue("Mode", Mode0);
+  WriteValue("P.dist", Pset0);
 }
 
-void opc_run_thread()
+
+void P_set()
 {
-  prctl(PR_SET_NAME, Cfg.opc.SrvName.c_str());
-  OPCs.run();
+  if_init();
+
+  int job0 = ReadValue("Process");
+  int Pset0; //=ReadValue("Pset");
+  int Alarm0 = ReadValue("Alarm_");
+  int Pshift = ReadValue("Check");
+  // int Mode0=ReadValue("Mode");
+
+  switch (job0) {
+  case 0:
+    Pset0 = 0;
+    break;
+  case 1:
+    Pset0 = ReadValue("P.dist");
+    break;
+  case 2:
+    Pset0 = ReadValue("P.dist");
+    break;
+  case 4:
+    Pset0 = ReadValue("P.heat");
+    break;
+  case 7:
+    Pset0 = ReadValue("P.boil");
+    break;
+  case 9 ... 79:
+    Pset0 = ReadValue("P.rect");
+    break;
+  case 80 ... 99:
+    Pset0 = 0;
+    break;
+  default:
+    Pset0 = 0;
+  }
+
+  if (job0 >= 9)
+    Pset0 = Pset0 - Pshift;
+
+  //  if (Alarm0 > 10) Pset0 = Pset0>>1;     // reduce if ModbusQuality!=192
+
+  if (Pset0 < 0)
+    Pset0 = 0;
+  WriteValue("Pset", Pset0);
 }
 
-// ======= OPC server operations =======
-
-void opc_server_()
+void P_rect()
 {
-  using OPC_server::ReadValue;
-  using OPC_server::WriteValue;
-  static float f = 1.2345f;
-  //uint16_t n = 3;
-  /*
-          i++;
-          string s;
-          s = "/PLC/Kub/Kub.millis";
-          OPCs.setVar(s, i);
-          s = "/PLC/Kub/Kub.Temp1";
-          OPCs.setVar(s, (float)i);
-  */
+  if_init();
 
-  string s = "/PLC/Kub/Kub.millis";
-  PRINTF("%s %d, ", s.c_str(), OPCs.ReadRawUnion(s).ui16);
+  int Pset0 = 0;
+  int pMode;
+  int job0 = ReadValue("Process");
+  int Mode0 = ReadValue("Mode");
+  //  Int Pshift = ReadValue("Check");
 
-  s = "/PLC/Kub/Kub.Temp1";
-  PRINTF("%s %5.2f, ", s.c_str(), OPCs.ReadRawUnion(s).fl);
+  if (job0 > 90)
+    pMode = 99;
+  else if (job0 == 9)
+    pMode = Mode0;
+  else if (job0 > 9)
+    pMode = job0;
+  else
+    pMode = 99;
 
-  s = "/PLC/Kub/Kub.Temp2";
-  float fl;
-  OPCs.ReadNumber(s, fl);
-  PRINTF("%s %5.2f\n", s.c_str(), fl);
+  switch (pMode) {
+  case 0 ... 9:
+    Pset0 = 0;
+    break;
+  case 10 ... 19:
+    Pset0 = ReadValue("P_MAX"); // RUN
+    break;
+  case 20 ... 29:
+    Pset0 = ReadValue("P_WARM"); // HEAT
+    break;
+  case 30 ... 39:
+    Pset0 = ReadValue("P_HEAD"); // STAB
+    break;
+  case 40 ... 49:
+    Pset0 = ReadValue("P_HEAD"); // HEAD
+    break;
+  case 50 ... 59:
+    Pset0 = ReadValue("P_BODY"); // BODY
+    break;
+  case 60 ... 69:
+    Pset0 = ReadValue("P_BODY"); // after-BODY
+    break;
+  case 70 ... 79:
+    Pset0 = ReadValue("P_TAIL"); // TAIL
+    break;
+  case 80 ... 99:
+    Pset0 = 0; // finish-pause-error
+    break;
+  default:
+    Pset0 = 0;
+  }
+  //  Pset0 = Pset0 - Pshift;
 
-// ==========================================================
-
-  s = OPCs.GetVarFullName("T49_100");
-  fl = 3.1415926f;
-  OPCs.WriteNumber(s, fl, true);
-
-  float myfl = ReadValue(s);
-  const char* C = getColor(OPCs.isVariable(s));
-  const char* B = getBlynk(OPCs.isGood(s));
-  PRINTF("%s%s %s%5.2f%s, ", C, s.c_str(), B, myfl, NRM);
-
-  s = OPCs.GetVarFullName("Millis");
-  // uint16_t m = ReadValue(s);
-  C = getColor(OPCs.isVariable(s));
-  B = getBlynk(OPCs.isGood(s));
-  PRINTF("%s%s %s%u%s, ", C, s.c_str(), B, (uint16_t)ReadValue(s) /*m*/, NRM);
-
-  s = OPCs.GetVarFullName("Double");
-  f += 0.1111f;
-  OPCs.WriteNumber(s, f, true);
-  myfl = ReadValue(s);
-  C = getColor(OPCs.isVariable(s));
-  B = getBlynk(OPCs.isGood(s));
-  PRINTF("%s%s %s%5.4f%s\n ", C, s.c_str(), B, (float)ReadValue(s) /*myfl*/, NRM);
-
-  //s = "Kub.Temp3";
-  //myfl = ReadValue(s);
-  C = getColor(OPCs.isVariable(s));
-  B = getBlynk(OPCs.isGood(s));
-  PRINTF("%sT3c: %s%5.2f%s, ", C, B, myfl, NRM);
-  // printf("T4: %5.3f, ", myfl /*(float)ReadValue(s)*/);
-  PRINTF("(float)T44: %5.3f, ", (float)ReadValue(s));
-  int16_t t16 = (int16_t)round(myfl * 100);
-  myfl = t16 / 100;
+  if (Pset0 < 0)
+    Pset0 = 0;
+  WriteValue("P.rect", Pset0);
 }
 
-// ======= OPC CLIENT operations =======
-void opc_client_()
+void P_heat()
 {
-  using OPC_client::ReadValue;
-  using OPC_client::WriteValue;
+  if_init();
 
-  static uint16_t cnt = 0;
-  static uint16_t val = 0;
-  uint16_t n = 1;
+  int Mode0;
+  int Pmax0, Pset0 = 0, Pmin0 = 300;
+  float Theat0 = ReadValue("T_heat");
+  int job0 = ReadValue("Process");
+  int PID0;
 
-  cnt++;
-  string s = OPCs.GetVarFullName("Millis");
+  if (job0 == 4) {
+    Pmax0 = ReadValue("P_MAX");
+    PID0 = ReadValue("PID");
+    Pmin0 = (int)(Theat0 * 10);
 
-//    t.start();
-//  OPCclient.ReadNumber(s, ccc);
-  val = ReadValue(s);
-  int ua_t = OPCclient.get_uatype(s);
-  Number_c nval = 3.14 * 4; //OPCclient.ReadNumber(s);
+    if (PID0 == 0)
+      Mode0 = 84; // pause
+    else if (PID0 > 99)
+      Mode0 = 14; // run!
+    else
+      Mode0 = 24; // slow
 
-  if (OPCclient.Write(s, cnt) && nval.isgood) {
-    val = ReadValue(s);
-    OPCs.RefreshAllValues();
-    PRINTF("%d. ua_type: %d %s: %s %d %d %d\n", n, ua_t, s.c_str(), nval.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
-  } else
-    PRINTF("%d. ua_type: %d %s: %d %d %d error!\n", n, ua_t, s.c_str(), val, cnt, OPCs.ReadRawUnion(s).ui16);
+    if (PID0 > 0)
+      Pset0 = Pmin0 + (int)(PID0 * Pmax0 / 100);
+    else
+      Pset0 = 0;
 
-// ======= Read CLIENT 2 (Process) Read =======
+    if ((Pset0 > 0) && (Pset0 < Pmin0))
+      Pset0 = Pmin0;
+    if (Pset0 > Pmax0)
+      Pset0 = Pmax0;
 
-  n++;
-  uint16_t u1 = 777;
-  s = OPCs.GetVarFullName("Process");
-  ua_t = OPCclient.get_uatype(s);
+    WriteValue("Mode", Mode0);
+  }
 
-  if (OPCclient.Read(s, u1))
-    PRINTF("%d. ua_type: %d %s: %d %d\n", n, ua_t, s.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
-  else
-    PRINTF("%d. ua_type: %d %s: %d %d Read error!\n", n, ua_t, s.c_str(), u1, OPCs.ReadRawUnion(s).ui16);
-
-// ======= Read CLIENT 3 (Process) Numeric =======
-
-  n++;
-  nval = /* OPCclient.ReadNumber(s) + */ 12345;
-
-
-  if (nval.isgood)
-    PRINTF("%d. ua_type: %d %s: %s %d %s\n", n, ua_t, s.c_str(),
-           nval.c_str(), nval.ui16, nval.status_name().c_str());
-  else
-    PRINTF("%d. ua_type: %d %s: %s %d %d Status error! %s\n", n, ua_t, s.c_str(),
-           nval.c_str(), u1, OPCs.ReadRawUnion(s).ui16, nval.status_name().c_str());
-
-
-// ======= Read CLIENT 4 (Tkub1) =======
-  float f1 = 0;
-  s = OPCs.GetVarFullName("Tkub1");
-  ua_t = OPCclient.get_uatype(s);
-
-
-  n++;
-  if (OPCclient.Read(s, f1))
-    PRINTF("%d. ua_type: %d Read %s: %s %f\n", n, ua_t, s.c_str(),
-           nval.c_str(), f1);
-  else
-    PRINTF("%d. ua_type: %d Read %s: %s %f %f Read error!\n", n, ua_t, s.c_str(),
-           nval.c_str(), f1, OPCs.ReadRawUnion(s).fl);
-
-// ======= Read CLIENT 5 (Tkub1) =======
-
-  n++;
-  nval = OPCclient.ReadNumber(s);
-
-  if (nval.isgood)
-    PRINTF("%d. ua_type: %d Status %s: %s %f %s\n", n, ua_t, s.c_str(),
-           nval.c_str(), nval.fl, nval.status_name().c_str());
-  else
-    PRINTF("%d. ua_type: %d Status %s: %s %f %f Error: %s\n", n, ua_t, s.c_str(),
-           nval.c_str(), f1, OPCs.ReadRawUnion(s).fl, nval.status_name().c_str());
-
-
-// ======= Read CLIENT 6 (Tkub1) =======
-
-  n++;
-
-  if (OPCclient.ReadNumber(s, nval))
-    PRINTF("%d. ua_type: %d Status %s: %s %f %s\n", n, ua_t, s.c_str(),
-           nval.c_str(), nval.fl, nval.status_name().c_str());
-  else
-    PRINTF("%d. ua_type: %d Status %s: %s %f %f Error: %s\n", n, ua_t, s.c_str(),
-           nval.c_str(), f1, OPCs.ReadRawUnion(s).fl, nval.status_name().c_str());
-
-
+  WriteValue("P.heat", Pset0);
 }
+
+
+// old version ==============================================
+/*
+  void SetP1()
+  {
+  switch (Tkub0)
+  {
+    case 0..94:     { Pset0 = ReadValue("P_MAX"); Mode0=11; }
+    case 94..100:   { Pset0 = ReadValue("P_DIST"); Mode0=21; }
+    default:        Pset0 = 0;
+  }
+  switch (Tdef0)
+  {
+    case 0..40:    { Pset0 = Pset0; }
+    case 40..97:   { Pset0 = ReadValue("P_DIST"); Mode0=31; }
+    case 97..99:   { Pset0 = ReadValue("P_TAIL"); Mode0=71; }
+    default:       Pset0 = 0;
+  }
+  }
+*/
 
 // eof
