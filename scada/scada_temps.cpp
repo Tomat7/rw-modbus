@@ -27,12 +27,12 @@ static map<string, float*> TempMap {
   { "Ttsa", &Ttsa  }
 };
 
-void AddAlarm(string Aname)
+void AddAlarm(string Alarm_name)
 {
   uint16_t a = 0;
-  OPCs.ReadNumber(FQN(Aname), a);
+  OPCs.ReadNumber(FQN(Alarm_name), a);
   a++;
-  OPCs.WriteNumber(FQN(Aname), a, true);
+  OPCs.WriteNumber(FQN(Alarm_name), a, true);
 }
 
 bool ReadTemp(string s, float &t)

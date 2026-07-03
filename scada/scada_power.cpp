@@ -26,45 +26,28 @@ uint16_t &Pnow0;
 void P_set()
 {
   if_init();
-//  Process0 = ReadValue("Process");
-//  int Pset0; //=ReadValue("Pset");
-//  int Alarm0 = ReadValue("Alarm_");
-//  int Mode0=ReadValue("Mode");
+  Pset0 = 0;
   uint16_t Pshift = ReadValue("Check");
 
-  switch (Process0) {
-  case 0:
-    Pset0 = 0;
-    break;
-  case 1:
+  if (Process0==1)
     Pset0 = ReadValue("P.dist");
-    break;
-  case 2:
+  if (Process0==2)
     Pset0 = ReadValue("P.dist");
-    break;
-  case 4:
+  if (Process0==4)
     Pset0 = ReadValue("P.heat");
-    break;
-  case 7:
+  if (Process0==7)
     Pset0 = ReadValue("P.boil");
-    break;
-  case 9 ... 79:
+  if (Process0 >= 9 && Process0 <= 79)
     Pset0 = ReadValue("P.rect");
-    break;
-  case 80 ... 99:
+  else
     Pset0 = 0;
-    break;
-  default:
-    Pset0 = 0;
-  }
 
-  if (Process0 >= 9)
+  if (Process0 >= 9 && Pset0 > Pshift)
     Pset0 = Pset0 - Pshift;
 
   //  if (Alarm0 > 10) Pset0 = Pset0>>1;     // reduce if ModbusQuality!=192
+  //if (Pset0 < 0) Pset0 = 0;
 
-  if (Pset0 < 0)
-    Pset0 = 0;
   WriteValue("Pset", Pset0);
 }
 
