@@ -2,11 +2,9 @@
 // Copyright 2026 Tomat7 (star0413@gmail.com)
 
 #include <string>
+#include <map>
 
-#include "config.h"
-#include "libs.h"
-
-#define FQN(S) OPCs.GetVarFullName(S)
+#include "scada.h"
 
 float Tkub0 = 0.0;
 float Tkub1 = 0.0;
@@ -19,7 +17,9 @@ float &Tbuf0 = Tbuf;
 float &Tdef0 = Tbuf;
 float &Ttsa0 = Ttsa;
 
-static map<string, float*> TempMap {
+#define FQN(S) OPCs.GetVarFullName(S)
+
+static std::map<string, float*> TempMap {
   { "Tkub1", &Tkub1 },
   { "Tkub2", &Tkub2 },
   { "Tbuf", &Tbuf  },
@@ -40,7 +40,7 @@ bool ReadTemp(string s, float &t)
   bool ret = false;
   float f = 0.0;
 
-  if (OPCs.ReadNumber(s, f)) { // Check for T range
+  if (OPCs.ReadNumber(FQN(s), f)) { // Check for T range
     t = f;
     if (f > 100)
       AddAlarm("Alarm.T");
@@ -58,7 +58,7 @@ uint16_t UpdateTemps()
   uint16_t error_counter = 0;
 
   for (auto& [S, t_] : TempMap) {
-    if (!ReadTemp(FQN(S), *t_))
+    if (!ReadTemp(S, *t_))
       error_counter++;
   }
 

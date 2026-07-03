@@ -3,13 +3,12 @@
 
 #include <string>
 
-#include "config.h"
-#include "libs.h"
-
 #include "scada.h"
 
-uint16_t Mode0 = 0;
-uint16_t Process0 = 0;
+uint16_t Mode = 0;
+uint16_t Process = 0;
+uint16_t &Mode0 = Mode;
+uint16_t &Process0 = Process;
 
 void UpdateProcess();
 
@@ -31,8 +30,10 @@ int task_scada_(void* params)
 
 void UpdateProcess()
 {
-  OPCs.ReadNumber("Process", Process0);
-  OPCs.ReadNumber("Mode", Mode0);
+  //OPCs.ReadNumber("Process", Process0);
+  //OPCs.ReadNumber("Mode", Mode0);
+  Process0 = ReadValue("Process");
+  Mode0 = ReadValue("Mode");
 }
 
 void if_init() {};

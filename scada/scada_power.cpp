@@ -1,26 +1,13 @@
 // scada_power.cpp -----------------------------
 // Copyright 2026 Tomat7 (star0413@gmail.com)
 
-#include <string.h>
-#include <sys/prctl.h>
-
-#include <cmath>
-#include <map>
-#include <string>
-#include <vector>
-
-#include "config.h"
-#include "libs.h"
-
 #include "scada.h"
-
-using namespace OPC_server;
 
 uint16_t Pset;
 uint16_t Pnow;
 
-uint16_t &Pset0;
-uint16_t &Pnow0;
+uint16_t &Pset0 = Pset;
+uint16_t &Pnow0 = Pnow;
 
 
 void SetPower()

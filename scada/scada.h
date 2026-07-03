@@ -6,7 +6,9 @@
 #include "config.h"
 #include "libs.h"
 
-extern volatile float Tkub0;
+using namespace OPC_server;
+
+extern float Tkub0;
 extern float Tkub1;
 extern float Tkub2;
 extern float Tbuf;
@@ -19,12 +21,14 @@ extern float &Ttsa0;
 
 extern uint16_t Pset;
 extern uint16_t Pnow;
-
 extern uint16_t &Pset0;
 extern uint16_t &Pnow0;
 
-extern uint16_t Process0;
-extern uint16_t Mode0;
+extern uint16_t Process;
+extern uint16_t Mode;
+
+extern uint16_t &Process0;
+extern uint16_t &Mode0;
 
 void if_init();
 
