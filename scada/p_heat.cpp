@@ -13,6 +13,7 @@ static uint16_t p_heat = 0;
 static uint16_t mod_heat = 0;
 
 /* ============== P.heat ================= */
+void P_boil() {}
 
 void P_heat()
 {

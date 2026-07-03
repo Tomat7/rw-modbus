@@ -23,23 +23,25 @@ uint16_t &Pset0;
 uint16_t &Pnow0;
 
 
-void P_set()
+void SetPower()
 {
   if_init();
   Pset0 = 0;
   uint16_t Pshift = ReadValue("Check");
 
-  if (Process0==1)
+  if (Process0==1 || Process0==2) {
+    P_dist();
     Pset0 = ReadValue("P.dist");
-  if (Process0==2)
-    Pset0 = ReadValue("P.dist");
-  if (Process0==4)
+  } else if (Process0==4) {
+    P_heat();
     Pset0 = ReadValue("P.heat");
-  if (Process0==7)
+  } else if (Process0==7) {
+    P_boil();
     Pset0 = ReadValue("P.boil");
-  if (Process0 >= 9 && Process0 <= 79)
+  } else if (Process0 >= 9 && Process0 <= 79) {
+    P_rect();
     Pset0 = ReadValue("P.rect");
-  else
+  } else
     Pset0 = 0;
 
   if (Process0 >= 9 && Pset0 > Pshift)

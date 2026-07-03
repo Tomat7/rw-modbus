@@ -29,9 +29,13 @@ extern uint16_t Mode0;
 void if_init();
 
 void AddAlarm(string Aname);
-
 bool ReadTemp(string s, float &t);
-
 uint16_t UpdateTemps();
+
+void SetPower();
+void P_boil();
+void P_heat();
+void P_dist();
+void P_rect();
 
 // eof

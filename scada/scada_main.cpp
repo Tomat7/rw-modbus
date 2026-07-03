@@ -11,16 +11,19 @@
 uint16_t Mode0 = 0;
 uint16_t Process0 = 0;
 
+void UpdateProcess();
+
 int task_scada_(void* params)
 {
   (void)(params);
 
-  void UpdateProcess();
+  UpdateProcess();
 
   uint16_t err = UpdateTemps();
   if (err)
     LOGW("Update TEMPs error: %i", err);
 
+  SetPower();
 
   LOGI("%s done.", __func__);
   return 0;
