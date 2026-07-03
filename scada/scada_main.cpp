@@ -19,7 +19,7 @@ int task_scada_(void* params)
 
   uint16_t err = UpdateTemps();
   if (err)
-    LOGW("Update Tepms error: %i", err);
+    LOGW("Update TEMPs error: %i", err);
 
 
   LOGI("%s done.", __func__);

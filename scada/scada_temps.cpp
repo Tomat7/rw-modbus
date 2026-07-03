@@ -6,6 +6,8 @@
 #include "config.h"
 #include "libs.h"
 
+#define FQN(S) OPCs.GetVarFullName(S)
+
 float Tkub0 = 0.0;
 float Tkub1 = 0.0;
 float Tkub2 = 0.0;
@@ -28,9 +30,9 @@ static map<string, float*> TempMap {
 void AddAlarm(string Aname)
 {
   uint16_t a = 0;
-  OPCs.ReadNumber(Aname, a);
+  OPCs.ReadNumber(FQN(Aname), a);
   a++;
-  OPCs.WriteNumber(Aname, a, true);
+  OPCs.WriteNumber(FQN(Aname), a, true);
 }
 
 bool ReadTemp(string s, float &t)
@@ -38,18 +40,15 @@ bool ReadTemp(string s, float &t)
   bool ret = false;
   float f = 0.0;
 
-  if (OPCs.ReadNumber(s, f)) {
-    // Check for T range
+  if (OPCs.ReadNumber(s, f)) { // Check for T range
     t = f;
     if (f > 100)
       AddAlarm("Alarm.T");
     if (f < -54)
       AddAlarm("Alarm.DS");
     ret = true;
-  } else {
-    // Update Alarm.MB
+  } else       // Update Alarm.MB
     AddAlarm("Alarm.MB");
-  }
 
   return ret;
 }
@@ -59,12 +58,12 @@ uint16_t UpdateTemps()
   uint16_t error_counter = 0;
 
   for (auto& [S, t_] : TempMap) {
-    if (!ReadTemp(S, *t_))
+    if (!ReadTemp(FQN(S), *t_))
       error_counter++;
   }
 
   Tkub0 = (Tkub1 > Tkub2) ? Tkub1 : Tkub2;
-  OPCs.WriteNumber("Tkub0", Tkub0, true);
+  OPCs.WriteNumber(FQN("Tkub0"), Tkub0, true);
 
   return error_counter;
 }

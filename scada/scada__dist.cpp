@@ -13,6 +13,11 @@
 
 #include "scada.h"
 
+#define WITHIN(X, MIN_X, MAX_X) (X >= MIN_X && X <= MAX_X)
+
+#define X_WITHIN_RANGE(X, MIN_X, MAX_X) (X >= MIN_X && X <= MAX_X)
+#define TEMPERATURE_IN_RANGE(T, MIN_T, MAX_T) (T >= MIN_T && T <= MAX_T)
+
 using namespace OPC_server;
 
 static uint16_t p_dist = 0;
@@ -20,20 +25,18 @@ static uint16_t mod_dist = 0;
 
 /* ============== P.dist ================= */
 
+#define Tkub0_IN(MIN_T, MAX_T) TEMPERATURE_IN_RANGE(Tkub0, MIN_T, MAX_T)
 void Dist1()
 {
+  p_dist = 0;
+
   if (Tdef0 > 40) {
-    switch ((int)Tkub0) {
-    case 0 ... 97:
+    if (Tkub0_IN(0, 97)) {
       p_dist = ReadValue("P_DIST");
       mod_dist=31;
-      break;
-    case 98 ... 101:
+    } else if (Tkub0_IN(97, 101)) {
       p_dist = ReadValue("P_TAIL");
       mod_dist=71;
-      break;
-    default:
-      p_dist = 0;
     }
   } else if (Tdef0 > 30)  {
     p_dist = ReadValue("P_WARM");
@@ -47,37 +50,39 @@ void Dist1()
     mod_dist=11;
   }
 }
+#undef Tkub0_IN
 
-
+#define Tkub0_IN(MIN_T, MAX_T) TEMPERATURE_IN_RANGE(Tkub0, MIN_T, MAX_T)
 void Dist2()
 {
-  if (Tdef0 > 40) {
-    switch ((int)Tkub0) {
-    case 0 ... 81:
-    { p_dist = ReadValue("P_WARM");  mod_dist=12; break; }
-    case 82 ... 96:
-    { p_dist = ReadValue("P_DIST2"); mod_dist=32; break; }
-    case 97 ... 100:
-    { p_dist = ReadValue("P_DIST3"); mod_dist=33; break; }
-    default:
-      p_dist = 0;
+  p_dist = 0;
+  if (Tdef0 < 40) {
+    if (Tkub0_IN(0, 80)) {
+      p_dist = ReadValue("P_MAX");
+      mod_dist=12;
+    } else if (Tkub0_IN(80, 100)) {
+      p_dist = ReadValue("P_WARM");
+      mod_dist=22;
     }
   } else {
-    switch ((int)Tkub0) {
-    case 0 ... 80:
-    { p_dist = ReadValue("P_MAX");   mod_dist=12; break; }
-    case 81 ... 100:
-    { p_dist = ReadValue("P_WARM");  mod_dist=22; break; }
-    default:
-      p_dist = 0;
+    if (Tkub0_IN(0, 82)) {
+      p_dist = ReadValue("P_WARM");
+      mod_dist=12;
+    } else if (Tkub0_IN(82, 97)) {
+      p_dist = ReadValue("P_DIST2");
+      mod_dist=32;
+    } else if (Tkub0_IN(97, 100)) {
+      p_dist = ReadValue("P_DIST3");
+      mod_dist=33;
     }
   }
 }
+#undef Tkub0_IN
 
 void CheckBoil()
 {
   if_init();
-  float Tboil_shift = 0.15;
+  float Tboil_shift = 0.15f;
   float Tboil0=ReadValue("T_boil");
   float Tstop0=ReadValue("T_heat");
   if (Tkub0>Tstop0 || Tkub0>(Tboil0+Tboil_shift))

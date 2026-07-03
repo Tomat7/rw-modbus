@@ -1,1 +1,1 @@
-/home/star9999/src/rw-modbus/bin/git_upload
+git_upload
