@@ -173,7 +173,7 @@ void flush_logger()
   }
 }
 
-void replace_str(string& str, const string& from, const string& to)
+void replace_str(string &str, const string &from, const string &to)
 {
   size_t start_pos = 0;
   // Цикл ищет подстроку 'from' до тех пор, пока она не перестанет встречаться

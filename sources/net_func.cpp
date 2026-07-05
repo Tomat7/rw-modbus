@@ -25,7 +25,7 @@ void netsvc_deinit() { svr.stop(); }
 void netsvc_init()
 {
   // GET endpoint: Returns a JSON object
-  svr.Get("/api/opc", [](const httplib::Request&, httplib::Response& res) {
+  svr.Get("/api/opc", [](const httplib::Request &, httplib::Response& res) {
     res.set_content(json_dump, "application/json");
   });
 

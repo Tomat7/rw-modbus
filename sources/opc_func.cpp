@@ -131,26 +131,26 @@ void opc_server_()
   PRINTF("%s %5.2f\n", s.c_str(), fl);
 
 // ==========================================================
+  /*
+    s = OPCs.GetVarFullName("T49_100");
+    fl = 3.1415926f;
+    OPCs.WriteNumber(s, fl, true);
 
-  s = OPCs.GetVarFullName("T49_100");
-  fl = 3.1415926f;
-  OPCs.WriteNumber(s, fl, true);
-
-  float myfl = ReadValue(s);
-  const char* C = getColor(OPCs.isVariable(s));
-  const char* B = getBlynk(OPCs.isGood(s));
-  PRINTF("%s%s %s%5.2f%s, ", C, s.c_str(), B, myfl, NRM);
-
+    float myfl = ReadValue(s);
+    const char* C = getColor(OPCs.isVariable(s));
+    const char* B = getBlynk(OPCs.isGood(s));
+    PRINTF("%s%s %s%5.2f%s, ", C, s.c_str(), B, myfl, NRM);
+  */
   s = OPCs.GetVarFullName("Millis");
   // uint16_t m = ReadValue(s);
-  C = getColor(OPCs.isVariable(s));
-  B = getBlynk(OPCs.isGood(s));
+  const char* C = getColor(OPCs.isVariable(s));
+  const char* B = getBlynk(OPCs.isGood(s));
   PRINTF("%s%s %s%u%s, ", C, s.c_str(), B, (uint16_t)ReadValue(s) /*m*/, NRM);
 
   s = OPCs.GetVarFullName("Double");
   f += 0.1111f;
   OPCs.WriteNumber(s, f, true);
-  myfl = ReadValue(s);
+  float myfl = ReadValue(s);
   C = getColor(OPCs.isVariable(s));
   B = getBlynk(OPCs.isGood(s));
   PRINTF("%s%s %s%5.4f%s\n ", C, s.c_str(), B, (float)ReadValue(s) /*myfl*/, NRM);

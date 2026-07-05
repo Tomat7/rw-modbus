@@ -1,4 +1,4 @@
-// scada_millis.cpp -----------------------------
+// scada_check.cpp -----------------------------
 // Copyright 2026 Tomat7 (star0413@gmail.com)
 
 #include <string>

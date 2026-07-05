@@ -14,21 +14,22 @@ void SetPower()
 {
   if_init();
   Pset0 = 0;
-  uint16_t Pshift = ReadValue("Check");
+  int Pshift = ReadValue("Pshift");
 
-  if (Process0==1 || Process0==2) {
-    P_dist();
+  P_boil();
+  P_heat();
+  P_dist();
+  P_rect();
+
+  if (Process0==1 || Process0==2)
     Pset0 = ReadValue("P.dist");
-  } else if (Process0==4) {
-    P_heat();
+  else if (Process0==4)
     Pset0 = ReadValue("P.heat");
-  } else if (Process0==7) {
-    P_boil();
+  else if (Process0==7)
     Pset0 = ReadValue("P.boil");
-  } else if (Process0 >= 9 && Process0 <= 79) {
-    P_rect();
+  else if (Process0 >= 9 && Process0 <= 79)
     Pset0 = ReadValue("P.rect");
-  } else
+  else
     Pset0 = 0;
 
   if (Process0 >= 9 && Pset0 > Pshift)
