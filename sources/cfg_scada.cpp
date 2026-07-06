@@ -21,6 +21,7 @@ static int total_regs = 0;
 
 int cfg_init_scadaset(const Setting &cfg, const Setting &pl);
 int cfg_init_scadaregs(const Setting &reg, string _dname, string _dfolder);
+int cfg_init_scadavars(const Setting &reg, string _dname, string _dfolder);
 
 int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
 {
@@ -58,11 +59,12 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
         cfgPLC[i].lookupValue("desc", _desc)) {
       // It is SCADA registers configuration!
 
-      int nb_regs = cfg_init_scadaregs(cfgPLC[i]["regs"], _devname, _dfolder);
+      //int nb_regs = cfg_init_scadaregs(cfgPLC[i]["vars"], _devname, _dfolder);
+      int nb_regs = cfg_init_scadavars(cfgPLC[i]["vars"], _devname, _dfolder);
       total_regs += nb_regs;
       nb_plc_ready++;
 
-      LOGI("Configured SCADA set: %s, with: %d regs", _devname.c_str(),
+      LOGI("Configured SCADA set: %s, with: %d vars", _devname.c_str(),
            nb_regs);
 
       // ===== End SCADA virtual filling =====
@@ -73,7 +75,7 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
     }
   }
 
-  LOGI("Total SCADA sets: %d, with %d regs", nb_plc_cfg, total_regs);
+  LOGI("Total SCADA sets: %d, with %d vars", nb_plc_cfg, total_regs);
 
   if (isCheckName && (nb_plc_ready != nb_plc_list))
     LOGA("Wrong PLCs number! Processed: %d, in the list: %d.",
@@ -82,32 +84,90 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
   return 0;
 }
 
-int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
+
+int cfg_init_scadavars(const Setting &List_vars, string _dname, string _dfolder)
 {
-  int nb_regs = cfgREG.getLength();
+  int nb_regs = List_vars.getLength();
+  int nb_errors = 0;
+
+  // ===== Cycle for REGs =====
+  for (int j = 0; j < nb_regs; ++j) {
+    const Setting &Var_option = List_vars[j];
+    mbreg_t r;
+    string s_source, s_type;
+
+    r.str_rname = (string)Var_option[0];
+    s_source = (string)Var_option[1];
+    r.str_mode = (string)Var_option[2];
+    s_type = (string)Var_option[3];
+    r.raddr = j;
+
+    if (Var_option.getLength() > 4)
+      r.str_rfolder = (string)Var_option[4];
+
+    r.data.rvalue = 888;  // TODO: remove for production!
+
+    if (_dname == "-" || _dname == "." || _dname == "")  // No prefix.name?
+      r.rfullname = r.str_rname;
+    else
+      r.rfullname = _dname + "." + r.str_rname;
+
+    string str_opcbase = "/" + _dfolder + "/" + _dname + "/";
+    mbreg_t* ptr_source = nullptr;
+
+    if (!(s_source == "") && !(s_source == "-")) {
+      if (reg_exist(s_source))
+        ptr_source = REGmap[s_source].get_ptr(0);
+      else {
+        LOGE("Wrong 'rsource': '%s' on reg: '%s' - IGNORED!",
+             s_source.c_str(), r.str_rname.c_str());
+        continue;
+      }
+    }
+
+    if (Reg_c::check_type(s_type)) {
+      //Reg_c R(&r, ptr_source, s_source, s_type, str_opcbase);
+      //REGmap[r.rfullname] = R;
+      REGmap[r.rfullname] = { &r, ptr_source, s_source, s_type, str_opcbase };
+    } else {
+      nb_errors++;
+      LOGE("Wrong type: '%s', reg: '%s' - IGNORED!",
+           s_type.c_str(), r.str_rname.c_str());
+    }
+
+  }
+
+  return nb_regs - nb_errors;
+}
+
+
+/*
+  int cfg_init_scadaregs(const Setting &List_regs, string _dname, string _dfolder)
+  {
+  int nb_regs = List_regs.getLength();
   int nb_errors = 0;
 
   // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
     mbreg_t r;
     string s_source, s_type;
-//    Number_c val =
+  //    Number_c val =
 
-    if (cfgREG[j].lookupValue("rname", r.str_rname)) {
+    if (List_regs[j].lookupValue("rname", r.str_rname)) {
       // This is SCADA register/variable/tag
 
-      if (!(cfgREG[j].lookupValue("rmode", r.str_mode) &&
-            cfgREG[j].lookupValue("rtype", s_type))) {
+      if (!(List_regs[j].lookupValue("rmode", r.str_mode) &&
+            List_regs[j].lookupValue("rtype", s_type))) {
 
         LOGE("Error reading 'rmode'/'rtype' on %s/%s REG: %d\n",
              _dname.c_str(), r.str_rname.c_str(), j);
         continue;
       }
 
-      if (!cfgREG[j].lookupValue("rsource", s_source))
+      if (!List_regs[j].lookupValue("rsource", s_source))
         s_source = "";
 
-      if (!cfgREG[j].lookupValue("rfolder", r.str_rfolder))
+      if (!List_regs[j].lookupValue("rfolder", r.str_rfolder))
         r.str_rfolder = "";
 
       r.raddr = j;
@@ -153,7 +213,9 @@ int cfg_init_scadaregs(const Setting &cfgREG, string _dname, string _dfolder)
   }
 
   return nb_regs - nb_errors;
-}
+  }
+*/
+
 
 /*
     // Check the record which expect to get for CFG-file.
