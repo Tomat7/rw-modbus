@@ -36,7 +36,7 @@ CC=$(CXX)
 
 # === C/CPP flags configuration ===
 #CPPFLAGS= -std=$(CXX_VER)
-CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors -DCPPHTTPLIB_COMPILE 
+CXXFLAGS= -std=$(CXX_VER) -Wall -Wextra -Wpedantic -Wfatal-errors #-DCPPHTTPLIB_COMPILE 
 #CPPFLAGS= -Weffc++
 #LDFLAGS = -Wall #-std=$(CXX_VER)
 DEPFLAGS= -MD -MF $(OBJDIR)

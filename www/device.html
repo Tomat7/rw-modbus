@@ -4,15 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SCADA — прибор</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { height: 100%; }
 
     body {
       font-family: 'Segoe UI', system-ui, monospace;
       background: #0b0f19;
       color: #cbd5e1;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
