@@ -26,6 +26,14 @@ static mutex regmap_mux;  // already defined in .h
 string quote(string str) { return "\"" + str + "\""; }
 string quote(const char* ch) { return "\"" + string(ch) + "\""; }
 
+bool str_has(const string& text, const char* target)
+{
+  if (text.find(string(target)) != std::string::npos)
+    return true;
+  else
+    return false;
+}
+
 // void reg_print(string, const mbregdata_t*);
 void reg_print(Reg_c &);
 
@@ -84,6 +92,9 @@ int task_regs_refresh_(void* params)
       if (/* rm.var_mode &&  */ isNew_Opc) {
         x++;
         rm.set_local_value(opc_val);
+
+        if (str_has(n, "cfg")) {}
+
         if (!STRmap.count(n) || !STRmap[n].upd_opc) {
           STRmap[n].upd_opc = true;
           STRmap[n].opc_value = opc_val;
