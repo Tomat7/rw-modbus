@@ -101,7 +101,7 @@ void EzConfig::set(const std::string& key, const std::string& val) { data_[key] 
 void EzConfig::set(const std::string& key, int val)  { data_[key] = std::to_string(val); }
 void EzConfig::set(const std::string& key, bool val) { data_[key] = val ? "true" : "false"; }
 
-std::vector<fs::path> EzConfig::history() const { return listFiles(); }
-int EzConfig::count() const { return std::ssize(listFiles()); }
+//std::vector<fs::path> EzConfig::history() const { return listFiles(); }
+//int EzConfig::count() const { return std::ssize(listFiles()); }
 
 // eof

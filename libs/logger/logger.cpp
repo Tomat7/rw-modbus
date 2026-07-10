@@ -44,7 +44,7 @@ void logger(const char* _logname, int _prio, const char* _func,
   if (no_syslog && no_print)
     return;
 
-  // print filename if DEBUG prio or LEVEL 8 and 9
+  // print filename if prio==DEBUG or LEVEL 8 and 9
   bool no_filename = !(_prio == 7 || log_level > 7);
   // print function() & fullpath to file & line number only on LEVEL 9
   bool no_funcname = (log_level < 9);

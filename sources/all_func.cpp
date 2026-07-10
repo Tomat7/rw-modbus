@@ -22,7 +22,7 @@ void init_all()
 
   //  Console::save();
   //t.start(TIMER_START_MSG);
-  ret = cfg_master(CFG_DIR, CFG_FILE, Cfg.mode);
+  ret = cfg_master(ResolvePath(CFG_DIR).c_str(), CFG_FILE, Cfg.mode);
   //t.spent_auto("============ Cfg Master finished in: ");
   if (ret == EXIT_FAILURE)
     exit(EXIT_FAILURE);
@@ -184,6 +184,36 @@ void replace_str(string &str, const string &from, const string &to)
 }
 
 
+string to_lower(string str)
+{
+  for (auto &c : str)
+    c = static_cast<char>(tolower(c));
+  return str;
+}
+
+#include <filesystem>
+namespace fs = std::filesystem;
+
+std::string ResolvePath(std::string path)
+{
+  LOG_RED("1");
+  // Проверяем, начинается ли путь с $HOME или ~/
+  if (path.rfind("$HOME", 0) == 0) {
+    if (const char* homeDir = std::getenv("HOME"))
+      path.replace(0, 5, homeDir);
+  } else if (path.rfind("~", 0) == 0) {
+    if (const char* homeDir = std::getenv("HOME"))
+      path.replace(0, 1, homeDir);
+  }
+  LOG_RED("2");
+  return fs::path(path).string();
+}
+
+string ResolvePath(const char* path) { return ResolvePath(string(path)); }
+void console_wait_sec(int _sec) { Console::read_sec(_sec); }
+bool isdebug() { return (log_level > 7); }
+
+
 /*
   void flush_logger()
   {
@@ -196,7 +226,6 @@ void replace_str(string &str, const string &from, const string &to)
   }
 */
 
-void console_wait_sec(int _sec) { Console::read_sec(_sec); }
 
 /* int write_shm(string rn, uint16_t val)
   {
@@ -245,14 +274,5 @@ void console_wait_sec(int _sec) { Console::read_sec(_sec); }
   return 0;
   }
 */
-
-bool isdebug() { return (log_level > 7); }
-
-string to_lower(string str)
-{
-  for (auto &c : str)
-    c = static_cast<char>(tolower(c));
-  return str;
-}
 
 // eof

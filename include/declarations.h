@@ -154,6 +154,9 @@ int task_regs_refresh_(void* params);
 int task_plc_refresh_(void* params);
 // int task_begin_(void* params);
 
+string ResolvePath(string path);
+string ResolvePath(const char* path);
+
 
 // ===== OPC SERVER functions "fold" =====
 

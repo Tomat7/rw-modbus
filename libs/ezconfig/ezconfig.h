@@ -33,6 +33,6 @@ public:
   void set(const std::string& key, int val);
   void set(const std::string& key, bool val);
 
-  std::vector<fs::path> history() const;
-  int count() const;
+  //std::vector<fs::path> history() const;
+  //int count() const;
 };

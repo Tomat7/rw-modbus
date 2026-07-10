@@ -9,7 +9,7 @@
 
 #define PI 3.1415926535897932384626433832795
 
-#define CFG_DIR "/var/tmp/conf"
+#define CFG_DIR "$HOME/.config/hd/conf"
 #define CFG_FILE "modbus.cfg"
 
 #define OPC_URL "opc.tcp://localhost:4840"
