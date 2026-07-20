@@ -36,8 +36,8 @@ int cfg_init_scadaset(const Setting &cfgPLC, const Setting &listPLC)
   LOGW("Total SCADA sets in config: %d, in the list: %d.",
        nb_plc_cfg, nb_plc_list);
 
-  const string &p0 = listPLC[0];
-  if ((p0 == "all") || (p0 == "ALL") || (p0 == "All")) {
+  const string p0 = to_lower(listPLC[0]);
+  if (p0 == "all") {
     //  vec_size_new = PLCvec.size() + nb_plc_cfg;
     LOGC("List with %d SCADA sets ignored.", nb_plc_list);
     LOGC("Will read '%s' %d SCADA sets from configfile!", p0.c_str(),

@@ -82,8 +82,7 @@ int cfg_master(cchar* cfg_dir, cchar* cfg_file, cchar* cfg_mode)
   Setting* DEVlist;
   const char* dev_type = "PLC";
   try {
-    DEVlist =
-      &cfg.lookup("plc_list_" + string(dev_type) /* string(cfg_mode) */);
+    DEVlist = &cfg.lookup("plc_list_" + string(dev_type));
   } catch (const SettingNotFoundException &nfex) {
     LOGA("No 'plc_list_%s' configured!", dev_type /* cfg_mode */);
     return (EXIT_FAILURE);
@@ -202,6 +201,38 @@ int cfg_init_plcregs(const Setting &cfgREG, ModbusPLC_c* pn)
   int nb_errors = 0;
 
   // ===== Cycle for REGs =====
+  // Tuple order: ( raddr, rname, rmode, rtype, rfolder (optional) )
+  for (int j = 0; j < nb_regs; ++j) {
+    const Setting &Reg_option = cfgREG[j];
+    mbreg_t r;
+
+    r.raddr     = (int)Reg_option[0];
+    r.str_rname = (string)Reg_option[1];
+    r.str_mode  = (string)Reg_option[2];
+    // Reg_option[3] is 'rtype' - not stored: PLC regs are kept as raw uint16_t
+
+    if (Reg_option.getLength() > 4)
+      r.str_rfolder = (string)Reg_option[4];
+    else
+      r.str_rfolder = "";
+
+    r.data.rvalue = 555;  // TODO: remove for production!
+    //if (Reg_c::init_types(&r))
+    pn->regs[r.raddr] = r;
+    //else
+    // nb_errors++;
+  }
+  return nb_regs - nb_errors;
+}
+
+
+/*
+  int cfg_init_plcregs(const Setting &cfgREG, ModbusPLC_c* pn)
+  {
+  int nb_regs = cfgREG.getLength();
+  int nb_errors = 0;
+
+  // ===== Cycle for REGs =====
   for (int j = 0; j < nb_regs; ++j) {
     mbreg_t r;
 
@@ -233,6 +264,7 @@ int cfg_init_plcregs(const Setting &cfgREG, ModbusPLC_c* pn)
     // nb_errors++;
   }
   return nb_regs - nb_errors;
-}
+  }
+*/
 
 // eof
