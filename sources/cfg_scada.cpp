@@ -94,16 +94,19 @@ int cfg_init_scadavars(const Setting &List_vars, string _dname, string _dfolder)
   for (int j = 0; j < nb_regs; ++j) {
     const Setting &Var_option = List_vars[j];
     mbreg_t r;
-    string s_source, s_type;
+    string s_type = "u";
+    string s_source = "";
 
-    r.str_rname = (string)Var_option[0];
-    s_source = (string)Var_option[1];
-    r.str_mode = (string)Var_option[2];
-    s_type = (string)Var_option[3];
     r.raddr = j;
+    r.str_rname = (string)Var_option[0];
+    r.str_mode = (string)Var_option[1];
+    s_type = (string)Var_option[2];
+
+    if (Var_option.getLength() > 3)
+      r.str_rfolder = (string)Var_option[3];
 
     if (Var_option.getLength() > 4)
-      r.str_rfolder = (string)Var_option[4];
+      s_source = (string)Var_option[4];
 
     r.data.rvalue = 888;  // TODO: remove for production!
 

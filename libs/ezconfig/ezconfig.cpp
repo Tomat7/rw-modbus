@@ -5,28 +5,6 @@
 #include <chrono>
 #include <ctime>
 
-std::string EzConfig::timestamp() const
-{
-  auto now = std::chrono::system_clock::now();
-  auto t = std::chrono::system_clock::to_time_t(now);
-  auto tm = *std::localtime(&t);
-  char buf[32];
-  std::strftime(buf, sizeof(buf), "%Y%m%d_%H%M%S", &tm);
-  return buf;
-}
-
-std::vector<fs::path> EzConfig::listFiles() const
-{
-  std::vector<fs::path> files;
-  for (auto& entry : fs::directory_iterator(dir_)) {
-    auto fname = entry.path().filename().string();
-    if (fname.starts_with(prefix_))
-      files.push_back(entry.path());
-  }
-  std::sort(files.begin(), files.end());
-  return files;
-}
-
 EzConfig::EzConfig(const std::string& dir, const std::string& prefix, int max_files)
   : dir_(dir), prefix_(prefix),
     max_files_(std::clamp(max_files, 1, 10))
@@ -40,6 +18,18 @@ void EzConfig::loadLatest()
   auto files = listFiles();
   if (!files.empty())
     loadFrom(files.back());
+}
+
+std::vector<fs::path> EzConfig::listFiles() const
+{
+  std::vector<fs::path> files;
+  for (auto& entry : fs::directory_iterator(dir_)) {
+    auto fname = entry.path().filename().string();
+    if (fname.starts_with(prefix_))
+      files.push_back(entry.path());
+  }
+  std::sort(files.begin(), files.end());
+  return files;
 }
 
 void EzConfig::loadFrom(const fs::path& path)
@@ -103,5 +93,15 @@ void EzConfig::set(const std::string& key, bool val) { data_[key] = val ? "true"
 
 //std::vector<fs::path> EzConfig::history() const { return listFiles(); }
 //int EzConfig::count() const { return std::ssize(listFiles()); }
+
+std::string EzConfig::timestamp() const
+{
+  auto now = std::chrono::system_clock::now();
+  auto t = std::chrono::system_clock::to_time_t(now);
+  auto tm = *std::localtime(&t);
+  char buf[32];
+  std::strftime(buf, sizeof(buf), "%Y%m%d_%H%M%S", &tm);
+  return buf;
+}
 
 // eof

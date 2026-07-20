@@ -108,11 +108,12 @@ public:
 
 //  const char* var_format = nullptr;
   byteorder_t byte_order = BO_SNGL;// for 32/64-bit Modbus register
-
   bool visible = false;  // try to hide 2nd/3rd/4th word of multiply MB regs
-  bool is_modbus = false; // Modebus register
-  bool is_scada = false;  // SCADA-only (local) var/reg
-  bool is_ref = false;    // Referenced to Modbus reg(s)
+
+  // ONE, and ONLY ONE of the next must be TRUE
+  bool is_modbus = false; // Modbus register OR(!)
+  bool is_scada = false;  // SCADA-only (local) var OR(!)
+  bool is_ref = false;    // SCADA var, but referenced to Modbus reg(s)
 
 
 private:
