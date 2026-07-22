@@ -134,7 +134,7 @@ private:
   int master_socket;
   int fdmax;
 
-  string to_lower(string str);
+  string str_tolower(string str);
   int renew_mapping();  // for Slave only
   int renew_listen();   // for Slave only
   int check_slave();    // for Slave only

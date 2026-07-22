@@ -103,20 +103,22 @@ int task_regs_refresh_(void* params)
 
     } // ++ is_Scada
 
-    JSON_dump += ",\n\t" + quote(rm.str_opcname) + ": " + string(rm.c_str()); //quote(rm.c_str());
+    /*
+        JSON_dump += ",\n\t" + quote(rm.str_opcname) + ": " + string(rm.c_str());
 
-    if (rm.str_opcname.ends_with(".millis")) {
-      string s = rm.str_opcname;
-      s.replace(s.length() - string(".millis").length(), string(".status").length(), ".status");
-      JSON_dump += ",\n\t" + quote(s) + ": " + std::to_string((int16_t)OPC_server::ReadValue(s));
-    }
-    //json_update(rm);
+        if (rm.str_opcname.ends_with(".millis")) {
+          string s = rm.str_opcname;
+          s.replace(s.length() - string(".millis").length(), string(".status").length(), ".status");
+          JSON_dump += ",\n\t" + quote(s) + ": " + std::to_string((int16_t)OPC_server::ReadValue(s));
+        }
+    */
+    json_update(rm);
     //json_update(rm.str_opcname, rm.c_str(), (int16_t)OPC_server::ReadValue(s));
   }
 
   //json_set_answer();
-  //netsvc_update_json(json_get_answer());
-  netsvc_update_json(JSON_dump + "\n}\n");
+  netsvc_update_json(json_get_answer());
+  //netsvc_update_json(JSON_dump + "\n}\n");
   regmap_mux.unlock();
   LOGI("%s done: %d", __func__, x);
 

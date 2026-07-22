@@ -80,7 +80,7 @@ void reinit();
 //void refresh_ncurses();
 void flush_logger();
 void parse_char(int ch);
-string to_lower(string str);
+string str_tolower(string str);
 
 void console_wait_sec(int _sec);
 

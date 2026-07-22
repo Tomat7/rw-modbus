@@ -185,7 +185,7 @@ uint64_t ModbusPLC_c::millis()
   return CAST_MILLIS(system_clock::now().time_since_epoch()).count();
 }
 
-string ModbusPLC_c::to_lower(string str)
+string ModbusPLC_c::str_tolower(string str)
 {
   for (auto &c : str)
     c = static_cast<char>(tolower(c));

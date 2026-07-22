@@ -13,7 +13,7 @@
 #include <map>
 #include <vector>
 #include <string>
-
+#include <nlohmann/json.hpp>
 //#include "include/opc_server/opcs_class.h"
 //#include "include/numeric.h"
 //#include "include/number/number_class.h"
@@ -114,11 +114,10 @@ public:
   bool is_modbus = false; // Modbus register OR(!)
   bool is_scada = false;  // SCADA-only (local) var OR(!)
   bool is_ref = false;    // SCADA var, but referenced to Modbus reg(s)
-
+  Number_c Number = (uint16_t)0;
 
 private:
 
-  Number_c Number = (uint16_t)0;
 //  numeric_u value; // = *_value; // = Number.value;  // union of values (by type)
 //  numeric_u* _value = nullptr; //&Number.value;
 //  variant_t variant_value;
@@ -136,10 +135,10 @@ private:
   numeric_u pull_plc_value32();
   numeric_u pull_plc_value64();
 
-  bool has_Str(string SS, string fs);  // Look for fs within SS
+  bool str_has(string SS, string fs);  // Look for fs within SS
   char* get_new_char(const char* _oldch);
   void remove_dbl_slashes(string &str);
-  string to_lower(string str);
+  string str_tolower(string str);
 
 };
 

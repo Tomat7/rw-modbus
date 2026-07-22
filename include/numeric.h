@@ -5,6 +5,9 @@
 #include <float.h>
 #include <cstdint>
 
+#define FLOAT_BAD_VALUE -999.00f
+#define DOUBLE_BAD_VALUE -99999.00f
+
 #define UA_TYPES_BOOLEAN 0
 #define UA_TYPES_SBYTE 1
 #define UA_TYPES_BYTE 2
@@ -40,8 +43,8 @@ struct badvalue_t {
   uint16_t ui16 = UINT16_MAX; //65333;
   uint32_t ui32 = UINT32_MAX; // 123456789; //99999;
   uint64_t ui64 = UINT64_MAX; // 1234567890123456789;// 9999999;
-  float fl = FLT_MIN; // 123456.00f; //-99.54f;
-  double dbl = DBL_MIN; //123456789.00; //-999.8765;
+  float fl = FLOAT_BAD_VALUE; //FLT_MIN;
+  double dbl = DOUBLE_BAD_VALUE; //DBL_MIN;
 };
 
 struct typeprop_t {

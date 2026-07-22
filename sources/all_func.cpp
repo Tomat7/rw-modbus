@@ -184,7 +184,7 @@ void replace_str(string &str, const string &from, const string &to)
 }
 
 
-string to_lower(string str)
+string str_tolower(string str)
 {
   for (auto &c : str)
     c = static_cast<char>(tolower(c));

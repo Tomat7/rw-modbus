@@ -47,10 +47,13 @@ void var_test0()
 
   //printf("Value_c:Float = %i\n", (int)get_val());
   //printf("Variant:Float = %f\n", get<float>(get_var()));
+  double d0 = 0.0;
   long double ld = 0.0;
-  double d = 0.0;
+  printf("\nDBL size= %lu, LongDBL size= %lu\n", sizeof(d0), sizeof(ld));
 
-  printf("\n\nDBL size= %lu, LongDBL size= %lu\n\n\n", sizeof(d), sizeof(ld));
+  float f0 = 0.0f;
+  float128 f128 = 0.0;
+  printf("\nFLOAT size= %lu, Float128 size= %lu\n\n", sizeof(f0), sizeof(f128));
 
   uint16_t u16 = 12345;
   //int16_t i16 = INT16_MIN;

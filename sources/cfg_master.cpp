@@ -217,10 +217,7 @@ int cfg_init_plcregs(const Setting &cfgREG, ModbusPLC_c* pn)
       r.str_rfolder = "";
 
     r.data.rvalue = 555;  // TODO: remove for production!
-    //if (Reg_c::init_types(&r))
     pn->regs[r.raddr] = r;
-    //else
-    // nb_errors++;
   }
   return nb_regs - nb_errors;
 }

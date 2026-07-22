@@ -203,7 +203,7 @@ Reg_c::Reg_c(mbreg_t* _reg, mbreg_t* _src, string _str_source,
   for (int i = 0; i < 4; i++)
     remove_dbl_slashes(str_opcname);
 
-  string st_ = to_lower(_str_type);
+  string st_ = str_tolower(_str_type);
   if (regprop_map.count(st_)) {
     var_mode_rw = (_reg->str_mode == "rw") ? 1 : 0;
     var_type_ua = regprop_map[st_].rtype;

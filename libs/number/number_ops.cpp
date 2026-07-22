@@ -99,13 +99,8 @@ bool Number_c::get_status(int &stcode, string &stname)
   return isgood;
 }
 
-string Number_c::status_name()
-{
-  return _status_name;
-}
+string Number_c::status_name() { return _status_name; }
 
-int Number_c::status_code()
-{
-  return _status_code;
-}
+int Number_c::status_code() { return _status_code; }
+
 // eof

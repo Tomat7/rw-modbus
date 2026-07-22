@@ -38,7 +38,9 @@ void Reg_c::set_local_value(numeric_u _val)
   */
 }
 
-string Reg_c::to_lower(string str)
+
+
+string Reg_c::str_tolower(string str)
 {
   for (auto &c : str)
     c = static_cast<char>(tolower(c));
@@ -52,7 +54,7 @@ void Reg_c::remove_dbl_slashes(string &str)
     str.erase(dbl_slash, 1);
 }
 
-bool Reg_c::has_Str(string SS, string fs)
+bool Reg_c::str_has(string SS, string fs)
 {
   return SS.find(fs) != std::string::npos;
 }
