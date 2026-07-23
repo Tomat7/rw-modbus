@@ -13,41 +13,68 @@
 #include "colors_esc.h"
 // #include "macros.h"
 
-
 #define MESSAGE_MAX_LEN 254
 #define LOG_LEVEL_DEFAULT 4
 #define LOG_LEVEL_MINIMAL 1 // Log ALERTS only
+
+#ifndef XSTR
+#define XSTR(x) #x
+#endif
+#ifndef STR
+#define STR(x) XSTR(x)
+#endif
 
 #ifdef SYSLOG_NAME
 #undef SYSLOG_NAME
 #endif
 #define SYSLOG_NAME __FILENAME__
 
-/*
-  #define STRINGIFY_IMPL(x) #x
-  #define STRINGIFY(x) STRINGIFY_IMPL(x)
-*/
+#define NEWLOGGER
 
+struct logmessage_t {
+  std::string file_name;
+  std::string func_name;
+  int line_num;
+  int log_prio;
+  std::string message;
+};
+
+extern int log_level;  // 0 - no messages at all, 9 - all on screen
+
+//char* get_new_char(const char*);
 void logger_set_queue(bool to_queue);
 void logger_flush_printf();
 bool logger_get_string(std::string &logged_string);
 
 #define FILE_LINE __FILE__ ":" STR(__LINE__)
-#define _FL_ FILE_LINE
+#define _FFL_ __FILE__ "/" __func__ ":" STR(__LINE__)
 
 //#define LOGFORCE(...) logger(FILE_LINE, 0, __func__, 0, __VA_ARGS__)       // 0
 #define LOGBROADCAST(...) logger(FILE_LINE, 0, __func__, 0, __VA_ARGS__)   // 0 
 
-#define LOGA(...) logger(FILE_LINE, LOG_ALERT, __func__, 0, __VA_ARGS__)   // 1
-#define LOGC(...) logger(FILE_LINE, LOG_CRIT, __func__, 0, __VA_ARGS__)    // 2
-#define LOGE(...) logger(FILE_LINE, LOG_ERR, __func__, 0, __VA_ARGS__)     // 3
+#ifdef NEWLOGGER
+void newlogger(const char* fn, const char* func, int ln, int prio, const char* msg, ...);
+#define LOGA(...) newlogger(__FILE__, __func__, __LINE__, LOG_ALERT,   __VA_ARGS__) // 1
+#define LOGC(...) newlogger(__FILE__, __func__, __LINE__, LOG_CRIT,    __VA_ARGS__) // 2
+#define LOGE(...) newlogger(__FILE__, __func__, __LINE__, LOG_ERR,     __VA_ARGS__) // 3
+#define LOGW(...) newlogger(__FILE__, __func__, __LINE__, LOG_WARNING, __VA_ARGS__) // 4
+#define LOGN(...) newlogger(__FILE__, __func__, __LINE__, LOG_NOTICE,  __VA_ARGS__) // 5
+#define LOGI(...) newlogger(__FILE__, __func__, __LINE__, LOG_INFO,    __VA_ARGS__) // 6
+#define LOGD(...) newlogger(__FILE__, __func__, __LINE__, LOG_DEBUG,   __VA_ARGS__) // 7
+#else
+void logger(const char* _fname, int _prio, const char* _func, int _rgb,
+            const char* _fmt, ...);
+#define LOGA(...) logger(FILE_LINE, LOG_ALERT,   __func__, 0, __VA_ARGS__) // 1
+#define LOGC(...) logger(FILE_LINE, LOG_CRIT,    __func__, 0, __VA_ARGS__) // 2
+#define LOGE(...) logger(FILE_LINE, LOG_ERR,     __func__, 0, __VA_ARGS__) // 3
 #define LOGW(...) logger(FILE_LINE, LOG_WARNING, __func__, 0, __VA_ARGS__) // 4
-#define LOGN(...) logger(FILE_LINE, LOG_NOTICE, __func__, 0, __VA_ARGS__)  // 5
-#define LOGI(...) logger(FILE_LINE, LOG_INFO, __func__, 0, __VA_ARGS__)    // 6
-#define LOGD(...) logger(FILE_LINE, LOG_DEBUG, __func__, 0, __VA_ARGS__)   // 7
+#define LOGN(...) logger(FILE_LINE, LOG_NOTICE,  __func__, 0, __VA_ARGS__) // 5
+#define LOGI(...) logger(FILE_LINE, LOG_INFO,    __func__, 0, __VA_ARGS__) // 6
+#define LOGD(...) logger(FILE_LINE, LOG_DEBUG,   __func__, 0, __VA_ARGS__) // 7
 //#define LOGX(...) logger(FILE_LINE, 8, __func__, __VA_ARGS__)           // 8
 //#define LOGZ(...) logger(FILE_LINE, 9, __func__, __VA_ARGS__)           // 9
 #define LOG_(...) // no logging!
+#endif
 
 // DEBUG logging (color printing only!)
 #ifndef NDEBUG
@@ -64,31 +91,12 @@ bool logger_get_string(std::string &logged_string);
 #define LOGXB(...)
 #endif // NDEBUG
 
-#define LOGIFA(...) logif(rc, FILE_LINE, LOG_ALERT, __func__, __VA_ARGS__)
-#define LOGIFC(...) logif(rc, FILE_LINE, LOG_CRIT, __func__, __VA_ARGS__)
-#define LOGIFE(...) logif(rc, FILE_LINE, LOG_ERR, __func__, __VA_ARGS__)
-#define LOGIFW(...) logif(rc, FILE_LINE, LOG_WARNING, __func__, __VA_ARGS__)
-#define LOGIFN(...) logif(rc, FILE_LINE, LOG_NOTICE, __func__, __VA_ARGS__)
-#define LOGIFI(...) logif(rc, FILE_LINE, LOG_INFO, __func__, __VA_ARGS__)
-#define LOGIFD(...) logif(rc, FILE_LINE, LOG_DEBUG, __func__, __VA_ARGS__)
-
 #ifdef PRINT_DEBUG2
 #define D(a) a
 #else
 #define D(a)
 #endif
 
-
-extern int log_level;  // 0 - no messages at all, 9 - all on screen
-// static mutex logger_mux;
-
-// void logdebug(const char* logname, int prio, const char* format, ...);
-// void logger(int prio, const char* format, ...);
-// void logger(const char* logname, int prio, const char* format, ...);
-void logger(const char* logname, int prio, const char* _func, int _rgb,
-            const char* _fmt, ...);
-
-char* get_new_char(const char*);
 
 // eof
 

@@ -123,7 +123,7 @@ public:
     if (_same_type(type_index(typeid(T))))
       return (*static_cast<T*>(_ptr));
     else
-      return (static_cast<T>(_as_f128()));
+      return (static_cast<T>(fl128()));
   }
 
 // ======= COMPARE Operators =======
@@ -140,7 +140,7 @@ public:
     if (_same_type(type_index(typeid(T))) && _type_is_int)
       return (*static_cast<T*>(_ptr) == x);
     else
-      return fabsl(_as_f128() - x) <= DBL_EPSILON;
+      return fabsl(fl128() - x) <= DBL_EPSILON;
   }
 
   template <typename T> bool operator!= (T x)
@@ -148,7 +148,7 @@ public:
     if (_same_type(type_index(typeid(T))) && _type_is_int)
       return (*static_cast<T*>(_ptr) != x);
     else
-      return fabsl(_as_f128() - x) > DBL_EPSILON;
+      return fabsl(fl128() - x) > DBL_EPSILON;
   }
 
   template <typename T> bool operator< (T x)
@@ -156,7 +156,7 @@ public:
     if (_same_type(type_index(typeid(T))))
       return (*static_cast<T*>(_ptr) < x);
     else
-      return (_as_f128() < x);
+      return (fl128() < x);
   }
 
   template <typename T> bool operator> (T x)
@@ -164,7 +164,7 @@ public:
     if (_same_type(type_index(typeid(T))))
       return (*static_cast<T*>(_ptr) > x);
     else
-      return (_as_f128() > x);
+      return (fl128() > x);
   }
 
 // =======================================
@@ -183,6 +183,7 @@ public:
 
   bool isgood = true; // false if something wrong with value/type or other
 //  bool &isgood = status;
+  float128 fl128();
 
   int16_t &i16 = value.i16;
   int32_t &i32 = value.i32;
@@ -192,6 +193,7 @@ public:
   uint64_t &ui64 = value.ui64;
   float &fl = value.fl;
   double &dbl = value.dbl;
+
 
 // =======================================
 protected:
@@ -207,8 +209,6 @@ private:
   const char* _type_fmt = nullptr;
   void* _ptr = &value;
   char _str[STR_SIZE + 1];
-
-  float128 _as_f128();
 
   bool _set_type(int gtype, const void* ptr = nullptr, bool isok = true);
   bool _set_ti(type_index ti, const void* ptr = nullptr, bool isok = true);

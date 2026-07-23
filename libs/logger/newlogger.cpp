@@ -1,10 +1,6 @@
 // logger.cpp ----------------------------
 // Copyright 2024 Tomat7 (star0413@gmail.com)
 
-#include "logger.h"
-
-#ifndef NEWLOGGER
-
 #include <stdarg.h>
 #include <string.h>
 #include <syslog.h>
@@ -15,108 +11,60 @@
 #include <mutex>
 #include <queue>
 
+#include "logger.h"
+
+#ifdef NEWLOGGER
+
 #ifndef LOCK_GUARD
-#define LOCK_GUARD(_LG) const std::lock_guard<std::mutex> lock(_LG)
+#define LOCK_GUARD(MUX_) const std::lock_guard<std::mutex> lock(MUX_)
 #endif
 
 int log_level = LOG_LEVEL_MINIMAL;
 // 0 - no messages at all - will get from Config
 // 9 - all messages on screen
 
-static std::mutex logger_mux;  // already defined in .h
-static std::queue<std::string> Print_queue;
-static bool print_to_queue = false;
+static std::mutex newlogger_mux;  // already defined in .h
+static std::queue<logmessage_t> Log_queue;
+//static bool log_to_queue = false;
 
 static const char* ch_color[10] = {
 //  0    Alert-1 Crit-2  Error-3 Warn-4 Notice-5 Info-6 Debug-7   X-8    Z-9
   C_MAGB, C_RED, C_MAGB, C_REDB, C_YELB, C_GRN,  C_BLUB, C_CYN, C_GRNB, C_STD
 };
 
+std::string str(const char* ch) { return std::string(ch); }
 
-void logger(const char* _logname, int _prio, const char* _func,
-            int _rgb, const char* _fmt, ...)
+void newlogger(const char* file, const char* func, int ln, int prio, const char* msg, ...)
 {
-  LOCK_GUARD(logger_mux);
+  LOCK_GUARD(newlogger_mux);
 
-  // prio 8 and 9 is acceptable
-  _prio = (_prio > 7) ? 7 : _prio;
-  // 9 - log everything! otherwise - only up to WARNINGs
-  bool no_syslog = (_prio > 4 && log_level < 9);
-  // silent if LEVEL lower then prio
-  bool no_print = (_prio > log_level);
-
-  // get out if nothing to do
-  if (no_syslog && no_print)
-    return;
-
-  // print filename if prio==DEBUG or LEVEL 8 and 9
-  bool no_filename = !(_prio == 7 || log_level > 7);
-  // print function() & fullpath to file & line number only on LEVEL 9
-  bool no_funcname = (log_level < 9);
-
-  const char* format = _fmt;
-  const char* fname = _logname;
-  const char* color = C_NORM;
-  char buffer[MESSAGE_MAX_LEN + 1] = {0};
   char buff_va[MESSAGE_MAX_LEN + 1] = {0};
-  char buff_fn[MESSAGE_MAX_LEN + 1] = {0};
-
-  std::string fmt = (std::string)_func + "(): " + (std::string)_fmt;
-
-  if (!_rgb)
-    color = ch_color[_prio];
-  else
-    color = ch_color[_rgb];
-
-  if (!no_print) {
-
-    if (no_filename && no_funcname)
-      fname = "";
-    else if (no_funcname)
-      fname = strrchr(_logname, '/') ? strrchr(_logname, '/') + 1 : _logname;
-    else
-      format = fmt.c_str();
-
-    if (!no_filename)
-      snprintf(buff_fn, MESSAGE_MAX_LEN, "%s%s ", C_BLU, fname);
-  }
-
   va_list arg1;
-  va_start(arg1, _fmt);
-  vsnprintf(buff_va, MESSAGE_MAX_LEN, format, arg1);
+  va_start(arg1, msg);
+  vsnprintf(buff_va, MESSAGE_MAX_LEN, msg, arg1);
   va_end(arg1);
 
-  if (!no_syslog) {
-    openlog(_logname, LOG_NDELAY, LOG_LOCAL1);
-    syslog(_prio, "%s", buff_va);
-    closelog();
-  }
-
-  if (!no_print) {
-    snprintf(buffer, MESSAGE_MAX_LEN, "%s%s%s%s\n", buff_fn, color, buff_va, C_NORM);
-
-    if (print_to_queue)
-      Print_queue.emplace(std::string(buffer));
-    else
-      printf("%s", buffer);
-  }
+  logmessage_t log_message { str(file), str(func), ln, prio, str(buff_va) };
+  Log_queue.emplace(log_message);
 
   return;
 }
 
-void logger_set_queue(bool to_queue) { print_to_queue = to_queue; }
 
-void logger_flush_printf()
-{
+/*
+  void logger_set_queue(bool to_queue) { print_to_queue = to_queue; }
+
+  void logger_flush_printf()
+  {
   LOCK_GUARD(logger_mux);
   while (!Print_queue.empty()) {
     printf("%s", Print_queue.front().c_str());
     Print_queue.pop();
   }
-}
+  }
 
-bool logger_get_string(std::string &logged_string)
-{
+  bool logger_get_string(std::string &logged_string)
+  {
   LOCK_GUARD(logger_mux);
   if (!Print_queue.empty()) {
     logged_string = Print_queue.front();
@@ -124,38 +72,38 @@ bool logger_get_string(std::string &logged_string)
     return true;
   } else
     return false;
-}
+  }
 
-// ==================================================
+  // ==================================================
 
-char* get_new_char(const char* _oldch)
-{
+  char* get_new_char(const char* _oldch)
+  {
   char* _newch = new char[1 + strlen(_oldch)];
   strcpy(_newch, _oldch);
   return _newch;
-}
+  }
 
-char* add_slash(const char* _rn)
-{
+  char* add_slash(const char* _rn)
+  {
   char* _newch = new char[2 + strlen(_rn)];
   strcat(_newch, "/");
   strcat(_newch, _rn);
   return _newch;
-}
+  }
 
-const char* add_funcname(const char* _fmt, const char* _func)
-{
+  const char* add_funcname(const char* _fmt, const char* _func)
+  {
   std::string fmt = (std::string)_func + "(): " + (std::string)_fmt;
   _fmt = fmt.c_str();
   return _fmt;
-}
+  }
 
-const char* extract_filename(const char* f)
-{
+  const char* extract_filename(const char* f)
+  {
   f = strrchr(f, '/') ? strrchr(f, '/') + 1 : f;
   return f;
-}
-
+  }
+*/
 
 
 /*

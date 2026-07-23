@@ -17,7 +17,7 @@
 
 #define DEBUG(a) if(isDebug){a}
 
-float128 Number_c::_as_f128()
+float128 Number_c::fl128()
 {
   switch (_type_ua) {
   case UA_TYPES_INT16:

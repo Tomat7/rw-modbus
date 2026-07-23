@@ -196,7 +196,7 @@ namespace fs = std::filesystem;
 
 std::string ResolvePath(std::string path)
 {
-  LOG_RED("1");
+  //LOG_RED("1");
   // Проверяем, начинается ли путь с $HOME или ~/
   if (path.rfind("$HOME", 0) == 0) {
     if (const char* homeDir = std::getenv("HOME"))

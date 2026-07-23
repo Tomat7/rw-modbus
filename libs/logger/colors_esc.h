@@ -10,11 +10,6 @@
 #define STR(x) XSTR(x)
 #endif
 
-#ifndef LOCK_GUARD
-#define LOCK_GUARD(_LG) const std::lock_guard<std::mutex> lock(_LG)
-#endif
-
-
 // ANSI Escape Sequences
 #define ESC_ "\033["
 #define ESC_CLEAR ESC_ "2J"

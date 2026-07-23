@@ -5,8 +5,8 @@
 #include <float.h>
 #include <cstdint>
 
-#define FLOAT_BAD_VALUE -999.00f
-#define DOUBLE_BAD_VALUE -99999.00f
+#define FLOAT_BAD_VALUE -9999.75f
+#define DOUBLE_BAD_VALUE -99999.875
 
 #define UA_TYPES_BOOLEAN 0
 #define UA_TYPES_SBYTE 1
